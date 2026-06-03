@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset de Personagem - One Piece RPG</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body class="pagina-formulario pagina-reset">
+    <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true">
+        <source src="fundo-login.mp4" type="video/mp4">
+    </video>
+
+    <main class="conteudo-pagina reset-conteudo">
+        <header class="topo-pagina">
+            <div>
+                <p class="serie">Reset</p>
+                <h1>Personagem</h1>
+            </div>
+            <a class="botao-secundario" href="index.html">Voltar</a>
+        </header>
+
+        <section class="cartao-formulario reset-painel" aria-label="Solicitação de reset de personagem">
+            <div class="reset-aviso">
+                <strong>Apagar personagem</strong>
+                <p>Essa ação remove o personagem cadastrado, inventário e atributos salvos neste navegador. Depois do reset, será necessário criar uma nova aventura.</p>
+            </div>
+
+            <form class="formulario-cadastro" id="form-reset-personagem">
+                <div class="campo-bloco">
+                    <label for="reset-nome">Nome do personagem</label>
+                    <input id="reset-nome" type="text" placeholder="Digite exatamente o nome do personagem" autocomplete="off" required>
+                </div>
+
+                <div class="campo-bloco">
+                    <label for="reset-senha">Senha do personagem</label>
+                    <input id="reset-senha" type="password" placeholder="Confirme a senha cadastrada" autocomplete="current-password" required>
+                </div>
+
+                <section class="termos-reset" aria-label="Termos de reset">
+                    <h2>Termos de Reset</h2>
+                    <p>Ao solicitar o reset, você confirma que é responsável pelo personagem informado e entende que os dados removidos não serão restaurados automaticamente.</p>
+                    <p>O reset remove o personagem da lista principal, limpa o personagem ativo e apaga inventário e atributos vinculados ao nome informado.</p>
+                    <p>Uso indevido desse recurso, tentativa de apagar personagem de outro jogador ou informação falsa pode resultar em bloqueio de acesso ao RPG de WhatsApp.</p>
+                </section>
+
+                <label class="termos-check reset-check" for="reset-aceite">
+                    <input id="reset-aceite" type="checkbox">
+                    <span>Li e aceito os termos de reset do personagem.</span>
+                </label>
+
+                <p class="mensagem-status" id="reset-status" aria-live="polite"></p>
+                <button class="botao-principal botao-reset-final" id="reset-confirmar" type="submit" disabled>Apagar personagem</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="banco-personagens.js"></script>
+    <script>
+        const formReset = document.getElementById("form-reset-personagem");
+        const inputResetNome = document.getElementById("reset-nome");
+        const inputResetSenha = document.getElementById("reset-senha");
+        const aceiteReset = document.getElementById("reset-aceite");
+        const botaoResetConfirmar = document.getElementById("reset-confirmar");
+        const resetStatus = document.getElementById("reset-status");
+
+        function atualizarBotaoReset() {
+            botaoResetConfirmar.disabled = !(
+                inputResetNome.value.trim().length >= 2 &&
+                inputResetSenha.value.length > 0 &&
+                aceiteReset.checked
+            );
+        }
+
+        function registrarReset(dados) {
+            const registros = JSON.parse(localStorage.getItem("registrosResetPersonagem") || "[]");
+            registros.push(dados);
+            localStorage.setItem("registrosResetPersonagem", JSON.stringify(registros));
+        }
+
+        function limparDadosVinculados(nome) {
+            localStorage.removeItem(`inventario_${nome}`);
+            localStorage.removeItem(`atributos_${nome}`);
+
+            const ultimo = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+            if (ultimo && ultimo.nome && ultimo.nome.toLowerCase() === nome.toLowerCase()) {
+                localStorage.removeItem("ultimoPersonagem");
+            }
+        }
+
+        inputResetNome.addEventListener("input", atualizarBotaoReset);
+        inputResetSenha.addEventListener("input", atualizarBotaoReset);
+        aceiteReset.addEventListener("change", atualizarBotaoReset);
+
+        formReset.addEventListener("submit", async (evento) => {
+            evento.preventDefault();
+            const nome = inputResetNome.value.trim();
+            const senha = inputResetSenha.value;
+            const personagem = await BancoPersonagens.buscarPorNome(nome);
+
+            if (!personagem) {
+                resetStatus.textContent = "Personagem não encontrado.";
+                inputResetNome.focus();
+                return;
+            }
+
+            if (personagem.senha !== senha) {
+                resetStatus.textContent = "Senha inválida para este personagem.";
+                inputResetSenha.focus();
+                inputResetSenha.value = "";
+                atualizarBotaoReset();
+                return;
+            }
+
+            await BancoPersonagens.removerPorNome(nome);
+            limparDadosVinculados(personagem.nome);
+            registrarReset({
+                protocolo: `USR-${Date.now()}`,
+                tipo: "jogador",
+                personagem: personagem.nome,
+                motivo: "Reset solicitado pelo jogador via página de reset.",
+                quando: new Date().toLocaleString("pt-BR")
+            });
+
+            resetStatus.textContent = "Personagem apagado com sucesso. Redirecionando...";
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 1200);
+        });
+    </script>
+</body>
+</html>

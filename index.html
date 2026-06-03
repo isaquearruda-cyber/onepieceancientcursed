@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>One Piece RPG - Login</title>
+		<link rel="stylesheet" href="estilo.css">
+	</head>
+	<body>
+		<main class="tela-login">
+			<video class="video-fundo" autoplay muted loop playsinline aria-hidden="true">
+				<source src="fundo-login.mp4" type="video/mp4">
+			</video>
+
+				<section class="marca-jogo" aria-label="Identidade do jogo">
+					<div class="selo-rpg">RPG de WhatsApp</div>
+					<h1>
+						<span class="titulo-principal">One Piece</span>
+						<strong>Cursed Ancient Century</strong>
+					</h1>
+					<p class="subtitulo">Entre na tripulacao e comece sua jornada.</p>
+				</section>
+
+			<section class="painel-login" aria-label="Login do jogador">
+				<form class="formulario-login">
+					<div class="campos-login" id="campos-login" aria-hidden="true" inert>
+					<button class="botao-secundario botao-sair" id="botao-sair-entrar" type="button">Voltar</button>
+					<div class="campo-bloco">
+						<label for="usuario">Jogador</label>
+						<input id="usuario" name="usuario" type="text" placeholder="Nome do jogador" autocomplete="username">
+					</div>
+
+					<div class="campo-bloco">
+						<label for="senha">Senha</label>
+							<input id="senha" name="senha" type="password" placeholder="Codigo secreto" autocomplete="current-password">
+						</div>
+						<button class="botao-principal" id="botao-login-lobby" type="button">Entrar no Lobby</button>
+					</div>
+
+					<div class="painel-criacao" id="painel-criacao" aria-hidden="true">
+					<button class="botao-secundario botao-sair" id="botao-sair-nova-aventura" type="button">Voltar</button>
+
+						<div class="grade-criacao">
+							<div class="campo-bloco">
+								<label for="nome-personagem">Nome do personagem</label>
+								<input id="nome-personagem" name="nome-personagem" type="text" placeholder="Nome do personagem">
+							</div>
+
+							<div class="campo-bloco">
+								<label for="organizacao">Organização</label>
+								<select id="organizacao" name="organizacao">
+									<option>Marinha</option>
+									<option>Piratas</option>
+									<option>Exército Revolucionário</option>
+									<option>Cipher Pol</option>
+									<option>Neo Marinha</option>
+									<option>Caçadores de Recompensa</option>
+									<option>Germá 66</option>
+									<option>Galley-la Company</option>
+									<option>MADs</option>
+									<option>Baroque Works</option>
+								</select>
+							</div>
+
+								<div class="campo-bloco">
+								<label for="familia">Sorteio de familia</label>
+								<div class="campo-sorteio">
+									<input id="familia" name="familia" type="text" value="Sortear" readonly>
+									<button class="botao-pequeno" id="sortear-familia" type="button">Sortear</button>
+								</div>
+							</div>
+
+								<div class="campo-bloco">
+									<label for="raca">Raca</label>
+									<select id="raca" name="raca">
+									<option>Humanos</option>
+									<option>Kujas</option>
+									<option>Tribo das pernas longas</option>
+									<option>Tribo do pescoco longo</option>
+									<option>Tribo dos bracos longos</option>
+									<option>Tribo dos 3 olhos</option>
+									<option>Minks</option>
+									<option>Tontattas</option>
+									<option>Kinokobitos</option>
+									<option>Gigante</option>
+									<option>Gigante Ancestral</option>
+									<option>Meio Gigante</option>
+									<option>Ciborgues</option>
+									<option>Oni</option>
+									<option>Lunarians</option>
+									<option>Bucaneiros</option>
+									<option>Skypeans</option>
+									<option>Shandians</option>
+									<option>Birka</option>
+									<option>Homem Peixe</option>
+									<option>Sereianos</option>
+									<option>Wotan</option>
+									<option>Yet</option>
+									<option>Yet ancestral</option>
+									<option>Numans</option>
+									<option>Stratos shadow</option>
+									<option>Maffeyans</option>
+									</select>
+								</div>
+
+								<div class="campo-bloco">
+									<label for="estilo-luta">Estilo de luta</label>
+								<select id="estilo-luta" name="estilo-luta">
+									<optgroup label="Corpo a corpo">
+										<option>Jao Kun Do</option>
+										<option>Black Leg</option>
+										<option>Okama Kenpo</option>
+										<option>Freestyle</option>
+										<option>Punho suave</option>
+										<option>Karate Tritao</option>
+										<option>Combate Tontatta</option>
+										<option>Hasshouken</option>
+										<option>Ryusoken</option>
+										<option>Rokushiki</option>
+										<option>Jio-Ken</option>
+										<option>Punch style</option>
+										<option>Sumo</option>
+										<option>Ninjutsu</option>
+										<option>New Kama Genpo</option>
+										<option>Seimei Kikan</option>
+										<option>Ai No Kobushi</option>
+										<option>Nishi no Ryu</option>
+										<option>Shippuken</option>
+										<option>Okami no Gekido-ryu</option>
+									</optgroup>
+
+									<optgroup label="Espadas">
+										<option>Itoryuu</option>
+										<option>Nitoryuu</option>
+										<option>Santoryuu</option>
+										<option>Youtoryuu</option>
+										<option>Kyuutoryuu</option>
+										<option>Rokutoryuu</option>
+										<option>Hachitoryuu</option>
+										<option>Mutoryuu</option>
+										<option>Fencing Style</option>
+										<option>Sword Style</option>
+										<option>Kappa-Ryuu</option>
+										<option>Esgrima</option>
+										<option>Blade Swivel</option>
+										<option>Kitsune-Ryuu</option>
+									</optgroup>
+
+									<optgroup label="Atiradores">
+										<option>Sniper Style</option>
+										<option>Pistol style</option>
+										<option>Arrow style</option>
+									</optgroup>
+
+									<optgroup label="Armas e suporte">
+										<option>Arte Do Tempo</option>
+										<option>Black Cat</option>
+										<option>Peacock Slashers Style</option>
+										<option>Rope Action</option>
+										<option>Armor Style</option>
+										<option>Yare Style</option>
+										<option>Combate gigante</option>
+										<option>Color Trap</option>
+										<option>Ramen genpo</option>
+										<option>Rensa Hakai Mai</option>
+										<option>Mestres de Armas Improvaveis</option>
+									</optgroup>
+
+									<optgroup label="Veneno, ilusao e fios">
+										<option>Maboroshi Trump</option>
+										<option>Dokushin Yaju-ryu</option>
+										<option>Dokushi Renkin-ryu</option>
+										<option>Mukiryoku Kusari-ryu</option>
+										<option>Fuko no Kaji-ryu</option>
+									</optgroup>
+
+									<optgroup label="Raciais e tecnicos">
+										<option>Electro</option>
+										<option>Ciborgue Tatic</option>
+										<option>Pacifist Tatic</option>
+									</optgroup>
+								</select>
+							</div>
+
+							<div class="campo-bloco">
+								<label for="profissao">Profissao</label>
+								<select id="profissao" name="profissao">
+									<option>Cartografo</option>
+									<option>Timoneiro</option>
+									<option>Navegador</option>
+									<option>Medico</option>
+									<option>Cozinheiro</option>
+									<option>Ferreiro</option>
+									<option>Alfaiate</option>
+									<option>Musico</option>
+									<option>Arqueologo</option>
+									<option>Biologo</option>
+									<option>Carpinteiro</option>
+									<option>Cientista</option>
+									<option>Botanico</option>
+									<option>Tesoureiro</option>
+									<option>Interrogador</option>
+									<option>Torturador</option>
+									<option>Informante</option>
+									<option>Oficial tatico</option>
+									<option>Erudito</option>
+									<option>Agente de inteligencia</option>
+									<option>Artilheiro</option>
+									<option>Explorador</option>
+									<option>Corretor</option>
+								</select>
+								<p class="descricao-profissao" id="descricao-profissao"></p>
+							</div>
+
+							<div class="campo-bloco">
+								<label for="classe">Classe</label>
+								<select id="classe" name="classe">
+									<option>Espadachins</option>
+									<option>Combatentes</option>
+									<option>Atiradores</option>
+									<option>Samurais</option>
+									<option>Feiticeiros / Macumbeiros</option>
+									<option>Piromaniacos</option>
+									<option>Comandantes Pesados</option>
+									<option>Sentinelas de Aco</option>
+									<option>Colossos Primais</option>
+									<option>Guardioes Cineticos</option>
+									<option>Boxeadores de Elite</option>
+									<option>Sombras Taticas</option>
+									<option>Sentinelas Taticos</option>
+									<option>Manipuladores de Clima</option>
+									<option>Mestres de Veneno</option>
+									<option>Ilusionistas</option>
+									<option>Manipuladores de Fios</option>
+									<option>Mestres da Velocidade</option>
+									<option>Mestres de Armas Improvaveis</option>
+									<option>Mestres de Armas Contundentes</option>
+									<option>Ceifadores</option>
+									<option>Trapaceiros</option>
+									<option>Falsificador</option>
+									<option>Homem-Bomba</option>
+									<option>Mestre em Haki</option>
+								</select>
+								<p class="descricao-classe" id="descricao-classe"></p>
+							</div>
+						</div>
+
+						<button class="botao-cadastro" id="botao-cadastro" type="button">Cadastrar personagem</button>
+					</div>
+
+				<nav class="menu-login" id="menu-principal" aria-label="Menu principal">
+					<button class="opcao" id="botao-entrar" type="button" aria-controls="campos-login" aria-expanded="false" data-i18n="menu.enter">Entrar</button>
+					<button class="opcao" id="botao-nova-aventura" type="button" aria-controls="painel-criacao" aria-expanded="false" data-i18n="menu.newAdventure">Nova Aventura</button>
+					<button class="opcao" id="botao-opcoes" type="button" data-i18n="menu.options">Opcoes</button>
+					<button class="opcao" type="button" data-i18n="menu.credits">Creditos</button>
+				</nav>
+
+				<nav class="menu-login menu-opcoes" id="menu-opcoes" aria-label="Menu de opções" aria-hidden="true">
+					<button class="opcao-voltar" id="botao-voltar" type="button" aria-label="Voltar" data-i18n="menu.back">
+						<span class="icone-voltar">←</span>
+						Voltar
+					</button>
+					<div class="separador-menu"></div>
+					<button class="opcao" id="botao-desenvolvedores" type="button" data-i18n="menu.developers">Desenvolvedores</button>
+					<button class="opcao" id="botao-reset-personagem" type="button" data-i18n="menu.resetCharacter">Reset Personagem</button>
+					<button class="opcao" id="botao-atualizacao-org" type="button" data-i18n="menu.updateOrg">Atualização Org</button>
+					<button class="opcao" id="botao-idioma" type="button" data-i18n="menu.language">Idioma</button>
+					<button class="opcao" id="botao-tutorial" type="button" data-i18n="menu.tutorial">Tutorial</button>
+				</nav>
+		
+				<!-- Modal para Atualização de Organização (estética do site) -->
+				<div class="modal-overlay" id="modal-atualizacao-org">
+					<div class="modal-conteudo modal-org">
+						<div class="modal-cabecalho org-cabecalho">
+							<div>
+								<div class="modal-titulo">Atualização de Organização</div>
+								<p class="org-subtitulo">Altere o vínculo do personagem e registre a mudança no histórico.</p>
+							</div>
+							<button class="fechar-modal" id="fechar-modal-atualizacao-org">✕</button>
+						</div>
+
+
+
+						<div class="form-adicionar org-form">
+							<div class="form-grupo">
+								<label for="atualiza-nome">Nome do personagem</label>
+								<input id="atualiza-nome" name="atualiza-nome" type="text" placeholder="Nome do personagem">
+							</div>
+
+							<div class="form-grupo">
+								<label for="atualiza-senha">Senha (se houver)</label>
+								<input id="atualiza-senha" name="atualiza-senha" type="password" placeholder="Senha do personagem">
+							</div>
+
+							<div class="form-grupo">
+								<label for="atualiza-organizacao">Nova Organização</label>
+								<select id="atualiza-organizacao" name="atualiza-organizacao">
+									<option>Marinha</option>
+									<option>Piratas</option>
+									<option>Exército Revolucionário</option>
+									<option>Cipher Pol</option>
+									<option>Neo Marinha</option>
+									<option>Caçadores de Recompensa</option>
+									<option>Germá 66</option>
+									<option>Galley-la Company</option>
+									<option>MADs</option>
+									<option>Baroque Works</option>
+								</select>
+							</div>
+
+							<div class="org-acoes">
+								<button class="btn-adicionar" id="salvar-atualizacao-org" type="button">Salvar</button>
+								<button class="btn-cancelar" id="cancelar-atualizacao-org" type="button">Cancelar</button>
+							</div>
+						</div>
+						</div>
+						</div>
+						</form>
+
+						<!-- Modal para seleção de idioma (fora de outros modais) -->
+						<div class="modal-overlay" id="modal-idioma">
+							<div class="modal-conteudo modal-idioma-conteudo">
+								<div class="modal-cabecalho idioma-cabecalho">
+									<div>
+										<div class="modal-titulo" data-i18n="langSelector.title">Selecionar Idioma</div>
+										<p class="idioma-subtitulo">Escolha o idioma da interface</p>
+									</div>
+									<button class="fechar-modal" id="fechar-modal-idioma">✕</button>
+								</div>
+								<div class="grade-idiomas" aria-label="Idiomas disponiveis">
+									<button class="cartao-idioma" data-lang="pt" type="button"><span class="idioma-flag">BR</span><span><strong>Português</strong><small>Brasil</small></span></button>
+									<button class="cartao-idioma" data-lang="pt-pt" type="button"><span class="idioma-flag">PT</span><span><strong>Português</strong><small>Portugal</small></span></button>
+									<button class="cartao-idioma" data-lang="es" type="button"><span class="idioma-flag">ES</span><span><strong>Español</strong><small>España</small></span></button>
+									<button class="cartao-idioma" data-lang="en" type="button"><span class="idioma-flag">EN</span><span><strong>English</strong><small>Global</small></span></button>
+									<button class="cartao-idioma" data-lang="fr" type="button"><span class="idioma-flag">FR</span><span><strong>Français</strong><small>France</small></span></button>
+									<button class="cartao-idioma" data-lang="de" type="button"><span class="idioma-flag">DE</span><span><strong>Deutsch</strong><small>Deutschland</small></span></button>
+									<button class="cartao-idioma" data-lang="it" type="button"><span class="idioma-flag">IT</span><span><strong>Italiano</strong><small>Italia</small></span></button>
+									<button class="cartao-idioma" data-lang="ja" type="button"><span class="idioma-flag">JA</span><span><strong>日本語</strong><small>Japan</small></span></button>
+									<button class="cartao-idioma" data-lang="zh" type="button"><span class="idioma-flag">ZH</span><span><strong>中文</strong><small>China</small></span></button>
+									<button class="cartao-idioma" data-lang="ko" type="button"><span class="idioma-flag">KO</span><span><strong>한국어</strong><small>Korea</small></span></button>
+									<button class="cartao-idioma" data-lang="ru" type="button"><span class="idioma-flag">RU</span><span><strong>Русский</strong><small>Russia</small></span></button>
+									<button class="cartao-idioma" data-lang="ar" type="button"><span class="idioma-flag">AR</span><span><strong>العربية</strong><small>Arabic</small></span></button>
+									<button class="cartao-idioma" data-lang="nl" type="button"><span class="idioma-flag">NL</span><span><strong>Nederlands</strong><small>Nederland</small></span></button>
+									<button class="cartao-idioma" data-lang="sv" type="button"><span class="idioma-flag">SV</span><span><strong>Svenska</strong><small>Sverige</small></span></button>
+								</div>
+							</div>
+						</div>
+
+						<div class="modal-overlay modal-termos-overlay" id="modal-termos" aria-hidden="true">
+							<div class="modal-conteudo modal-termos" role="dialog" aria-modal="true" aria-labelledby="titulo-termos">
+								<div class="modal-cabecalho termos-cabecalho">
+									<div>
+										<div class="modal-titulo" id="titulo-termos">Termos da Aventura</div>
+										<p class="termos-subtitulo">Leia com atenção antes de entrar no RPG de WhatsApp.</p>
+									</div>
+								</div>
+
+								<div class="termos-corpo">
+									<section class="termos-texto" tabindex="0" aria-label="Contrato e termos de uso">
+										<h3>Contrato de Participação no RPG de WhatsApp</h3>
+										<p>Ao participar de One Piece Cursed Ancient Century, voce reconhece que este e um RPG narrativo realizado por WhatsApp, com interacoes por mensagens, grupos, sistemas de cadastro, personagens, inventario, atributos e organizacoes.</p>
+										<p>O jogador concorda em respeitar administradores, moderadores, desenvolvedores e demais participantes, mantendo uma postura adequada dentro dos grupos e conversas relacionadas ao RPG.</p>
+										<p>As regras publicadas pela administracao devem ser seguidas. Caso exista conflito entre interpretacoes, a palavra final pertence aos responsaveis pelo RPG.</p>
+										<p>O jogador deve usar apenas informacoes que seu personagem teria acesso dentro da narrativa. Usar informacoes externas, prints privados, conversas paralelas ou dados de outros personagens para obter vantagem pode ser considerado metagame.</p>
+										<p>E proibido usar bugs, falhas do site, edicoes externas, duplicacao de dados, manipulacao de inventario, alteracao indevida de atributos ou qualquer metodo que gere vantagem injusta.</p>
+										<p>Personagens, classes, racas, familias, organizacoes, recompensas, inventarios e atributos podem ser revisados pela administracao quando houver erro, abuso, duplicidade, desequilibrio ou conflito com as regras do RPG.</p>
+										<p>O jogador entende que mudancas de sistema podem acontecer. Atualizacoes podem alterar valores, recompensas, habilidades, organizacoes, itens, fichas e outras partes do jogo para melhorar equilibrio e funcionamento.</p>
+										<p>O uso dos grupos de WhatsApp deve respeitar o objetivo de cada grupo. Evite spam, flood, brigas fora de personagem, divulgacoes nao autorizadas, correntes, links suspeitos ou mensagens que atrapalhem o andamento do RPG.</p>
+										<p>Conteudos ofensivos, assedio, ameacas, preconceito, humilhacao, provocacoes excessivas, exposicao de dados pessoais ou qualquer comportamento que prejudique outros jogadores podem resultar em advertencia, silenciamento, reset, expulsao de grupos ou remocao do RPG.</p>
+										<p>O jogador se responsabiliza pelas informacoes fornecidas no cadastro, incluindo nome do personagem, senha, Gmail e demais dados necessarios para acesso e controle do personagem.</p>
+										<p>Dados salvos neste site podem depender do navegador e do dispositivo utilizado. Para evitar perda de informacoes, mantenha seus dados corretos, evite limpar armazenamento do navegador sem necessidade e siga as orientacoes dos desenvolvedores.</p>
+										<p>A administracao pode solicitar confirmacao de identidade do personagem, senha ou outras informacoes quando houver pedido de atualizacao, recuperacao, revisao ou investigacao de erro.</p>
+										<p>Contas, personagens ou itens criados de forma irregular podem ser corrigidos, bloqueados, resetados ou removidos conforme decisao da administracao.</p>
+										<p>Ao assinar este termo, voce confirma que leu as condicoes, aceita participar do RPG de WhatsApp seguindo as regras e entende que a continuidade no jogo depende do respeito aos sistemas, aos grupos e aos demais jogadores.</p>
+									</section>
+
+									<div class="termos-assinatura">
+										<div class="form-grupo">
+											<label for="assinatura-termos">Assinatura do jogador</label>
+											<input id="assinatura-termos" type="text" placeholder="Digite seu nome ou apelido">
+										</div>
+
+										<label class="termos-check" for="aceite-termos">
+											<input id="aceite-termos" type="checkbox">
+											<span>Li e aceito os termos de participação do RPG de WhatsApp.</span>
+										</label>
+
+										<button class="btn-adicionar termos-botao" id="botao-aceitar-termos" type="button" disabled>Assinar e continuar</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+				<div class="controles">
+					<span><kbd>B</kbd> Voltar</span>
+					<span><kbd>A</kbd> Selecionar</span>
+				</div>
+			</section>
+		</main>
+
+		<script src="banco-personagens.js"></script>
+		<script>
+			const botaoEntrar = document.getElementById("botao-entrar");
+			const botaoNovaAventura = document.getElementById("botao-nova-aventura");
+			const botaoOpcoes = document.getElementById("botao-opcoes");
+				const botaoVoltar = document.getElementById("botao-voltar");
+				const botaoSairEntrar = document.getElementById("botao-sair-entrar");
+				const botaoSairNovaAventura = document.getElementById("botao-sair-nova-aventura");
+				const botaoLoginLobby = document.getElementById("botao-login-lobby");
+				const botaoDesenvolvedores = document.getElementById("botao-desenvolvedores");
+			const botaoResetPersonagem = document.getElementById("botao-reset-personagem");
+			const botaoIdioma = document.getElementById("botao-idioma");
+			const botaoTutorial = document.getElementById("botao-tutorial");
+			const menuPrincipal = document.getElementById("menu-principal");
+			const menuOpcoes = document.getElementById("menu-opcoes");
+			const camposLogin = document.getElementById("campos-login");
+			const painelCriacao = document.getElementById("painel-criacao");
+			const campoUsuario = document.getElementById("usuario");
+			const campoNomePersonagem = document.getElementById("nome-personagem");
+			const botaoSortearFamilia = document.getElementById("sortear-familia");
+			const botaoCadastro = document.getElementById("botao-cadastro");
+				const campoFamilia = document.getElementById("familia");
+				const campoRaca = document.getElementById("raca");
+				const campoProfissao = document.getElementById("profissao");
+			const descricaoProfissao = document.getElementById("descricao-profissao");
+			const campoClasse = document.getElementById("classe");
+			const descricaoClasse = document.getElementById("descricao-classe");
+			const formulario = document.querySelector(".formulario-login");
+			const opcoes = document.querySelectorAll(".opcao");
+			const familias = [
+				"Clou D",
+				"Gol D",
+				"Nefetari D",
+				"Newgate",
+				"Vegapunk",
+				"Dracule",
+				"Hawkins",
+				"Lucci",
+				"Shimotsuki",
+				"Silvers",
+				"Smoker",
+				"Davy D",
+				"Charllote",
+				"Chinjao",
+				"Eusstass",
+				"Kaidou",
+				"Mont blanck",
+				"Shiki",
+				"Vismoke",
+				"Kozuki",
+				"Bullet",
+				"Ganzui",
+				"Kyu"
+			];
+			const chaveFamiliaSorteada = "familiaSorteadaBloqueada";
+
+			function obterFamiliaSorteada() {
+				return JSON.parse(localStorage.getItem(chaveFamiliaSorteada) || "null");
+			}
+
+			function salvarFamiliaSorteada(dados) {
+				localStorage.setItem(chaveFamiliaSorteada, JSON.stringify(dados));
+			}
+
+			function aplicarEstadoFamiliaSorteada() {
+				const sorteio = obterFamiliaSorteada();
+
+				if (sorteio && sorteio.familia) {
+					campoFamilia.value = sorteio.familia;
+					botaoSortearFamilia.disabled = true;
+					botaoSortearFamilia.textContent = "Sorteado";
+					botaoSortearFamilia.title = "Esta família já foi sorteada e só libera quando o personagem for apagado.";
+					return;
+				}
+
+				campoFamilia.value = "Sortear";
+				botaoSortearFamilia.disabled = false;
+				botaoSortearFamilia.textContent = "Sortear";
+				botaoSortearFamilia.removeAttribute("title");
+			}
+
+			const descricoesProfissao = {
+				"Cartografo": "Especialista em explorar, registrar e desenhar mapas de mares desconhecidos e ilhas perdidas. Ajuda a planejar rotas seguras, descobrir caminhos secretos e interpretar detalhes geograficos importantes.",
+				"Timoneiro": "Responsavel por controlar o leme e manter o navio no rumo certo mesmo em mares turbulentos. Em batalhas navais, posiciona a embarcacao para fuga, defesa ou ataque.",
+				"Navegador": "Mestre dos ventos, ondas, correntes maritimas e padroes climaticos. Define rotas seguras e eficientes, evitando tempestades, perigos naturais e regioes hostis.",
+				"Medico": "Guardiao da saude da tripulacao. Trata ferimentos, doencas e envenenamentos, alem de orientar a prevencao para manter todos vivos durante viagens e batalhas.",
+				"Cozinheiro": "Responsavel pela nutricao, saude e moral da tripulacao. Prepara refeicoes que recuperam energia, fortalecem o grupo e mantem todos prontos para enfrentar o mar.",
+				"Ferreiro": "Mestre do fogo e do metal. Forja, repara e personaliza armas, ferramentas e equipamentos que podem decidir o resultado de combates e expedicoes.",
+				"Alfaiate": "Artesao das vestimentas. Confecciona, repara e customiza roupas, acessorios, uniformes e trajes com protecao, mobilidade e identidade visual.",
+				"Musico": "A alma viva da tripulacao. Usa instrumentos, cancoes e melodias para elevar o moral, acalmar dores, animar aliados e ate confundir inimigos.",
+				"Arqueologo": "Guardiao do passado, capaz de decifrar ruinas, escritas antigas e reliquias. Revela segredos historicos, mapas escondidos e verdades esquecidas.",
+				"Biologo": "Especialista na vida em todas as formas. Estuda criaturas, ecossistemas, venenos, especies raras e comportamentos animais para transformar conhecimento em vantagem.",
+				"Carpinteiro": "Coracao estrutural da tripulacao. Constroi, mantem e repara navios, cabines, cascos e mecanismos, garantindo que a embarcacao sobreviva aos mares.",
+				"Cientista": "Mestre da inovacao e tecnologia. Desenvolve remedios, armas, drogas especiais, automatos e equipamentos avancados usando quimica, fisica, biologia e engenharia.",
+				"Botanico": "Especialista em plantas e suas propriedades. Identifica ervas, plantas venenosas, ingredientes medicinais e recursos naturais para curas, venenos e sobrevivencia.",
+				"Tesoureiro": "Guardiao do ouro e dos recursos. Administra dinheiro, riquezas, suprimentos e negociacoes, evitando desperdicios e preparando a tripulacao financeiramente.",
+				"Interrogador": "Mestre da persuasao e obtencao de informacoes. Extrai segredos por analise, pressao e negociacao, transformando respostas em vantagem estrategica.",
+				"Torturador": "Especialista implacavel no uso da dor e do medo para arrancar informacoes ou impor autoridade. Conhece os limites do corpo e da mente.",
+				"Informante": "Mestre de redes de informacao. Coleta segredos, boatos e dados valiosos por contatos, espionagem e observacao silenciosa.",
+				"Oficial tatico": "Estrategista da tripulacao. Planeja e coordena acoes em combates e expedicoes, adaptando estrategias ao inimigo, terreno e objetivo.",
+				"Erudito": "Guardiao do conhecimento e da sabedoria. Estuda livros, manuscritos, culturas e relatos historicos para resolver misterios e encontrar pistas importantes.",
+				"Agente de inteligencia": "Especialista em coleta e analise de informacoes sigilosas. Atua com infiltracao, espionagem, sabotagem, disfarce e protecao contra ameacas ocultas.",
+				"Artilheiro": "Especialista em armas de longo alcance, canhoes, mosquetes e armas de fogo. Domina balistica, recarga, posicao tatica e poder de fogo.",
+				"Explorador": "Aventureiro de territorios desconhecidos. Realiza expedicoes para mapear regioes, encontrar recursos, descobrir rotas e expandir o conhecimento da tripulacao.",
+				"Corretor": "Intermediario de transacoes ilegais ou arriscadas. Atua negociando acordos, contatos e trocas fora dos caminhos oficiais."
+			};
+			const descricoesClasse = {
+				"Espadachins": "Guerreiros dedicados que passam a vida aprimorando a arte da espada. Possuem corpos moldados pela disciplina, com agilidade, rapidez e reflexos impressionantes. Podem empunhar de uma a tres espadas simultaneamente, executando golpes com precisao e elegancia.",
+				"Combatentes": "Mestres da luta corpo a corpo que usam punhos e corpo como armas. Sao maquinas de guerra capazes de ataques devastadores com precisao e controle, adaptando o estilo ao proprio fisico e lendo o campo de batalha.",
+				"Atiradores": "Especialistas de mira infalivel e visao agucada, capazes de localizar inimigos a longas distancias. Dominam rifles, arcos e outras ferramentas de precisao, esperando o momento exato para o disparo perfeito.",
+				"Samurais": "Guerreiros leais e disciplinados originarios de Wano, guiados pelo codigo do Bushido. Possuem conexao profunda com suas laminas e dominam estilos como Ittoryu, Nitoryu ou Santoryu.",
+				"Feiticeiros / Macumbeiros": "Conjuradores que dominam magia ritualistica, energias ocultas e elementos naturais. Invocam maldicoes por movimentos manuais e podem desorientar, adoecer, atrair sorte ou amaldicoar adversarios.",
+				"Piromaniacos": "Estrategistas que usam equipamentos especiais e mascaras para manipular fogo. Criam chamas calculadas, cortinas de fumaca e armadilhas incendiarias para controlar terreno e movimento inimigo.",
+				"Comandantes Pesados": "Guerreiros imponentes que combinam forca bruta com taticas de comando. Usam armas contundentes e de impacto, coordenando tropas enquanto seguram a linha de frente.",
+				"Sentinelas de Aco": "Mestres em armas de haste longa, como alabardas, tridentes e naginatas. Usam alcance superior para controlar territorio, punir aproximacoes e executar estocadas devastadoras.",
+				"Colossos Primais": "Avatares da furia selvagem que encarnam o poder da natureza e instintos primitivos. Usam armas colossais e rituais de combate para atingir forca e resistencia sobre-humanas.",
+				"Guardioes Cineticos": "Especialistas em bastoes, tonfas e armas de haste curta. Lutam com movimento fluido, bloqueios, alavancas, desarmes e evasoes acrobaticas.",
+				"Boxeadores de Elite": "Lutadores focados no uso puro de socos. Usam manoplas e soqueiras para amplificar impactos, com ataques rapidos, diretos e devastadores.",
+				"Sombras Taticas": "Agentes de infiltracao e precisao que operam nas margens da batalha. Usam adagas, fios de aco, laminas ocultas e mobilidade avancada para eliminar alvos silenciosamente.",
+				"Sentinelas Taticos": "Guerreiros de contencao e captura, guiados por disciplina e foco estrategico. Usam armas nao convencionais, como jittes ou Kairoseki, para imobilizar e subjugar oponentes.",
+				"Manipuladores de Clima": "Individuos que influenciam vento, chuva e raios por ciencia, tecnologia ou conexao inata. Transformam o cenario em arma com tempestades, ventos, gelo e eletricidade.",
+				"Mestres de Veneno": "Combatentes astutos que usam toxinas, gases e substancias corrosivas para enfraquecer inimigos. Dominam quimica e biologia para criar venenos personalizados.",
+				"Ilusionistas": "Manipuladores mentais capazes de distorcer a percepcao da realidade. Criam miragens, sugestoes, medo e desespero para tornar inimigos vulneraveis.",
+				"Manipuladores de Fios": "Estrategistas que controlam fios quase invisiveis e resistentes. Podem cortar objetos, imobilizar adversarios ou controla-los como marionetes.",
+				"Mestres da Velocidade": "Combatentes que se movem em velocidades extremas, virando borroes no campo de batalha. Criam ilusoes de otica e usam inercia para golpes surpreendentes.",
+				"Mestres de Armas Improvaveis": "Inovadores que transformam objetos comuns em ferramentas letais. Usam criatividade, fisica e quimica para criar solucoes inesperadas e armadilhas.",
+				"Mestres de Armas Contundentes": "Guerreiros que usam marretas e macas para esmagar e desorientar oponentes. Quebram defesas e podem criar ondas de choque com seus golpes.",
+				"Ceifadores": "Mestres da foice que executam uma danca letal de graca e precisao. Usam a lamina curva para cortar, desarmar e varrer multiplos inimigos.",
+				"Trapaceiros": "Artistas da enganacao que preferem astucia a forca bruta. Usam truques, bombas de fumaca, iscas e ventriloquismo para confundir e controlar a luta.",
+				"Falsificador": "Genio das sombras burocraticas que vence com documentos, assinaturas e selos forjados. Pode criar identidades, manipular leiloes e enganar sistemas rigidos.",
+				"Homem-Bomba": "Mestre da destruicao planejada e alquimista da polvora. Cria bombas improvisadas e explosoes precisas para sabotagem, ocultacao ou destruicao total.",
+				"Mestre em Haki": "Conhecedor profundo dos misterios do Haki. Comeca sem uso pratico, mas recebe buff de 2x nas recompensas de treino de Haki e dobro de bellies/berries por dedicacao."
+			};
+
+			function atualizarDescricaoClasse() {
+				descricaoClasse.textContent = descricoesClasse[campoClasse.value] || "";
+			}
+
+			function atualizarDescricaoProfissao() {
+				descricaoProfissao.textContent = descricoesProfissao[campoProfissao.value] || "";
+			}
+
+			formulario.addEventListener("submit", (evento) => {
+				evento.preventDefault();
+			});
+
+			campoClasse.addEventListener("change", atualizarDescricaoClasse);
+			campoProfissao.addEventListener("change", atualizarDescricaoProfissao);
+			atualizarDescricaoClasse();
+			atualizarDescricaoProfissao();
+
+			function ativarOpcao(botaoAtivo) {
+				opcoes.forEach((opcao) => opcao.classList.remove("ativa"));
+				botaoAtivo.classList.add("ativa");
+			}
+
+			function resetParaMenu() {
+				camposLogin.classList.remove("visivel");
+				painelCriacao.classList.remove("visivel");
+				camposLogin.setAttribute("aria-hidden", "true");
+				painelCriacao.setAttribute("aria-hidden", "true");
+				camposLogin.setAttribute("inert", "");
+				painelCriacao.setAttribute("inert", "");
+				botaoEntrar.setAttribute("aria-expanded", "false");
+				botaoNovaAventura.setAttribute("aria-expanded", "false");
+				opcoes.forEach((opcao) => opcao.classList.remove("ativa"));
+			}
+
+				async function entrarNoLobby() {
+					const usuario = campoUsuario.value.trim();
+					const senha = document.getElementById("senha").value;
+
+					if (!usuario || !senha) {
+						alert("Preencha o nome do personagem e a senha.");
+						if (!usuario) {
+							campoUsuario.focus();
+						} else {
+							document.getElementById("senha").focus();
+						}
+						return;
+					}
+
+					let personagemEncontrado;
+					try {
+						personagemEncontrado = await BancoPersonagens.buscarPorNome(usuario);
+					} catch (erro) {
+						console.error("Erro ao buscar personagem:", erro);
+						alert("Não foi possível acessar os personagens salvos. Tente novamente.");
+						return;
+					}
+
+					if (!personagemEncontrado) {
+						alert("❌ Personagem não encontrado.");
+						campoUsuario.focus();
+						return;
+					}
+
+					if (personagemEncontrado.senha !== senha) {
+						alert("❌ Senha inválida.");
+						document.getElementById("senha").focus();
+						document.getElementById("senha").value = "";
+						return;
+					}
+
+					localStorage.setItem("ultimoPersonagem", JSON.stringify(personagemEncontrado));
+					window.location.assign("lobby.html");
+				}
+
+				botaoEntrar.addEventListener("click", () => {
+					if (camposLogin.classList.contains("visivel")) {
+						entrarNoLobby();
+						return;
+					}
+
+					camposLogin.classList.add("visivel");
+					painelCriacao.classList.remove("visivel");
+					camposLogin.setAttribute("aria-hidden", "false");
+				painelCriacao.setAttribute("aria-hidden", "true");
+				camposLogin.removeAttribute("inert");
+				painelCriacao.setAttribute("inert", "");
+				botaoEntrar.setAttribute("aria-expanded", "true");
+				botaoNovaAventura.setAttribute("aria-expanded", "false");
+				ativarOpcao(botaoEntrar);
+				campoUsuario.focus();
+			});
+
+			botaoNovaAventura.addEventListener("click", () => {
+				painelCriacao.classList.add("visivel");
+				camposLogin.classList.remove("visivel");
+				painelCriacao.setAttribute("aria-hidden", "false");
+				camposLogin.setAttribute("aria-hidden", "true");
+				painelCriacao.removeAttribute("inert");
+				camposLogin.setAttribute("inert", "");
+				botaoNovaAventura.setAttribute("aria-expanded", "true");
+				botaoEntrar.setAttribute("aria-expanded", "false");
+				ativarOpcao(botaoNovaAventura);
+				campoNomePersonagem.focus();
+			});
+
+			botaoOpcoes.addEventListener("click", () => {
+				menuPrincipal.classList.add("oculto");
+				menuOpcoes.setAttribute("aria-hidden", "false");
+				menuOpcoes.classList.add("visivel");
+			});
+
+			botaoVoltar.addEventListener("click", () => {
+				menuOpcoes.classList.remove("visivel");
+				menuOpcoes.setAttribute("aria-hidden", "true");
+				menuPrincipal.classList.remove("oculto");
+			});
+
+			botaoDesenvolvedores.addEventListener("click", () => {
+				window.location.href = "personagens.html";
+			});
+
+			botaoResetPersonagem.addEventListener("click", () => {
+				window.location.href = "reset-personagem.html";
+			});
+
+			const modalIdioma = document.getElementById('modal-idioma');
+			const fecharModalIdioma = document.getElementById('fechar-modal-idioma');
+			const botoesIdioma = modalIdioma.querySelectorAll('[data-lang]');
+			const modalTermos = document.getElementById("modal-termos");
+			const assinaturaTermos = document.getElementById("assinatura-termos");
+			const aceiteTermos = document.getElementById("aceite-termos");
+			const botaoAceitarTermos = document.getElementById("botao-aceitar-termos");
+			const chaveTermosAceitos = "onePieceRpgTermosAceitos";
+
+			function atualizarIdiomaAtivo(lang) {
+				botoesIdioma.forEach((btn) => {
+					const ativo = btn.getAttribute('data-lang') === lang;
+					btn.classList.toggle('ativo', ativo);
+					btn.setAttribute('aria-pressed', ativo ? 'true' : 'false');
+				});
+			}
+
+			botaoIdioma.addEventListener("click", () => {
+				console.log('botao-idioma clicked');
+				atualizarIdiomaAtivo(localStorage.getItem('site_language') || 'pt');
+				if (modalIdioma) modalIdioma.classList.add('ativo'); else console.warn('modal-idioma not found');
+			});
+
+			fecharModalIdioma.addEventListener('click', () => modalIdioma.classList.remove('ativo'));
+			modalIdioma.addEventListener('click', (ev) => { if (ev.target === modalIdioma) modalIdioma.classList.remove('ativo'); });
+
+			botoesIdioma.forEach(btn => {
+				btn.addEventListener('click', (ev) => {
+					const lang = btn.getAttribute('data-lang');
+					setLanguage(lang);
+					atualizarIdiomaAtivo(lang);
+					modalIdioma.classList.remove('ativo');
+				});
+			});
+
+			function atualizarEstadoTermos() {
+				const assinou = assinaturaTermos.value.trim().length >= 2;
+				botaoAceitarTermos.disabled = !(assinou && aceiteTermos.checked);
+			}
+
+			function abrirTermosSeNecessario() {
+				const termosAceitos = JSON.parse(localStorage.getItem(chaveTermosAceitos) || "null");
+				if (termosAceitos && termosAceitos.aceito) {
+					return;
+				}
+
+				modalTermos.classList.add("ativo");
+				modalTermos.setAttribute("aria-hidden", "false");
+				setTimeout(() => assinaturaTermos.focus(), 80);
+			}
+
+			assinaturaTermos.addEventListener("input", atualizarEstadoTermos);
+			aceiteTermos.addEventListener("change", atualizarEstadoTermos);
+
+			botaoAceitarTermos.addEventListener("click", () => {
+				if (botaoAceitarTermos.disabled) {
+					return;
+				}
+
+				localStorage.setItem(chaveTermosAceitos, JSON.stringify({
+					aceito: true,
+					assinatura: assinaturaTermos.value.trim(),
+					aceitoEm: new Date().toLocaleString("pt-BR")
+				}));
+
+				modalTermos.classList.remove("ativo");
+				modalTermos.setAttribute("aria-hidden", "true");
+			});
+
+				setTimeout(abrirTermosSeNecessario, 1200);
+
+			botaoTutorial.addEventListener("click", () => {
+				alert("Tutorial em breve: use Nova Aventura para criar um personagem e entre no lobby.");
+			});
+
+			// Atualizacao de Organizacao (UI agradável) - persiste e registra histórico
+			const botaoAtualizacaoOrg = document.getElementById("botao-atualizacao-org");
+			const modalAtualizacaoOrg = document.getElementById("modal-atualizacao-org");
+			const inputAtualizaNome = document.getElementById("atualiza-nome");
+			const inputAtualizaSenha = document.getElementById("atualiza-senha");
+			const selectAtualizaOrg = document.getElementById("atualiza-organizacao");
+			const botaoSalvarAtualizaOrg = document.getElementById("salvar-atualizacao-org");
+			const botaoCancelarAtualizaOrg = document.getElementById("cancelar-atualizacao-org");
+			const fecharModalAtualizacaoOrg = document.getElementById('fechar-modal-atualizacao-org');
+
+			function abrirModalAtualizacao() {
+				modalAtualizacaoOrg.classList.add('ativo');
+			}
+
+			function fecharModalAtualizacao() {
+				modalAtualizacaoOrg.classList.remove('ativo');
+			}
+
+			botaoAtualizacaoOrg.addEventListener("click", () => {
+				const ultimo = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+				if (ultimo && ultimo.nome) {
+					inputAtualizaNome.value = ultimo.nome;
+					if (ultimo.organizacao) selectAtualizaOrg.value = ultimo.organizacao;
+				} else {
+					inputAtualizaNome.value = "";
+				}
+				inputAtualizaSenha.value = "";
+				abrirModalAtualizacao();
+			});
+
+			botaoCancelarAtualizaOrg.addEventListener("click", fecharModalAtualizacao);
+			fecharModalAtualizacaoOrg.addEventListener('click', fecharModalAtualizacao);
+
+			modalAtualizacaoOrg.addEventListener('click', (ev) => { if (ev.target === modalAtualizacaoOrg) fecharModalAtualizacao(); });
+
+			BancoPersonagens.restaurarCache();
+
+			botaoSalvarAtualizaOrg.addEventListener("click", async () => {
+				const nome = inputAtualizaNome.value.trim();
+				const senha = inputAtualizaSenha.value || "";
+				const novaOrg = selectAtualizaOrg.value;
+				if (!nome) { alert("Informe o nome do personagem."); inputAtualizaNome.focus(); return; }
+				const personagens = await BancoPersonagens.obterTodos();
+				const idx = personagens.findIndex(p => p.nome && p.nome.toLowerCase() === nome.toLowerCase());
+				if (idx === -1) { alert("Personagem não encontrado."); return; }
+				const personagem = personagens[idx];
+				if (personagem.senha) {
+					if (personagem.senha !== senha) { alert("Senha inválida."); inputAtualizaSenha.focus(); return; }
+				} else {
+					if (!confirm("Este personagem não tem senha. Confirmar atualização da organização?")) return;
+				}
+
+				const orgAntiga = personagem.organizacao || "-";
+				personagem.organizacao = novaOrg;
+				personagens[idx] = personagem;
+				await BancoPersonagens.salvarTodos(personagens);
+
+				const ultimo = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+				if (ultimo && ultimo.nome && ultimo.nome.toLowerCase() === personagem.nome.toLowerCase()) {
+					localStorage.setItem("ultimoPersonagem", JSON.stringify(personagem));
+				}
+
+				// registro de histórico no backup
+				try {
+					const chaveBackup = `personagem_backup_${personagem.nome}`;
+					const existente = JSON.parse(localStorage.getItem(chaveBackup) || "{}");
+					const historico = existente.historico || [];
+					const autor = (JSON.parse(localStorage.getItem('ultimoPersonagem') || 'null') || {}).nome || 'menu';
+					historico.push({ quando: new Date().toLocaleString('pt-BR'), autor, de: orgAntiga, para: personagem.organizacao });
+					const novoBackup = { personagem, historico };
+					localStorage.setItem(chaveBackup, JSON.stringify(novoBackup));
+				} catch (e) {
+					console.warn("Erro ao gravar backup/histórico:", e);
+				}
+
+				alert("Organização atualizada e salva com sucesso.");
+				fecharModalAtualizacao();
+				window.dispatchEvent(new StorageEvent('storage', { key: 'personagensCriados', newValue: localStorage.getItem('personagensCriados') }));
+			});
+
+				botaoSairEntrar.addEventListener("click", resetParaMenu);
+				botaoSairNovaAventura.addEventListener("click", resetParaMenu);
+				botaoLoginLobby.addEventListener("click", entrarNoLobby);
+
+				// ==================== LOGIN PERSONAGEM ====================
+			camposLogin.addEventListener("submit", (evento) => {
+				evento.preventDefault();
+			});
+
+				camposLogin.addEventListener("keypress", async (evento) => {
+					if (evento.key === "Enter") {
+						evento.preventDefault();
+						await entrarNoLobby();
+					}
+				});
+
+			botaoSortearFamilia.addEventListener("click", () => {
+				const sorteioExistente = obterFamiliaSorteada();
+				if (sorteioExistente && sorteioExistente.familia) {
+					aplicarEstadoFamiliaSorteada();
+					return;
+				}
+
+				const indice = Math.floor(Math.random() * familias.length);
+				const familia = familias[indice];
+				salvarFamiliaSorteada({
+					familia,
+					nomePersonagem: "",
+					status: "pendente",
+					sorteadoEm: new Date().toLocaleString("pt-BR")
+				});
+				aplicarEstadoFamiliaSorteada();
+			});
+
+			botaoCadastro.addEventListener("click", () => {
+				const sorteioAtual = obterFamiliaSorteada();
+				if (!sorteioAtual || !sorteioAtual.familia || campoFamilia.value === "Sortear") {
+					alert("Sorteie a família antes de cadastrar o personagem.");
+					botaoSortearFamilia.focus();
+					return;
+				}
+
+				const personagem = {
+					nome: document.getElementById("nome-personagem").value.trim(),
+						organizacao: document.getElementById("organizacao").value,
+						familia: document.getElementById("familia").value,
+						raca: document.getElementById("raca").value,
+						estiloLuta: document.getElementById("estilo-luta").value,
+					profissao: document.getElementById("profissao").value,
+					descricaoProfissao: descricoesProfissao[document.getElementById("profissao").value] || "",
+					classe: document.getElementById("classe").value,
+					descricaoClasse: descricoesClasse[document.getElementById("classe").value] || ""
+				};
+
+				if (!personagem.nome) {
+					campoNomePersonagem.focus();
+					return;
+				}
+
+				salvarFamiliaSorteada({
+					...sorteioAtual,
+					familia: personagem.familia,
+					nomePersonagem: personagem.nome,
+					status: "pendente"
+				});
+				sessionStorage.setItem("personagemPendente", JSON.stringify(personagem));
+				window.location.href = "cadastro.html";
+			});
+
+			aplicarEstadoFamiliaSorteada();
+
+				// ----------------- i18n (simples) -----------------
+
+				
+				const translations = {
+
+					
+					pt: {
+						'menu.enter': 'Entrar',
+						'menu.newAdventure': 'Nova Aventura',
+						'menu.options': 'Opções',
+						'menu.credits': 'Créditos',
+						'menu.back': 'Voltar',
+						'menu.developers': 'Desenvolvedores',
+						'menu.resetCharacter': 'Reset Personagem',
+						'menu.updateOrg': 'Atualização Org',
+						'menu.language': 'Idioma',
+						'menu.tutorial': 'Tutorial',
+						'langSelector.title': 'Selecionar Idioma'
+					},
+					'pt-pt': {
+						'menu.enter': 'Entrar',
+						'menu.newAdventure': 'Nova Aventura',
+						'menu.options': 'Opções',
+						'menu.credits': 'Créditos',
+						'menu.back': 'Voltar',
+						'menu.developers': 'Desenvolvedores',
+						'menu.resetCharacter': 'Reset Personagem',
+						'menu.updateOrg': 'Atualização Org',
+						'menu.language': 'Idioma',
+						'menu.tutorial': 'Tutorial',
+						'langSelector.title': 'Selecionar Idioma'
+					},
+					es: {
+						'menu.enter': 'Entrar',
+						'menu.newAdventure': 'Nueva Aventura',
+						'menu.options': 'Opciones',
+						'menu.credits': 'Créditos',
+						'menu.back': 'Atrás',
+						'menu.developers': 'Desarrolladores',
+						'menu.resetCharacter': 'Reiniciar Personaje',
+						'menu.updateOrg': 'Actualizar Org',
+						'menu.language': 'Idioma',
+						'menu.tutorial': 'Tutorial',
+						'langSelector.title': 'Seleccionar Idioma'
+					},
+					en: {
+						'menu.enter': 'Enter',
+						'menu.newAdventure': 'New Adventure',
+						'menu.options': 'Options',
+						'menu.credits': 'Credits',
+						'menu.back': 'Back',
+						'menu.developers': 'Developers',
+						'menu.resetCharacter': 'Reset Character',
+						'menu.updateOrg': 'Update Org',
+						'menu.language': 'Language',
+						'menu.tutorial': 'Tutorial',
+						'langSelector.title': 'Select Language'
+						},
+						fr: {
+						'menu.enter': 'Entrar',
+						'menu.newAdventure': 'Nouvelle Aventure',
+						'menu.options': 'Options',
+						'menu.credits': 'Crédits',
+						'menu.back': 'Retour',
+						'menu.developers': 'Développeurs',
+						'menu.resetCharacter': 'Réinitialiser le personnage',
+						'menu.updateOrg': 'Mettre à jour Org',
+						'menu.language': 'Langue',
+						'menu.tutorial': 'Tutoriel',
+						'langSelector.title': 'Sélectionner la langue'
+					},
+					de: {
+						'menu.enter': 'Einloggen',
+						'menu.newAdventure': 'Neues Abenteuer',
+						'menu.options': 'Optionen',
+						'menu.credits': 'Credits',
+						'menu.back': 'Zurück',
+						'menu.developers': 'Entwickler',
+						'menu.resetCharacter': 'Charakter zurücksetzen',
+						'menu.updateOrg': 'Organisation aktualisieren',
+						'menu.language': 'Sprache',
+						'menu.tutorial': 'Anleitung',
+						'langSelector.title': 'Sprache wählen'
+					},
+					it: {
+						'menu.enter': 'Entra',
+						'menu.newAdventure': 'Nuova Avventura',
+						'menu.options': 'Opzioni',
+						'menu.credits': 'Crediti',
+						'menu.back': 'Indietro',
+						'menu.developers': 'Sviluppatori',
+						'menu.resetCharacter': 'Reimposta personaggio',
+						'menu.updateOrg': 'Aggiorna Org',
+						'menu.language': 'Lingua',
+						'menu.tutorial': 'Tutorial',
+						'langSelector.title': 'Seleziona lingua'
+					},
+					ja: {
+						'menu.enter': 'ログイン',
+						'menu.newAdventure': '新しい冒険',
+						'menu.options': 'オプション',
+						'menu.credits': 'クレジット',
+						'menu.back': '戻る',
+						'menu.developers': '開発者',
+						'menu.resetCharacter': 'キャラクターをリセット',
+						'menu.updateOrg': '組織を更新',
+						'menu.language': '言語',
+						'menu.tutorial': 'チュートリアル',
+						'langSelector.title': '言語を選択'
+					},
+					zh: {
+						'menu.enter': '进入',
+						'menu.newAdventure': '新冒险',
+						'menu.options': '选项',
+						'menu.credits': '制作人员',
+						'menu.back': '返回',
+						'menu.developers': '开发者',
+						'menu.resetCharacter': '重置角色',
+						'menu.updateOrg': '更新组织',
+						'menu.language': '语言',
+						'menu.tutorial': '教程',
+						'langSelector.title': '选择语言'
+					},
+					ko: {
+						'menu.enter': '입장',
+						'menu.newAdventure': '새로운 모험',
+						'menu.options': '옵션',
+						'menu.credits': '크레딧',
+						'menu.back': '뒤로',
+						'menu.developers': '개발자',
+						'menu.resetCharacter': '캐릭터 초기화',
+						'menu.updateOrg': '조직 업데이트',
+						'menu.language': '언어',
+						'menu.tutorial': '튜토리얼',
+						'langSelector.title': '언어 선택'
+					},
+					ru: {
+						'menu.enter': 'Войти',
+						'menu.newAdventure': 'Новая авантюра',
+						'menu.options': 'Опции',
+						'menu.credits': 'Авторы',
+						'menu.back': 'Назад',
+						'menu.developers': 'Разработчики',
+						'menu.resetCharacter': 'Сбросить персонажа',
+						'menu.updateOrg': 'Обновить организацию',
+						'menu.language': 'Язык',
+						'menu.tutorial': 'Учебник',
+						'langSelector.title': 'Выбрать язык'
+					},
+					ar: {
+						'menu.enter': 'دخول',
+						'menu.newAdventure': 'مغامرة جديدة',
+						'menu.options': 'خيارات',
+						'menu.credits': 'المشاركون',
+						'menu.back': 'عودة',
+						'menu.developers': 'المطورون',
+						'menu.resetCharacter': 'إعادة ضبط الشخصية',
+						'menu.updateOrg': 'تحديث المنظمة',
+						'menu.language': 'اللغة',
+						'menu.tutorial': 'الدليل',
+						'langSelector.title': 'اختر اللغة'
+					},
+					nl: {
+						'menu.enter': 'Inloggen',
+						'menu.newAdventure': 'Nieuw Avontuur',
+						'menu.options': 'Opties',
+						'menu.credits': 'Credits',
+						'menu.back': 'Terug',
+						'menu.developers': 'Ontwikkelaars',
+						'menu.resetCharacter': 'Reset personage',
+						'menu.updateOrg': 'Update org',
+						'menu.language': 'Taal',
+						'menu.tutorial': 'Handleiding',
+						'langSelector.title': 'Selecteer taal'
+					},
+					sv: {
+						'menu.enter': 'Logga in',
+						'menu.newAdventure': 'Nytt äventyr',
+						'menu.options': 'Alternativ',
+						'menu.credits': 'Medverkande',
+						'menu.back': 'Tillbaka',
+						'menu.developers': 'Utvecklare',
+						'menu.resetCharacter': 'Återställ karaktär',
+						'menu.updateOrg': 'Uppdatera org',
+						'menu.language': 'Språk',
+						'menu.tutorial': 'Handledning',
+						'langSelector.title': 'Välj språk'
+					}
+				};
+
+				function applyTranslations(lang) {
+					const map = translations[lang] || translations['pt'];
+					document.querySelectorAll('[data-i18n]').forEach(el => {
+						const key = el.getAttribute('data-i18n');
+						if (map[key]) {
+							if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+								el.placeholder = map[key];
+							} else {
+								el.innerText = map[key];
+							}
+						}
+					});
+				}
+
+				function setLanguage(lang) {
+					localStorage.setItem('site_language', lang);
+					applyTranslations(lang);
+				}
+
+				// inicializar idioma salvo
+				(function(){
+					const saved = localStorage.getItem('site_language') || 'pt';
+					applyTranslations(saved);
+				})();
+		</script>
+	</body>
+</html>

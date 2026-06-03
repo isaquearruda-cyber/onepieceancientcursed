@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lobby - One Piece RPG</title>
+    <link rel="stylesheet" href="estilo.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, rgba(7, 18, 14, 0.95), rgba(13, 40, 43, 0.85));
+        }
+
+        .container-lobby {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            align-items: center;
+            padding: clamp(24px, 5vw, 64px);
+            position: relative;
+            z-index: 2;
+        }
+
+        .painel-lobby {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .cabecalho-lobby {
+            text-align: left;
+        }
+
+        .cabecalho-lobby h1 {
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            line-height: 1.1;
+            margin-bottom: 8px;
+            color: #fff7df;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .cabecalho-lobby .subtitulo-lobby {
+            font-size: 1.1rem;
+            color: #d9e8d4;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+        }
+
+        .status-personagem {
+            display: grid;
+            gap: 12px;
+            padding: 20px;
+            border: 2px solid #f7c84b;
+            background: linear-gradient(135deg, rgba(247, 200, 75, 0.08), rgba(246, 196, 80, 0.04));
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(247, 200, 75, 0.15), inset 0 0 18px rgba(255, 233, 163, 0.08);
+        }
+
+        .info-linha {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .info-label {
+            font-weight: 700;
+            color: #ffe28a;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .info-valor {
+            color: #fff7df;
+            font-size: 1rem;
+            padding: 8px 12px;
+            background: rgba(4, 12, 13, 0.5);
+            border-left: 3px solid #f7c84b;
+            border-radius: 2px;
+        }
+
+        .acoes-lobby {
+            display: grid;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .painel-acessos {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .botao-acesso-rapido {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+            border: 2px solid rgba(247, 200, 75, 0.4);
+            background: rgba(4, 12, 13, 0.6);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            color: #fff7df;
+            font-size: 0.95rem;
+        }
+
+        .botao-acesso-rapido:hover {
+            background: rgba(247, 200, 75, 0.15);
+            border-color: #f7c84b;
+            box-shadow: 0 0 16px rgba(247, 200, 75, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .icone-acesso {
+            font-size: 2rem;
+        }
+
+        /* ==================== MODAL ====================*/
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: transparent;
+            z-index: 1000;
+            backdrop-filter: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.ativo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-conteudo {
+            background: linear-gradient(135deg, rgba(13, 53, 58, 0.95), rgba(4, 12, 13, 0.95));
+            border: 2px solid #f7c84b;
+            border-radius: 8px;
+            padding: 24px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 40px rgba(247, 200, 75, 0.3);
+            animation: slideIn 0.3s ease;
+        }
+
+        .modal-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .modal-tabs .tab {
+            flex: 1;
+            padding: 12px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(4, 12, 13, 0.72);
+            color: #d9e8d4;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-tabs .tab.ativa {
+            background: linear-gradient(90deg, rgba(247, 200, 75, 0.35), rgba(247, 200, 75, 0.15));
+            border-color: #f7c84b;
+            color: #fff7df;
+            box-shadow: 0 0 18px rgba(247, 200, 75, 0.22);
+        }
+
+        .modal-tab-pane.oculto {
+            display: none;
+        }
+
+        .historico-lista {
+            display: grid;
+            gap: 12px;
+            max-height: 58vh;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .historico-item {
+            display: grid;
+            gap: 10px;
+            padding: 14px;
+            background: rgba(0, 0, 0, 0.55);
+            border: 1px solid rgba(247, 200, 75, 0.12);
+            border-radius: 8px;
+            color: #e7e7e2;
+        }
+
+        .historico-item-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .historico-item-meta {
+            display: grid;
+            gap: 4px;
+            font-size: 0.92rem;
+            color: #cfd3cc;
+        }
+
+        .historico-item-dados {
+            color: #fff7df;
+            font-size: 0.92rem;
+            line-height: 1.4;
+        }
+
+        .historico-item button {
+            align-self: center;
+            padding: 8px 10px;
+            border: 1px solid rgba(247, 200, 75, 0.25);
+            border-radius: 6px;
+            background: rgba(247, 200, 75, 0.12);
+            color: #fff7df;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .historico-item button:hover {
+            background: rgba(247, 200, 75, 0.25);
+            transform: translateY(-1px);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-cabecalho {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid rgba(247, 200, 75, 0.3);
+        }
+
+        .modal-titulo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffe28a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .fechar-modal {
+            background: rgba(200, 50, 50, 0.3);
+            border: 1px solid rgba(200, 50, 50, 0.5);
+            color: #ff9999;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .fechar-modal:hover {
+            background: rgba(200, 50, 50, 0.5);
+            border-color: #ff6666;
+        }
+
+        /* ==================== INVENTÁRIO ====================*/
+        #modal-inventario .modal-conteudo {
+            position: relative;
+            width: min(96vw, 1120px);
+            overflow: hidden;
+            background:
+                linear-gradient(135deg, rgba(10, 24, 26, 0.98), rgba(3, 7, 9, 0.98)),
+                radial-gradient(circle at 18% 0%, rgba(247, 200, 75, 0.12), transparent 32%);
+            border: 1px solid rgba(247, 200, 75, 0.34);
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55), 0 0 34px rgba(247, 200, 75, 0.16);
+            color: #e7e7e2;
+        }
+
+        #modal-inventario .modal-conteudo::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(255,255,255,0.03), transparent 40%),
+                        repeating-linear-gradient(90deg, rgba(255,255,255,0.015), rgba(255,255,255,0.015) 1px, transparent 1px, transparent 4px);
+        }
+
+        #modal-inventario .modal-cabecalho,
+        #modal-inventario .modal-tabs,
+        #modal-inventario #inventario-pane,
+        #modal-inventario #inventario-historico-pane {
+            position: relative;
+            z-index: 1;
+        }
+
+        #modal-inventario .modal-tabs {
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        #modal-inventario .modal-tabs .tab {
+            padding: 10px 12px;
+            font-size: 0.95rem;
+        }
+
+        .inventario-layout {
+            display: grid;
+            grid-template-columns: minmax(230px, 280px) 1fr;
+            gap: 16px;
+            min-height: 520px;
+        }
+
+        .inventario-sidebar {
+            display: grid;
+            align-content: start;
+            gap: 14px;
+        }
+
+        #modal-inventario .form-adicionar {
+            display: grid;
+            gap: 11px;
+            margin: 0;
+            padding: 16px;
+            border: 1px solid rgba(247, 200, 75, 0.14);
+            border-radius: 8px;
+            background: rgba(3, 8, 10, 0.78);
+            box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.28);
+        }
+
+        .inventario-titulo-form {
+            margin: 0;
+            color: #ffe28a;
+            font-size: 1rem;
+            letter-spacing: 0.04em;
+        }
+
+        .inventario-categorias {
+            display: grid;
+            gap: 8px;
+            max-height: 330px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .categoria-inventario {
+            display: grid;
+            grid-template-columns: 32px 1fr auto;
+            align-items: center;
+            gap: 9px;
+            min-height: 44px;
+            padding: 7px 9px;
+            border: 1px solid rgba(255, 237, 179, 0.13);
+            border-radius: 8px;
+            color: #d9e8d4;
+            background: rgba(4, 12, 13, 0.62);
+            cursor: pointer;
+            text-align: left;
+            transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .categoria-inventario:hover,
+        .categoria-inventario:focus-visible,
+        .categoria-inventario.ativa {
+            border-color: rgba(255, 226, 138, 0.62);
+            background: linear-gradient(90deg, rgba(247, 200, 75, 0.22), rgba(4, 12, 13, 0.72));
+            box-shadow: 0 0 16px rgba(247, 200, 75, 0.18);
+            outline: none;
+            transform: translateX(2px);
+        }
+
+        .categoria-icone {
+            display: grid;
+            place-items: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(255, 247, 223, 0.06);
+            font-size: 1.05rem;
+        }
+
+        .categoria-nome {
+            font-size: 0.86rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .categoria-contador {
+            min-width: 28px;
+            padding: 4px 7px;
+            border-radius: 999px;
+            color: #1e211c;
+            background: #f7c84b;
+            font-size: 0.78rem;
+            font-weight: 900;
+            text-align: center;
+        }
+
+        .inventario-conteudo {
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .inventario-barra {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 14px;
+            border: 1px solid rgba(247, 200, 75, 0.16);
+            border-radius: 8px;
+            background: rgba(3, 8, 10, 0.72);
+        }
+
+        .inventario-barra strong {
+            display: block;
+            color: #ffe28a;
+            font-size: 1.05rem;
+        }
+
+        .inventario-barra span {
+            color: rgba(217, 232, 212, 0.78);
+            font-size: 0.9rem;
+        }
+
+        #modal-inventario .grid-inventario {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+            gap: 12px;
+            align-content: start;
+            min-height: 420px;
+            max-height: 62vh;
+            overflow-y: auto;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background:
+                linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px),
+                rgba(2, 4, 7, 0.82);
+            background-size: 28px 28px;
+            box-shadow: inset 0 0 22px rgba(0,0,0,0.34);
+        }
+
+        .slot-inventario {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 8px;
+            min-height: 154px;
+            aspect-ratio: 1 / 1;
+            padding: 10px;
+            border-radius: 8px;
+            background:
+                radial-gradient(circle at 50% 24%, rgba(247, 200, 75, 0.12), transparent 42%),
+                linear-gradient(180deg, rgba(15, 18, 21, 0.96), rgba(5, 8, 10, 0.94));
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+        }
+
+        .slot-inventario:hover {
+            border-color: rgba(255, 226, 138, 0.48);
+            transform: translateY(-2px);
+            box-shadow: 0 16px 30px rgba(0,0,0,0.48), 0 0 18px rgba(247,200,75,0.18), inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+
+        .item-icon {
+            display: grid;
+            place-items: center;
+            justify-self: center;
+            width: 54px;
+            height: 54px;
+            border: 1px solid rgba(255, 226, 138, 0.22);
+            border-radius: 8px;
+            color: #fff7df;
+            background: rgba(255,255,255,0.04);
+            box-shadow: inset 0 0 12px rgba(0,0,0,0.25);
+            font-size: 1.7rem;
+        }
+
+        .slot-meta {
+            display: grid;
+            align-content: start;
+            gap: 5px;
+            min-width: 0;
+            text-align: center;
+        }
+
+        .item-nome {
+            font-weight: 800;
+            color: #ffe28a;
+            font-size: 0.92rem;
+            line-height: 1.15;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: normal;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .item-descricao {
+            color: #cfd3cc;
+            font-size: 0.78rem;
+            line-height: 1.3;
+            max-height: 2.6rem;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .item-quantidade {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            color: #1e211c;
+            background: #f7c84b;
+            border: 1px solid rgba(255, 247, 223, 0.28);
+            font-size: 0.76rem;
+            font-weight: 900;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.24);
+        }
+
+        #modal-inventario .slot-inventario .btn-remover {
+            align-self: end;
+            width: 100%;
+            flex: none;
+            min-width: 0;
+            padding: 7px 8px;
+            background: rgba(200, 50, 50, 0.22);
+            color: #ffb3b3;
+            border: 1px solid rgba(200, 50, 50, 0.38);
+            border-radius: 7px;
+            font-size: 0.74rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        #modal-inventario .slot-inventario .btn-remover:hover {
+            background: rgba(200, 50, 50, 0.38);
+        }
+
+        .inventario-vazio {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px 20px;
+            color: #d9e8d4;
+            font-style: italic;
+            border: 1px dashed rgba(247, 200, 75, 0.22);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.025);
+        }
+
+        @media (max-width: 860px) {
+            #modal-inventario .modal-conteudo {
+                width: 94vw;
+                max-height: 92vh;
+            }
+
+            .inventario-layout {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .inventario-categorias {
+                display: flex;
+                gap: 8px;
+                max-height: none;
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding: 0 0 4px;
+            }
+
+            .categoria-inventario {
+                grid-template-columns: 28px auto auto;
+                min-width: 150px;
+            }
+
+            #modal-inventario .grid-inventario {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                max-height: 52vh;
+            }
+        }
+
+        @media (max-width: 460px) {
+            #modal-inventario .grid-inventario {
+                grid-template-columns: 1fr;
+            }
+
+            .slot-inventario {
+                aspect-ratio: auto;
+            }
+        }
+
+        /* ==================== ATRIBUTOS ====================*/
+        .grid-atributos {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .card-atributo {
+            border: 2px solid rgba(247, 200, 75, 0.3);
+            background: rgba(4, 12, 13, 0.7);
+            border-radius: 6px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .atributo-nome {
+            font-size: 0.85rem;
+            color: #ffe28a;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .atributo-valor {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff7df;
+            text-shadow: 0 0 8px rgba(247, 200, 75, 0.3);
+        }
+
+        .atributo-barra {
+            width: 100%;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(247, 200, 75, 0.2);
+        }
+
+        .atributo-preenchimento {
+            height: 100%;
+            background: linear-gradient(90deg, #f7c84b, #ffe28a);
+            width: 75%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 8px rgba(247, 200, 75, 0.5);
+        }
+
+        /* ==================== MODAL SCROLLBAR ====================*/
+        .modal-conteudo::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .modal-conteudo::-webkit-scrollbar-track {
+            background: rgba(4, 12, 13, 0.85);
+        }
+
+        .modal-conteudo::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #f7c84b, #ffe28a);
+            border-radius: 6px;
+            border: 2px solid #1e211c;
+        }
+
+        .modal-conteudo::-webkit-scrollbar-thumb:hover {
+            background: #ffe28a;
+        }
+
+        /* ==================== FORMULÁRIO DE ADIÇÃO ====================*/
+        .form-adicionar {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(247, 200, 75, 0.3);
+        }
+
+        .form-grupo {
+            display: grid;
+            gap: 6px;
+        }
+
+        .form-grupo label {
+            font-weight: 700;
+            color: #ffe28a;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-grupo input,
+        .form-grupo select,
+        .form-grupo textarea {
+            padding: 10px;
+            border: 1px solid rgba(247, 200, 75, 0.3);
+            background: rgba(4, 12, 13, 0.7);
+            color: #fff7df;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .form-grupo input::placeholder,
+        .form-grupo textarea::placeholder {
+            color: rgba(255, 247, 223, 0.5);
+        }
+
+        .form-grupo input:focus,
+        .form-grupo select:focus,
+        .form-grupo textarea:focus {
+            border-color: #f7c84b;
+            background: rgba(4, 12, 13, 0.9);
+            outline: none;
+            box-shadow: 0 0 8px rgba(247, 200, 75, 0.3);
+        }
+
+        .form-grupo textarea {
+            resize: vertical;
+            min-height: 60px;
+            max-height: 120px;
+        }
+
+        .form-acoes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-adicionar {
+            padding: 10px;
+            background: linear-gradient(90deg, #f7c84b, #ffe28a);
+            color: #1e211c;
+            border: 1px solid #f7c84b;
+            font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-adicionar:hover {
+            background: #ffe28a;
+            box-shadow: 0 0 12px rgba(247, 200, 75, 0.5);
+        }
+
+        .btn-cancelar {
+            padding: 10px;
+            background: rgba(100, 50, 50, 0.3);
+            color: #ff9999;
+            border: 1px solid rgba(100, 50, 50, 0.5);
+            font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cancelar:hover {
+            background: rgba(100, 50, 50, 0.5);
+            border-color: #ff6666;
+        }
+
+        .item-acoes {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .btn-remover {
+            flex: 1;
+            padding: 6px;
+            background: rgba(200, 50, 50, 0.3);
+            color: #ff9999;
+            border: 1px solid rgba(200, 50, 50, 0.5);
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+
+        .btn-remover:hover {
+            background: rgba(200, 50, 50, 0.6);
+            border-color: #ff6666;
+        }
+
+        .item-info {
+            display: grid;
+            gap: 4px;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .item-tipo {
+            font-size: 0.75rem;
+            color: #ffe28a;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+        }
+
+        .item-descricao {
+            color: #d9e8d4;
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+
+        .botao-lobby {
+            min-height: 50px;
+            padding: 0 20px;
+            border: 2px solid #f7c84b;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        .botao-entrar-jogo {
+            background: linear-gradient(90deg, #f7c84b, #ffe28a);
+            color: #1e211c;
+        }
+
+        .botao-entrar-jogo:hover {
+            background: #ffe28a;
+            box-shadow: 0 0 24px rgba(247, 200, 75, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .botao-dev {
+            background: rgba(4, 12, 13, 0.7);
+            color: #fff7df;
+            border-color: rgba(247, 200, 75, 0.5);
+        }
+
+        .botao-dev:hover {
+            background: rgba(247, 200, 75, 0.15);
+            border-color: #ffe28a;
+            color: #ffe28a;
+            box-shadow: 0 0 16px rgba(247, 200, 75, 0.3);
+        }
+
+        .botao-voltar-inicio {
+            background: rgba(200, 50, 50, 0.3);
+            color: #ff9999;
+            border-color: rgba(200, 50, 50, 0.5);
+        }
+
+        .botao-voltar-inicio:hover {
+            background: rgba(200, 50, 50, 0.5);
+            border-color: #ff6666;
+            box-shadow: 0 0 16px rgba(200, 50, 50, 0.3);
+        }
+
+        .card-personagem-info {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .info-extra {
+            display: grid;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(4, 12, 13, 0.6);
+            border: 1px solid rgba(255, 237, 179, 0.2);
+            border-radius: 4px;
+        }
+
+        .info-extra-titulo {
+            font-weight: 700;
+            color: #ffe28a;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .info-extra-valor {
+            color: #d9e8d4;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .status-online {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #90ff00;
+            font-weight: 700;
+        }
+
+        .ponto-online {
+            width: 12px;
+            height: 12px;
+            background: #90ff00;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #90ff00;
+            animation: piscar 1.5s infinite;
+        }
+
+        @keyframes piscar {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0.5; }
+        }
+
+        @media (max-width: 1024px) {
+            .container-lobby {
+                grid-template-columns: 1fr;
+            }
+
+            .cabecalho-lobby {
+                text-align: center;
+            }
+
+        }
+
+        @media (max-width: 760px) {
+            .container-lobby {
+                gap: 20px;
+                padding: 16px;
+            }
+
+            .info-linha {
+                grid-template-columns: 1fr;
+            }
+
+            .cabecalho-lobby h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body class="pagina-formulario">
+    <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true">
+        <source src="fundo-login.mp4" type="video/mp4">
+    </video>
+
+    <main class="container-lobby">
+        <!-- PAINEL ESQUERDO: INFORMAÇÕES -->
+        <section class="painel-lobby">
+            <div class="cabecalho-lobby">
+                <h1>Bem-vindo ao Lobby</h1>
+                <p class="subtitulo-lobby">Sua jornada como pirata está prestes a começar</p>
+                <div class="status-online">
+                    <div class="ponto-online"></div>
+                    Pronto para a aventura
+                </div>
+            </div>
+
+            <div class="status-personagem" id="status-personagem">
+                <div class="info-linha">
+                    <span class="info-label">Nome</span>
+                    <span class="info-valor" id="nome-pers">---</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">Família</span>
+                    <span class="info-valor" id="familia-pers">---</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">Raça</span>
+                    <span class="info-valor" id="raca-pers">---</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">Estilo de Luta</span>
+                    <span class="info-valor" id="estilo-pers">---</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">Profissão</span>
+                    <span class="info-valor" id="profissao-pers">---</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">Classe</span>
+                    <span class="info-valor" id="classe-pers">---</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">Organização</span>
+                    <span class="info-valor" id="organizacao-pers">---</span>
+                </div>
+            </div>
+
+            <div class="acoes-lobby">
+                <button class="botao-lobby botao-entrar-jogo" id="botao-iniciar" type="button">⚔️ Entrar na Aventura</button>
+                    <button class="botao-lobby" id="botao-atualiza-org-lobby" type="button">🏷️ Atualizar Organização</button>
+                
+                <div class="painel-acessos">
+                    <button class="botao-acesso-rapido" id="botao-inventario" type="button">
+                        <span class="icone-acesso">🎒</span>
+                        Inventário
+                    </button>
+                    <button class="botao-acesso-rapido" id="botao-atributos" type="button">
+                        <span class="icone-acesso">💎</span>
+                        Atributos
+                    </button>
+                </div>
+
+                <button class="botao-lobby botao-dev" id="botao-admin" type="button">🔧 Desenvolvedores</button>
+                <button class="botao-lobby botao-voltar-inicio" id="botao-sair-lobby" type="button">← Voltar ao Início</button>
+            </div>
+        </section>
+
+        <!-- PAINEL DIREITO: EXTRAS -->
+        <section class="card-personagem-info">
+            <div class="info-extra">
+                <div class="info-extra-titulo">⏰ Data de Criação</div>
+                <div class="info-extra-valor" id="data-criacao">Carregando...</div>
+            </div>
+
+            <div class="info-extra">
+                <div class="info-extra-titulo">📋 Descrição da Classe</div>
+                <div class="info-extra-valor" id="descricao-classe-lobby">Carregando...</div>
+            </div>
+
+            <div class="info-extra">
+                <div class="info-extra-titulo">💼 Especialidade</div>
+                <div class="info-extra-valor" id="descricao-profissao-lobby">Carregando...</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== MODAIS ====================-->
+    <div class="modal-overlay" id="modal-inventario">
+        <div class="modal-conteudo">
+            <div class="modal-cabecalho">
+                <h2 class="modal-titulo">🎒 Inventário</h2>
+                <button class="fechar-modal" onclick="fecharModal('modal-inventario')">✕</button>
+            </div>
+
+            <div class="modal-tabs">
+                <button id="tab-inventario-itens" class="tab ativa" type="button">Itens</button>
+                <button id="tab-inventario-historico" class="tab" type="button">Histórico</button>
+            </div>
+
+            <div id="inventario-pane">
+                <div class="inventario-layout">
+                    <aside class="inventario-sidebar">
+                        <div class="form-adicionar" id="form-adicionar-item">
+                            <h3 class="inventario-titulo-form">Adicionar Item</h3>
+                            
+                            <div class="form-grupo">
+                                <label for="input-item-nome">Nome do Item</label>
+                                <input id="input-item-nome" type="text" placeholder="Ex: Espada de Ferro">
+                            </div>
+
+                            <div class="form-grupo">
+                                <label for="input-item-tipo">Tipo de Equipamento</label>
+                                <select id="input-item-tipo">
+                                    <option value="alimentacao">Alimentação</option>
+                                    <option value="armamentos">Armamentos</option>
+                                    <option value="equipamentos">Equipamentos</option>
+                                    <option value="vestimentas">Vestimentas</option>
+                                    <option value="medicinais">Medicinais</option>
+                                    <option value="ferramentas">Ferramentas</option>
+                                    <option value="navegacao">Navegação</option>
+                                    <option value="recursos">Recursos</option>
+                                    <option value="nauticos">Náuticos</option>
+                                    <option value="tesouros">Tesouros</option>
+                                    <option value="documentos">Documentos</option>
+                                    <option value="especiais">Especiais</option>
+                                    <option value="consumiveis">Consumíveis</option>
+                                    <option value="tecnologicos">Tecnológicos</option>
+                                    <option value="materiais">Materiais</option>
+                                    <option value="berris">Berris</option>
+                                    <option value="cacaepesca">Caça e Pesca</option>
+                                    <option value="diversos">Diversos</option>
+                                </select>
+                            </div>
+
+                            <div class="form-grupo">
+                                <label for="input-item-quantidade">Quantidade</label>
+                                <input id="input-item-quantidade" type="number" min="1" value="1" placeholder="1">
+                            </div>
+
+                            <div class="form-grupo">
+                                <label for="input-item-descricao">Descrição</label>
+                                <textarea id="input-item-descricao" placeholder="Descreva o item (poder, origem, efeito)..."></textarea>
+                            </div>
+
+                            <div class="form-acoes">
+                                <button class="btn-adicionar" onclick="adicionarItem()">Adicionar</button>
+                                <button class="btn-cancelar" onclick="limparFormulario()">Limpar</button>
+                            </div>
+                        </div>
+
+                        <nav class="inventario-categorias" id="inventario-categorias" aria-label="Categorias do inventário"></nav>
+                    </aside>
+
+                    <section class="inventario-conteudo">
+                        <div class="inventario-barra">
+                            <div>
+                                <strong id="inventario-categoria-titulo">Todos os itens</strong>
+                                <span id="inventario-categoria-resumo">0 itens no inventário</span>
+                            </div>
+                        </div>
+                        <div class="grid-inventario" id="grid-inventario"></div>
+                    </section>
+                </div>
+            </div>
+
+            <div id="inventario-historico-pane" class="modal-tab-pane oculto">
+                <div class="historico-lista" id="historico-inventario"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-atributos">
+        <div class="modal-conteudo">
+            <div class="modal-cabecalho">
+                <h2 class="modal-titulo">💎 Atributos</h2>
+                <button class="fechar-modal" onclick="fecharModal('modal-atributos')">✕</button>
+            </div>
+
+            <div class="modal-tabs">
+                <button id="tab-atributos-valores" class="tab ativa" type="button">Valores</button>
+                <button id="tab-atributos-historico" class="tab" type="button">Histórico</button>
+            </div>
+
+            <div id="atributos-pane">
+                <div class="grid-atributos" id="grid-atributos"></div>
+            </div>
+
+            <div id="atributos-historico-pane" class="modal-tab-pane oculto">
+                <div class="historico-lista" id="historico-atributos"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Atualizar Organizacao (lobby) -->
+    <div class="modal-overlay" id="modal-atualiza-org-lobby">
+        <div class="modal-conteudo modal-org">
+            <div class="modal-cabecalho org-cabecalho">
+                <div>
+                    <h2 class="modal-titulo">Atualizar Organização</h2>
+                    <p class="org-subtitulo">Confirme a senha do personagem e escolha a nova afiliação.</p>
+                </div>
+                <button class="fechar-modal" onclick="fecharModal('modal-atualiza-org-lobby')">✕</button>
+            </div>
+
+            <div class="form-adicionar org-form">
+                <div class="form-grupo">
+                    <label for="lobby-atualiza-nome">Nome do personagem</label>
+                    <input id="lobby-atualiza-nome" type="text" readonly>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="lobby-atualiza-senha">Senha (se houver)</label>
+                    <input id="lobby-atualiza-senha" type="password" placeholder="Senha do personagem">
+                </div>
+
+                <div class="form-grupo">
+                    <label for="lobby-atualiza-organizacao">Nova Organização</label>
+                    <select id="lobby-atualiza-organizacao">
+                        <option>Marinha</option>
+                        <option>Piratas</option>
+                        <option>Exército Revolucionário</option>
+                        <option>Cipher Pol</option>
+                        <option>Neo Marinha</option>
+                        <option>Caçadores de Recompensa</option>
+                        <option>Germá 66</option>
+                        <option>Galley-la Company</option>
+                        <option>MADs</option>
+                        <option>Baroque Works</option>
+                    </select>
+                </div>
+
+                <div class="org-acoes">
+                    <button class="btn-adicionar" id="lobby-salvar-atualiza-org" type="button">Salvar</button>
+                    <button class="btn-cancelar" id="lobby-cancelar-atualiza-org" type="button">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="banco-personagens.js"></script>
+    <script>
+        const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+
+        // Elementos de texto
+        const nomePers = document.getElementById("nome-pers");
+        const familiaPers = document.getElementById("familia-pers");
+        const racaPers = document.getElementById("raca-pers");
+        const estiloPers = document.getElementById("estilo-pers");
+        const profissaoPers = document.getElementById("profissao-pers");
+        const classePers = document.getElementById("classe-pers");
+        const dataCriacao = document.getElementById("data-criacao");
+        const descricaoClasseLobby = document.getElementById("descricao-classe-lobby");
+        const descricaoProfissaoLobby = document.getElementById("descricao-profissao-lobby");
+
+        // Botões
+        const botaoIniciar = document.getElementById("botao-iniciar");
+        const botaoInventario = document.getElementById("botao-inventario");
+        const botaoAtributos = document.getElementById("botao-atributos");
+        const botaoAdmin = document.getElementById("botao-admin");
+        const botaoSairLobby = document.getElementById("botao-sair-lobby");
+
+        // Modais
+        const modalInventario = document.getElementById("modal-inventario");
+        const modalAtributos = document.getElementById("modal-atributos");
+        const gridInventario = document.getElementById("grid-inventario");
+        const gridAtributos = document.getElementById("grid-atributos");
+
+        // Inputs do formulário
+        const inputItemNome = document.getElementById("input-item-nome");
+        const inputItemTipo = document.getElementById("input-item-tipo");
+        const inputItemQuantidade = document.getElementById("input-item-quantidade");
+        const inputItemDescricao = document.getElementById("input-item-descricao");
+        const tabInventarioItens = document.getElementById('tab-inventario-itens');
+        const tabInventarioHistorico = document.getElementById('tab-inventario-historico');
+        const tabAtributosValores = document.getElementById('tab-atributos-valores');
+        const tabAtributosHistorico = document.getElementById('tab-atributos-historico');
+        const navCategoriasInventario = document.getElementById('inventario-categorias');
+        const tituloCategoriaInventario = document.getElementById('inventario-categoria-titulo');
+        const resumoCategoriaInventario = document.getElementById('inventario-categoria-resumo');
+        let categoriaInventarioAtiva = 'todos';
+
+        const categoriasInventario = [
+            { chave: 'todos', nome: 'Todos', icone: '🎒' },
+            { chave: 'alimentacao', nome: 'Alimentação', icone: '🍖' },
+            { chave: 'armamentos', nome: 'Armamentos', icone: '⚔️' },
+            { chave: 'equipamentos', nome: 'Equipamentos', icone: '🛡️' },
+            { chave: 'vestimentas', nome: 'Vestimentas', icone: '👕' },
+            { chave: 'medicinais', nome: 'Medicinais', icone: '💊' },
+            { chave: 'ferramentas', nome: 'Ferramentas', icone: '🧰' },
+            { chave: 'navegacao', nome: 'Navegação', icone: '🧭' },
+            { chave: 'recursos', nome: 'Recursos', icone: '📦' },
+            { chave: 'nauticos', nome: 'Náuticos', icone: '🚢' },
+            { chave: 'tesouros', nome: 'Tesouros', icone: '💎' },
+            { chave: 'documentos', nome: 'Documentos', icone: '📜' },
+            { chave: 'especiais', nome: 'Especiais', icone: '✨' },
+            { chave: 'consumiveis', nome: 'Consumíveis', icone: '🎒' },
+            { chave: 'tecnologicos', nome: 'Tecnológicos', icone: '🔬' },
+            { chave: 'materiais', nome: 'Materiais', icone: '🐾' },
+            { chave: 'berris', nome: 'Berris', icone: '💰' },
+            { chave: 'cacaepesca', nome: 'Caça e Pesca', icone: '🎣' },
+            { chave: 'diversos', nome: 'Diversos', icone: '🎁' }
+        ];
+
+        // ==================== SISTEMA DE PERSISTÊNCIA ====================
+        function obterInventario() {
+            if (!personagem) return [];
+            const chave = `inventario_${personagem.nome}`;
+            return JSON.parse(localStorage.getItem(chave) || "[]");
+        }
+
+        function salvarInventario(itens) {
+            if (!personagem) return;
+            const chave = `inventario_${personagem.nome}`;
+            localStorage.setItem(chave, JSON.stringify(itens));
+        }
+
+        // Registra histórico no backup do personagem (inventario / atributos / organizacao)
+        function registrarHistorico(nomePersonagem, autor, tipo, de, para) {
+            if (!nomePersonagem) return;
+            try {
+                const chaveBackup = `personagem_backup_${nomePersonagem}`;
+                const existenteRaw = localStorage.getItem(chaveBackup);
+                const existente = existenteRaw ? JSON.parse(existenteRaw) : {};
+                const historico = Array.isArray(existente.historico) ? existente.historico : [];
+                const entry = {
+                    quando: new Date().toLocaleString('pt-BR'),
+                    quem: nomePersonagem,
+                    autor: autor || (personagem && personagem.nome) || 'sistema',
+                    tipo: tipo || 'dados',
+                    de: de === undefined ? null : de,
+                    para: para === undefined ? null : para
+                };
+                historico.push(entry);
+
+                // Atualiza objeto de backup - tenta recuperar personagem atual do banco
+                const personagens = JSON.parse(localStorage.getItem('personagensCriados') || '[]');
+                const p = personagens.find(p => p.nome && p.nome.toLowerCase() === nomePersonagem.toLowerCase()) || (existente.personagem || null);
+                const novoBackup = { personagem: p, historico };
+                localStorage.setItem(chaveBackup, JSON.stringify(novoBackup));
+            } catch (e) {
+                console.warn('Falha ao registrar historico para', nomePersonagem, e);
+            }
+        }
+
+        function obterBackupPersonagem() {
+            if (!personagem) return { personagem: null, historico: [] };
+            const backup = JSON.parse(localStorage.getItem(`personagem_backup_${personagem.nome}`) || '{}');
+            return {
+                personagem: backup.personagem || personagem,
+                historico: Array.isArray(backup.historico) ? backup.historico : []
+            };
+        }
+
+        function renderizarHistoricoInventario() {
+            const backup = obterBackupPersonagem();
+            const historico = backup.historico.filter(item => item.tipo === 'inventario');
+            const historicoLista = document.getElementById('historico-inventario');
+
+            if (historico.length === 0) {
+                historicoLista.innerHTML = `<div class="inventario-vazio">Nenhuma alteração de inventário registrada.</div>`;
+                return;
+            }
+
+            historicoLista.innerHTML = historico.map((item, index) => `
+                <div class="historico-item">
+                    <div class="historico-item-header">
+                        <div class="historico-item-meta">
+                            <strong>${item.quando}</strong>
+                            <span>Autor: ${item.autor}</span>
+                            <span>Tipo: ${item.tipo}</span>
+                            <span>Quem: ${item.quem}</span>
+                        </div>
+                        <button onclick="restaurarInventario(${index})">Restaurar</button>
+                    </div>
+                    <div class="historico-item-dados">
+                        <div><strong>De:</strong> ${resumoInventario(item.de)}</div>
+                        <div><strong>Para:</strong> ${resumoInventario(item.para)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderizarHistoricoAtributos() {
+            const backup = obterBackupPersonagem();
+            const historico = backup.historico.filter(item => item.tipo === 'atributos');
+            const historicoLista = document.getElementById('historico-atributos');
+
+            if (historico.length === 0) {
+                historicoLista.innerHTML = `<div class="inventario-vazio">Nenhuma alteração de atributos registrada.</div>`;
+                return;
+            }
+
+            historicoLista.innerHTML = historico.map((item, index) => `
+                <div class="historico-item">
+                    <div class="historico-item-header">
+                        <div class="historico-item-meta">
+                            <strong>${item.quando}</strong>
+                            <span>Autor: ${item.autor}</span>
+                            <span>Tipo: ${item.tipo}</span>
+                            <span>Quem: ${item.quem}</span>
+                        </div>
+                        <button onclick="restaurarAtributos(${index})">Restaurar</button>
+                    </div>
+                    <div class="historico-item-dados">
+                        <div><strong>De:</strong> ${resumoAtributos(item.de)}</div>
+                        <div><strong>Para:</strong> ${resumoAtributos(item.para)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function resumoInventario(inventario) {
+            if (!Array.isArray(inventario)) return '[]';
+            if (inventario.length === 0) return 'Vazio';
+            return inventario.map(item => `${item.nome} x${item.quantidade}`).slice(0, 4).join(', ');
+        }
+
+        function resumoAtributos(atributos) {
+            if (!atributos || typeof atributos !== 'object') return '-';
+            const labels = {
+                forca: 'Força Vital',
+                velocidade: 'Agilidade',
+                resistencia: 'Resistência',
+                inteligencia: 'Força Mental',
+                vontade: 'Determinação',
+                sorte: 'Força'
+            };
+            return ['forca', 'velocidade', 'resistencia', 'inteligencia', 'vontade', 'sorte']
+                .map(chave => `${labels[chave]}: ${atributos[chave] ?? '-'}`)
+                .join(' | ');
+        }
+
+        function mostrarAbaInventario(aba) {
+            document.getElementById('tab-inventario-itens').classList.toggle('ativa', aba === 'itens');
+            document.getElementById('tab-inventario-historico').classList.toggle('ativa', aba === 'historico');
+            document.getElementById('inventario-pane').classList.toggle('oculto', aba !== 'itens');
+            document.getElementById('inventario-historico-pane').classList.toggle('oculto', aba !== 'historico');
+            if (aba === 'historico') renderizarHistoricoInventario();
+        }
+
+        function mostrarAbaAtributos(aba) {
+            document.getElementById('tab-atributos-valores').classList.toggle('ativa', aba === 'valores');
+            document.getElementById('tab-atributos-historico').classList.toggle('ativa', aba === 'historico');
+            document.getElementById('atributos-pane').classList.toggle('oculto', aba !== 'valores');
+            document.getElementById('atributos-historico-pane').classList.toggle('oculto', aba !== 'historico');
+            if (aba === 'historico') renderizarHistoricoAtributos();
+        }
+
+        function restaurarInventario(indice) {
+            if (!personagem) return;
+            const backup = obterBackupPersonagem();
+            const entradas = backup.historico.filter(item => item.tipo === 'inventario');
+            const entrada = entradas[indice];
+            if (!entrada) return;
+            const antes = JSON.parse(JSON.stringify(obterInventario()));
+            const restaurado = Array.isArray(entrada.para) ? entrada.para : [];
+            salvarInventario(restaurado);
+            registrarHistorico(personagem.nome, personagem.nome, 'inventario', antes, restaurado);
+            renderizarInventario();
+            renderizarHistoricoInventario();
+            alert('Inventário restaurado para o estado selecionado.');
+        }
+
+        function restaurarAtributos(indice) {
+            if (!personagem) return;
+            const backup = obterBackupPersonagem();
+            const entradas = backup.historico.filter(item => item.tipo === 'atributos');
+            const entrada = entradas[indice];
+            if (!entrada) return;
+            const antes = JSON.parse(JSON.stringify(obterAtributos()));
+            const restaurado = entrada.para || { forca: 0, velocidade: 0, resistencia: 0, inteligencia: 0, vontade: 0, sorte: 0 };
+            salvarAtributos(restaurado);
+            registrarHistorico(personagem.nome, personagem.nome, 'atributos', antes, restaurado);
+            renderizarAtributos();
+            renderizarHistoricoAtributos();
+            alert('Atributos restaurados para o estado selecionado.');
+        }
+
+        function obterAtributos() {
+            if (!personagem) return {};
+            const chave = `atributos_${personagem.nome}`;
+            return JSON.parse(localStorage.getItem(chave) || JSON.stringify({
+                forca: 85,
+                velocidade: 78,
+                resistencia: 82,
+                inteligencia: 70,
+                vontade: 95,
+                sorte: 60
+            }));
+        }
+
+        function salvarAtributos(atributos) {
+            if (!personagem) return;
+            const chave = `atributos_${personagem.nome}`;
+            const antes = JSON.parse(localStorage.getItem(chave) || "null");
+            localStorage.setItem(chave, JSON.stringify(atributos));
+            // registrar historico de atributos
+            try {
+                registrarHistorico(personagem.nome, personagem.nome, 'atributos', antes || null, atributos);
+            } catch (e) { console.warn('Erro ao registrar historico de atributos', e); }
+        }
+
+        // ==================== FUNÇÕES MODAIS ====================
+        function abrirModal(idModal) {
+            document.getElementById(idModal).classList.add("ativo");
+        }
+
+        function fecharModal(idModal) {
+            document.getElementById(idModal).classList.remove("ativo");
+        }
+
+        // Fechar modal ao clicar fora
+        document.querySelectorAll(".modal-overlay").forEach((modal) => {
+            modal.addEventListener("click", (evento) => {
+                if (evento.target === modal) {
+                    fecharModal(modal.id);
+                }
+            });
+        });
+
+        // ==================== GERENCIAMENTO DE INVENTÁRIO ====================
+        function escaparHtml(texto) {
+            return String(texto || "").replace(/[&<>"']/g, (caractere) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            })[caractere]);
+        }
+
+        function obterCategoriaInventario(chave) {
+            return categoriasInventario.find((categoria) => categoria.chave === chave) || categoriasInventario[0];
+        }
+
+        function contarItensPorCategoria(inventario) {
+            return categoriasInventario.reduce((contadores, categoria) => {
+                contadores[categoria.chave] = categoria.chave === 'todos'
+                    ? inventario.length
+                    : inventario.filter((item) => item.tipo === categoria.chave).length;
+                return contadores;
+            }, {});
+        }
+
+        function renderizarCategoriasInventario(inventario) {
+            const contadores = contarItensPorCategoria(inventario);
+
+            navCategoriasInventario.innerHTML = categoriasInventario.map((categoria) => `
+                <button class="categoria-inventario ${categoriaInventarioAtiva === categoria.chave ? 'ativa' : ''}" type="button" data-categoria="${categoria.chave}" aria-pressed="${categoriaInventarioAtiva === categoria.chave ? 'true' : 'false'}">
+                    <span class="categoria-icone">${categoria.icone}</span>
+                    <span class="categoria-nome">${categoria.nome}</span>
+                    <span class="categoria-contador">${contadores[categoria.chave] || 0}</span>
+                </button>
+            `).join("");
+
+            navCategoriasInventario.querySelectorAll('[data-categoria]').forEach((botao) => {
+                botao.addEventListener('click', () => {
+                    categoriaInventarioAtiva = botao.getAttribute('data-categoria');
+                    renderizarInventario();
+                });
+            });
+        }
+
+        function adicionarItem() {
+            const nome = inputItemNome.value.trim();
+            const tipo = inputItemTipo.value;
+            const quantidade = parseInt(inputItemQuantidade.value) || 1;
+            const descricao = inputItemDescricao.value.trim();
+
+            if (!nome) {
+                alert("❌ Digite o nome do item!");
+                inputItemNome.focus();
+                return;
+            }
+
+            const inventario = obterInventario();
+            const novoItem = {
+                id: Date.now(),
+                nome,
+                tipo,
+                quantidade,
+                descricao,
+                adicionadoEm: new Date().toLocaleString("pt-BR")
+            };
+
+            const inventarioAntes = JSON.parse(JSON.stringify(inventario));
+            inventario.push(novoItem);
+            salvarInventario(inventario);
+            // registra historico: de = inventarioAntes, para = inventario (array), autor = personagem.nome
+            registrarHistorico(personagem.nome, personagem.nome, 'inventario', inventarioAntes, inventario);
+            limparFormulario();
+            renderizarInventario();
+        }
+
+        function removerItem(idItem) {
+            if (!confirm("❌ Tem certeza que deseja remover este item?")) return;
+
+            let inventario = obterInventario();
+            const inventarioAntes = JSON.parse(JSON.stringify(inventario));
+            inventario = inventario.filter((item) => item.id !== idItem);
+            salvarInventario(inventario);
+            registrarHistorico(personagem.nome, personagem.nome, 'inventario', inventarioAntes, inventario);
+            renderizarInventario();
+        }
+
+        function limparFormulario() {
+            inputItemNome.value = "";
+            inputItemTipo.value = "alimentacao";
+            inputItemQuantidade.value = "1";
+            inputItemDescricao.value = "";
+            inputItemNome.focus();
+        }
+
+        // ==================== RENDERIZAR INVENTÁRIO ====================
+        function renderizarInventario() {
+            const inventario = obterInventario();
+            const categoriaAtual = obterCategoriaInventario(categoriaInventarioAtiva);
+            const itensFiltrados = categoriaInventarioAtiva === 'todos'
+                ? inventario
+                : inventario.filter((item) => item.tipo === categoriaInventarioAtiva);
+            const totalFiltrado = itensFiltrados.length;
+
+            renderizarCategoriasInventario(inventario);
+            tituloCategoriaInventario.textContent = categoriaInventarioAtiva === 'todos'
+                ? 'Todos os itens'
+                : categoriaAtual.nome;
+            resumoCategoriaInventario.textContent = `${totalFiltrado} ${totalFiltrado === 1 ? 'item' : 'itens'} ${categoriaInventarioAtiva === 'todos' ? 'no inventário' : 'nesta categoria'}`;
+
+            if (inventario.length === 0) {
+                gridInventario.innerHTML = `<div class="inventario-vazio">Sua mochila está vazia. Adicione um item no painel ao lado.</div>`;
+                return;
+            }
+
+            if (itensFiltrados.length === 0) {
+                gridInventario.innerHTML = `<div class="inventario-vazio">Nenhum item em ${escaparHtml(categoriaAtual.nome)} ainda.</div>`;
+                return;
+            }
+
+            gridInventario.innerHTML = itensFiltrados.map((item) => {
+                const categoria = obterCategoriaInventario(item.tipo);
+                return `
+                <div class="slot-inventario ocupado">
+                    <span class="item-quantidade">x${escaparHtml(item.quantidade)}</span>
+                    <div class="item-icon">${categoria.icone}</div>
+                    <div class="slot-meta">
+                        <strong class="item-nome">${escaparHtml(item.nome)}</strong>
+                        <div class="item-descricao">${escaparHtml(item.descricao || "Sem descrição")}</div>
+                    </div>
+                    <button class="btn-remover" onclick="removerItem(${Number(item.id)})">Remover</button>
+                </div>
+            `}).join("");
+        }
+
+        // ==================== RENDERIZAR ATRIBUTOS ====================
+        function renderizarAtributos() {
+            const atributos = obterAtributos();
+
+            const atributosArray = [
+                { nome: "❤️ Força Vital", chave: "forca", icon: "❤️" },
+                { nome: "⚡ Agilidade", chave: "velocidade", icon: "⚡" },
+                { nome: "🛡️ Resistência", chave: "resistencia", icon: "🛡️" },
+                { nome: "🧠 Força Mental", chave: "inteligencia", icon: "🧠" },
+                { nome: "🔥 Determinação", chave: "vontade", icon: "🔥" },
+                { nome: "💪 Força", chave: "sorte", icon: "💪" }
+            ];
+
+            gridAtributos.innerHTML = atributosArray.map((atrib) => `
+                <div class="card-atributo">
+                    <div class="atributo-nome">${atrib.icon} ${atrib.nome}</div>
+                    <div class="atributo-valor">${atributos[atrib.chave]}</div>
+                    <div class="atributo-barra">
+                        <div class="atributo-preenchimento" style="width: ${(atributos[atrib.chave] / 100) * 100}%"></div>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        // ==================== INICIALIZAÇÃO ====================
+        if (!personagem) {
+            nomePers.textContent = "Nenhum personagem encontrado";
+            botaoIniciar.disabled = true;
+            botaoInventario.disabled = true;
+            botaoAtributos.disabled = true;
+        } else {
+            nomePers.textContent = personagem.nome || "---";
+            familiaPers.textContent = personagem.familia || "---";
+            racaPers.textContent = personagem.raca || "---";
+            estiloPers.textContent = personagem.estiloLuta || "---";
+            profissaoPers.textContent = personagem.profissao || "---";
+            classePers.textContent = personagem.classe || "---";
+            // Organização (pode vir de "organizacao")
+            const org = personagem.organizacao || personagem.organização || personagem.organization || "---";
+            document.getElementById("organizacao-pers").textContent = org;
+            dataCriacao.textContent = personagem.criadoEm || "Hoje";
+            descricaoClasseLobby.textContent = personagem.descricaoClasse || "Aguardando dados...";
+            descricaoProfissaoLobby.textContent = personagem.descricaoProfissao || "Aguardando dados...";
+        }
+
+        botaoIniciar.addEventListener("click", () => {
+            alert("🎮 Bem-vindo à aventura, " + (personagem?.nome || "navegante") + "!\n\nO jogo em breve estará disponível.");
+        });
+
+        botaoInventario.addEventListener("click", () => {
+            mostrarAbaInventario('itens');
+            renderizarInventario();
+            abrirModal("modal-inventario");
+        });
+
+        botaoAtributos.addEventListener("click", () => {
+            mostrarAbaAtributos('valores');
+            renderizarAtributos();
+            abrirModal("modal-atributos");
+        });
+
+        botaoAdmin.addEventListener("click", () => {
+            window.location.href = "personagens.html";
+        });
+
+        botaoSairLobby.addEventListener("click", () => {
+            window.location.href = "index.html";
+        });
+
+        if (tabInventarioItens && tabInventarioHistorico) {
+            tabInventarioItens.addEventListener('click', () => mostrarAbaInventario('itens'));
+            tabInventarioHistorico.addEventListener('click', () => mostrarAbaInventario('historico'));
+        }
+
+        if (tabAtributosValores && tabAtributosHistorico) {
+            tabAtributosValores.addEventListener('click', () => mostrarAbaAtributos('valores'));
+            tabAtributosHistorico.addEventListener('click', () => mostrarAbaAtributos('historico'));
+        }
+
+        // Listen para mudanças no localStorage
+        window.addEventListener("storage", (evento) => {
+            if (evento.key === "ultimoPersonagem") {
+                window.location.reload();
+            }
+        });
+
+        // ==================== ATUALIZACAO DE ORGANIZACAO (LOBBY) ====================
+        const botaoAtualizaOrgLobby = document.getElementById('botao-atualiza-org-lobby');
+        const modalAtualizaOrgLobby = document.getElementById('modal-atualiza-org-lobby');
+        const inputLobbyAtualizaNome = document.getElementById('lobby-atualiza-nome');
+        const inputLobbyAtualizaSenha = document.getElementById('lobby-atualiza-senha');
+        const selectLobbyAtualizaOrg = document.getElementById('lobby-atualiza-organizacao');
+        const botaoLobbySalvar = document.getElementById('lobby-salvar-atualiza-org');
+        const botaoLobbyCancelar = document.getElementById('lobby-cancelar-atualiza-org');
+
+        botaoAtualizaOrgLobby.addEventListener('click', () => {
+            if (!personagem) { alert('Nenhum personagem ativo.'); return; }
+            inputLobbyAtualizaNome.value = personagem.nome || '';
+            inputLobbyAtualizaSenha.value = '';
+            if (personagem.organizacao) selectLobbyAtualizaOrg.value = personagem.organizacao;
+            try { modalAtualizaOrgLobby.classList.add('ativo'); } catch (e) { modalAtualizaOrgLobby.style.display = 'flex'; }
+        });
+
+        botaoLobbyCancelar.addEventListener('click', () => {
+            fecharModal('modal-atualiza-org-lobby');
+        });
+
+        BancoPersonagens.restaurarCache();
+
+        botaoLobbySalvar.addEventListener('click', async () => {
+            const nome = inputLobbyAtualizaNome.value.trim();
+            const senha = inputLobbyAtualizaSenha.value || '';
+            const novaOrg = selectLobbyAtualizaOrg.value;
+            if (!nome) { alert('Nome do personagem inválido.'); return; }
+
+            const personagens = await BancoPersonagens.obterTodos();
+            const idx = personagens.findIndex(p => p.nome && p.nome.toLowerCase() === nome.toLowerCase());
+            if (idx === -1) { alert('Personagem não encontrado no banco.'); return; }
+            const p = personagens[idx];
+            if (p.senha) {
+                if (p.senha !== senha) { alert('Senha inválida.'); return; }
+            } else {
+                if (!confirm('Personagem sem senha. Confirmar alteração da organização?')) return;
+            }
+
+            const orgAntiga = p.organizacao || "-";
+            p.organizacao = novaOrg;
+            personagens[idx] = p;
+            await BancoPersonagens.salvarTodos(personagens);
+            // atualiza ultimoPersonagem se for o atual
+            const ultimo = JSON.parse(localStorage.getItem('ultimoPersonagem') || 'null');
+            if (ultimo && ultimo.nome && ultimo.nome.toLowerCase() === p.nome.toLowerCase()) {
+                localStorage.setItem('ultimoPersonagem', JSON.stringify(p));
+            }
+            // backup estruturado com histórico
+            try {
+                const chaveBackup = `personagem_backup_${p.nome}`;
+                const existente = JSON.parse(localStorage.getItem(chaveBackup) || "{}");
+                const historico = existente.historico || [];
+                const autor = (JSON.parse(localStorage.getItem('ultimoPersonagem') || 'null') || {}).nome || 'lobby';
+                historico.push({ quando: new Date().toLocaleString('pt-BR'), autor, de: orgAntiga, para: p.organizacao });
+                const novoBackup = { personagem: p, historico };
+                localStorage.setItem(chaveBackup, JSON.stringify(novoBackup));
+            } catch (e) {
+                console.warn('Não foi possível criar backup por personagem:', e);
+            }
+
+            alert('Organização atualizada e salva permanentemente.');
+            fecharModal('modal-atualiza-org-lobby');
+            window.dispatchEvent(new StorageEvent('storage', { key: 'personagensCriados', newValue: localStorage.getItem('personagensCriados') }));
+            // atualizar exibição imediata
+            document.getElementById('organizacao-pers').textContent = p.organizacao || '---';
+        });
+    </script>
+</body>
+</html>

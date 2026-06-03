@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personagens Criados - One Piece RPG</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body class="pagina-formulario admin-bloqueado">
+    <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true">
+        <source src="fundo-login.mp4" type="video/mp4">
+    </video>
+
+    <main class="conteudo-pagina">
+        <header class="topo-pagina">
+            <div>
+                <p class="serie">Desenvolvedores</p>
+                <h1>Personagens</h1>
+            </div>
+            <a class="botao-secundario" href="index.html">Inicio</a>
+        </header>
+
+        <section class="cartao-admin acesso-dev" id="acesso-dev" aria-label="Acesso dos desenvolvedores">
+            <div class="campo-bloco">
+                <label for="senha-dev">Senha de desenvolvedor</label>
+                <input id="senha-dev" type="password" placeholder="Digite a senha">
+            </div>
+            <p class="mensagem-status" id="mensagem-dev" aria-live="polite"></p>
+            <button class="botao-principal" id="entrar-dev" type="button">Acessar lista</button>
+        </section>
+
+        <section class="area-admin" aria-label="Lista de personagens criados">
+            <div class="lista-personagens" id="lista-personagens"></div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="modal-admin-inventario">
+        <div class="modal-conteudo modal-admin-jogo">
+            <div class="modal-cabecalho">
+                <div>
+                    <div class="modal-titulo">Inventário</div>
+                    <p class="modal-admin-subtitulo" id="admin-inventario-personagem">Personagem</p>
+                </div>
+                <button class="fechar-modal" onclick="fecharModalAdmin('modal-admin-inventario')" type="button">✕</button>
+            </div>
+
+            <div class="admin-inventario-layout">
+                <nav class="admin-inventario-categorias" id="admin-inventario-categorias" aria-label="Categorias do inventário"></nav>
+                <section class="admin-inventario-painel">
+                    <div class="admin-inventario-barra">
+                        <strong id="admin-inventario-titulo">Todos os itens</strong>
+                        <span id="admin-inventario-resumo">0 itens</span>
+                    </div>
+                    <div class="admin-grid-inventario" id="admin-grid-inventario"></div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-admin-atributos">
+        <div class="modal-conteudo modal-admin-jogo modal-admin-atributos">
+            <div class="modal-cabecalho">
+                <div>
+                    <div class="modal-titulo">Atributos</div>
+                    <p class="modal-admin-subtitulo" id="admin-atributos-personagem">Personagem</p>
+                </div>
+                <button class="fechar-modal" onclick="fecharModalAdmin('modal-admin-atributos')" type="button">✕</button>
+            </div>
+            <div class="admin-grid-atributos" id="admin-grid-atributos"></div>
+        </div>
+    </div>
+
+    <script src="banco-personagens.js"></script>
+    <script>
+        // ==================== SENHA DE DESENVOLVEDOR ====================
+        const senhaDev = "dev123";     // ←←← MUDE AQUI A SENHA
+        const senhaDelecao = "dev558"; // ←←← SENHA PARA DELETAR
+
+        // ============================================================
+        const corpo = document.body;
+        const botaoEntrarDev = document.getElementById("entrar-dev");
+        const campoSenhaDev = document.getElementById("senha-dev");
+        const mensagemDev = document.getElementById("mensagem-dev");
+        const acessoDev = document.getElementById("acesso-dev");
+        const lista = document.getElementById("lista-personagens");
+        const adminGridInventario = document.getElementById("admin-grid-inventario");
+        const adminCategoriasInventario = document.getElementById("admin-inventario-categorias");
+        const adminInventarioPersonagem = document.getElementById("admin-inventario-personagem");
+        const adminInventarioTitulo = document.getElementById("admin-inventario-titulo");
+        const adminInventarioResumo = document.getElementById("admin-inventario-resumo");
+        const adminGridAtributos = document.getElementById("admin-grid-atributos");
+        const adminAtributosPersonagem = document.getElementById("admin-atributos-personagem");
+        let personagemSelecionado = null;
+        let inventarioAdminAtual = [];
+        let categoriaAdminAtual = "todos";
+        let modoAcaoAdmin = "reset";
+
+        function escaparHtml(texto) {
+            return String(texto || "").replace(/[&<>"']/g, (caractere) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            }[caractere]));
+        }
+
+        function selecionarPersonagem(nome) {
+            document.querySelectorAll(".cartao-personagem").forEach((cartao) => {
+                cartao.classList.remove("selecionado");
+            });
+
+            if (personagemSelecionado === nome) {
+                personagemSelecionado = null;
+                return;
+            }
+
+            personagemSelecionado = nome;
+            const cartaoSelecionado = Array.from(document.querySelectorAll(".cartao-personagem")).find(
+                (cartao) => cartao.textContent.includes(nome)
+            );
+            if (cartaoSelecionado) {
+                cartaoSelecionado.classList.add("selecionado");
+            }
+        }
+
+        function gerarProtocoloReset() {
+            const data = new Date();
+            const ano = data.getFullYear();
+            const mes = String(data.getMonth() + 1).padStart(2, "0");
+            const dia = String(data.getDate()).padStart(2, "0");
+            return `ADM-${ano}${mes}${dia}-${Date.now().toString().slice(-6)}`;
+        }
+
+        function abrirModalAcaoAdmin(tipo) {
+            const vaiApagar = tipo === "apagar";
+            if (!personagemSelecionado) {
+                alert(`Selecione um personagem para ${vaiApagar ? "apagar" : "resetar"}.`);
+                return;
+            }
+
+            modoAcaoAdmin = vaiApagar ? "apagar" : "reset";
+            document.getElementById("admin-reset-titulo").textContent = vaiApagar ? "Apagar Personagem" : "Reset Administrativo";
+            document.getElementById("admin-reset-subtitulo").textContent = vaiApagar
+                ? "Remove o personagem e todos os dados vinculados seguindo as mesmas regras do reset."
+                : "Use este painel para punições, resets disciplinares ou remoções justificadas.";
+            document.getElementById("admin-reset-motivo-label").textContent = vaiApagar ? "Motivo para apagar o personagem" : "Motivo do reset / punição";
+            document.getElementById("admin-reset-senha").placeholder = vaiApagar ? "Senha para confirmar a remoção" : "Senha para confirmar o reset";
+            document.getElementById("admin-reset-confirmar").textContent = vaiApagar ? "Apagar personagem" : "Aplicar reset";
+            document.getElementById("admin-reset-personagem").value = personagemSelecionado;
+            document.getElementById("admin-reset-senha").value = "";
+            document.getElementById("admin-reset-motivo").value = "";
+            document.getElementById("admin-reset-protocolo").value = gerarProtocoloReset();
+            document.getElementById("admin-reset-status").textContent = "";
+            document.getElementById("modal-admin-reset-personagem").classList.add("ativo");
+        }
+
+        function abrirModalResetAdmin() {
+            abrirModalAcaoAdmin("reset");
+        }
+
+        function abrirModalApagarAdmin() {
+            abrirModalAcaoAdmin("apagar");
+        }
+
+        function fecharModalResetAdmin() {
+            document.getElementById("modal-admin-reset-personagem").classList.remove("ativo");
+        }
+
+        function registrarResetAdmin(dados) {
+            const registros = JSON.parse(localStorage.getItem("registrosResetPersonagem") || "[]");
+            registros.push(dados);
+            localStorage.setItem("registrosResetPersonagem", JSON.stringify(registros));
+        }
+
+        function limparDadosResetados(nome) {
+            localStorage.removeItem(`inventario_${nome}`);
+            localStorage.removeItem(`atributos_${nome}`);
+
+            const ultimo = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+            if (ultimo && ultimo.nome && ultimo.nome.toLowerCase() === nome.toLowerCase()) {
+                localStorage.removeItem("ultimoPersonagem");
+            }
+        }
+
+        async function confirmarResetAdmin() {
+            const vaiApagar = modoAcaoAdmin === "apagar";
+            const nome = document.getElementById("admin-reset-personagem").value.trim();
+            const senha = document.getElementById("admin-reset-senha").value;
+            const motivo = document.getElementById("admin-reset-motivo").value.trim();
+            const protocolo = document.getElementById("admin-reset-protocolo").value.trim();
+            const status = document.getElementById("admin-reset-status");
+
+            if (!nome) {
+                status.textContent = "Nenhum personagem selecionado.";
+                return;
+            }
+            if (senha !== senhaDelecao) {
+                status.textContent = "Senha administrativa inválida.";
+                return;
+            }
+            if (motivo.length < 8) {
+                status.textContent = `Informe um motivo mais detalhado para ${vaiApagar ? "apagar o personagem" : "o reset"}.`;
+                document.getElementById("admin-reset-motivo").focus();
+                return;
+            }
+            if (!protocolo) {
+                status.textContent = "Informe o número do protocolo.";
+                document.getElementById("admin-reset-protocolo").focus();
+                return;
+            }
+
+            const personagem = await BancoPersonagens.buscarPorNome(nome);
+            await BancoPersonagens.removerPorNome(nome);
+            limparDadosResetados(nome);
+            registrarResetAdmin({
+                protocolo,
+                tipo: vaiApagar ? "administracao-apagar" : "administracao-reset",
+                personagem: nome,
+                motivo,
+                punicao: true,
+                snapshot: personagem || null,
+                quando: new Date().toLocaleString("pt-BR")
+            });
+
+            status.textContent = `${vaiApagar ? "Personagem apagado" : "Reset aplicado"}. Protocolo ${protocolo}.`;
+            personagemSelecionado = null;
+            fecharModalResetAdmin();
+            await desenharPersonagens();
+        }
+
+        async function desenharPersonagens() {
+            const personagens = await BancoPersonagens.obterTodos();
+
+            if (personagens.length === 0) {
+                lista.innerHTML = `
+                    <article class="cartao-personagem">
+                        <h2>Nenhum personagem cadastrado</h2>
+                        <p>Quando um jogador finalizar o cadastro, o personagem aparece aqui.</p>
+                    </article>
+                `;
+                return;
+            }
+
+            lista.innerHTML = personagens.map((personagem) => `
+                <article class="cartao-personagem" style="cursor: pointer; transition: all 0.2s;" data-nome="${escaparHtml(personagem.nome)}" onclick="selecionarPersonagem('${escaparHtml(personagem.nome).replace(/'/g, "\\'")}')">
+                    <h2>${escaparHtml(personagem.nome)}</h2>
+                    <p><strong>Gmail:</strong> ${escaparHtml(personagem.gmail)}</p>
+                    <p><strong>Familia:</strong> ${escaparHtml(personagem.familia)}</p>
+                    <p><strong>Raca:</strong> ${escaparHtml(personagem.raca)}</p>
+                    <p><strong>Estilo de luta:</strong> ${escaparHtml(personagem.estiloLuta)}</p>
+                    <p><strong>Profissao:</strong> ${escaparHtml(personagem.profissao)}</p>
+                    <p><strong>Classe:</strong> ${escaparHtml(personagem.classe)}</p>
+                    <p><strong>Descrição da classe:</strong> ${escaparHtml(personagem.descricaoClasse)}</p>
+                    <p><strong>Organização:</strong> ${escaparHtml(personagem.organizacao || personagem.organização || "-")}</p>
+                    <p><strong>Criado em:</strong> ${escaparHtml(personagem.criadoEm)}</p>
+                    <div class="acoes-cartao-admin">
+                                <button class="botao-principal" type="button" onclick="event.stopPropagation(); verInventario('${escaparHtml(personagem.nome).replace(/'/g, "\\'")}')">Inventário</button>
+                                <button class="botao-principal" type="button" onclick="event.stopPropagation(); verAtributos('${escaparHtml(personagem.nome).replace(/'/g, "\\'")}')">Atributos</button>
+                                <button class="botao-principal" type="button" onclick="event.stopPropagation(); abrirAtualizaOrgAdmin('${escaparHtml(personagem.nome).replace(/'/g, "\\'")}')">Atualizar Org</button>
+                    </div>
+                </article>
+            `).join("");
+
+            if (personagens.length > 0) {
+                const botaoDeletar = document.createElement("button");
+                botaoDeletar.className = "botao-principal botao-admin-perigo";
+                botaoDeletar.textContent = "Resetar Personagem Selecionado";
+                botaoDeletar.style.marginTop = "16px";
+                botaoDeletar.addEventListener("click", abrirModalResetAdmin);
+                lista.appendChild(botaoDeletar);
+
+                const botaoApagar = document.createElement("button");
+                botaoApagar.className = "botao-secundario botao-admin-perigo botao-apagar-personagem";
+                botaoApagar.textContent = "Apagar o personagem";
+                botaoApagar.type = "button";
+                botaoApagar.style.marginTop = "10px";
+                botaoApagar.style.width = "100%";
+                botaoApagar.addEventListener("click", abrirModalApagarAdmin);
+                lista.appendChild(botaoApagar);
+            }
+        }
+
+        // Funções para atualização de organização via admin
+        async function abrirAtualizaOrgAdmin(nomePersonagem) {
+            const campo = document.getElementById('modal-admin-atualiza-nome');
+            const select = document.getElementById('modal-admin-atualiza-organizacao');
+            const modal = document.getElementById('modal-admin-atualiza-org');
+            campo.value = nomePersonagem;
+            const p = await BancoPersonagens.buscarPorNome(nomePersonagem);
+            if (p && p.organizacao) select.value = p.organizacao;
+            modal.classList.add('ativo');
+        }
+
+        function fecharModalAdminAtualiza() {
+            document.getElementById('modal-admin-atualiza-org').classList.remove('ativo');
+        }
+
+        async function salvarAtualizaOrgAdmin() {
+            const nome = document.getElementById('modal-admin-atualiza-nome').value;
+            const novaOrg = document.getElementById('modal-admin-atualiza-organizacao').value;
+            if (!nome) return alert('Nome inválido');
+            const personagens = await BancoPersonagens.obterTodos();
+            const idx = personagens.findIndex(p => p.nome === nome);
+            if (idx === -1) return alert('Personagem não encontrado');
+            const p = personagens[idx];
+            const orgAntiga = p.organizacao || '-';
+            p.organizacao = novaOrg;
+            personagens[idx] = p;
+            await BancoPersonagens.salvarTodos(personagens);
+            // backup com historico (autor = admin)
+            try {
+                const chaveBackup = `personagem_backup_${p.nome}`;
+                const existente = JSON.parse(localStorage.getItem(chaveBackup) || "{}");
+                const historico = existente.historico || [];
+                historico.push({ quando: new Date().toLocaleString('pt-BR'), autor: 'admin', de: orgAntiga, para: p.organizacao });
+                const novoBackup = { personagem: p, historico };
+                localStorage.setItem(chaveBackup, JSON.stringify(novoBackup));
+            } catch (e) { console.warn('erro backup admin', e); }
+            alert('Organização atualizada.');
+            fecharModalAdminAtualiza();
+            desenharPersonagens();
+        }
+
+        function liberarAcesso() {
+            if (campoSenhaDev.value !== senhaDev) {
+                mensagemDev.textContent = "Senha incorreta.";
+                campoSenhaDev.focus();
+                return;
+            }
+
+            corpo.classList.remove("admin-bloqueado");
+            acessoDev.style.display = "none";
+            desenharPersonagens();
+        }
+
+        window.addEventListener("storage", (evento) => {
+            if (evento.key === "personagensCriados" && !corpo.classList.contains("admin-bloqueado")) {
+                desenharPersonagens();
+            }
+        });
+
+        botaoEntrarDev.addEventListener("click", liberarAcesso);
+        campoSenhaDev.addEventListener("keydown", (evento) => {
+            if (evento.key === "Enter") {
+                liberarAcesso();
+            }
+        });
+
+        // ==================== MODAIS PARA INVENTÁRIO E ATRIBUTOS ====================
+        const categoriasInventarioAdmin = [
+            { chave: "todos", nome: "Todos", icone: "🎒" },
+            { chave: "alimentacao", nome: "Alimentação", icone: "🍖" },
+            { chave: "armamentos", nome: "Armamentos", icone: "⚔️" },
+            { chave: "equipamentos", nome: "Equipamentos", icone: "🛡️" },
+            { chave: "vestimentas", nome: "Vestimentas", icone: "👕" },
+            { chave: "medicinais", nome: "Medicinais", icone: "💊" },
+            { chave: "ferramentas", nome: "Ferramentas", icone: "🧰" },
+            { chave: "navegacao", nome: "Navegação", icone: "🧭" },
+            { chave: "recursos", nome: "Recursos", icone: "📦" },
+            { chave: "nauticos", nome: "Náuticos", icone: "🚢" },
+            { chave: "tesouros", nome: "Tesouros", icone: "💎" },
+            { chave: "documentos", nome: "Documentos", icone: "📜" },
+            { chave: "especiais", nome: "Especiais", icone: "✨" },
+            { chave: "consumiveis", nome: "Consumíveis", icone: "🎒" },
+            { chave: "tecnologicos", nome: "Tecnológicos", icone: "🔬" },
+            { chave: "materiais", nome: "Materiais", icone: "🐾" },
+            { chave: "berris", nome: "Berris", icone: "💰" },
+            { chave: "cacaepesca", nome: "Caça e Pesca", icone: "🎣" },
+            { chave: "diversos", nome: "Diversos", icone: "🎁" },
+            { chave: "arma", nome: "Armas antigas", icone: "⚔️" },
+            { chave: "armadura", nome: "Armaduras antigas", icone: "🛡️" },
+            { chave: "consumivel", nome: "Consumíveis antigos", icone: "🧪" },
+            { chave: "joia", nome: "Joias antigas", icone: "💎" },
+            { chave: "misc", nome: "Outros antigos", icone: "📦" }
+        ];
+
+        function obterDadosPersonagem(nome) {
+            const chave = `inventario_${nome}`;
+            const inventario = JSON.parse(localStorage.getItem(chave) || "[]");
+            
+            const chaveAtributos = `atributos_${nome}`;
+            const atributos = JSON.parse(localStorage.getItem(chaveAtributos) || JSON.stringify({
+                forca: 85,
+                velocidade: 78,
+                resistencia: 82,
+                inteligencia: 70,
+                vontade: 95,
+                sorte: 60
+            }));
+
+            return {
+                inventario,
+                atributos
+            };
+        }
+
+        function fecharModalAdmin(idModal) {
+            document.getElementById(idModal).classList.remove("ativo");
+        }
+
+        function abrirModalAdmin(idModal) {
+            document.getElementById(idModal).classList.add("ativo");
+        }
+
+        function categoriaAdmin(chave) {
+            return categoriasInventarioAdmin.find((categoria) => categoria.chave === chave) || categoriasInventarioAdmin[0];
+        }
+
+        function contarCategoriasAdmin() {
+            return categoriasInventarioAdmin.reduce((contadores, categoria) => {
+                contadores[categoria.chave] = categoria.chave === "todos"
+                    ? inventarioAdminAtual.length
+                    : inventarioAdminAtual.filter((item) => item.tipo === categoria.chave).length;
+                return contadores;
+            }, {});
+        }
+
+        function renderizarCategoriasAdmin() {
+            const contadores = contarCategoriasAdmin();
+
+            adminCategoriasInventario.innerHTML = categoriasInventarioAdmin
+                .filter((categoria) => categoria.chave === "todos" || contadores[categoria.chave] > 0)
+                .map((categoria) => `
+                    <button class="admin-categoria-inventario ${categoriaAdminAtual === categoria.chave ? "ativa" : ""}" type="button" onclick="selecionarCategoriaAdmin('${categoria.chave}')">
+                        <span>${categoria.icone}</span>
+                        <strong>${escaparHtml(categoria.nome)}</strong>
+                        <small>${contadores[categoria.chave] || 0}</small>
+                    </button>
+                `).join("");
+        }
+
+        function selecionarCategoriaAdmin(categoria) {
+            categoriaAdminAtual = categoria;
+            renderizarInventarioAdmin();
+        }
+
+        function renderizarInventarioAdmin() {
+            const categoriaAtual = categoriaAdmin(categoriaAdminAtual);
+            const itens = categoriaAdminAtual === "todos"
+                ? inventarioAdminAtual
+                : inventarioAdminAtual.filter((item) => item.tipo === categoriaAdminAtual);
+
+            renderizarCategoriasAdmin();
+            adminInventarioTitulo.textContent = categoriaAdminAtual === "todos" ? "Todos os itens" : categoriaAtual.nome;
+            adminInventarioResumo.textContent = `${itens.length} ${itens.length === 1 ? "item" : "itens"} ${categoriaAdminAtual === "todos" ? "no inventário" : "nesta categoria"}`;
+
+            if (inventarioAdminAtual.length === 0) {
+                adminGridInventario.innerHTML = `<div class="admin-vazio">Mochila vazia.</div>`;
+                return;
+            }
+
+            if (itens.length === 0) {
+                adminGridInventario.innerHTML = `<div class="admin-vazio">Nenhum item nessa categoria.</div>`;
+                return;
+            }
+
+            adminGridInventario.innerHTML = itens.map((item) => {
+                const categoria = categoriaAdmin(item.tipo);
+                return `
+                    <article class="admin-slot-inventario">
+                        <span class="admin-item-qtd">x${escaparHtml(item.quantidade)}</span>
+                        <div class="admin-item-icone">${categoria.icone}</div>
+                        <strong>${escaparHtml(item.nome)}</strong>
+                        <p>${escaparHtml(item.descricao || "Sem descrição")}</p>
+                        <small>${escaparHtml(categoria.nome)}</small>
+                    </article>
+                `;
+            }).join("");
+        }
+
+        function verInventario(nomePersonagem) {
+            const dados = obterDadosPersonagem(nomePersonagem);
+            inventarioAdminAtual = dados.inventario;
+            categoriaAdminAtual = "todos";
+            adminInventarioPersonagem.textContent = nomePersonagem;
+            renderizarInventarioAdmin();
+            abrirModalAdmin("modal-admin-inventario");
+        }
+
+        function verAtributos(nomePersonagem) {
+            const dados = obterDadosPersonagem(nomePersonagem);
+            const { atributos } = dados;
+            const atributosLista = [
+                { nome: "Força Vital", chave: "forca", icone: "❤️" },
+                { nome: "Agilidade", chave: "velocidade", icone: "⚡" },
+                { nome: "Resistência", chave: "resistencia", icone: "🛡️" },
+                { nome: "Força Mental", chave: "inteligencia", icone: "🧠" },
+                { nome: "Determinação", chave: "vontade", icone: "🔥" },
+                { nome: "Força", chave: "sorte", icone: "💪" }
+            ];
+
+            adminAtributosPersonagem.textContent = nomePersonagem;
+            adminGridAtributos.innerHTML = atributosLista.map((atributo) => {
+                const valor = Number(atributos[atributo.chave] || 0);
+                const largura = Math.max(0, Math.min(valor, 100));
+                return `
+                    <article class="admin-card-atributo">
+                        <span>${atributo.icone}</span>
+                        <strong>${escaparHtml(atributo.nome)}</strong>
+                        <b>${valor}</b>
+                        <div class="admin-atributo-barra"><i style="width: ${largura}%"></i></div>
+                    </article>
+                `;
+            }).join("");
+            abrirModalAdmin("modal-admin-atributos");
+        }
+
+        document.querySelectorAll(".modal-overlay").forEach((modal) => {
+            modal.addEventListener("click", (evento) => {
+                if (evento.target === modal) {
+                    modal.classList.remove("ativo");
+                }
+            });
+        });
+    </script>
+
+    <!-- Modal admin para atualizar organizacao -->
+    <div class="modal-overlay" id="modal-admin-atualiza-org">
+        <div class="modal-conteudo modal-org">
+            <div class="modal-cabecalho org-cabecalho">
+                <div>
+                    <div class="modal-titulo">Atualizar Organização</div>
+                    <p class="org-subtitulo">Painel administrativo para alterar a afiliação do personagem.</p>
+                </div>
+                <button class="fechar-modal" onclick="fecharModalAdminAtualiza()">✕</button>
+            </div>
+
+            <div class="form-adicionar org-form">
+                <div class="form-grupo">
+                    <label for="modal-admin-atualiza-nome">Nome do personagem</label>
+                    <input id="modal-admin-atualiza-nome" readonly>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="modal-admin-atualiza-organizacao">Nova Organização</label>
+                    <select id="modal-admin-atualiza-organizacao">
+                        <option>Marinha</option>
+                        <option>Piratas</option>
+                        <option>Exército Revolucionário</option>
+                        <option>Cipher Pol</option>
+                        <option>Neo Marinha</option>
+                        <option>Caçadores de Recompensa</option>
+                        <option>Germá 66</option>
+                        <option>Galley-la Company</option>
+                        <option>MADs</option>
+                        <option>Baroque Works</option>
+                    </select>
+                </div>
+
+                <div class="org-acoes">
+                    <button class="btn-adicionar" onclick="salvarAtualizaOrgAdmin()">Salvar</button>
+                    <button class="btn-cancelar" onclick="fecharModalAdminAtualiza()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-admin-reset-personagem">
+        <div class="modal-conteudo modal-org modal-reset-admin">
+            <div class="modal-cabecalho org-cabecalho">
+                <div>
+                    <div class="modal-titulo" id="admin-reset-titulo">Reset Administrativo</div>
+                    <p class="org-subtitulo" id="admin-reset-subtitulo">Use este painel para punições, resets disciplinares ou remoções justificadas.</p>
+                </div>
+                <button class="fechar-modal" onclick="fecharModalResetAdmin()" type="button">✕</button>
+            </div>
+
+            <div class="form-adicionar org-form">
+                <div class="form-grupo">
+                    <label for="admin-reset-personagem">Personagem selecionado</label>
+                    <input id="admin-reset-personagem" readonly>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="admin-reset-protocolo">Número do protocolo</label>
+                    <input id="admin-reset-protocolo" type="text" placeholder="Ex: ADM-20260603-000001">
+                </div>
+
+                <div class="form-grupo">
+                    <label for="admin-reset-motivo" id="admin-reset-motivo-label">Motivo do reset / punição</label>
+                    <textarea id="admin-reset-motivo" class="campo-texto-admin" placeholder="Descreva o motivo, regra violada, evidência ou observação administrativa."></textarea>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="admin-reset-senha">Senha administrativa</label>
+                    <input id="admin-reset-senha" type="password" placeholder="Senha para confirmar o reset">
+                </div>
+
+                <p class="mensagem-status" id="admin-reset-status" aria-live="polite"></p>
+
+                <div class="org-acoes">
+                    <button class="btn-adicionar" id="admin-reset-confirmar" onclick="confirmarResetAdmin()" type="button">Aplicar reset</button>
+                    <button class="btn-cancelar" onclick="fecharModalResetAdmin()" type="button">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

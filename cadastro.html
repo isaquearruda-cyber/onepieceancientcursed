@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro do Jogador - One Piece RPG</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body class="pagina-formulario">
+    <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true">
+        <source src="fundo-login.mp4" type="video/mp4">
+    </video>
+
+    <main class="conteudo-pagina">
+        <header class="topo-pagina">
+            <div>
+                <p class="serie">Cadastro</p>
+                <h1>Jogador</h1>
+            </div>
+            <a class="botao-secundario" href="index.html">Voltar</a>
+        </header>
+
+        <section class="cartao-formulario" aria-label="Personagem criado">
+            <div class="resumo-personagem" id="resumo-personagem"></div>
+        </section>
+
+        <section class="cartao-formulario" aria-label="Cadastro do jogador">
+            <form class="formulario-cadastro" id="formulario-cadastro">
+                <div class="campo-bloco">
+                    <label for="gmail">Gmail</label>
+                    <input id="gmail" name="gmail" type="email" placeholder="seunome@gmail.com" autocomplete="email" required>
+                </div>
+
+                <div class="campo-bloco">
+                    <label for="senha-cadastro">Senha</label>
+                    <input id="senha-cadastro" name="senha-cadastro" type="password" placeholder="Crie uma senha" autocomplete="new-password" required>
+                </div>
+
+                <div class="verificador">
+                    <label for="resposta-robo" id="pergunta-robo">Verificador de robo</label>
+                    <input id="resposta-robo" name="resposta-robo" type="number" placeholder="Resposta" required>
+                </div>
+
+                <p class="mensagem-status" id="mensagem-status" aria-live="polite"></p>
+                <button class="botao-principal" type="submit">Finalizar cadastro</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="banco-personagens.js"></script>
+    <script>
+        const personagem = JSON.parse(sessionStorage.getItem("personagemPendente") || "null");
+        const resumo = document.getElementById("resumo-personagem");
+        const formulario = document.getElementById("formulario-cadastro");
+        const mensagem = document.getElementById("mensagem-status");
+        const perguntaRobo = document.getElementById("pergunta-robo");
+        const respostaRobo = document.getElementById("resposta-robo");
+        const chaveFamiliaSorteada = "familiaSorteadaBloqueada";
+
+        const numeroA = Math.floor(Math.random() * 8) + 2;
+        const numeroB = Math.floor(Math.random() * 8) + 2;
+        const respostaCorreta = numeroA + numeroB;
+
+BancoPersonagens.restaurarCache();
+
+perguntaRobo.textContent = `Verificador de robo: quanto é ${numeroA} + ${numeroB}?`;
+
+function escaparHtml(texto) {
+    return String(texto || "").replace(/[&<>"']/g, (caractere) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+    })[caractere]);
+}
+
+        function criarItem(nome, valor) {
+            return `
+                <div class="item-resumo">
+                    <span>${escaparHtml(nome)}</span>
+                    <strong>${escaparHtml(valor || "Não informado")}</strong>
+                </div>
+            `;
+        }
+
+        if (!personagem) {
+            resumo.innerHTML = criarItem("Personagem", "Nenhum personagem pendente");
+            mensagem.textContent = "Volte para Nova Aventura e crie um personagem antes.";
+            formulario.querySelector("button").disabled = true;
+        } else {
+            resumo.innerHTML = [
+                criarItem("Nome", personagem.nome),
+                criarItem("Família", personagem.familia),
+                criarItem("Raça", personagem.raca),
+                criarItem("Estilo de luta", personagem.estiloLuta),
+                criarItem("Profissão", personagem.profissao),
+                criarItem("Classe", personagem.classe),
+                criarItem("Descrição da classe", personagem.descricaoClasse)
+            ].join("");
+        }
+
+	        // ==================== CADASTRO PERMANENTE ====================
+	        function esperar(ms) {
+	            return new Promise((resolve) => setTimeout(resolve, ms));
+	        }
+
+	        function comLimiteDeTempo(promessa, ms) {
+	            return Promise.race([
+	                promessa,
+	                new Promise((_, reject) => setTimeout(() => reject(new Error("Tempo limite ao salvar.")), ms))
+	            ]);
+	        }
+
+	        function salvarNoCacheLocal(personagemSalvo) {
+	            const personagens = JSON.parse(localStorage.getItem("personagensCriados") || "[]");
+	            const chave = String(personagemSalvo.nome || "").trim().toLowerCase();
+	            const indice = personagens.findIndex((item) => String(item.nome || "").trim().toLowerCase() === chave);
+
+	            if (indice >= 0) {
+	                personagens[indice] = personagemSalvo;
+	            } else {
+	                personagens.push(personagemSalvo);
+	            }
+
+	            localStorage.setItem("personagensCriados", JSON.stringify(personagens));
+	            localStorage.setItem("ultimoPersonagem", JSON.stringify(personagemSalvo));
+	        }
+
+	        function vincularFamiliaSorteadaAoPersonagem(personagemSalvo) {
+	            const sorteio = JSON.parse(localStorage.getItem(chaveFamiliaSorteada) || "null");
+	            if (!sorteio || !sorteio.familia || sorteio.familia !== personagemSalvo.familia) {
+	                return;
+	            }
+
+	            localStorage.setItem(chaveFamiliaSorteada, JSON.stringify({
+	                ...sorteio,
+	                nomePersonagem: personagemSalvo.nome,
+	                status: "cadastrado",
+	                cadastradoEm: new Date().toLocaleString("pt-BR")
+	            }));
+	        }
+
+	        formulario.addEventListener("submit", async (evento) => {
+	            evento.preventDefault();
+	            const botaoSubmit = formulario.querySelector("button[type='submit']");
+
+	            const gmail = document.getElementById("gmail").value.trim();
+	            const senha = document.getElementById("senha-cadastro").value;
+	            const resposta = Number(respostaRobo.value);
+
+            if (!gmail.endsWith("@gmail.com")) {
+                mensagem.textContent = "❌ Use um Gmail válido.";
+                return;
+            }
+            if (senha.length < 6) {
+                mensagem.textContent = "❌ A senha precisa ter pelo menos 6 caracteres.";
+                return;
+            }
+            if (resposta !== respostaCorreta) {
+                mensagem.textContent = "❌ Verificador de robô incorreto.";
+	                respostaRobo.focus();
+	                return;
+	            }
+
+	            if (!personagem) {
+	                mensagem.textContent = "❌ Nenhum personagem pendente para salvar.";
+	                return;
+	            }
+
+	            botaoSubmit.disabled = true;
+	            mensagem.style.color = "#ffe28a";
+	            mensagem.textContent = "Salvando personagem em 2 segundos...";
+
+	            try {
+	                const personagemParaSalvar = {
+	                    ...personagem,
+	                    gmail: gmail,
+	                    senha: senha,
+	                    criadoEm: new Date().toLocaleString("pt-BR")
+	                };
+
+	                await esperar(2000);
+
+	                let personagemSalvo;
+	                try {
+	                    personagemSalvo = await comLimiteDeTempo(
+	                        BancoPersonagens.salvarPersonagem(personagemParaSalvar),
+	                        4000
+	                    );
+	                } catch (erroBanco) {
+	                    console.warn("Banco demorou/falhou; salvando no cache local permanente:", erroBanco);
+	                    salvarNoCacheLocal(personagemParaSalvar);
+	                    personagemSalvo = personagemParaSalvar;
+	                }
+
+	                localStorage.setItem("ultimoPersonagem", JSON.stringify(personagemSalvo));
+	                vincularFamiliaSorteadaAoPersonagem(personagemSalvo);
+	                sessionStorage.removeItem("personagemPendente");
+	                mensagem.textContent = "✅ Personagem salvo com sucesso! Redirecionando...";
+	                window.location.assign("lobby.html");
+	            } catch (erro) {
+	                console.error("Erro ao finalizar cadastro:", erro);
+	                botaoSubmit.disabled = false;
+	                mensagem.style.color = "#ffb4a8";
+	                mensagem.textContent = "❌ Não foi possível salvar. Tente novamente.";
+	            }
+	        });
+    </script>
+</body>
+</html>
