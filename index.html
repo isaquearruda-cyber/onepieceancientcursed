@@ -7,6 +7,10 @@
 		<link rel="stylesheet" href="estilo.css">
 	</head>
 	<body>
+		<audio id="musica-fundo" loop preload="auto">
+			<source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg">
+		</audio>
+
 		<main class="tela-login">
 			<video class="video-fundo" autoplay muted loop playsinline aria-hidden="true">
 				<source src="fundo-login.mp4" type="video/mp4">
@@ -18,7 +22,7 @@
 						<span class="titulo-principal">One Piece</span>
 						<strong>Cursed Ancient Century</strong>
 					</h1>
-					<p class="subtitulo">Entre na tripulacao e comece sua jornada.</p>
+					<p class="subtitulo">Escreva sua propria historia nesses mares.</p>
 				</section>
 
 			<section class="painel-login" aria-label="Login do jogador">
@@ -26,14 +30,18 @@
 					<div class="campos-login" id="campos-login" aria-hidden="true" inert>
 					<button class="botao-secundario botao-sair" id="botao-sair-entrar" type="button">Voltar</button>
 					<div class="campo-bloco">
-						<label for="usuario">Jogador</label>
-						<input id="usuario" name="usuario" type="text" placeholder="Nome do jogador" autocomplete="username">
+						<label for="usuario">Gmail</label>
+						<input id="usuario" name="usuario" type="email" placeholder="seunome@gmail.com" autocomplete="email">
 					</div>
 
 					<div class="campo-bloco">
 						<label for="senha">Senha</label>
-							<input id="senha" name="senha" type="password" placeholder="Codigo secreto" autocomplete="current-password">
+							<input id="senha" name="senha" type="password" placeholder="Senha" autocomplete="current-password">
 						</div>
+						<label class="opcao-check login-check" for="lembrar-senha-login">
+							<input id="lembrar-senha-login" type="checkbox">
+							<span>Relembrar senha neste aparelho</span>
+						</label>
 						<button class="botao-principal" id="botao-login-lobby" type="button">Entrar no Lobby</button>
 					</div>
 
@@ -44,6 +52,11 @@
 							<div class="campo-bloco">
 								<label for="nome-personagem">Nome do personagem</label>
 								<input id="nome-personagem" name="nome-personagem" type="text" placeholder="Nome do personagem">
+							</div>
+
+							<div class="campo-bloco">
+								<label for="gmail-personagem">Gmail</label>
+								<input id="gmail-personagem" name="gmail-personagem" type="email" placeholder="seunome@gmail.com" autocomplete="email">
 							</div>
 
 							<div class="campo-bloco">
@@ -263,7 +276,13 @@
 					<div class="separador-menu"></div>
 					<button class="opcao" id="botao-desenvolvedores" type="button" data-i18n="menu.developers">Desenvolvedores</button>
 					<button class="opcao" id="botao-reset-personagem" type="button" data-i18n="menu.resetCharacter">Reset Personagem</button>
+					<button class="opcao" id="botao-recuperar-senha" type="button" data-i18n="menu.recoverPassword">Recuperação de Senha</button>
 					<button class="opcao" id="botao-atualizacao-org" type="button" data-i18n="menu.updateOrg">Atualização Org</button>
+					<button class="opcao" id="botao-som" type="button">Som</button>
+					<div class="controle-som" id="controle-som" aria-hidden="true">
+						<label for="volume-musica">Volume</label>
+						<input id="volume-musica" type="range" min="0" max="100" value="50">
+					</div>
 					<button class="opcao" id="botao-idioma" type="button" data-i18n="menu.language">Idioma</button>
 					<button class="opcao" id="botao-tutorial" type="button" data-i18n="menu.tutorial">Tutorial</button>
 				</nav>
@@ -316,6 +335,48 @@
 						</div>
 						</div>
 						</form>
+
+						<div class="modal-overlay" id="modal-recuperar-senha">
+							<div class="modal-conteudo modal-org">
+								<div class="modal-cabecalho org-cabecalho">
+									<div>
+										<div class="modal-titulo">Recuperação de Senha</div>
+										<p class="org-subtitulo">Na primeira recuperação, o site gera um código para guardar. Depois disso, só ele redefine a senha.</p>
+									</div>
+									<button class="fechar-modal" id="fechar-modal-recuperar-senha" type="button">✕</button>
+								</div>
+
+								<div class="form-adicionar org-form">
+									<div class="form-grupo">
+										<label for="recupera-gmail">Gmail cadastrado</label>
+										<input id="recupera-gmail" name="recupera-gmail" type="email" placeholder="seugmail@gmail.com" autocomplete="email">
+									</div>
+
+									<div class="org-acoes">
+										<button class="btn-adicionar" id="enviar-codigo-recuperacao" type="button">Continuar</button>
+									</div>
+
+									<div id="area-validar-recuperacao" hidden>
+										<div class="form-grupo">
+											<label for="recupera-codigo">Código de recuperação</label>
+											<input id="recupera-codigo" name="recupera-codigo" type="text" maxlength="12" placeholder="Ex: AB12-CD34">
+										</div>
+
+										<div class="form-grupo">
+											<label for="recupera-nova-senha">Nova senha</label>
+											<input id="recupera-nova-senha" name="recupera-nova-senha" type="password" placeholder="Nova senha com 6 caracteres ou mais" autocomplete="new-password">
+										</div>
+
+										<div class="org-acoes">
+											<button class="btn-adicionar" id="confirmar-recuperacao-senha" type="button">Redefinir senha</button>
+											<button class="btn-cancelar" id="cancelar-recuperacao-senha" type="button">Cancelar</button>
+										</div>
+									</div>
+
+									<p class="mensagem-status" id="status-recuperacao-senha" aria-live="polite"></p>
+								</div>
+							</div>
+						</div>
 
 						<!-- Modal para seleção de idioma (fora de outros modais) -->
 						<div class="modal-overlay" id="modal-idioma">
@@ -398,7 +459,9 @@
 			</section>
 		</main>
 
+		<script src="supabase-config.js"></script>
 		<script src="banco-personagens.js"></script>
+		<script src="musica-fundo.js"></script>
 		<script>
 			const botaoEntrar = document.getElementById("botao-entrar");
 			const botaoNovaAventura = document.getElementById("botao-nova-aventura");
@@ -409,6 +472,7 @@
 				const botaoLoginLobby = document.getElementById("botao-login-lobby");
 				const botaoDesenvolvedores = document.getElementById("botao-desenvolvedores");
 			const botaoResetPersonagem = document.getElementById("botao-reset-personagem");
+			const botaoRecuperarSenha = document.getElementById("botao-recuperar-senha");
 			const botaoIdioma = document.getElementById("botao-idioma");
 			const botaoTutorial = document.getElementById("botao-tutorial");
 			const menuPrincipal = document.getElementById("menu-principal");
@@ -416,6 +480,8 @@
 			const camposLogin = document.getElementById("campos-login");
 			const painelCriacao = document.getElementById("painel-criacao");
 			const campoUsuario = document.getElementById("usuario");
+			const campoSenhaLogin = document.getElementById("senha");
+			const checkLembrarSenhaLogin = document.getElementById("lembrar-senha-login");
 			const campoNomePersonagem = document.getElementById("nome-personagem");
 			const botaoSortearFamilia = document.getElementById("sortear-familia");
 			const botaoCadastro = document.getElementById("botao-cadastro");
@@ -427,6 +493,18 @@
 			const descricaoClasse = document.getElementById("descricao-classe");
 			const formulario = document.querySelector(".formulario-login");
 			const opcoes = document.querySelectorAll(".opcao");
+			const modalRecuperarSenha = document.getElementById("modal-recuperar-senha");
+			const fecharModalRecuperarSenha = document.getElementById("fechar-modal-recuperar-senha");
+			const inputRecuperaGmail = document.getElementById("recupera-gmail");
+			const inputRecuperaCodigo = document.getElementById("recupera-codigo");
+			const inputRecuperaNovaSenha = document.getElementById("recupera-nova-senha");
+			const botaoEnviarCodigoRecuperacao = document.getElementById("enviar-codigo-recuperacao");
+			const botaoConfirmarRecuperacaoSenha = document.getElementById("confirmar-recuperacao-senha");
+			const botaoCancelarRecuperacaoSenha = document.getElementById("cancelar-recuperacao-senha");
+			const areaValidarRecuperacao = document.getElementById("area-validar-recuperacao");
+			const statusRecuperacaoSenha = document.getElementById("status-recuperacao-senha");
+			let recuperacaoSenhaAtual = null;
+			const chaveLembrarSenha = "onePieceRpgLoginLembrado";
 			const familias = [
 				"Clou D",
 				"Gol D",
@@ -540,6 +618,22 @@
 				descricaoProfissao.textContent = descricoesProfissao[campoProfissao.value] || "";
 			}
 
+			function carregarLoginLembrado() {
+				try {
+					const loginLembrado = JSON.parse(localStorage.getItem(chaveLembrarSenha) || "null");
+					if (!loginLembrado || !loginLembrado.usuario || !loginLembrado.senha) {
+						return;
+					}
+
+					campoUsuario.value = loginLembrado.usuario;
+					campoSenhaLogin.value = loginLembrado.senha;
+					checkLembrarSenhaLogin.checked = true;
+				} catch (erro) {
+					console.warn("Login lembrado invalido:", erro);
+					localStorage.removeItem(chaveLembrarSenha);
+				}
+			}
+
 			formulario.addEventListener("submit", (evento) => {
 				evento.preventDefault();
 			});
@@ -548,6 +642,7 @@
 			campoProfissao.addEventListener("change", atualizarDescricaoProfissao);
 			atualizarDescricaoClasse();
 			atualizarDescricaoProfissao();
+			carregarLoginLembrado();
 
 			function ativarOpcao(botaoAtivo) {
 				opcoes.forEach((opcao) => opcao.classList.remove("ativa"));
@@ -567,22 +662,29 @@
 			}
 
 				async function entrarNoLobby() {
-					const usuario = campoUsuario.value.trim();
-					const senha = document.getElementById("senha").value;
+					const gmail = campoUsuario.value.trim().toLowerCase();
+					const senha = campoSenhaLogin.value;
 
-					if (!usuario || !senha) {
-						alert("Preencha o nome do personagem e a senha.");
-						if (!usuario) {
+					if (!gmail || !senha) {
+						alert("Preencha o Gmail e a senha.");
+						if (!gmail) {
 							campoUsuario.focus();
 						} else {
-							document.getElementById("senha").focus();
+							campoSenhaLogin.focus();
 						}
+						return;
+					}
+
+					if (!gmail.endsWith("@gmail.com")) {
+						alert("Informe o Gmail cadastrado.");
+						campoUsuario.focus();
 						return;
 					}
 
 					let personagemEncontrado;
 					try {
-						personagemEncontrado = await BancoPersonagens.buscarPorNome(usuario);
+						const personagens = await BancoPersonagens.obterTodos();
+						personagemEncontrado = personagens.find((personagem) => String(personagem.gmail || "").trim().toLowerCase() === gmail);
 					} catch (erro) {
 						console.error("Erro ao buscar personagem:", erro);
 						alert("Não foi possível acessar os personagens salvos. Tente novamente.");
@@ -590,16 +692,36 @@
 					}
 
 					if (!personagemEncontrado) {
-						alert("❌ Personagem não encontrado.");
+						alert("❌ Nenhum personagem encontrado com esse Gmail.");
 						campoUsuario.focus();
 						return;
 					}
 
 					if (personagemEncontrado.senha !== senha) {
 						alert("❌ Senha inválida.");
-						document.getElementById("senha").focus();
-						document.getElementById("senha").value = "";
+						campoSenhaLogin.focus();
+						campoSenhaLogin.value = "";
 						return;
+					}
+
+					try {
+						personagemEncontrado.historicoAcesso = [
+							...(personagemEncontrado.historicoAcesso || []),
+							{
+								quando: new Date().toLocaleString("pt-BR"),
+								gmail,
+								navegador: navigator.userAgent
+							}
+						].slice(-80);
+						await BancoPersonagens.salvarPersonagem(personagemEncontrado);
+					} catch (erro) {
+						console.warn("Não foi possível registrar o acesso do jogador:", erro);
+					}
+
+					if (checkLembrarSenhaLogin.checked) {
+						localStorage.setItem(chaveLembrarSenha, JSON.stringify({ usuario: gmail, senha }));
+					} else {
+						localStorage.removeItem(chaveLembrarSenha);
 					}
 
 					localStorage.setItem("ultimoPersonagem", JSON.stringify(personagemEncontrado));
@@ -655,6 +777,149 @@
 
 			botaoResetPersonagem.addEventListener("click", () => {
 				window.location.href = "reset-personagem.html";
+			});
+
+			function abrirModalRecuperacaoSenha() {
+				recuperacaoSenhaAtual = null;
+				inputRecuperaGmail.value = "";
+				inputRecuperaCodigo.value = "";
+				inputRecuperaNovaSenha.value = "";
+				areaValidarRecuperacao.hidden = true;
+				statusRecuperacaoSenha.textContent = "";
+				botaoEnviarCodigoRecuperacao.disabled = false;
+				botaoConfirmarRecuperacaoSenha.disabled = false;
+				modalRecuperarSenha.classList.add("ativo");
+				setTimeout(() => inputRecuperaGmail.focus(), 80);
+			}
+
+			function fecharRecuperacaoSenha() {
+				modalRecuperarSenha.classList.remove("ativo");
+			}
+
+			function normalizarCodigoRecuperacao(codigo) {
+				return String(codigo || "").trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+			}
+
+			function gerarCodigoRecuperacaoSenha() {
+				const letras = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+				const numeros = "23456789";
+				const pegar = (base, tamanho) => Array.from({ length: tamanho }, () => base[Math.floor(Math.random() * base.length)]).join("");
+				return `${pegar(letras, 4)}-${pegar(numeros, 4)}`;
+			}
+
+			async function enviarCodigoRecuperacaoSenha() {
+				const gmail = inputRecuperaGmail.value.trim().toLowerCase();
+
+				if (!gmail.endsWith("@gmail.com")) {
+					statusRecuperacaoSenha.textContent = "Informe o Gmail cadastrado no personagem.";
+					inputRecuperaGmail.focus();
+					return;
+				}
+
+				botaoEnviarCodigoRecuperacao.disabled = true;
+				statusRecuperacaoSenha.textContent = "Verificando Gmail cadastrado...";
+
+				try {
+					const personagens = await BancoPersonagens.obterTodos();
+					const personagem = personagens.find((item) => String(item.gmail || "").trim().toLowerCase() === gmail);
+
+					if (!personagem) {
+						statusRecuperacaoSenha.textContent = "Nenhum personagem encontrado com esse Gmail.";
+						botaoEnviarCodigoRecuperacao.disabled = false;
+						return;
+					}
+
+					let codigoRecuperacao = String(personagem.codigoRecuperacao || "").trim().toUpperCase();
+					const primeiraRecuperacao = !normalizarCodigoRecuperacao(codigoRecuperacao);
+
+					if (!codigoRecuperacao) {
+						codigoRecuperacao = gerarCodigoRecuperacaoSenha();
+						personagem.codigoRecuperacao = codigoRecuperacao;
+						await BancoPersonagens.salvarPersonagem(personagem);
+					}
+
+					recuperacaoSenhaAtual = {
+						gmail,
+						codigo: normalizarCodigoRecuperacao(codigoRecuperacao),
+						personagem
+					};
+
+					areaValidarRecuperacao.hidden = false;
+					if (primeiraRecuperacao) {
+						inputRecuperaCodigo.value = codigoRecuperacao;
+						statusRecuperacaoSenha.textContent = `Primeira recuperação: guarde este código ${codigoRecuperacao}. Nas próximas vezes, só será possível redefinir a senha com ele.`;
+					} else {
+						inputRecuperaCodigo.value = "";
+						statusRecuperacaoSenha.textContent = "Digite o código de recuperação gerado na primeira recuperação.";
+					}
+					inputRecuperaCodigo.focus();
+				} catch (erro) {
+					console.error("Erro na recuperação de senha:", erro);
+					statusRecuperacaoSenha.textContent = "Não foi possível verificar o Gmail agora. Tente novamente.";
+					botaoEnviarCodigoRecuperacao.disabled = false;
+				}
+			}
+
+			async function confirmarRecuperacaoSenha() {
+				const codigo = inputRecuperaCodigo.value.trim();
+				const novaSenha = inputRecuperaNovaSenha.value;
+
+				if (!recuperacaoSenhaAtual) {
+					statusRecuperacaoSenha.textContent = "Informe o Gmail e clique em Continuar antes de redefinir a senha.";
+					return;
+				}
+
+				if (normalizarCodigoRecuperacao(codigo) !== recuperacaoSenhaAtual.codigo) {
+					statusRecuperacaoSenha.textContent = "Código inválido.";
+					inputRecuperaCodigo.focus();
+					return;
+				}
+
+				if (novaSenha.length < 6) {
+					statusRecuperacaoSenha.textContent = "A nova senha precisa ter pelo menos 6 caracteres.";
+					inputRecuperaNovaSenha.focus();
+					return;
+				}
+
+				botaoConfirmarRecuperacaoSenha.disabled = true;
+				statusRecuperacaoSenha.textContent = "Atualizando senha...";
+
+				try {
+					const personagemAtualizado = {
+						...recuperacaoSenhaAtual.personagem,
+						senha: novaSenha
+					};
+
+					await BancoPersonagens.salvarPersonagem(personagemAtualizado);
+
+					const ultimo = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+					if (ultimo?.nome && ultimo.nome.toLowerCase() === personagemAtualizado.nome.toLowerCase()) {
+						localStorage.setItem("ultimoPersonagem", JSON.stringify(personagemAtualizado));
+					}
+
+					statusRecuperacaoSenha.textContent = "Senha redefinida com sucesso. Você já pode entrar no lobby.";
+					recuperacaoSenhaAtual = null;
+					inputRecuperaCodigo.value = "";
+					inputRecuperaNovaSenha.value = "";
+					areaValidarRecuperacao.hidden = true;
+					botaoEnviarCodigoRecuperacao.disabled = false;
+					botaoConfirmarRecuperacaoSenha.disabled = false;
+				} catch (erro) {
+					console.error("Erro ao redefinir senha:", erro);
+					statusRecuperacaoSenha.textContent = "Não foi possível redefinir a senha. Tente novamente.";
+					botaoConfirmarRecuperacaoSenha.disabled = false;
+				}
+			}
+
+			botaoRecuperarSenha.addEventListener("click", abrirModalRecuperacaoSenha);
+			botaoEnviarCodigoRecuperacao.addEventListener("click", enviarCodigoRecuperacaoSenha);
+			botaoConfirmarRecuperacaoSenha.addEventListener("click", confirmarRecuperacaoSenha);
+			botaoCancelarRecuperacaoSenha.addEventListener("click", fecharRecuperacaoSenha);
+			fecharModalRecuperarSenha.addEventListener("click", fecharRecuperacaoSenha);
+			modalRecuperarSenha.addEventListener("click", (evento) => {
+				if (evento.target === modalRecuperarSenha) {
+					fecharRecuperacaoSenha();
+				}
 			});
 
 			const modalIdioma = document.getElementById('modal-idioma');
@@ -846,7 +1111,17 @@
 				aplicarEstadoFamiliaSorteada();
 			});
 
-			botaoCadastro.addEventListener("click", () => {
+			function gmailJaCadastrado(personagens, gmail, nomeAtual = "") {
+				const gmailNormalizado = String(gmail || "").trim().toLowerCase();
+				const nomeNormalizado = String(nomeAtual || "").trim().toLowerCase();
+				return personagens.some((personagem) => {
+					const mesmoGmail = String(personagem.gmail || "").trim().toLowerCase() === gmailNormalizado;
+					const mesmoNome = nomeNormalizado && String(personagem.nome || "").trim().toLowerCase() === nomeNormalizado;
+					return mesmoGmail && !mesmoNome;
+				});
+			}
+
+			botaoCadastro.addEventListener("click", async () => {
 				const sorteioAtual = obterFamiliaSorteada();
 				if (!sorteioAtual || !sorteioAtual.familia || campoFamilia.value === "Sortear") {
 					alert("Sorteie a família antes de cadastrar o personagem.");
@@ -856,10 +1131,11 @@
 
 				const personagem = {
 					nome: document.getElementById("nome-personagem").value.trim(),
-						organizacao: document.getElementById("organizacao").value,
-						familia: document.getElementById("familia").value,
-						raca: document.getElementById("raca").value,
-						estiloLuta: document.getElementById("estilo-luta").value,
+					gmail: document.getElementById("gmail-personagem").value.trim().toLowerCase(),
+					organizacao: document.getElementById("organizacao").value,
+					familia: document.getElementById("familia").value,
+					raca: document.getElementById("raca").value,
+					estiloLuta: document.getElementById("estilo-luta").value,
 					profissao: document.getElementById("profissao").value,
 					descricaoProfissao: descricoesProfissao[document.getElementById("profissao").value] || "",
 					classe: document.getElementById("classe").value,
@@ -868,6 +1144,25 @@
 
 				if (!personagem.nome) {
 					campoNomePersonagem.focus();
+					return;
+				}
+
+				if (!personagem.gmail.endsWith("@gmail.com")) {
+					alert("Informe um Gmail válido para cadastrar o personagem.");
+					document.getElementById("gmail-personagem").focus();
+					return;
+				}
+
+				try {
+					const personagensCriados = await BancoPersonagens.obterTodos();
+					if (gmailJaCadastrado(personagensCriados, personagem.gmail, personagem.nome)) {
+						alert("Esse Gmail já tem um personagem cadastrado. Só é permitido 1 personagem por Gmail.");
+						document.getElementById("gmail-personagem").focus();
+						return;
+					}
+				} catch (erro) {
+					console.error("Erro ao verificar Gmail cadastrado:", erro);
+					alert("Não foi possível verificar se esse Gmail já está cadastrado. Tente novamente.");
 					return;
 				}
 

@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="estilo.css">
 </head>
 <body class="pagina-formulario">
+    <audio id="musica-fundo" loop preload="auto">
+        <source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg">
+    </audio>
+
     <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true">
         <source src="fundo-login.mp4" type="video/mp4">
     </video>
@@ -36,6 +40,11 @@
                     <input id="senha-cadastro" name="senha-cadastro" type="password" placeholder="Crie uma senha" autocomplete="new-password" required>
                 </div>
 
+                <label class="opcao-check cadastro-check" for="mostrar-senha-cadastro">
+                    <input id="mostrar-senha-cadastro" type="checkbox">
+                    <span>Ver senha</span>
+                </label>
+
                 <div class="verificador">
                     <label for="resposta-robo" id="pergunta-robo">Verificador de robo</label>
                     <input id="resposta-robo" name="resposta-robo" type="number" placeholder="Resposta" required>
@@ -47,12 +56,17 @@
         </section>
     </main>
 
+    <script src="supabase-config.js"></script>
     <script src="banco-personagens.js"></script>
+    <script src="musica-fundo.js"></script>
     <script>
         const personagem = JSON.parse(sessionStorage.getItem("personagemPendente") || "null");
         const resumo = document.getElementById("resumo-personagem");
         const formulario = document.getElementById("formulario-cadastro");
         const mensagem = document.getElementById("mensagem-status");
+        const inputGmail = document.getElementById("gmail");
+        const inputSenhaCadastro = document.getElementById("senha-cadastro");
+        const checkMostrarSenhaCadastro = document.getElementById("mostrar-senha-cadastro");
         const perguntaRobo = document.getElementById("pergunta-robo");
         const respostaRobo = document.getElementById("resposta-robo");
         const chaveFamiliaSorteada = "familiaSorteadaBloqueada";
@@ -64,6 +78,10 @@
 BancoPersonagens.restaurarCache();
 
 perguntaRobo.textContent = `Verificador de robo: quanto é ${numeroA} + ${numeroB}?`;
+
+checkMostrarSenhaCadastro.addEventListener("change", () => {
+    inputSenhaCadastro.type = checkMostrarSenhaCadastro.checked ? "text" : "password";
+});
 
 function escaparHtml(texto) {
     return String(texto || "").replace(/[&<>"']/g, (caractere) => ({
@@ -89,8 +107,13 @@ function escaparHtml(texto) {
             mensagem.textContent = "Volte para Nova Aventura e crie um personagem antes.";
             formulario.querySelector("button").disabled = true;
         } else {
+            if (personagem.gmail) {
+                inputGmail.value = personagem.gmail;
+            }
+
             resumo.innerHTML = [
                 criarItem("Nome", personagem.nome),
+                criarItem("Gmail", personagem.gmail),
                 criarItem("Família", personagem.familia),
                 criarItem("Raça", personagem.raca),
                 criarItem("Estilo de luta", personagem.estiloLuta),
@@ -141,12 +164,22 @@ function escaparHtml(texto) {
 	            }));
 	        }
 
+	        function gmailJaCadastrado(personagens, gmail, nomeAtual = "") {
+	            const gmailNormalizado = String(gmail || "").trim().toLowerCase();
+	            const nomeNormalizado = String(nomeAtual || "").trim().toLowerCase();
+	            return personagens.some((personagemExistente) => {
+	                const mesmoGmail = String(personagemExistente.gmail || "").trim().toLowerCase() === gmailNormalizado;
+	                const mesmoNome = nomeNormalizado && String(personagemExistente.nome || "").trim().toLowerCase() === nomeNormalizado;
+	                return mesmoGmail && !mesmoNome;
+	            });
+	        }
+
 	        formulario.addEventListener("submit", async (evento) => {
 	            evento.preventDefault();
 	            const botaoSubmit = formulario.querySelector("button[type='submit']");
 
-	            const gmail = document.getElementById("gmail").value.trim();
-	            const senha = document.getElementById("senha-cadastro").value;
+	            const gmail = inputGmail.value.trim().toLowerCase();
+	            const senha = inputSenhaCadastro.value;
 	            const resposta = Number(respostaRobo.value);
 
             if (!gmail.endsWith("@gmail.com")) {
@@ -165,6 +198,19 @@ function escaparHtml(texto) {
 
 	            if (!personagem) {
 	                mensagem.textContent = "❌ Nenhum personagem pendente para salvar.";
+	                return;
+	            }
+
+	            try {
+	                const personagensCriados = await BancoPersonagens.obterTodos();
+	                if (gmailJaCadastrado(personagensCriados, gmail, personagem.nome)) {
+	                    mensagem.textContent = "❌ Esse Gmail já tem um personagem cadastrado. Só é permitido 1 personagem por Gmail.";
+	                    inputGmail.focus();
+	                    return;
+	                }
+	            } catch (erro) {
+	                console.error("Erro ao verificar Gmail cadastrado:", erro);
+	                mensagem.textContent = "❌ Não foi possível verificar se esse Gmail já está cadastrado. Tente novamente.";
 	                return;
 	            }
 

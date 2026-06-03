@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="estilo.css">
 </head>
 <body class="pagina-formulario admin-bloqueado">
+    <audio id="musica-fundo" loop preload="auto">
+        <source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg">
+    </audio>
+
     <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true">
         <source src="fundo-login.mp4" type="video/mp4">
     </video>
@@ -70,7 +74,9 @@
         </div>
     </div>
 
+    <script src="supabase-config.js"></script>
     <script src="banco-personagens.js"></script>
+    <script src="musica-fundo.js"></script>
     <script>
         // ==================== SENHA DE DESENVOLVEDOR ====================
         const senhaDev = "dev123";     // ←←← MUDE AQUI A SENHA
@@ -94,6 +100,147 @@
         let inventarioAdminAtual = [];
         let categoriaAdminAtual = "todos";
         let modoAcaoAdmin = "reset";
+        const racasAtualizacaoFicha = [
+            "Humanos",
+            "Kujas",
+            "Tribo das pernas longas",
+            "Tribo do pescoco longo",
+            "Tribo dos bracos longos",
+            "Tribo dos 3 olhos",
+            "Minks",
+            "Tontattas",
+            "Kinokobitos",
+            "Gigante",
+            "Gigante Ancestral",
+            "Meio Gigante",
+            "Ciborgues",
+            "Oni",
+            "Lunarians",
+            "Bucaneiros",
+            "Skypeans",
+            "Shandians",
+            "Birka",
+            "Homem Peixe",
+            "Sereianos",
+            "Wotan",
+            "Yet",
+            "Yet ancestral",
+            "Numans",
+            "Stratos shadow",
+            "Maffeyans"
+        ];
+        const estilosAtualizacaoFicha = [
+            "Jao Kun Do",
+            "Black Leg",
+            "Okama Kenpo",
+            "Freestyle",
+            "Punho suave",
+            "Karate Tritao",
+            "Combate Tontatta",
+            "Hasshouken",
+            "Ryusoken",
+            "Rokushiki",
+            "Jio-Ken",
+            "Punch style",
+            "Sumo",
+            "Ninjutsu",
+            "New Kama Genpo",
+            "Seimei Kikan",
+            "Ai No Kobushi",
+            "Nishi no Ryu",
+            "Shippuken",
+            "Okami no Gekido-ryu",
+            "Itoryuu",
+            "Nitoryuu",
+            "Santoryuu",
+            "Youtoryuu",
+            "Kyuutoryuu",
+            "Rokutoryuu",
+            "Hachitoryuu",
+            "Mutoryuu",
+            "Fencing Style",
+            "Sword Style",
+            "Kappa-Ryuu",
+            "Esgrima",
+            "Blade Swivel",
+            "Kitsune-Ryuu",
+            "Sniper Style",
+            "Pistol style",
+            "Arrow style",
+            "Arte Do Tempo",
+            "Black Cat",
+            "Peacock Slashers Style",
+            "Rope Action",
+            "Armor Style",
+            "Yare Style",
+            "Combate gigante",
+            "Color Trap",
+            "Ramen genpo",
+            "Rensa Hakai Mai",
+            "Mestres de Armas Improvaveis",
+            "Maboroshi Trump",
+            "Dokushin Yaju-ryu",
+            "Dokushi Renkin-ryu",
+            "Mukiryoku Kusari-ryu",
+            "Fuko no Kaji-ryu",
+            "Electro",
+            "Ciborgue Tatic",
+            "Pacifist Tatic"
+        ];
+        const classesAtualizacaoFicha = [
+            "Espadachins",
+            "Combatentes",
+            "Atiradores",
+            "Samurais",
+            "Feiticeiros / Macumbeiros",
+            "Piromaniacos",
+            "Comandantes Pesados",
+            "Sentinelas de Aco",
+            "Colossos Primais",
+            "Guardioes Cineticos",
+            "Boxeadores de Elite",
+            "Sombras Taticas",
+            "Sentinelas Taticos",
+            "Manipuladores de Clima",
+            "Mestres de Veneno",
+            "Ilusionistas",
+            "Manipuladores de Fios",
+            "Mestres da Velocidade",
+            "Mestres de Armas Improvaveis",
+            "Mestres de Armas Contundentes",
+            "Ceifadores",
+            "Trapaceiros",
+            "Falsificador",
+            "Homem-Bomba",
+            "Mestre em Haki"
+        ];
+        const descricoesClasseAtualizacaoFicha = {
+            "Espadachins": "Guerreiros dedicados que passam a vida aprimorando a arte da espada.",
+            "Combatentes": "Mestres da luta corpo a corpo que usam punhos e corpo como armas.",
+            "Atiradores": "Especialistas de mira infalivel e visao agucada.",
+            "Samurais": "Guerreiros leais e disciplinados originarios de Wano.",
+            "Feiticeiros / Macumbeiros": "Conjuradores que dominam magia ritualistica, energias ocultas e elementos naturais.",
+            "Piromaniacos": "Estrategistas que usam equipamentos especiais para manipular fogo.",
+            "Comandantes Pesados": "Guerreiros imponentes que combinam forca bruta com taticas de comando.",
+            "Sentinelas de Aco": "Mestres em armas de haste longa.",
+            "Colossos Primais": "Avatares da furia selvagem que encarnam instintos primitivos.",
+            "Guardioes Cineticos": "Especialistas em bastoes, tonfas e armas de haste curta.",
+            "Boxeadores de Elite": "Lutadores focados no uso puro de socos.",
+            "Sombras Taticas": "Agentes de infiltracao e precisao.",
+            "Sentinelas Taticos": "Guerreiros de contencao e captura.",
+            "Manipuladores de Clima": "Individuos que influenciam vento, chuva e raios.",
+            "Mestres de Veneno": "Combatentes astutos que usam toxinas, gases e substancias corrosivas.",
+            "Ilusionistas": "Manipuladores mentais capazes de distorcer a percepcao da realidade.",
+            "Manipuladores de Fios": "Estrategistas que controlam fios quase invisiveis e resistentes.",
+            "Mestres da Velocidade": "Combatentes que se movem em velocidades extremas.",
+            "Mestres de Armas Improvaveis": "Inovadores que transformam objetos comuns em ferramentas letais.",
+            "Mestres de Armas Contundentes": "Guerreiros que usam marretas e macas para esmagar oponentes.",
+            "Ceifadores": "Mestres da foice que executam uma danca letal.",
+            "Trapaceiros": "Artistas da enganacao que preferem astucia a forca bruta.",
+            "Falsificador": "Genio das sombras burocraticas que vence com documentos e selos forjados.",
+            "Homem-Bomba": "Mestre da destruicao planejada e alquimista da polvora.",
+            "Mestre em Haki": "Conhecedor profundo dos misterios do Haki."
+        };
 
         function escaparHtml(texto) {
             return String(texto || "").replace(/[&<>"']/g, (caractere) => ({
@@ -246,18 +393,27 @@
                 <article class="cartao-personagem" style="cursor: pointer; transition: all 0.2s;" data-nome="${escaparHtml(personagem.nome)}" onclick="selecionarPersonagem('${escaparHtml(personagem.nome).replace(/'/g, "\\'")}')">
                     <h2>${escaparHtml(personagem.nome)}</h2>
                     <p><strong>Gmail:</strong> ${escaparHtml(personagem.gmail)}</p>
+                    <p><strong>Código de recuperação:</strong> ${escaparHtml(personagem.codigoRecuperacao || "Será gerado na primeira recuperação")}</p>
                     <p><strong>Familia:</strong> ${escaparHtml(personagem.familia)}</p>
                     <p><strong>Raca:</strong> ${escaparHtml(personagem.raca)}</p>
+                    <p><strong>Troca de raça:</strong> ${personagem.atualizacaoFicha?.racaAlterada ? "Usada" : "Disponível"}</p>
                     <p><strong>Estilo de luta:</strong> ${escaparHtml(personagem.estiloLuta)}</p>
+                    <p><strong>Troca de estilo:</strong> ${personagem.atualizacaoFicha?.estiloLutaAlterado ? "Usada" : "Disponível"}</p>
                     <p><strong>Profissao:</strong> ${escaparHtml(personagem.profissao)}</p>
                     <p><strong>Classe:</strong> ${escaparHtml(personagem.classe)}</p>
+                    <p><strong>Troca de classe:</strong> ${personagem.atualizacaoFicha?.classeAlterada ? "Usada" : "Disponível"}</p>
                     <p><strong>Descrição da classe:</strong> ${escaparHtml(personagem.descricaoClasse)}</p>
                     <p><strong>Organização:</strong> ${escaparHtml(personagem.organizacao || personagem.organização || "-")}</p>
+                    <p><strong>Aparência:</strong> ${personagem.aparencia ? `${escaparHtml(personagem.aparencia.nome)} (${escaparHtml(personagem.aparencia.obra)})` : "Não registrada"}</p>
+                    <p><strong>Histórico de aparência:</strong> ${(personagem.historicoAparencia || []).length} registro(s)</p>
                     <p><strong>Criado em:</strong> ${escaparHtml(personagem.criadoEm)}</p>
+                    <p><strong>Acessos registrados:</strong> ${(personagem.historicoAcesso || []).length}</p>
+                    <p><strong>Último acesso:</strong> ${escaparHtml((personagem.historicoAcesso || []).at(-1)?.quando || "Nenhum")}</p>
                     <div class="acoes-cartao-admin">
                                 <button class="botao-principal" type="button" onclick="event.stopPropagation(); verInventario('${escaparHtml(personagem.nome).replace(/'/g, "\\'")}')">Inventário</button>
                                 <button class="botao-principal" type="button" onclick="event.stopPropagation(); verAtributos('${escaparHtml(personagem.nome).replace(/'/g, "\\'")}')">Atributos</button>
                                 <button class="botao-principal" type="button" onclick="event.stopPropagation(); abrirAtualizaOrgAdmin('${escaparHtml(personagem.nome).replace(/'/g, "\\'")}')">Atualizar Org</button>
+                                <button class="botao-principal" type="button" onclick="event.stopPropagation(); abrirAtualizacaoFichaAdmin('${escaparHtml(personagem.nome).replace(/'/g, "\\'")}')">Atualização de Ficha</button>
                     </div>
                 </article>
             `).join("");
@@ -319,6 +475,132 @@
             } catch (e) { console.warn('erro backup admin', e); }
             alert('Organização atualizada.');
             fecharModalAdminAtualiza();
+            desenharPersonagens();
+        }
+
+        function preencherSelect(select, opcoes, valorAtual) {
+            select.innerHTML = opcoes.map((opcao) => `
+                <option value="${escaparHtml(opcao)}"${opcao === valorAtual ? " selected" : ""}>${escaparHtml(opcao)}</option>
+            `).join("");
+        }
+
+        async function abrirAtualizacaoFichaAdmin(nomePersonagem) {
+            const modal = document.getElementById("modal-admin-atualizacao-ficha");
+            const campoNome = document.getElementById("modal-ficha-nome");
+            const selectRaca = document.getElementById("modal-ficha-raca");
+            const selectEstilo = document.getElementById("modal-ficha-estilo");
+            const selectClasse = document.getElementById("modal-ficha-classe");
+            const status = document.getElementById("modal-ficha-status");
+            const personagem = await BancoPersonagens.buscarPorNome(nomePersonagem);
+
+            if (!personagem) {
+                alert("Personagem não encontrado.");
+                return;
+            }
+
+            const controle = personagem.atualizacaoFicha || {};
+            campoNome.value = personagem.nome;
+            preencherSelect(selectRaca, racasAtualizacaoFicha, personagem.raca);
+            preencherSelect(selectEstilo, estilosAtualizacaoFicha, personagem.estiloLuta);
+            preencherSelect(selectClasse, classesAtualizacaoFicha, personagem.classe);
+
+            selectRaca.disabled = Boolean(controle.racaAlterada);
+            selectEstilo.disabled = Boolean(controle.estiloLutaAlterado);
+            selectClasse.disabled = Boolean(controle.classeAlterada);
+
+            const avisos = [];
+            if (controle.racaAlterada) avisos.push("Raça já foi alterada uma vez.");
+            if (controle.estiloLutaAlterado) avisos.push("Estilo de luta já foi alterado uma vez.");
+            if (controle.classeAlterada) avisos.push("Classe já foi alterada uma vez.");
+            status.textContent = avisos.length ? avisos.join(" ") : "Cada campo pode ser alterado apenas uma vez.";
+
+            modal.classList.add("ativo");
+        }
+
+        function fecharModalAtualizacaoFicha() {
+            document.getElementById("modal-admin-atualizacao-ficha").classList.remove("ativo");
+        }
+
+        async function salvarAtualizacaoFichaAdmin() {
+            const nome = document.getElementById("modal-ficha-nome").value;
+            const novaRaca = document.getElementById("modal-ficha-raca").value;
+            const novoEstilo = document.getElementById("modal-ficha-estilo").value;
+            const novaClasse = document.getElementById("modal-ficha-classe").value;
+            const status = document.getElementById("modal-ficha-status");
+            const personagens = await BancoPersonagens.obterTodos();
+            const idx = personagens.findIndex((p) => p.nome === nome);
+
+            if (idx === -1) {
+                status.textContent = "Personagem não encontrado.";
+                return;
+            }
+
+            const personagem = personagens[idx];
+            const controle = personagem.atualizacaoFicha || {};
+            const alteracoes = [];
+
+            if (novaRaca !== personagem.raca) {
+                if (controle.racaAlterada) {
+                    status.textContent = "A raça deste personagem já foi alterada uma vez.";
+                    return;
+                }
+
+                alteracoes.push({ campo: "Raça", de: personagem.raca, para: novaRaca });
+                personagem.raca = novaRaca;
+                controle.racaAlterada = true;
+                controle.racaAlteradaEm = new Date().toLocaleString("pt-BR");
+            }
+
+            if (novoEstilo !== personagem.estiloLuta) {
+                if (controle.estiloLutaAlterado) {
+                    status.textContent = "O estilo de luta deste personagem já foi alterado uma vez.";
+                    return;
+                }
+
+                alteracoes.push({ campo: "Estilo de luta", de: personagem.estiloLuta, para: novoEstilo });
+                personagem.estiloLuta = novoEstilo;
+                controle.estiloLutaAlterado = true;
+                controle.estiloLutaAlteradoEm = new Date().toLocaleString("pt-BR");
+            }
+
+            if (novaClasse !== personagem.classe) {
+                if (controle.classeAlterada) {
+                    status.textContent = "A classe deste personagem já foi alterada uma vez.";
+                    return;
+                }
+
+                alteracoes.push({ campo: "Classe", de: personagem.classe, para: novaClasse });
+                personagem.classe = novaClasse;
+                personagem.descricaoClasse = descricoesClasseAtualizacaoFicha[novaClasse] || "";
+                controle.classeAlterada = true;
+                controle.classeAlteradaEm = new Date().toLocaleString("pt-BR");
+            }
+
+            if (alteracoes.length === 0) {
+                status.textContent = "Nenhuma alteração selecionada.";
+                return;
+            }
+
+            personagem.atualizacaoFicha = controle;
+            personagem.historicoAtualizacaoFicha = [
+                ...(personagem.historicoAtualizacaoFicha || []),
+                {
+                    quando: new Date().toLocaleString("pt-BR"),
+                    autor: "admin",
+                    alteracoes
+                }
+            ];
+
+            personagens[idx] = personagem;
+            await BancoPersonagens.salvarTodos(personagens);
+
+            const ultimo = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+            if (ultimo?.nome && ultimo.nome.toLowerCase() === personagem.nome.toLowerCase()) {
+                localStorage.setItem("ultimoPersonagem", JSON.stringify(personagem));
+            }
+
+            status.textContent = "Ficha atualizada com sucesso.";
+            fecharModalAtualizacaoFicha();
             desenharPersonagens();
         }
 
@@ -551,6 +833,47 @@
                 <div class="org-acoes">
                     <button class="btn-adicionar" onclick="salvarAtualizaOrgAdmin()">Salvar</button>
                     <button class="btn-cancelar" onclick="fecharModalAdminAtualiza()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-admin-atualizacao-ficha">
+        <div class="modal-conteudo modal-org">
+            <div class="modal-cabecalho org-cabecalho">
+                <div>
+                    <div class="modal-titulo">Atualização de Ficha</div>
+                    <p class="org-subtitulo">Raça, estilo de luta e classe podem ser alterados apenas uma vez.</p>
+                </div>
+                <button class="fechar-modal" onclick="fecharModalAtualizacaoFicha()" type="button">✕</button>
+            </div>
+
+            <div class="form-adicionar org-form">
+                <div class="form-grupo">
+                    <label for="modal-ficha-nome">Nome do personagem</label>
+                    <input id="modal-ficha-nome" readonly>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="modal-ficha-raca">Raça</label>
+                    <select id="modal-ficha-raca"></select>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="modal-ficha-estilo">Estilo de luta</label>
+                    <select id="modal-ficha-estilo"></select>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="modal-ficha-classe">Classe</label>
+                    <select id="modal-ficha-classe"></select>
+                </div>
+
+                <p class="mensagem-status" id="modal-ficha-status" aria-live="polite"></p>
+
+                <div class="org-acoes">
+                    <button class="btn-adicionar" onclick="salvarAtualizacaoFichaAdmin()" type="button">Salvar ficha</button>
+                    <button class="btn-cancelar" onclick="fecharModalAtualizacaoFicha()" type="button">Cancelar</button>
                 </div>
             </div>
         </div>

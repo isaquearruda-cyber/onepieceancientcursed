@@ -6,17 +6,25 @@
     <title>Lobby - One Piece RPG</title>
     <link rel="stylesheet" href="estilo.css">
     <style>
+        html,
         body {
+            background: #040c0d;
+        }
+
+        body.pagina-formulario {
+            min-height: 100vh;
+            padding: 0;
             background: linear-gradient(135deg, rgba(7, 18, 14, 0.95), rgba(13, 40, 43, 0.85));
+            overflow-x: hidden;
         }
 
         .container-lobby {
             min-height: 100vh;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 32px;
-            align-items: center;
-            padding: clamp(24px, 5vw, 64px);
+            grid-template-columns: minmax(270px, 0.9fr) minmax(320px, 1.2fr) minmax(280px, 0.95fr);
+            gap: 20px;
+            align-items: stretch;
+            padding: clamp(18px, 3vw, 42px);
             position: relative;
             z-index: 2;
         }
@@ -25,6 +33,23 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            min-width: 0;
+        }
+
+        .painel-personagem,
+        .painel-comandos,
+        .personagem-palco {
+            border: 1px solid rgba(247, 200, 75, 0.26);
+            border-radius: 8px;
+            background:
+                linear-gradient(180deg, rgba(7, 20, 22, 0.88), rgba(3, 8, 10, 0.9)),
+                radial-gradient(circle at 50% 0%, rgba(247, 200, 75, 0.12), transparent 38%);
+            box-shadow: 0 22px 54px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 247, 223, 0.06);
+        }
+
+        .painel-personagem,
+        .painel-comandos {
+            padding: 18px;
         }
 
         .cabecalho-lobby {
@@ -32,7 +57,7 @@
         }
 
         .cabecalho-lobby h1 {
-            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            font-size: clamp(2rem, 4vw, 3.3rem);
             line-height: 1.1;
             margin-bottom: 8px;
             color: #fff7df;
@@ -48,18 +73,18 @@
 
         .status-personagem {
             display: grid;
-            gap: 12px;
-            padding: 20px;
-            border: 2px solid #f7c84b;
-            background: linear-gradient(135deg, rgba(247, 200, 75, 0.08), rgba(246, 196, 80, 0.04));
+            gap: 10px;
+            padding: 14px;
+            border: 1px solid rgba(247, 200, 75, 0.34);
+            background: rgba(4, 12, 13, 0.55);
             border-radius: 8px;
-            box-shadow: 0 0 20px rgba(247, 200, 75, 0.15), inset 0 0 18px rgba(255, 233, 163, 0.08);
+            box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.28);
         }
 
         .info-linha {
             display: grid;
-            grid-template-columns: 140px 1fr;
-            gap: 12px;
+            grid-template-columns: minmax(96px, 120px) 1fr;
+            gap: 10px;
             align-items: center;
         }
 
@@ -73,17 +98,263 @@
 
         .info-valor {
             color: #fff7df;
-            font-size: 1rem;
-            padding: 8px 12px;
+            font-size: 0.95rem;
+            padding: 8px 10px;
             background: rgba(4, 12, 13, 0.5);
             border-left: 3px solid #f7c84b;
             border-radius: 2px;
+            min-width: 0;
+            overflow-wrap: anywhere;
         }
 
         .acoes-lobby {
             display: grid;
             gap: 12px;
-            margin-top: 16px;
+            margin-top: 0;
+        }
+
+        .grupo-comandos {
+            display: grid;
+            gap: 12px;
+        }
+
+        .painel-titulo {
+            margin: 0;
+            color: #ffe28a;
+            font-size: 0.95rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .personagem-palco {
+            position: relative;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            min-height: 620px;
+            padding: 22px;
+        }
+
+        .personagem-palco::before {
+            content: "";
+            position: absolute;
+            inset: 16px;
+            border: 1px solid rgba(255, 247, 223, 0.08);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        .personagem-palco::after {
+            content: "";
+            position: absolute;
+            inset: auto 10% 8% 10%;
+            height: 26%;
+            background: radial-gradient(ellipse at center, rgba(247, 200, 75, 0.26), transparent 66%);
+            filter: blur(4px);
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .palco-moldura {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            place-items: center;
+            width: min(100%, 430px);
+            min-height: 560px;
+        }
+
+        .palco-identidade {
+            position: absolute;
+            top: 48px;
+            left: 50%;
+            z-index: 2;
+            display: grid;
+            gap: 4px;
+            width: min(82%, 340px);
+            padding: 11px 16px;
+            border: 1px solid rgba(247, 200, 75, 0.5);
+            border-radius: 8px;
+            background: rgba(4, 12, 13, 0.72);
+            color: #fff7df;
+            text-align: center;
+            transform: translateX(-50%);
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.32);
+        }
+
+        .palco-identidade span {
+            color: #ffe28a;
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .palco-identidade strong {
+            font-size: clamp(1.35rem, 3vw, 2.15rem);
+            line-height: 1.05;
+            text-transform: uppercase;
+            overflow-wrap: anywhere;
+            text-shadow: 0 3px 14px rgba(0, 0, 0, 0.74);
+        }
+
+        .palco-placeholder {
+            display: grid;
+            place-items: center;
+            align-content: center;
+            gap: 10px;
+            width: min(86%, 320px);
+            aspect-ratio: 3 / 4;
+            border: 2px solid rgba(247, 200, 75, 0.48);
+            border-radius: 8px;
+            background:
+                linear-gradient(180deg, rgba(255, 247, 223, 0.08), rgba(4, 12, 13, 0.32)),
+                repeating-linear-gradient(0deg, rgba(255, 247, 223, 0.035), rgba(255, 247, 223, 0.035) 1px, transparent 1px, transparent 9px);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.44), inset 0 0 30px rgba(0, 0, 0, 0.32);
+            color: #fff7df;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .imagem-personagem {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center bottom;
+            filter: drop-shadow(0 22px 28px rgba(0, 0, 0, 0.58));
+        }
+
+        .palco-placeholder.tem-imagem {
+            width: min(94%, 360px);
+            border-color: rgba(255, 226, 138, 0.7);
+            background: radial-gradient(circle at 50% 78%, rgba(247, 200, 75, 0.22), transparent 46%);
+        }
+
+        .palco-placeholder.tem-imagem span,
+        .palco-placeholder.tem-imagem strong {
+            display: none;
+        }
+
+        .palco-placeholder.tem-imagem .imagem-personagem {
+            display: block;
+        }
+
+        .palco-placeholder span {
+            color: #ffe28a;
+            font-size: 0.86rem;
+            font-weight: 900;
+            letter-spacing: 0.16em;
+        }
+
+        .palco-placeholder strong {
+            max-width: 82%;
+            font-size: clamp(1.5rem, 4vw, 2.4rem);
+            line-height: 1.05;
+            text-transform: uppercase;
+            overflow-wrap: anywhere;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .palco-sombra {
+            position: absolute;
+            bottom: 8%;
+            width: 58%;
+            height: 40px;
+            border-radius: 999px;
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.72), transparent 68%);
+        }
+
+        .input-imagem-personagem {
+            position: fixed;
+            inline-size: 1px;
+            block-size: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .botao-registros {
+            display: grid;
+            grid-template-columns: 52px 1fr;
+            align-items: center;
+            gap: 12px;
+            min-height: 58px;
+            padding: 8px 14px;
+            border: 2px solid rgba(247, 200, 75, 0.58);
+            border-radius: 8px;
+            background: rgba(255, 247, 223, 0.06);
+            color: #fff7df;
+            font-weight: 900;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+        }
+
+        .botao-registros img {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 6px;
+            background: #fff;
+        }
+
+        .botao-registros:hover {
+            border-color: #ffe28a;
+            background: rgba(247, 200, 75, 0.15);
+            box-shadow: 0 0 18px rgba(247, 200, 75, 0.28);
+            transform: translateY(-2px);
+        }
+
+        .orientacao-celular {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            place-items: center;
+            padding: 24px;
+            background:
+                linear-gradient(180deg, rgba(3, 8, 10, 0.96), rgba(7, 20, 22, 0.98)),
+                radial-gradient(circle at 50% 30%, rgba(247, 200, 75, 0.16), transparent 36%);
+            color: #fff7df;
+            text-align: center;
+        }
+
+        .orientacao-card {
+            display: grid;
+            gap: 12px;
+            width: calc(100vw - 48px);
+            max-width: 340px;
+            padding: 22px;
+            border: 1px solid rgba(247, 200, 75, 0.42);
+            border-radius: 8px;
+            background: rgba(4, 12, 13, 0.76);
+            box-shadow: 0 20px 54px rgba(0, 0, 0, 0.42);
+        }
+
+        .orientacao-icone {
+            font-size: 3rem;
+        }
+
+        .orientacao-card strong {
+            color: #ffe28a;
+            font-size: 1.25rem;
+        }
+
+        .orientacao-card span {
+            color: #d9e8d4;
+            line-height: 1.4;
+        }
+
+        .botao-orientacao {
+            min-height: 42px;
+            border: 1px solid rgba(247, 200, 75, 0.72);
+            border-radius: 8px;
+            background: linear-gradient(90deg, #f7c84b, #ffe28a);
+            color: #1e211c;
+            font-weight: 900;
+            cursor: pointer;
         }
 
         .painel-acessos {
@@ -119,6 +390,99 @@
 
         .icone-acesso {
             font-size: 2rem;
+        }
+
+        .menu-lobby-recolhivel {
+            display: grid;
+            gap: 10px;
+        }
+
+        .botao-menu-lobby {
+            display: grid;
+            grid-template-columns: 52px 1fr auto;
+            align-items: center;
+            gap: 12px;
+            min-height: 58px;
+            padding: 8px 14px;
+            border: 2px solid rgba(255, 68, 68, 0.68);
+            border-radius: 8px;
+            background: rgba(100, 0, 0, 0.25);
+            color: #fff7df;
+            font-weight: 900;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+        }
+
+        .botao-menu-lobby:hover,
+        .menu-lobby-recolhivel.aberto .botao-menu-lobby {
+            border-color: #ff5b5b;
+            background: rgba(180, 0, 0, 0.24);
+            box-shadow: 0 0 20px rgba(255, 28, 28, 0.34);
+            transform: translateY(-2px);
+        }
+
+        .botao-menu-lobby img,
+        .atalho-menu-lobby img {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .menu-seta {
+            color: #ffb7b7;
+            font-size: 1.25rem;
+            transition: transform 0.22s ease;
+        }
+
+        .menu-lobby-recolhivel.aberto .menu-seta {
+            transform: rotate(180deg);
+        }
+
+        .grade-menu-lobby {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 10px;
+            border: 1px solid rgba(247, 200, 75, 0.2);
+            border-radius: 8px;
+            background: rgba(4, 12, 13, 0.58);
+        }
+
+        .menu-lobby-recolhivel.aberto .grade-menu-lobby {
+            display: grid;
+        }
+
+        .atalho-menu-lobby {
+            display: grid;
+            place-items: center;
+            gap: 8px;
+            min-height: 112px;
+            padding: 12px 8px;
+            border: 1px solid rgba(247, 200, 75, 0.38);
+            border-radius: 8px;
+            background: rgba(255, 247, 223, 0.04);
+            color: #fff7df;
+            font-weight: 900;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .atalho-menu-lobby:hover {
+            border-color: #ffe28a;
+            background: rgba(247, 200, 75, 0.12);
+            box-shadow: 0 0 16px rgba(247, 200, 75, 0.22);
+            transform: translateY(-2px);
+        }
+
+        .atalho-menu-lobby span {
+            font-size: 0.82rem;
+            line-height: 1.15;
+            text-transform: uppercase;
         }
 
         /* ==================== MODAL ====================*/
@@ -883,6 +1247,7 @@
             display: flex;
             flex-direction: column;
             gap: 16px;
+            min-width: 0;
         }
 
         .info-extra {
@@ -935,10 +1300,21 @@
         @media (max-width: 1024px) {
             .container-lobby {
                 grid-template-columns: 1fr;
+                max-width: 760px;
+                margin: 0 auto;
             }
 
             .cabecalho-lobby {
                 text-align: center;
+            }
+
+            .personagem-palco {
+                min-height: 500px;
+                order: -1;
+            }
+
+            .palco-moldura {
+                min-height: 450px;
             }
 
         }
@@ -949,6 +1325,12 @@
                 padding: 16px;
             }
 
+            .painel-personagem,
+            .painel-comandos,
+            .personagem-palco {
+                padding: 14px;
+            }
+
             .info-linha {
                 grid-template-columns: 1fr;
             }
@@ -956,20 +1338,118 @@
             .cabecalho-lobby h1 {
                 font-size: 2rem;
             }
+
+            .personagem-palco {
+                min-height: 390px;
+            }
+
+            .palco-moldura {
+                min-height: 340px;
+            }
+
+            .palco-placeholder {
+                width: min(92%, 260px);
+            }
+        }
+
+        @media (max-width: 900px) and (orientation: landscape) {
+            .container-lobby {
+                grid-template-columns: minmax(210px, 0.82fr) minmax(260px, 1.1fr) minmax(220px, 0.9fr);
+                gap: 12px;
+                padding: 12px;
+            }
+
+            .cabecalho-lobby h1 {
+                font-size: 1.75rem;
+            }
+
+            .cabecalho-lobby .subtitulo-lobby {
+                font-size: 0.86rem;
+                margin-bottom: 10px;
+            }
+
+            .status-personagem {
+                gap: 7px;
+                padding: 10px;
+            }
+
+            .info-linha {
+                grid-template-columns: 86px 1fr;
+                gap: 8px;
+            }
+
+            .info-label {
+                font-size: 0.72rem;
+            }
+
+            .info-valor {
+                padding: 6px 8px;
+                font-size: 0.78rem;
+            }
+
+            .personagem-palco {
+                min-height: calc(100vh - 24px);
+            }
+
+            .palco-moldura {
+                min-height: 330px;
+            }
+
+            .palco-identidade {
+                top: 24px;
+                padding: 8px 12px;
+            }
+
+            .palco-placeholder {
+                width: min(78%, 230px);
+            }
+
+            .botao-lobby {
+                min-height: 42px;
+                font-size: 0.78rem;
+            }
+
+            .botao-acesso-rapido {
+                min-height: 74px;
+                padding: 10px;
+                font-size: 0.78rem;
+            }
+
+            .icone-acesso {
+                font-size: 1.55rem;
+            }
+        }
+
+        @media (max-width: 760px) and (orientation: portrait) {
+            .orientacao-celular {
+                display: grid;
+            }
         }
     </style>
 </head>
 <body class="pagina-formulario">
+    <audio id="musica-fundo" loop preload="auto">
+        <source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg">
+    </audio>
+
     <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true">
         <source src="fundo-login.mp4" type="video/mp4">
     </video>
 
+    <div class="orientacao-celular" aria-hidden="true">
+        <div class="orientacao-card">
+            <div class="orientacao-icone">↻</div>
+            <strong>Vire o celular</strong>
+            <span>O lobby fica melhor na horizontal, como tela de jogo.</span>
+            <button class="botao-orientacao" id="botao-orientacao" type="button">Ativar horizontal</button>
+        </div>
+    </div>
+
     <main class="container-lobby">
-        <!-- PAINEL ESQUERDO: INFORMAÇÕES -->
-        <section class="painel-lobby">
+        <section class="painel-lobby painel-personagem">
             <div class="cabecalho-lobby">
                 <h1>Bem-vindo ao Lobby</h1>
-                <p class="subtitulo-lobby">Sua jornada como pirata está prestes a começar</p>
+                <p class="subtitulo-lobby" id="mensagem-organizacao-lobby">Sua jornada como pirata está prestes a começar</p>
                 <div class="status-online">
                     <div class="ponto-online"></div>
                     Pronto para a aventura
@@ -1005,48 +1485,113 @@
                     <span class="info-label">Organização</span>
                     <span class="info-valor" id="organizacao-pers">---</span>
                 </div>
-            </div>
-
-            <div class="acoes-lobby">
-                <button class="botao-lobby botao-entrar-jogo" id="botao-iniciar" type="button">⚔️ Entrar na Aventura</button>
-                    <button class="botao-lobby" id="botao-atualiza-org-lobby" type="button">🏷️ Atualizar Organização</button>
-                
-                <div class="painel-acessos">
-                    <button class="botao-acesso-rapido" id="botao-inventario" type="button">
-                        <span class="icone-acesso">🎒</span>
-                        Inventário
-                    </button>
-                    <button class="botao-acesso-rapido" id="botao-atributos" type="button">
-                        <span class="icone-acesso">💎</span>
-                        Atributos
-                    </button>
+                <div class="info-linha">
+                    <span class="info-label">Aparência</span>
+                    <span class="info-valor" id="aparencia-pers">---</span>
                 </div>
-
-                <button class="botao-lobby botao-dev" id="botao-admin" type="button">🔧 Desenvolvedores</button>
-                <button class="botao-lobby botao-voltar-inicio" id="botao-sair-lobby" type="button">← Voltar ao Início</button>
             </div>
         </section>
 
-        <!-- PAINEL DIREITO: EXTRAS -->
-        <section class="card-personagem-info">
-            <div class="info-extra">
-                <div class="info-extra-titulo">⏰ Data de Criação</div>
-                <div class="info-extra-valor" id="data-criacao">Carregando...</div>
+        <section class="personagem-palco" aria-label="Prévia do personagem">
+            <div class="palco-identidade">
+                <span>Personagem</span>
+                <strong id="nome-palco">Em breve</strong>
+            </div>
+            <div class="palco-moldura">
+                <div class="palco-sombra"></div>
+                <div class="palco-placeholder" id="palco-personagem">
+                    <img class="imagem-personagem" id="imagem-personagem" alt="Imagem do personagem">
+                    <span>Imagem</span>
+                    <strong>Enviar imagem</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="painel-lobby painel-comandos">
+            <div class="acoes-lobby">
+                <h2 class="painel-titulo">Comandos</h2>
+                <div class="grupo-comandos">
+                    <button class="botao-lobby botao-entrar-jogo" id="botao-iniciar" type="button">⚔️ Entrar na Aventura</button>
+                    <button class="botao-lobby" id="botao-atualiza-org-lobby" type="button">🏷️ Atualizar Organização</button>
+                    <button class="botao-lobby" id="botao-aparencia-lobby" type="button">🎭 Atualizar Aparência</button>
+                    <button class="botao-lobby" id="botao-imagem-personagem" type="button">🖼️ Enviar Imagem</button>
+                    <input class="input-imagem-personagem" id="input-imagem-personagem" type="file" accept="image/*">
+                </div>
+
+                <div class="menu-lobby-recolhivel" id="menu-lobby-recolhivel">
+                    <button class="botao-menu-lobby" id="botao-menu-lobby" type="button" aria-expanded="false">
+                        <img src="assets/img/menu-lobby.jpeg" alt="">
+                        <span>Menu</span>
+                        <span class="menu-seta">▾</span>
+                    </button>
+
+                    <div class="grade-menu-lobby" id="grade-menu-lobby">
+                        <button class="atalho-menu-lobby" id="botao-atributos" type="button">
+                            <img src="assets/img/menu-atributos.jpeg" alt="">
+                            <span>Atributos</span>
+                        </button>
+                        <button class="atalho-menu-lobby" id="botao-inventario" type="button">
+                            <img src="assets/img/menu-inventario.jpeg" alt="">
+                            <span>Inventário</span>
+                        </button>
+                        <button class="atalho-menu-lobby" data-menu-acao="lojas" type="button">
+                            <img src="assets/img/menu-lojas.jpeg" alt="">
+                            <span>Lojas</span>
+                        </button>
+                        <button class="atalho-menu-lobby" data-menu-acao="eventos" type="button">
+                            <img src="assets/img/menu-eventos.jpeg" alt="">
+                            <span>Eventos</span>
+                        </button>
+                        <button class="atalho-menu-lobby" data-menu-acao="missoes" type="button">
+                            <img src="assets/img/menu-missoes.jpeg" alt="">
+                            <span>Missões de Organização</span>
+                        </button>
+                        <button class="atalho-menu-lobby" data-menu-acao="viagem" type="button">
+                            <img src="assets/img/menu-viagem.jpeg" alt="">
+                            <span>Viagem</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grupo-comandos">
+                    <button class="botao-lobby botao-voltar-inicio" id="botao-sair-lobby" type="button">← Voltar ao Início</button>
+                </div>
             </div>
 
-            <div class="info-extra">
-                <div class="info-extra-titulo">📋 Descrição da Classe</div>
-                <div class="info-extra-valor" id="descricao-classe-lobby">Carregando...</div>
-            </div>
-
-            <div class="info-extra">
-                <div class="info-extra-titulo">💼 Especialidade</div>
-                <div class="info-extra-valor" id="descricao-profissao-lobby">Carregando...</div>
-            </div>
+            <button class="botao-registros" id="botao-registros" type="button">
+                <img src="assets/img/botao-registros.jpeg" alt="">
+                <span>Registros</span>
+            </button>
         </section>
     </main>
 
     <!-- ==================== MODAIS ====================-->
+    <div class="modal-overlay" id="modal-registros">
+        <div class="modal-conteudo">
+            <div class="modal-cabecalho">
+                <h2 class="modal-titulo">Registros</h2>
+                <button class="fechar-modal" onclick="fecharModal('modal-registros')">✕</button>
+            </div>
+
+            <div class="card-personagem-info">
+                <div class="info-extra">
+                    <div class="info-extra-titulo">⏰ Data de Criação</div>
+                    <div class="info-extra-valor" id="data-criacao">Carregando...</div>
+                </div>
+
+                <div class="info-extra">
+                    <div class="info-extra-titulo">📋 Descrição da Classe</div>
+                    <div class="info-extra-valor" id="descricao-classe-lobby">Carregando...</div>
+                </div>
+
+                <div class="info-extra">
+                    <div class="info-extra-titulo">💼 Especialidade</div>
+                    <div class="info-extra-valor" id="descricao-profissao-lobby">Carregando...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="modal-inventario">
         <div class="modal-conteudo">
             <div class="modal-cabecalho">
@@ -1199,7 +1744,40 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="modal-aparencia-lobby">
+        <div class="modal-conteudo modal-org">
+            <div class="modal-cabecalho org-cabecalho">
+                <div>
+                    <h2 class="modal-titulo">Aparência do Personagem</h2>
+                    <p class="org-subtitulo">Informe o nome da aparência e a obra de origem. Depois do primeiro registro, só muda a cada 2 meses.</p>
+                </div>
+                <button class="fechar-modal" onclick="fecharModal('modal-aparencia-lobby')">✕</button>
+            </div>
+
+            <div class="form-adicionar org-form">
+                <div class="form-grupo">
+                    <label for="lobby-aparencia-nome">Nome da aparência</label>
+                    <input id="lobby-aparencia-nome" type="text" placeholder="Ex: Monkey D. Luffy Gear 5">
+                </div>
+
+                <div class="form-grupo">
+                    <label for="lobby-aparencia-obra">Obra</label>
+                    <input id="lobby-aparencia-obra" type="text" placeholder="Ex: One Piece">
+                </div>
+
+                <p class="mensagem-status" id="lobby-aparencia-status" aria-live="polite"></p>
+
+                <div class="org-acoes">
+                    <button class="btn-adicionar" id="lobby-salvar-aparencia" type="button">Salvar aparência</button>
+                    <button class="btn-cancelar" id="lobby-cancelar-aparencia" type="button">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="supabase-config.js"></script>
     <script src="banco-personagens.js"></script>
+    <script src="musica-fundo.js"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
 
@@ -1210,22 +1788,38 @@
         const estiloPers = document.getElementById("estilo-pers");
         const profissaoPers = document.getElementById("profissao-pers");
         const classePers = document.getElementById("classe-pers");
+        const aparenciaPers = document.getElementById("aparencia-pers");
         const dataCriacao = document.getElementById("data-criacao");
         const descricaoClasseLobby = document.getElementById("descricao-classe-lobby");
         const descricaoProfissaoLobby = document.getElementById("descricao-profissao-lobby");
+        const nomePalco = document.getElementById("nome-palco");
+        const palcoPersonagem = document.getElementById("palco-personagem");
+        const imagemPersonagem = document.getElementById("imagem-personagem");
+        const mensagemOrganizacaoLobby = document.getElementById("mensagem-organizacao-lobby");
 
         // Botões
         const botaoIniciar = document.getElementById("botao-iniciar");
         const botaoInventario = document.getElementById("botao-inventario");
         const botaoAtributos = document.getElementById("botao-atributos");
-        const botaoAdmin = document.getElementById("botao-admin");
         const botaoSairLobby = document.getElementById("botao-sair-lobby");
+        const botaoAparenciaLobby = document.getElementById("botao-aparencia-lobby");
+        const botaoImagemPersonagem = document.getElementById("botao-imagem-personagem");
+        const inputImagemPersonagem = document.getElementById("input-imagem-personagem");
+        const botaoRegistros = document.getElementById("botao-registros");
+        const botaoOrientacao = document.getElementById("botao-orientacao");
+        const menuLobbyRecolhivel = document.getElementById("menu-lobby-recolhivel");
+        const botaoMenuLobby = document.getElementById("botao-menu-lobby");
 
         // Modais
         const modalInventario = document.getElementById("modal-inventario");
         const modalAtributos = document.getElementById("modal-atributos");
         const gridInventario = document.getElementById("grid-inventario");
         const gridAtributos = document.getElementById("grid-atributos");
+        const inputAparenciaNome = document.getElementById("lobby-aparencia-nome");
+        const inputAparenciaObra = document.getElementById("lobby-aparencia-obra");
+        const statusAparencia = document.getElementById("lobby-aparencia-status");
+        const botaoSalvarAparencia = document.getElementById("lobby-salvar-aparencia");
+        const botaoCancelarAparencia = document.getElementById("lobby-cancelar-aparencia");
 
         // Inputs do formulário
         const inputItemNome = document.getElementById("input-item-nome");
@@ -1262,6 +1856,27 @@
             { chave: 'cacaepesca', nome: 'Caça e Pesca', icone: '🎣' },
             { chave: 'diversos', nome: 'Diversos', icone: '🎁' }
         ];
+
+        const mensagensPorOrganizacao = {
+            "Marinha": "A justiça dos mares aguarda suas próximas ordens.",
+            "Piratas": "Sua jornada como pirata está prestes a começar.",
+            "Exército Revolucionário": "A chama da revolução começa a se mover pelos mares.",
+            "Cipher Pol": "Sua missão secreta está pronta para entrar em ação.",
+            "Neo Marinha": "Uma nova justiça se ergue contra o caos dos mares.",
+            "Caçadores de Recompensa": "Há recompensas esperando por quem sabe caçar.",
+            "Germá 66": "A ciência da guerra prepara seu próximo avanço.",
+            "Galley-la Company": "Os estaleiros chamam por mãos capazes de criar lendas.",
+            "MADs": "A pesquisa proibida está prestes a mudar o mundo.",
+            "Baroque Works": "As sombras da organização já se movem em segredo."
+        };
+
+        function obterOrganizacaoPersonagem(personagemAtual = personagem) {
+            return personagemAtual?.organizacao || personagemAtual?.organização || personagemAtual?.organization || "---";
+        }
+
+        function atualizarMensagemOrganizacao(organizacao) {
+            mensagemOrganizacaoLobby.textContent = mensagensPorOrganizacao[organizacao] || "Sua jornada nesse mar está prestes a começar.";
+        }
 
         // ==================== SISTEMA DE PERSISTÊNCIA ====================
         function obterInventario() {
@@ -1637,25 +2252,208 @@
             `).join("");
         }
 
+        function obterDataProximaAparencia() {
+            const atualizadoEm = personagem?.aparencia?.atualizadoEm;
+            if (!atualizadoEm) return null;
+
+            const data = new Date(atualizadoEm);
+            if (Number.isNaN(data.getTime())) return null;
+            data.setMonth(data.getMonth() + 2);
+            return data;
+        }
+
+        function podeAlterarAparencia() {
+            const proximaData = obterDataProximaAparencia();
+            return !personagem?.aparencia || !proximaData || Date.now() >= proximaData.getTime();
+        }
+
+        function textoAparencia() {
+            if (!personagem?.aparencia) return "Não registrada";
+            return `${personagem.aparencia.nome} (${personagem.aparencia.obra})`;
+        }
+
+        function atualizarAparenciaLobby() {
+            aparenciaPers.textContent = textoAparencia();
+
+            if (!personagem?.aparencia) {
+                statusAparencia.textContent = "Registre a aparência inicial do personagem.";
+                botaoSalvarAparencia.disabled = false;
+                return;
+            }
+
+            const proximaData = obterDataProximaAparencia();
+            if (!podeAlterarAparencia()) {
+                statusAparencia.textContent = `Aparência registrada. Próxima mudança liberada em ${proximaData.toLocaleDateString("pt-BR")}.`;
+                botaoSalvarAparencia.disabled = true;
+            } else {
+                statusAparencia.textContent = "A mudança de aparência está liberada.";
+                botaoSalvarAparencia.disabled = false;
+            }
+        }
+
+        function abrirModalAparencia() {
+            if (!personagem) return;
+
+            inputAparenciaNome.value = personagem.aparencia?.nome || "";
+            inputAparenciaObra.value = personagem.aparencia?.obra || "";
+            atualizarAparenciaLobby();
+            abrirModal("modal-aparencia-lobby");
+            setTimeout(() => inputAparenciaNome.focus(), 80);
+        }
+
+        async function salvarAparenciaLobby() {
+            if (!personagem) return;
+
+            const nome = inputAparenciaNome.value.trim();
+            const obra = inputAparenciaObra.value.trim();
+
+            if (!nome || !obra) {
+                statusAparencia.textContent = "Informe nome da aparência e obra para ser aceito.";
+                (!nome ? inputAparenciaNome : inputAparenciaObra).focus();
+                return;
+            }
+
+            if (personagem.aparencia && !podeAlterarAparencia()) {
+                const proximaData = obterDataProximaAparencia();
+                statusAparencia.textContent = `Ainda não é possível mudar. Próxima troca em ${proximaData.toLocaleDateString("pt-BR")}.`;
+                return;
+            }
+
+            const anterior = personagem.aparencia || null;
+            personagem.aparencia = {
+                nome,
+                obra,
+                atualizadoEm: new Date().toISOString(),
+                atualizadoEmTexto: new Date().toLocaleString("pt-BR")
+            };
+            personagem.historicoAparencia = [
+                ...(personagem.historicoAparencia || []),
+                {
+                    quando: new Date().toLocaleString("pt-BR"),
+                    de: anterior,
+                    para: personagem.aparencia
+                }
+            ];
+
+            await BancoPersonagens.salvarPersonagem(personagem);
+            localStorage.setItem("ultimoPersonagem", JSON.stringify(personagem));
+            atualizarAparenciaLobby();
+            fecharModal("modal-aparencia-lobby");
+        }
+
+        function atualizarImagemPersonagem() {
+            const imagem = personagem?.imagemPersonagem || "";
+            if (!imagem) {
+                imagemPersonagem.removeAttribute("src");
+                palcoPersonagem.classList.remove("tem-imagem");
+                return;
+            }
+
+            imagemPersonagem.src = imagem;
+            palcoPersonagem.classList.add("tem-imagem");
+        }
+
+        function redimensionarImagemParaPersonagem(arquivo) {
+            return new Promise((resolve, reject) => {
+                if (!arquivo || !arquivo.type.startsWith("image/")) {
+                    reject(new Error("Escolha uma imagem válida."));
+                    return;
+                }
+
+                const leitor = new FileReader();
+                leitor.onerror = () => reject(new Error("Não foi possível ler a imagem."));
+                leitor.onload = () => {
+                    const imagem = new Image();
+                    imagem.onerror = () => reject(new Error("Não foi possível carregar a imagem."));
+                    imagem.onload = () => {
+                        const limite = 1100;
+                        const escala = Math.min(1, limite / Math.max(imagem.width, imagem.height));
+                        const largura = Math.max(1, Math.round(imagem.width * escala));
+                        const altura = Math.max(1, Math.round(imagem.height * escala));
+                        const canvas = document.createElement("canvas");
+                        canvas.width = largura;
+                        canvas.height = altura;
+                        const contexto = canvas.getContext("2d");
+                        contexto.drawImage(imagem, 0, 0, largura, altura);
+                        resolve(canvas.toDataURL("image/jpeg", 0.84));
+                    };
+                    imagem.src = leitor.result;
+                };
+                leitor.readAsDataURL(arquivo);
+            });
+        }
+
+        async function salvarImagemPersonagem(arquivo) {
+            if (!personagem) return;
+
+            try {
+                botaoImagemPersonagem.disabled = true;
+                botaoImagemPersonagem.textContent = "Salvando imagem...";
+                const imagemBase64 = await redimensionarImagemParaPersonagem(arquivo);
+                personagem.imagemPersonagem = imagemBase64;
+                personagem.imagemPersonagemAtualizadaEm = new Date().toISOString();
+                await BancoPersonagens.salvarPersonagem(personagem);
+                localStorage.setItem("ultimoPersonagem", JSON.stringify(personagem));
+                atualizarImagemPersonagem();
+            } catch (erro) {
+                alert(erro.message || "Não foi possível salvar a imagem.");
+            } finally {
+                botaoImagemPersonagem.disabled = false;
+                botaoImagemPersonagem.textContent = "🖼️ Enviar Imagem";
+                inputImagemPersonagem.value = "";
+            }
+        }
+
+        function precisaModoHorizontal() {
+            return window.matchMedia("(max-width: 900px)").matches && window.matchMedia("(orientation: portrait)").matches;
+        }
+
+        async function ativarModoHorizontal(pedirTelaCheia = false) {
+            if (!precisaModoHorizontal() || !screen.orientation?.lock) return;
+
+            try {
+                if (pedirTelaCheia && !document.fullscreenElement && document.documentElement.requestFullscreen) {
+                    await document.documentElement.requestFullscreen();
+                }
+                await screen.orientation.lock("landscape");
+            } catch (erro) {
+                console.info("O navegador bloqueou a troca automática para horizontal.", erro);
+            }
+        }
+
+        ativarModoHorizontal(false);
+        window.addEventListener("pointerdown", () => ativarModoHorizontal(true), { once: true });
+
         // ==================== INICIALIZAÇÃO ====================
         if (!personagem) {
             nomePers.textContent = "Nenhum personagem encontrado";
+            nomePalco.textContent = "Sem personagem";
+            atualizarMensagemOrganizacao("---");
             botaoIniciar.disabled = true;
             botaoInventario.disabled = true;
             botaoAtributos.disabled = true;
+            botaoAparenciaLobby.disabled = true;
+            botaoImagemPersonagem.disabled = true;
         } else {
             nomePers.textContent = personagem.nome || "---";
+            nomePalco.textContent = personagem.nome || "Personagem";
             familiaPers.textContent = personagem.familia || "---";
             racaPers.textContent = personagem.raca || "---";
             estiloPers.textContent = personagem.estiloLuta || "---";
             profissaoPers.textContent = personagem.profissao || "---";
             classePers.textContent = personagem.classe || "---";
             // Organização (pode vir de "organizacao")
-            const org = personagem.organizacao || personagem.organização || personagem.organization || "---";
+            const org = obterOrganizacaoPersonagem(personagem);
             document.getElementById("organizacao-pers").textContent = org;
+            atualizarMensagemOrganizacao(org);
             dataCriacao.textContent = personagem.criadoEm || "Hoje";
             descricaoClasseLobby.textContent = personagem.descricaoClasse || "Aguardando dados...";
             descricaoProfissaoLobby.textContent = personagem.descricaoProfissao || "Aguardando dados...";
+            atualizarAparenciaLobby();
+            atualizarImagemPersonagem();
+            if (!personagem.aparencia) {
+                setTimeout(abrirModalAparencia, 400);
+            }
         }
 
         botaoIniciar.addEventListener("click", () => {
@@ -1674,8 +2472,33 @@
             abrirModal("modal-atributos");
         });
 
-        botaoAdmin.addEventListener("click", () => {
-            window.location.href = "personagens.html";
+        botaoAparenciaLobby.addEventListener("click", abrirModalAparencia);
+        botaoSalvarAparencia.addEventListener("click", salvarAparenciaLobby);
+        botaoCancelarAparencia.addEventListener("click", () => fecharModal("modal-aparencia-lobby"));
+        botaoImagemPersonagem.addEventListener("click", () => inputImagemPersonagem.click());
+        inputImagemPersonagem.addEventListener("change", () => {
+            const arquivo = inputImagemPersonagem.files?.[0];
+            if (arquivo) salvarImagemPersonagem(arquivo);
+        });
+        botaoRegistros.addEventListener("click", () => abrirModal("modal-registros"));
+        botaoOrientacao.addEventListener("click", () => ativarModoHorizontal(true));
+
+        botaoMenuLobby.addEventListener("click", () => {
+            const abriu = !menuLobbyRecolhivel.classList.contains("aberto");
+            menuLobbyRecolhivel.classList.toggle("aberto", abriu);
+            botaoMenuLobby.setAttribute("aria-expanded", String(abriu));
+        });
+
+        document.querySelectorAll("[data-menu-acao]").forEach((botao) => {
+            botao.addEventListener("click", () => {
+                const nomes = {
+                    lojas: "Lojas",
+                    eventos: "Eventos",
+                    missoes: "Missões de Organização",
+                    viagem: "Viagem"
+                };
+                alert(`${nomes[botao.dataset.menuAcao]} em breve.`);
+            });
         });
 
         botaoSairLobby.addEventListener("click", () => {
@@ -1765,6 +2588,7 @@
             window.dispatchEvent(new StorageEvent('storage', { key: 'personagensCriados', newValue: localStorage.getItem('personagensCriados') }));
             // atualizar exibição imediata
             document.getElementById('organizacao-pers').textContent = p.organizacao || '---';
+            atualizarMensagemOrganizacao(p.organizacao || '---');
         });
     </script>
 </body>

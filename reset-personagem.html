@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="estilo.css">
 </head>
 <body class="pagina-formulario pagina-reset">
+    <audio id="musica-fundo" loop preload="auto">
+        <source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg">
+    </audio>
+
     <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true">
         <source src="fundo-login.mp4" type="video/mp4">
     </video>
@@ -55,7 +59,9 @@
         </section>
     </main>
 
+    <script src="supabase-config.js"></script>
     <script src="banco-personagens.js"></script>
+    <script src="musica-fundo.js"></script>
     <script>
         const formReset = document.getElementById("form-reset-personagem");
         const inputResetNome = document.getElementById("reset-nome");
