@@ -1512,11 +1512,31 @@
                 <h2 class="painel-titulo">Comandos</h2>
                 <div class="grupo-comandos">
                     <button class="botao-lobby botao-entrar-jogo" id="botao-iniciar" type="button">⚔️ Entrar na Aventura</button>
-                    <button class="botao-lobby" id="botao-atualiza-org-lobby" type="button">🏷️ Atualizar Organização</button>
-                    <button class="botao-lobby" id="botao-aparencia-lobby" type="button">🎭 Atualizar Aparência</button>
-                    <button class="botao-lobby" id="botao-imagem-personagem" type="button">🖼️ Enviar Imagem</button>
-                    <input class="input-imagem-personagem" id="input-imagem-personagem" type="file" accept="image/*">
                 </div>
+
+                <div class="menu-lobby-recolhivel" id="menu-ajustes-recolhivel">
+                    <button class="botao-menu-lobby" id="botao-menu-ajustes" type="button" aria-expanded="false">
+                        <img src="assets/img/menu-ajustes.jpeg" alt="">
+                        <span>Ajustes</span>
+                        <span class="menu-seta">▾</span>
+                    </button>
+
+                    <div class="grade-menu-lobby" id="grade-menu-ajustes">
+                        <button class="atalho-menu-lobby" id="botao-atualiza-org-lobby" type="button">
+                            <img src="assets/img/menu-organizacao.jpeg" alt="">
+                            <span>Atualizar Organização</span>
+                        </button>
+                        <button class="atalho-menu-lobby" id="botao-aparencia-lobby" type="button">
+                            <img src="assets/img/menu-aparencia.jpeg" alt="">
+                            <span>Atualizar Aparência</span>
+                        </button>
+                        <button class="atalho-menu-lobby" id="botao-imagem-personagem" type="button">
+                            <img src="assets/img/menu-imagem-personagem.jpeg" alt="">
+                            <span>Enviar Aparência</span>
+                        </button>
+                    </div>
+                </div>
+                <input class="input-imagem-personagem" id="input-imagem-personagem" type="file" accept="image/*">
 
                 <div class="menu-lobby-recolhivel" id="menu-lobby-recolhivel">
                     <button class="botao-menu-lobby" id="botao-menu-lobby" type="button" aria-expanded="false">
@@ -1809,6 +1829,8 @@
         const botaoOrientacao = document.getElementById("botao-orientacao");
         const menuLobbyRecolhivel = document.getElementById("menu-lobby-recolhivel");
         const botaoMenuLobby = document.getElementById("botao-menu-lobby");
+        const menuAjustesRecolhivel = document.getElementById("menu-ajustes-recolhivel");
+        const botaoMenuAjustes = document.getElementById("botao-menu-ajustes");
 
         // Modais
         const modalInventario = document.getElementById("modal-inventario");
@@ -2388,7 +2410,7 @@
 
             try {
                 botaoImagemPersonagem.disabled = true;
-                botaoImagemPersonagem.textContent = "Salvando imagem...";
+                botaoImagemPersonagem.querySelector("span").textContent = "Salvando...";
                 const imagemBase64 = await redimensionarImagemParaPersonagem(arquivo);
                 personagem.imagemPersonagem = imagemBase64;
                 personagem.imagemPersonagemAtualizadaEm = new Date().toISOString();
@@ -2399,9 +2421,15 @@
                 alert(erro.message || "Não foi possível salvar a imagem.");
             } finally {
                 botaoImagemPersonagem.disabled = false;
-                botaoImagemPersonagem.textContent = "🖼️ Enviar Imagem";
+                botaoImagemPersonagem.querySelector("span").textContent = "Enviar Aparência";
                 inputImagemPersonagem.value = "";
             }
+        }
+
+        function alternarMenuRecolhivel(menu, botao) {
+            const abriu = !menu.classList.contains("aberto");
+            menu.classList.toggle("aberto", abriu);
+            botao.setAttribute("aria-expanded", String(abriu));
         }
 
         function precisaModoHorizontal() {
@@ -2483,11 +2511,8 @@
         botaoRegistros.addEventListener("click", () => abrirModal("modal-registros"));
         botaoOrientacao.addEventListener("click", () => ativarModoHorizontal(true));
 
-        botaoMenuLobby.addEventListener("click", () => {
-            const abriu = !menuLobbyRecolhivel.classList.contains("aberto");
-            menuLobbyRecolhivel.classList.toggle("aberto", abriu);
-            botaoMenuLobby.setAttribute("aria-expanded", String(abriu));
-        });
+        botaoMenuAjustes.addEventListener("click", () => alternarMenuRecolhivel(menuAjustesRecolhivel, botaoMenuAjustes));
+        botaoMenuLobby.addEventListener("click", () => alternarMenuRecolhivel(menuLobbyRecolhivel, botaoMenuLobby));
 
         document.querySelectorAll("[data-menu-acao]").forEach((botao) => {
             botao.addEventListener("click", () => {
