@@ -1,11 +1,16 @@
 (function () {
 	document.addEventListener("click", (evento) => {
-		const botaoInventario = evento.target.closest("#botao-inventario");
-		if (!botaoInventario) return;
+		const destinoPaginas = {
+			"botao-inventario": "inventario.html",
+			"botao-atributos": "atributos.html"
+		};
+		const botaoPagina = evento.target.closest("#botao-inventario, #botao-atributos");
+		const destino = botaoPagina ? destinoPaginas[botaoPagina.id] : "";
+		if (!destino) return;
 
 		evento.preventDefault();
 		evento.stopImmediatePropagation();
-		window.location.href = "inventario.html";
+		window.location.href = destino;
 	}, true);
 
 	const audio = document.getElementById("musica-fundo");
