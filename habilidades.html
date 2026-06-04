@@ -1,1 +1,788 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Árvore de Habilidades - One Piece RPG</title><link rel="stylesheet" href="estilo.css"><style>html,body{margin:0;min-height:100%;background:#030708;color:#fff7df}body{overflow:hidden}.video-fundo{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;filter:brightness(.38) saturate(1.2)}.app{position:relative;z-index:1;min-height:100vh;display:grid;grid-template-rows:auto 1fr;gap:14px;padding:clamp(14px,2.2vw,26px);background:radial-gradient(circle at 36% 46%,rgba(54,224,255,.16),transparent 28%),radial-gradient(circle at 63% 55%,rgba(255,69,60,.12),transparent 28%)}header,.branches,.stage,.detail{border:1px solid rgba(247,200,75,.24);border-radius:8px;background:linear-gradient(180deg,rgba(5,12,14,.9),rgba(1,4,6,.95)),repeating-linear-gradient(0deg,rgba(255,255,255,.022),rgba(255,255,255,.022) 1px,transparent 1px,transparent 8px);box-shadow:0 24px 70px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,247,223,.06);backdrop-filter:blur(8px)}header{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:14px 18px}small,.meta{color:#ffe28a;font-weight:900;letter-spacing:.1em;text-transform:uppercase}h1{margin:2px 0 5px;font:900 clamp(1.8rem,4.2vw,3.35rem)/.94 Arial Black,Impact,sans-serif;text-transform:uppercase;text-shadow:0 5px 0 #210b08,0 14px 28px #000}p{margin:0;color:#d9e8d4}.actions{display:flex;flex-wrap:wrap;justify-content:end;gap:10px}.chip,.back,.detail button{min-height:42px;padding:0 14px;border:1px solid rgba(255,226,138,.52);border-radius:8px;color:#fff7df;background:rgba(4,12,13,.72);font-weight:900;text-transform:uppercase;text-decoration:none;display:grid;place-items:center}.chip{color:#ffe28a;border-color:rgba(54,224,255,.44)}.layout{min-height:0;display:grid;grid-template-columns:270px minmax(0,1fr)340px;gap:14px}.branches{display:grid;align-content:start;gap:10px;padding:14px;overflow:auto}.branchBtn{--c:#36e0ff;display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:10px;min-height:68px;padding:9px;border:1px solid color-mix(in srgb,var(--c) 38%,transparent);border-radius:8px;color:#fff7df;background:linear-gradient(90deg,color-mix(in srgb,var(--c) 16%,transparent),rgba(3,8,10,.62));text-align:left;cursor:pointer}.branchBtn.on,.branchBtn:hover{border-color:var(--c);box-shadow:0 0 20px color-mix(in srgb,var(--c) 35%,transparent)}.branchBtn img{width:48px;height:48px;border-radius:8px;box-shadow:0 0 16px color-mix(in srgb,var(--c) 45%,transparent)}.branchBtn span,.branchBtn strong{display:block}.branchBtn span span{margin-top:3px;color:#d9e8d4;font-size:.76rem}.branchBtn b{color:var(--c)}.stage{position:relative;min-height:0;overflow:hidden}.stage:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,247,223,.08),transparent 22%),radial-gradient(circle at 34% 45%,rgba(54,224,255,.09),transparent 24%),radial-gradient(circle at 66% 56%,rgba(255,69,60,.08),transparent 26%)}.tree{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none}.line{fill:none;stroke:rgba(255,247,223,.12);stroke-width:5;stroke-linecap:round}.line.open{stroke:var(--lc);filter:drop-shadow(0 0 8px var(--lc))}.line.ready{stroke:#ffe28a;stroke-dasharray:14 10;animation:dash 1.15s linear infinite;filter:drop-shadow(0 0 12px #ffe28a)}@keyframes dash{to{stroke-dashoffset:-48}}.node,.core{--c:#36e0ff;position:absolute;z-index:2;width:66px;height:66px;border:1px solid rgba(255,247,223,.18);border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.08),rgba(2,5,6,.94) 65%);transform:translate(-50%,-50%);display:grid;place-items:center;padding:5px;cursor:pointer;box-shadow:0 14px 24px rgba(0,0,0,.38)}.core{left:50%;top:50%;width:108px;height:108px;border:2px solid var(--c);box-shadow:0 0 38px color-mix(in srgb,var(--c) 42%,transparent),inset 0 0 28px color-mix(in srgb,var(--c) 20%,transparent)}.node img,.core img{width:100%;height:100%;border-radius:inherit;object-fit:cover;filter:grayscale(1);opacity:.48}.core img{filter:none;opacity:1}.node.open{border-color:var(--c);box-shadow:0 0 22px color-mix(in srgb,var(--c) 46%,transparent),0 14px 24px rgba(0,0,0,.38)}.node.open img{filter:none;opacity:1}.node.ready{border-color:#ffe28a;animation:pulse 1.55s ease-in-out infinite}@keyframes pulse{50%{box-shadow:0 0 30px rgba(255,226,138,.55),0 14px 24px rgba(0,0,0,.38)}}.node:after{content:attr(data-lv);position:absolute;right:-2px;bottom:-2px;min-width:18px;height:18px;display:grid;place-items:center;border-radius:50%;color:#120f08;background:#ffe28a;font-size:.62rem;font-weight:900}.detail{display:grid;gap:14px;align-content:start;padding:18px;overflow:auto}.detail img{width:132px;height:132px;border-radius:8px;object-fit:cover;box-shadow:0 0 28px var(--dc,rgba(54,224,255,.32))}.detail h2,.detail p{margin:0}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stats span{padding:10px;border:1px solid rgba(247,200,75,.22);border-radius:8px;background:rgba(4,12,13,.58);color:#d9e8d4;font-size:.82rem}.stats b{display:block;color:#ffe28a;font-size:1.06rem}.detail button{color:#1e211c;background:#f7c84b;cursor:pointer}.detail button:disabled{opacity:.48;cursor:not-allowed}@media(max-width:1050px){body{overflow:auto}.layout{grid-template-columns:1fr}.branches{grid-template-columns:repeat(2,1fr)}.stage{min-height:640px}}@media(max-width:680px){header{grid-template-columns:1fr}.actions{justify-content:stretch}.chip,.back{width:100%}.branches{grid-template-columns:1fr}.stage{min-height:560px}.node{width:54px;height:54px}}</style></head><body><audio id="musica-fundo" loop preload="auto"><source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg"></audio><video class="video-fundo" autoplay muted loop playsinline><source src="fundo-login.mp4" type="video/mp4"></video><main class="app"><header><div><small id="style">Estilo de luta</small><h1>Árvore de Habilidades</h1><p id="who">Carregando personagem...</p></div><div class="actions"><span class="chip" id="xp">0 EXP livre</span><a class="back" href="lobby.html">Voltar ao Lobby</a></div></header><section class="layout"><aside class="branches" id="branches"></aside><section class="stage" id="stage"></section><aside class="detail" id="detail"></aside></section></main><script src="musica-fundo.js"></script><script src="rpg-sistemas.js"></script><script>const personagem=JSON.parse(localStorage.getItem('ultimoPersonagem')||'null'),branchesEl=document.getElementById('branches'),stage=document.getElementById('stage'),detail=document.getElementById('detail');let activeBranch=0,activeSkill=null;const branchData=[['vitalidade','Vitalidade','#31e860','Força Vital','vida máxima e recuperação'],['impacto','Impacto','#ff453c','Força','dano de arma e dano direto'],['agilidade','Agilidade','#49d8ff','Agilidade','velocidade, esquiva e combo'],['resistencia','Resistência','#6d8cff','Resistência','defesa, bloqueio e redução'],['mente','Controle','#9b6cff','Força Mental','precisão, técnica e custo'],['vontade','Determinação','#ff9b2f','Determinação','crítico, haki e pressão']];function profile(s){const t=RpgSistemas.normalizar(s);if(/itoryuu|nitoryuu|santoryuu|youtoryuu|kyuutoryuu|rokutoryuu|hachitoryuu|sword|fencing|mutoryuu|espada/.test(t))return{cls:'Espadachim',arma:'lâminas',dano:'corte',f:['impacto','agilidade','vontade'],sym:'blade',cor:'#ff453c'};if(/black leg|okama|karate|hasshouken|ryusoken|rokushiki|punho|punch|sumo|freestyle|jao|kobushi|perna/.test(t))return{cls:'Corpo a corpo',arma:'punhos e chutes',dano:'impacto',f:['impacto','resistencia','agilidade'],sym:'fist',cor:'#ff9b2f'};if(/arma|pistola|rifle|atirador|gun|sniper/.test(t))return{cls:'Atirador',arma:'armas de fogo',dano:'perfuração',f:['mente','agilidade','impacto'],sym:'target',cor:'#49d8ff'};return{cls:'Estilo livre',arma:'arma equipada',dano:'híbrido',f:['mente','vontade','impacto'],sym:'aura',cor:'#ffe28a'}}function fmt(v){return Number(v||0).toLocaleString('pt-BR')}function esc(t){return String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function emblem(c,type,txt){const f={blade:'<path d="M55 9 43 53 24 74l-6-6 21-19L83 37l4 4-22 10-10 36-9-9 7-25-22 22-7-7 22-22-25 7-9-9 36-10Z"/>',fist:'<path d="M29 39V23a8 8 0 0 1 15 0v12h2V18a8 8 0 0 1 15 0v17h2V24a8 8 0 0 1 15 0v27c0 24-16 35-33 35-15 0-27-10-27-27V45a7 7 0 0 1 11-6Z"/>',target:'<path d="M48 9a39 39 0 1 0 0 78 39 39 0 0 0 0-78Zm0 13a26 26 0 1 1 0 52 26 26 0 0 1 0-52Zm0 14a12 12 0 1 0 0 24 12 12 0 0 0 0-24Z"/>',aura:'<path d="M48 8c15 14 22 27 22 41 0 21-14 35-22 39-8-4-22-18-22-39 0-14 7-27 22-41Zm0 22c-6 8-9 14-9 22 0 9 5 16 9 19 4-3 9-10 9-19 0-8-3-14-9-22Z"/>',shield:'<path d="M48 8 78 20v24c0 19-12 34-30 44-18-10-30-25-30-44V20L48 8Zm0 15-16 7v15c0 10 5 19 16 27 11-8 16-17 16-27V30l-16-7Z"/>',wing:'<path d="M16 55c20-32 43-39 64-33-7 9-15 15-26 19 11 1 19 0 29-5-11 22-30 36-59 34 10-5 17-10 23-18-9 5-19 7-31 3Z"/>'}[type]||'<circle cx="48" cy="48" r="30"/>';const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><defs><radialGradient id="g" cx="46%" cy="36%" r="66%"><stop offset="0" stop-color="#fff7df"/><stop offset=".44" stop-color="${c}"/><stop offset="1" stop-color="#05090b"/></radialGradient><filter id="s"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="${c}"/></filter></defs><rect width="96" height="96" rx="12" fill="#05090b"/><circle cx="48" cy="48" r="39" fill="none" stroke="${c}" stroke-width="3" opacity=".8"/><g fill="url(#g)" filter="url(#s)">${f}</g><text x="48" y="88" text-anchor="middle" fill="#fff7df" font-size="9" font-family="Arial" font-weight="800">${txt.slice(0,3).toUpperCase()}</text></svg>`;return`data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`}function bonus(b,i,p){let v=Math.min(35,Math.floor(i/5)+1+Math.floor(i/8));if(b[0]=='impacto')return`+${v}% dano de ${p.arma} e +${Math.ceil(v/2)}% dano ${p.dano}.`;if(b[0]=='agilidade')return`+${v}% velocidade de ação e +${Math.ceil(v/2)}% esquiva em combos.`;if(b[0]=='resistencia')return`+${v}% bloqueio e +${Math.ceil(v/2)}% redução de dano recebido.`;if(b[0]=='vitalidade')return`+${v}% vida máxima e +${Math.ceil(v/2)}% recuperação após missão.`;if(b[0]=='mente')return`+${v}% precisão técnica e -${Math.ceil(v/3)}% custo de habilidade.`;return`+${v}% crítico narrativo e +${Math.ceil(v/2)}% pressão de haki.`}function tree(style){let p=profile(style),arr=[{id:'0',ramo:-1,idx:0,nome:`${style}: Fundamento Inicial`,descricao:'A base do estilo. Já vem desbloqueada e acende o começo de todos os ramos.',bonus:`Libera as primeiras técnicas de ${p.cls}.`,custo:0,requer:null,cor:p.cor,img:emblem(p.cor,p.sym,'Core'),atr:p.cls}];branchData.forEach((b,bi)=>{let foc=p.f.includes(b[0]);for(let i=0;i<50;i++){let id=String(1+bi*50+i),escala=Math.floor(i/5)+1;arr.push({id,ramo:bi,idx:i,nome:i?`${b[1]} ${i+1}`:`${b[1]}: Entrada`,descricao:`Fortalece ${b[3]} para ${style} com foco em ${b[4]}.`,bonus:i?bonus(b,i,p):`Abre a trilha ${b[1]}.`,custo:i?140+i*42+escala*90+(foc?45:0):0,requer:i?String(Number(id)-1):'0',cor:b[2],img:emblem(b[2],i%3==0?p.sym:i%3==1?'shield':'wing',b[1]),atr:b[3]})}});return arr}function pos(i){let path=[[50,50],[42,42],[35,34],[29,25],[22,18],[58,40],[68,31],[77,23],[84,15],[45,59],[36,68],[27,78],[18,86],[60,60],[71,70],[82,78],[90,87]],g=Math.floor(i/16),p=path[i%path.length],a=g*2.2;return{x:Math.max(8,Math.min(92,p[0]+(g%2?a:-a))),y:Math.max(8,Math.min(92,p[1]+a))}}function state(h,open){return open.includes(String(h.id))?'open':(!h.requer||open.includes(String(h.requer)))?'ready':'locked'}function render(){if(!personagem?.nome){location.href='index.html';return}let styleName=personagem.estiloLuta||'Estilo livre',p=profile(styleName),prog=RpgSistemas.obterProgresso(personagem),open=Array.from(new Set([...(prog.habilidades||[]),'0'].map(String))),skills=tree(styleName),vis=skills.filter(h=>h.ramo==activeBranch);activeSkill=activeSkill||skills[0];style.textContent=`${p.cls} / ${styleName}`;who.textContent=`${personagem.nome} / Nv. ${prog.nivel} / arma base: ${p.arma}`;xp.textContent=`${fmt(prog.expDisponivel)} EXP livre`;renderBranches(skills,open);renderStage(vis,skills[0],open);renderDetail(activeSkill,prog,open)}function renderBranches(skills,open){branchesEl.innerHTML=branchData.map((b,i)=>{let list=skills.filter(h=>h.ramo==i),done=list.filter(h=>open.includes(h.id)).length;return`<button class="branchBtn ${activeBranch==i?'on':''}" data-branch="${i}" style="--c:${b[2]}"><img src="${emblem(b[2],i%2?'shield':'aura',b[1])}" alt=""><span><strong>${b[1]}</strong><span>${b[3]}</span></span><b>${done}/50</b></button>`}).join('');branchesEl.querySelectorAll('[data-branch]').forEach(btn=>btn.onclick=()=>{activeBranch=Number(btn.dataset.branch);let styleName=personagem.estiloLuta||'Estilo livre',prog=RpgSistemas.obterProgresso(personagem),open=Array.from(new Set([...(prog.habilidades||[]),'0'].map(String)));activeSkill=tree(styleName).find(h=>h.ramo==activeBranch&&state(h,open)!='locked')||activeSkill;render()})}function renderStage(vis,core,open){let lines=vis.map(h=>{let a=h.idx?pos(h.idx-1):{x:50,y:50},b=pos(h.idx),s=state(h,open),cls=s=='open'?'open':s=='ready'?'ready':'';return`<path class="line ${cls}" style="--lc:${h.cor}" d="M${a.x} ${a.y} C${(a.x+b.x)/2} ${a.y}, ${(a.x+b.x)/2} ${b.y}, ${b.x} ${b.y}"></path>`}).join('');stage.innerHTML=`<svg class="tree" viewBox="0 0 100 100" preserveAspectRatio="none">${lines}</svg><button class="core" data-skill="0" style="--c:${core.cor}"><img src="${core.img}" alt=""></button>${vis.map(h=>{let p=pos(h.idx),s=state(h,open);return`<button class="node ${s}" data-skill="${h.id}" data-lv="${h.idx+1}" style="left:${p.x}%;top:${p.y}%;--c:${h.cor}"><img src="${h.img}" alt=""></button>`}).join('')}`;stage.querySelectorAll('[data-skill]').forEach(btn=>btn.onclick=()=>{activeSkill=tree(personagem.estiloLuta||'Estilo livre').find(h=>h.id==btn.dataset.skill)||activeSkill;render()})}function renderDetail(h,prog,open){let s=state(h,open),can=s=='ready'&&prog.expDisponivel>=h.custo;detail.style.setProperty('--dc',h.cor);detail.innerHTML=`<span class="meta">${esc(h.atr)}</span><img src="${h.img}" alt=""><h2>${esc(h.nome)}</h2><p>${esc(h.descricao)}</p><div class="stats"><span><b>${s=='open'?'Aberta':s=='ready'?'Disponível':'Bloqueada'}</b>Estado</span><span><b>${fmt(h.custo)}</b>Custo EXP</span><span><b>${fmt(prog.expDisponivel)}</b>EXP livre</span><span><b>${h.ramo<0?'Core':h.ramo+1}</b>Ramo</span></div><p><b style="color:${h.cor}">Bônus:</b> ${esc(h.bonus)}</p><button id="unlock" ${can?'':'disabled'}>${s=='open'?'Habilidade dominada':'Desbloquear'}</button><p id="msg"></p>`;unlock.onclick=()=>{let r=RpgSistemas.salvarHabilidade(personagem,h);msg.textContent=r.mensagem||'Habilidade desbloqueada.';if(r.ok)render()}}render()</script></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Árvore de Habilidades - One Piece RPG</title>
+    <link rel="stylesheet" href="estilo.css">
+    <style>
+        html,
+        body {
+            min-height: 100%;
+            margin: 0;
+            background: #030708;
+            color: #fff7df;
+        }
+
+        body {
+            overflow: hidden;
+        }
+
+        .video-fundo {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.38) saturate(1.2);
+        }
+
+        .skill-app {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 14px;
+            padding: clamp(14px, 2.2vw, 26px);
+            background:
+                radial-gradient(circle at 36% 46%, rgba(54, 224, 255, 0.16), transparent 28%),
+                radial-gradient(circle at 63% 55%, rgba(255, 69, 60, 0.12), transparent 28%);
+        }
+
+        .skill-topo,
+        .ramo-lista,
+        .skill-stage,
+        .skill-detalhe {
+            border: 1px solid rgba(247, 200, 75, 0.24);
+            border-radius: 8px;
+            background:
+                linear-gradient(180deg, rgba(5, 12, 14, 0.9), rgba(1, 4, 6, 0.95)),
+                repeating-linear-gradient(0deg, rgba(255,255,255,.022), rgba(255,255,255,.022) 1px, transparent 1px, transparent 8px);
+            box-shadow: 0 24px 70px rgba(0,0,0,.48), inset 0 1px 0 rgba(255,247,223,.06);
+            backdrop-filter: blur(8px);
+        }
+
+        .skill-topo {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 14px;
+            align-items: center;
+            padding: 14px 18px;
+        }
+
+        .skill-topo small,
+        .detalhe-meta,
+        .ramo-botao small {
+            color: #ffe28a;
+            font-weight: 900;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        .skill-topo h1 {
+            margin: 2px 0 5px;
+            color: #fff7df;
+            font-family: "Segoe UI Black", "Arial Black", Impact, sans-serif;
+            font-size: clamp(1.8rem, 4.2vw, 3.35rem);
+            line-height: .94;
+            text-transform: uppercase;
+            text-shadow: 0 5px 0 #210b08, 0 14px 28px rgba(0,0,0,.68);
+        }
+
+        .skill-topo p {
+            margin: 0;
+            color: #d9e8d4;
+        }
+
+        .skill-acoes {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: end;
+            gap: 10px;
+        }
+
+        .skill-chip,
+        .voltar-lobby,
+        .skill-detalhe button {
+            min-height: 42px;
+            padding: 0 14px;
+            border: 1px solid rgba(255,226,138,.52);
+            border-radius: 8px;
+            color: #fff7df;
+            background: rgba(4,12,13,.72);
+            font-weight: 900;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-grid;
+            place-items: center;
+        }
+
+        .skill-chip {
+            color: #ffe28a;
+            border-color: rgba(54, 224, 255, .44);
+        }
+
+        .skill-layout {
+            min-height: 0;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 340px;
+            grid-template-areas:
+                "ramos ramos"
+                "stage detalhe";
+            gap: 14px;
+        }
+
+        .ramo-lista {
+            grid-area: ramos;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            align-content: start;
+            gap: 10px;
+            padding: 14px;
+            overflow: hidden;
+        }
+
+        .ramo-botao {
+            --c: #36e0ff;
+            display: grid;
+            grid-template-columns: 48px 1fr auto;
+            align-items: center;
+            gap: 10px;
+            min-height: 68px;
+            padding: 9px;
+            border: 1px solid color-mix(in srgb, var(--c) 38%, transparent);
+            border-radius: 8px;
+            color: #fff7df;
+            background: linear-gradient(90deg, color-mix(in srgb, var(--c) 16%, transparent), rgba(3,8,10,.62));
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .ramo-botao.ativo,
+        .ramo-botao:hover {
+            border-color: var(--c);
+            box-shadow: 0 0 20px color-mix(in srgb, var(--c) 35%, transparent);
+        }
+
+        .ramo-botao img {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            box-shadow: 0 0 16px color-mix(in srgb, var(--c) 45%, transparent);
+        }
+
+        .ramo-botao strong,
+        .ramo-botao span {
+            display: block;
+        }
+
+        .ramo-botao span {
+            margin-top: 3px;
+            color: #d9e8d4;
+            font-size: .76rem;
+        }
+
+        .ramo-botao b {
+            color: var(--c);
+        }
+
+        .skill-stage {
+            grid-area: stage;
+            position: relative;
+            min-height: 0;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        .stage-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(90deg, rgba(255,247,223,.055) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(255,247,223,.04) 1px, transparent 1px),
+                radial-gradient(circle at 8% 50%, color-mix(in srgb, var(--ramo-cor, #36e0ff) 22%, transparent), transparent 20%),
+                radial-gradient(circle at 74% 48%, rgba(255,247,223,.06), transparent 30%);
+            background-size: 8.2% 100%, 100% 15%, auto, auto;
+            pointer-events: none;
+        }
+
+        .stage-bg::before,
+        .stage-bg::after {
+            content: "";
+            position: absolute;
+            inset: 12% 4%;
+            border: 1px solid color-mix(in srgb, var(--ramo-cor, #36e0ff) 30%, transparent);
+            border-radius: 18px;
+            box-shadow: inset 0 0 34px rgba(0,0,0,.36);
+        }
+
+        .stage-bg::after {
+            inset: 19% 10% 18% 16%;
+            border-style: dashed;
+            opacity: .42;
+        }
+
+        .tree-tier {
+            position: absolute;
+            z-index: 1;
+            top: 8px;
+            transform: translateX(-50%);
+            color: rgba(255,247,223,.46);
+            font-size: .66rem;
+            font-weight: 900;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            pointer-events: none;
+        }
+
+        .branch-band {
+            position: absolute;
+            z-index: 0;
+            left: 14%;
+            right: 4%;
+            height: 14%;
+            transform: translateY(-50%);
+            border: 1px solid color-mix(in srgb, var(--ramo-cor, #36e0ff) 18%, transparent);
+            border-radius: 999px;
+            background:
+                linear-gradient(90deg, color-mix(in srgb, var(--ramo-cor, #36e0ff) 14%, transparent), transparent 52%),
+                radial-gradient(circle at 18% 50%, color-mix(in srgb, var(--ramo-cor, #36e0ff) 18%, transparent), transparent 58%);
+            opacity: .72;
+            pointer-events: none;
+        }
+
+        .branch-label {
+            position: absolute;
+            z-index: 2;
+            left: 16%;
+            transform: translateY(-50%);
+            padding: 4px 10px;
+            border: 1px solid color-mix(in srgb, var(--ramo-cor, #36e0ff) 36%, transparent);
+            border-radius: 999px;
+            background: rgba(3, 8, 10, .82);
+            color: #fff7df;
+            font-size: .67rem;
+            font-weight: 900;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            box-shadow: 0 10px 20px rgba(0,0,0,.2);
+            pointer-events: none;
+        }
+
+        .tree-lane {
+            position: absolute;
+            z-index: 1;
+            left: 20%;
+            right: 5%;
+            height: 1px;
+            border-top: 1px solid color-mix(in srgb, var(--ramo-cor, #36e0ff) 18%, transparent);
+            opacity: .72;
+            pointer-events: none;
+        }
+
+        .tree-svg {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .tree-line {
+            fill: none;
+            stroke: rgba(255,247,223,.12);
+            stroke-width: 5;
+            stroke-linecap: round;
+        }
+
+        .tree-line.aberta {
+            stroke: var(--line-cor);
+            filter: drop-shadow(0 0 8px var(--line-cor));
+        }
+
+        .tree-line.disponivel {
+            stroke: #ffe28a;
+            stroke-dasharray: 14 10;
+            animation: trilha 1.15s linear infinite;
+            filter: drop-shadow(0 0 12px #ffe28a);
+        }
+
+        @keyframes trilha {
+            to { stroke-dashoffset: -48; }
+        }
+
+        .skill-node,
+        .skill-core {
+            --c: #36e0ff;
+            position: absolute;
+            z-index: 2;
+            width: 54px;
+            height: 54px;
+            border: 1px solid rgba(255,247,223,.18);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,.08), rgba(2,5,6,.94) 65%);
+            transform: translate(-50%, -50%);
+            display: grid;
+            place-items: center;
+            padding: 5px;
+            cursor: pointer;
+            box-shadow: 0 14px 24px rgba(0,0,0,.38);
+        }
+
+        .skill-core {
+            left: 8%;
+            top: 50%;
+            width: 88px;
+            height: 88px;
+            border-width: 2px;
+            border-color: var(--c);
+            box-shadow: 0 0 38px color-mix(in srgb, var(--c) 42%, transparent), inset 0 0 28px color-mix(in srgb, var(--c) 20%, transparent);
+        }
+
+        .skill-node img,
+        .skill-core img {
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            object-fit: cover;
+            filter: grayscale(1);
+            opacity: .48;
+        }
+
+        .skill-core img {
+            filter: none;
+            opacity: 1;
+        }
+
+        .skill-node.aberta {
+            border-color: var(--c);
+            box-shadow: 0 0 22px color-mix(in srgb, var(--c) 46%, transparent), 0 14px 24px rgba(0,0,0,.38);
+        }
+
+        .skill-node.aberta img {
+            filter: none;
+            opacity: 1;
+        }
+
+        .skill-node.disponivel {
+            border-color: #ffe28a;
+            animation: pulso 1.55s ease-in-out infinite;
+        }
+
+        @keyframes pulso {
+            50% { box-shadow: 0 0 30px rgba(255,226,138,.55), 0 14px 24px rgba(0,0,0,.38); }
+        }
+
+        .skill-node::after {
+            content: attr(data-nivel);
+            position: absolute;
+            right: -2px;
+            bottom: -2px;
+            min-width: 18px;
+            height: 18px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            color: #120f08;
+            background: #ffe28a;
+            font-size: .62rem;
+            font-weight: 900;
+        }
+
+        .skill-node::before {
+            content: attr(data-linha);
+            position: absolute;
+            left: -6px;
+            top: -6px;
+            width: 18px;
+            height: 18px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            color: #fff7df;
+            background: color-mix(in srgb, var(--c) 58%, #05090b);
+            font-size: .56rem;
+            font-weight: 900;
+            box-shadow: 0 0 10px color-mix(in srgb, var(--c) 34%, transparent);
+        }
+
+        .skill-detalhe {
+            grid-area: detalhe;
+            display: grid;
+            gap: 14px;
+            align-content: start;
+            padding: 18px;
+            overflow-y: auto;
+        }
+
+        .skill-detalhe img {
+            width: 132px;
+            height: 132px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 0 28px var(--dc, rgba(54,224,255,.32));
+        }
+
+        .skill-detalhe h2,
+        .skill-detalhe p {
+            margin: 0;
+        }
+
+        .skill-detalhe p {
+            color: #d9e8d4;
+            line-height: 1.45;
+        }
+
+        .detalhe-status {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .detalhe-status span {
+            padding: 10px;
+            border: 1px solid rgba(247,200,75,.22);
+            border-radius: 8px;
+            background: rgba(4,12,13,.58);
+            color: #d9e8d4;
+            font-size: .82rem;
+        }
+
+        .detalhe-status b {
+            display: block;
+            color: #ffe28a;
+            font-size: 1.06rem;
+        }
+
+        .skill-detalhe button {
+            color: #1e211c;
+            background: #f7c84b;
+            cursor: pointer;
+        }
+
+        .skill-detalhe button:disabled {
+            opacity: .48;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 1050px) {
+            body { overflow: auto; }
+            .skill-layout {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "ramos"
+                    "stage"
+                    "detalhe";
+            }
+            .ramo-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .skill-stage { min-height: 640px; }
+        }
+
+        @media (max-width: 680px) {
+            .skill-topo { grid-template-columns: 1fr; }
+            .skill-acoes { justify-content: stretch; }
+            .skill-chip,
+            .voltar-lobby { width: 100%; }
+            .ramo-lista { grid-template-columns: 1fr; }
+            .skill-stage { min-height: 560px; }
+            .skill-node { width: 54px; height: 54px; }
+            .branch-band { left: 11%; right: 3%; }
+            .branch-label {
+                left: 13%;
+                font-size: .58rem;
+                padding: 3px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <audio id="musica-fundo" loop preload="auto"><source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg"></audio>
+    <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true"><source src="fundo-login.mp4" type="video/mp4"></video>
+
+    <main class="skill-app">
+        <header class="skill-topo">
+            <div>
+                <small id="skill-estilo">Estilo de luta</small>
+                <h1>Árvore de Habilidades</h1>
+                <p id="skill-personagem">Carregando personagem...</p>
+            </div>
+            <div class="skill-acoes">
+                <span class="skill-chip" id="skill-exp">0 EXP livre</span>
+                <a class="voltar-lobby" href="lobby.html">Voltar ao Lobby</a>
+            </div>
+        </header>
+
+        <section class="skill-layout">
+            <aside class="ramo-lista" id="ramo-lista"></aside>
+            <section class="skill-stage" id="skill-stage" aria-label="Árvore de habilidades">
+                <div class="stage-bg"></div>
+            </section>
+            <aside class="skill-detalhe" id="skill-detalhe"></aside>
+        </section>
+    </main>
+
+    <script src="musica-fundo.js"></script>
+    <script src="rpg-sistemas.js"></script>
+    <script>
+        const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+        const listaRamos = document.getElementById("ramo-lista");
+        const stage = document.getElementById("skill-stage");
+        const detalhe = document.getElementById("skill-detalhe");
+        let ramoAtivo = 0;
+        let habilidadeAtiva = null;
+
+        const ramos = [
+            { chave: "vitalidade", nome: "Vitalidade", cor: "#31e860", atributo: "Força Vital", bonus: "vida máxima e recuperação" },
+            { chave: "impacto", nome: "Impacto", cor: "#ff453c", atributo: "Força", bonus: "dano de arma e dano direto" },
+            { chave: "agilidade", nome: "Agilidade", cor: "#49d8ff", atributo: "Agilidade", bonus: "velocidade, esquiva e combo" },
+            { chave: "resistencia", nome: "Resistência", cor: "#6d8cff", atributo: "Resistência", bonus: "defesa, bloqueio e redução" },
+            { chave: "mente", nome: "Controle", cor: "#9b6cff", atributo: "Força Mental", bonus: "precisão, técnica e custo" },
+            { chave: "vontade", nome: "Determinação", cor: "#ff9b2f", atributo: "Determinação", bonus: "crítico, haki e pressão" }
+        ];
+
+        function perfilEstilo(estilo) {
+            const texto = RpgSistemas.normalizar(estilo);
+            if (/(itoryuu|nitoryuu|santoryuu|youtoryuu|kyuutoryuu|rokutoryuu|hachitoryuu|sword|fencing|mutoryuu|espada)/.test(texto)) {
+                return { classe: "Espadachim", arma: "lâminas", dano: "corte", foco: ["impacto", "agilidade", "vontade"], simbolo: "blade", cor: "#ff453c" };
+            }
+            if (/(black leg|okama|karate|hasshouken|ryusoken|rokushiki|punho|punch|sumo|freestyle|jao|kobushi|perna)/.test(texto)) {
+                return { classe: "Corpo a corpo", arma: "punhos e chutes", dano: "impacto", foco: ["impacto", "resistencia", "agilidade"], simbolo: "fist", cor: "#ff9b2f" };
+            }
+            if (/(arma|pistola|rifle|atirador|gun|sniper)/.test(texto)) {
+                return { classe: "Atirador", arma: "armas de fogo", dano: "perfuração", foco: ["mente", "agilidade", "impacto"], simbolo: "target", cor: "#49d8ff" };
+            }
+            return { classe: "Estilo livre", arma: "arma equipada", dano: "híbrido", foco: ["mente", "vontade", "impacto"], simbolo: "aura", cor: "#ffe28a" };
+        }
+
+        function formatar(valor) {
+            return Number(valor || 0).toLocaleString("pt-BR");
+        }
+
+        function escaparHtml(texto) {
+            return String(texto ?? "").replace(/[&<>"']/g, (char) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            })[char]);
+        }
+
+        function emblemaSvg(cor, tipo, texto) {
+            const formas = {
+                blade: '<path d="M55 9 43 53 24 74l-6-6 21-19L83 37l4 4-22 10-10 36-9-9 7-25-22 22-7-7 22-22-25 7-9-9 36-10Z"/>',
+                fist: '<path d="M29 39V23a8 8 0 0 1 15 0v12h2V18a8 8 0 0 1 15 0v17h2V24a8 8 0 0 1 15 0v27c0 24-16 35-33 35-15 0-27-10-27-27V45a7 7 0 0 1 11-6Z"/>',
+                target: '<path d="M48 9a39 39 0 1 0 0 78 39 39 0 0 0 0-78Zm0 13a26 26 0 1 1 0 52 26 26 0 0 1 0-52Zm0 14a12 12 0 1 0 0 24 12 12 0 0 0 0-24Z"/>',
+                aura: '<path d="M48 8c15 14 22 27 22 41 0 21-14 35-22 39-8-4-22-18-22-39 0-14 7-27 22-41Zm0 22c-6 8-9 14-9 22 0 9 5 16 9 19 4-3 9-10 9-19 0-8-3-14-9-22Z"/>',
+                shield: '<path d="M48 8 78 20v24c0 19-12 34-30 44-18-10-30-25-30-44V20L48 8Zm0 15-16 7v15c0 10 5 19 16 27 11-8 16-17 16-27V30l-16-7Z"/>',
+                wing: '<path d="M16 55c20-32 43-39 64-33-7 9-15 15-26 19 11 1 19 0 29-5-11 22-30 36-59 34 10-5 17-10 23-18-9 5-19 7-31 3Z"/>'
+            };
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><defs><radialGradient id="g" cx="46%" cy="36%" r="66%"><stop offset="0" stop-color="#fff7df"/><stop offset=".44" stop-color="${cor}"/><stop offset="1" stop-color="#05090b"/></radialGradient><filter id="s"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="${cor}"/></filter></defs><rect width="96" height="96" rx="12" fill="#05090b"/><circle cx="48" cy="48" r="39" fill="none" stroke="${cor}" stroke-width="3" opacity=".8"/><g fill="url(#g)" filter="url(#s)">${formas[tipo] || formas.aura}</g><text x="48" y="88" text-anchor="middle" fill="#fff7df" font-size="9" font-family="Arial" font-weight="800">${texto.slice(0, 3).toUpperCase()}</text></svg>`;
+            return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+        }
+
+        function bonusRamo(ramo, indice, perfil) {
+            const escala = Math.floor(indice / 5) + 1;
+            const valor = Math.min(35, escala + Math.floor(indice / 8));
+            if (ramo.chave === "impacto") return `+${valor}% dano de ${perfil.arma} e +${Math.ceil(valor / 2)}% dano ${perfil.dano}.`;
+            if (ramo.chave === "agilidade") return `+${valor}% velocidade de ação e +${Math.ceil(valor / 2)}% esquiva em combos.`;
+            if (ramo.chave === "resistencia") return `+${valor}% bloqueio e +${Math.ceil(valor / 2)}% redução de dano recebido.`;
+            if (ramo.chave === "vitalidade") return `+${valor}% vida máxima e +${Math.ceil(valor / 2)}% recuperação após missão.`;
+            if (ramo.chave === "mente") return `+${valor}% precisão técnica e -${Math.ceil(valor / 3)}% custo de habilidade.`;
+            return `+${valor}% crítico narrativo e +${Math.ceil(valor / 2)}% pressão de haki.`;
+        }
+
+        function gerarArvore(estilo) {
+            const perfil = perfilEstilo(estilo);
+            const habilidades = [{
+                id: "0",
+                ramo: -1,
+                indice: 0,
+                nome: `${estilo}: Fundamento Inicial`,
+                descricao: "A base do estilo. Já vem desbloqueada e acende o começo de todos os ramos.",
+                bonus: `Libera as primeiras técnicas de ${perfil.classe}.`,
+                custo: 0,
+                requer: null,
+                cor: perfil.cor,
+                imagem: emblemaSvg(perfil.cor, perfil.simbolo, "Core"),
+                atributo: perfil.classe
+            }];
+
+            ramos.forEach((ramo, indiceRamo) => {
+                const focado = perfil.foco.includes(ramo.chave);
+                for (let indice = 0; indice < 50; indice += 1) {
+                    const id = String(1 + indiceRamo * 50 + indice);
+                    const linha = indice % 5;
+                    const coluna = Math.floor(indice / 5);
+                    const escala = Math.floor(indice / 5) + 1;
+                    habilidades.push({
+                        id,
+                        ramo: indiceRamo,
+                        indice,
+                        linha,
+                        coluna,
+                        nome: indice < 5 ? `${ramo.nome}: Trilha ${linha + 1}` : `${ramo.nome} ${indice + 1}`,
+                        descricao: `Fortalece ${ramo.atributo} para ${estilo} com foco em ${ramo.bonus}.`,
+                        bonus: indice < 5 ? `Abre uma linha de progressão em ${ramo.nome}.` : bonusRamo(ramo, indice, perfil),
+                        custo: indice < 5 ? 0 : 140 + indice * 42 + escala * 90 + (focado ? 45 : 0),
+                        requer: indice < 5 ? "0" : String(Number(id) - 5),
+                        cor: ramo.cor,
+                        imagem: emblemaSvg(ramo.cor, indice % 3 === 0 ? perfil.simbolo : indice % 3 === 1 ? "shield" : "wing", ramo.nome),
+                        atributo: ramo.atributo
+                    });
+                }
+            });
+            return habilidades;
+        }
+
+        const eixoLinhas = [15, 32.5, 50, 67.5, 85];
+        const eixoColunas = [22, 30, 38, 47, 57, 67, 76, 84, 90, 95];
+        const curvaRamificacao = [
+            [-1, -3, -5, -6, -8, -9, -10, -11, -12, -13],
+            [0, -1, -2, -3, -4, -5, -6, -7, -8, -9],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+            [1, 3, 5, 6, 8, 9, 10, 11, 12, 13]
+        ];
+
+        function posicao(indice) {
+            const coluna = Math.floor(indice / 5);
+            const linha = indice % 5;
+            const x = eixoColunas[Math.min(coluna, eixoColunas.length - 1)];
+            const y = eixoLinhas[linha] + curvaRamificacao[linha][Math.min(coluna, curvaRamificacao[linha].length - 1)];
+            return {
+                x: Math.max(18, Math.min(95, x)),
+                y: Math.max(11, Math.min(89, y))
+            };
+        }
+
+        function estado(habilidade, abertas) {
+            if (abertas.includes(String(habilidade.id))) return "aberta";
+            if (!habilidade.requer || abertas.includes(String(habilidade.requer))) return "disponivel";
+            return "bloqueada";
+        }
+
+        function renderizar() {
+            if (!personagem?.nome) {
+                window.location.href = "index.html";
+                return;
+            }
+            const estilo = personagem.estiloLuta || "Estilo livre";
+            const perfil = perfilEstilo(estilo);
+            const progresso = RpgSistemas.obterProgresso(personagem);
+            const abertas = Array.from(new Set([...(progresso.habilidades || []), "0"].map(String)));
+            const habilidades = gerarArvore(estilo);
+            const ramoAtual = ramos[ramoAtivo];
+            const visiveis = habilidades.filter((h) => h.ramo === ramoAtivo);
+            habilidadeAtiva = habilidadeAtiva || habilidades[0];
+
+            document.getElementById("skill-estilo").textContent = `${perfil.classe} / ${estilo}`;
+            document.getElementById("skill-personagem").textContent = `${personagem.nome} / Nv. ${progresso.nivel} / arma base: ${perfil.arma}`;
+            document.getElementById("skill-exp").textContent = `${formatar(progresso.expDisponivel)} EXP livre`;
+
+            renderizarRamos(habilidades, abertas);
+            renderizarStage(visiveis, habilidades[0], abertas, ramoAtual);
+            renderizarDetalhe(habilidadeAtiva, progresso, abertas);
+        }
+
+        function renderizarRamos(habilidades, abertas) {
+            listaRamos.innerHTML = ramos.map((ramo, indice) => {
+                const lista = habilidades.filter((h) => h.ramo === indice);
+                const feitos = lista.filter((h) => abertas.includes(h.id)).length;
+                return `
+                    <button class="ramo-botao ${ramoAtivo === indice ? "ativo" : ""}" type="button" data-ramo="${indice}" style="--c:${ramo.cor}">
+                        <img src="${emblemaSvg(ramo.cor, indice % 2 ? "shield" : "aura", ramo.nome)}" alt="">
+                        <span><strong>${escaparHtml(ramo.nome)}</strong><span>${escaparHtml(ramo.atributo)}</span></span>
+                        <b>${feitos}/50</b>
+                    </button>
+                `;
+            }).join("");
+            listaRamos.querySelectorAll("[data-ramo]").forEach((botao) => {
+                botao.addEventListener("click", () => {
+                    ramoAtivo = Number(botao.dataset.ramo);
+                    const estilo = personagem.estiloLuta || "Estilo livre";
+                    const progresso = RpgSistemas.obterProgresso(personagem);
+                    const abertas = Array.from(new Set([...(progresso.habilidades || []), "0"].map(String)));
+                    const primeiraDisponivel = gerarArvore(estilo).find((h) => h.ramo === ramoAtivo && estado(h, abertas) !== "bloqueada");
+                    habilidadeAtiva = primeiraDisponivel || habilidadeAtiva;
+                    renderizar();
+                });
+            });
+        }
+
+        function renderizarStage(visiveis, core, abertas, ramoAtual) {
+            const linhas = visiveis.map((h) => {
+                const atual = posicao(h.indice);
+                const anterior = h.indice < 5 ? { x: 8, y: 50 } : posicao(h.indice - 5);
+                const e = estado(h, abertas);
+                const classe = e === "aberta" ? "aberta" : e === "disponivel" ? "disponivel" : "";
+                const meio = h.indice < 5 ? 14 : (anterior.x + atual.x) / 2;
+                return `<path class="tree-line ${classe}" style="--line-cor:${h.cor}" d="M${anterior.x} ${anterior.y} C${meio} ${anterior.y}, ${meio} ${atual.y}, ${atual.x} ${atual.y}"></path>`;
+            }).join("");
+            const bandas = eixoLinhas.map((topo, indice) => (
+                `<span class="branch-band" style="top:${topo}%;--ramo-cor:${ramoAtual.cor}"></span>`
+            )).join("");
+            const nomesLinhas = ["Trilha I", "Trilha II", "Trilha III", "Trilha IV", "Trilha V"];
+            const etiquetas = eixoLinhas.map((topo, indice) => (
+                `<span class="branch-label" style="top:${topo}%;--ramo-cor:${ramoAtual.cor}">${nomesLinhas[indice]}</span>`
+            )).join("");
+            const trilhas = eixoLinhas.map((topo) => (
+                `<span class="tree-lane" style="top:${topo}%;--ramo-cor:${ramoAtual.cor}"></span>`
+            )).join("");
+            const tiers = Array.from({ length: 10 }, (_, indice) => {
+                const p = posicao(indice * 5);
+                return `<span class="tree-tier" style="left:${p.x}%">N${indice + 1}</span>`;
+            }).join("");
+
+            stage.innerHTML = `
+                <div class="stage-bg" style="--ramo-cor:${ramoAtual.cor}"></div>
+                ${bandas}
+                ${trilhas}
+                ${etiquetas}
+                ${tiers}
+                <svg class="tree-svg" viewBox="0 0 100 100" preserveAspectRatio="none">${linhas}</svg>
+                <button class="skill-core" type="button" data-skill="0" style="--c:${core.cor}">
+                    <img src="${core.imagem}" alt="">
+                </button>
+                ${visiveis.map((h) => {
+                    const p = posicao(h.indice);
+                    const e = estado(h, abertas);
+                    return `
+                        <button class="skill-node ${e}" type="button" data-skill="${h.id}" data-nivel="${h.indice + 1}" data-linha="${h.linha + 1}" style="left:${p.x}%;top:${p.y}%;--c:${h.cor}">
+                            <img src="${h.imagem}" alt="">
+                        </button>
+                    `;
+                }).join("")}
+            `;
+            stage.querySelectorAll("[data-skill]").forEach((botao) => {
+                botao.addEventListener("click", () => {
+                    const habilidade = gerarArvore(personagem.estiloLuta || "Estilo livre").find((h) => h.id === botao.dataset.skill);
+                    habilidadeAtiva = habilidade || habilidadeAtiva;
+                    renderizar();
+                });
+            });
+        }
+
+        function renderizarDetalhe(habilidade, progresso, abertas) {
+            const e = estado(habilidade, abertas);
+            const pode = e === "disponivel" && progresso.expDisponivel >= habilidade.custo;
+            detalhe.style.setProperty("--dc", habilidade.cor);
+            detalhe.innerHTML = `
+                <span class="detalhe-meta">${escaparHtml(habilidade.atributo)}</span>
+                <img src="${habilidade.imagem}" alt="">
+                <h2>${escaparHtml(habilidade.nome)}</h2>
+                <p>${escaparHtml(habilidade.descricao)}</p>
+                <div class="detalhe-status">
+                    <span><b>${e === "aberta" ? "Aberta" : e === "disponivel" ? "Disponível" : "Bloqueada"}</b>Estado</span>
+                    <span><b>${formatar(habilidade.custo)}</b>Custo EXP</span>
+                    <span><b>${formatar(progresso.expDisponivel)}</b>EXP livre</span>
+                    <span><b>${habilidade.ramo < 0 ? "Core" : habilidade.ramo + 1}</b>Ramo</span>
+                </div>
+                <p><strong style="color:${habilidade.cor}">Bônus:</strong> ${escaparHtml(habilidade.bonus)}</p>
+                <button type="button" id="botao-desbloquear" ${pode ? "" : "disabled"}>${e === "aberta" ? "Habilidade dominada" : "Desbloquear"}</button>
+                <p id="skill-msg"></p>
+            `;
+            document.getElementById("botao-desbloquear").addEventListener("click", () => {
+                const resultado = RpgSistemas.salvarHabilidade(personagem, habilidade);
+                document.getElementById("skill-msg").textContent = resultado.mensagem || "Habilidade desbloqueada.";
+                if (resultado.ok) renderizar();
+            });
+        }
+
+        renderizar();
+    </script>
+</body>
+</html>
