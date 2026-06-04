@@ -80,9 +80,28 @@
 			"botao-aparencia-lobby": ["aparencia", "Atualizar Aparência"],
 			"botao-imagem-personagem": ["aparencia", "Imagem do Personagem"]
 		};
-		document.querySelectorAll("#grade-menu-lobby .atalho-menu-lobby, .botao-menu-lobby").forEach((botao) => {
-			const acao = botao.dataset.menuAcao || mapa[botao.id]?.[0] || "";
-			const texto = botao.querySelector("span")?.textContent?.trim() || mapa[botao.id]?.[1] || acao;
+		const porTexto = [
+			[/atributos/i, "atributos"],
+			[/invent[aá]rio/i, "inventario"],
+			[/lojas?/i, "lojas"],
+			[/eventos?/i, "eventos"],
+			[/miss/i, "missoes"],
+			[/treinos?/i, "treinos"],
+			[/[aá]rvore|habilidades?/i, "habilidades"],
+			[/amigos?/i, "amigos"],
+			[/bando|organiza/i, "grupo"],
+			[/viagem|viajar/i, "viagem"],
+			[/ajustes?/i, "ajustes"],
+			[/apar[eê]ncia|imagem/i, "aparencia"]
+		];
+		const resolverAcao = (botao, texto) => {
+			if (botao.dataset.menuAcao) return botao.dataset.menuAcao;
+			if (mapa[botao.id]) return mapa[botao.id][0];
+			return porTexto.find(([regex]) => regex.test(texto))?.[1] || "";
+		};
+		document.querySelectorAll(".atalho-menu-lobby, .botao-menu-lobby").forEach((botao) => {
+			const texto = botao.querySelector("span")?.textContent?.trim() || mapa[botao.id]?.[1] || "";
+			const acao = resolverAcao(botao, texto);
 			const img = botao.querySelector("img");
 			if (img && texto) img.alt = texto;
 			if (img && acao) img.src = iconeMenu(acao);
