@@ -1301,6 +1301,180 @@
             }
         }
 
+        /* Refinamento: inventário horizontal e atributos lado a lado */
+        #modal-inventario .modal-conteudo {
+            width: min(98vw, 1360px);
+            max-height: 92vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        #modal-inventario #inventario-pane {
+            min-height: 0;
+        }
+
+        #modal-inventario .inventario-layout {
+            display: grid;
+            grid-template-rows: auto auto minmax(0, 1fr);
+            gap: 12px;
+            min-height: auto;
+        }
+
+        #modal-inventario .inventario-sidebar {
+            display: contents;
+        }
+
+        #modal-inventario .form-adicionar {
+            grid-row: 1;
+            grid-template-columns: minmax(170px, 1fr) minmax(160px, 0.8fr) 88px minmax(240px, 1.25fr) 180px;
+            align-items: end;
+            margin-bottom: 0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        #modal-inventario .inventario-titulo-form {
+            grid-column: 1 / -1;
+            font-size: 0.92rem;
+        }
+
+        #modal-inventario .inventario-categorias {
+            grid-row: 2;
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(140px, 160px);
+            gap: 8px;
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 2px 2px 10px;
+            scrollbar-width: thin;
+        }
+
+        #modal-inventario .categoria-inventario {
+            min-width: 0;
+            min-height: 48px;
+            transform: none;
+        }
+
+        #modal-inventario .categoria-inventario:hover,
+        #modal-inventario .categoria-inventario:focus-visible,
+        #modal-inventario .categoria-inventario.ativa {
+            transform: translateY(-1px);
+        }
+
+        #modal-inventario .inventario-conteudo {
+            grid-row: 3;
+            min-height: 0;
+        }
+
+        #modal-inventario .inventario-barra {
+            min-height: 50px;
+        }
+
+        #modal-inventario .grid-inventario {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: 112px;
+            grid-template-rows: repeat(3, 124px);
+            grid-template-columns: none;
+            align-content: start;
+            justify-content: start;
+            min-height: 408px;
+            max-height: none;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 14px;
+            scroll-snap-type: x proximity;
+        }
+
+        #modal-inventario .slot-inventario {
+            width: 112px;
+            height: 124px;
+            scroll-snap-align: start;
+        }
+
+        #modal-inventario .inventario-vazio {
+            width: min(680px, calc(100vw - 70px));
+        }
+
+        #modal-atributos .modal-conteudo {
+            width: min(96vw, 980px);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        #modal-atributos .grid-atributos {
+            grid-template-columns: minmax(280px, 340px) minmax(360px, 1fr);
+            align-items: start;
+            gap: 16px;
+        }
+
+        #modal-atributos .atributos-radar-painel {
+            padding: 14px;
+            gap: 10px;
+        }
+
+        #modal-atributos .radar-jogo {
+            width: min(100%, 310px);
+        }
+
+        #modal-atributos .atributos-lista-jogo {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        #modal-atributos .atributo-linha-jogo {
+            min-height: 82px;
+        }
+
+        #modal-atributos .atributos-aviso {
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 900px) {
+            #modal-inventario .modal-conteudo,
+            #modal-atributos .modal-conteudo {
+                width: 96vw;
+                max-height: 92vh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            #modal-inventario .form-adicionar {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            #modal-inventario .form-acoes {
+                grid-column: 1 / -1;
+            }
+
+            #modal-inventario .grid-inventario {
+                grid-auto-flow: row;
+                grid-template-columns: repeat(4, 104px);
+                grid-auto-rows: 116px;
+                grid-template-rows: none;
+                overflow-x: auto;
+                overflow-y: visible;
+                min-height: 0;
+            }
+
+            #modal-inventario .slot-inventario {
+                width: 104px;
+                height: 116px;
+            }
+
+            #modal-atributos .grid-atributos {
+                grid-template-columns: 300px minmax(340px, 1fr);
+                overflow-x: auto;
+                padding-bottom: 8px;
+            }
+
+            #modal-atributos .atributos-lista-jogo {
+                grid-template-columns: repeat(2, 170px);
+            }
+        }
+
         /* ==================== MODAL SCROLLBAR ====================*/
         .modal-conteudo::-webkit-scrollbar {
             width: 10px;
