@@ -39,7 +39,44 @@
 		document.body.style.position = "relative";
 	}
 
+	function criarAtalhoSistema(acao, texto, imagem) {
+		const botao = document.createElement("button");
+		botao.className = "atalho-menu-lobby";
+		botao.type = "button";
+		botao.dataset.menuAcao = acao;
+		botao.innerHTML = `<img src="${imagem}" alt=""><span>${texto}</span>`;
+		return botao;
+	}
+
+	function injetarSistemasNoLobby() {
+		const grade = document.getElementById("grade-menu-lobby");
+		if (!grade || grade.dataset.sistemasRpg === "ok") return;
+		grade.dataset.sistemasRpg = "ok";
+
+		const atalhos = [
+			["treinos", "Treinos", "assets/img/menu-missoes.jpeg"],
+			["habilidades", "Árvore de Habilidades", "assets/img/menu-atributos.jpeg"],
+			["amigos", "Adicionar Amigos", "assets/img/menu-organizacao.jpeg"],
+			["grupo", "Bando / Organização", "assets/img/menu-organizacao.jpeg"]
+		];
+		atalhos.forEach(([acao, texto, imagem]) => {
+			if (!grade.querySelector(`[data-menu-acao="${acao}"]`)) {
+				grade.appendChild(criarAtalhoSistema(acao, texto, imagem));
+			}
+		});
+	}
+
+	function carregarRpgSistemas() {
+		if (window.RpgSistemas || document.querySelector('script[src="rpg-sistemas.js"]')) return;
+		const script = document.createElement("script");
+		script.src = "rpg-sistemas.js";
+		script.defer = true;
+		document.head.appendChild(script);
+	}
+
 	garantirVideoDeFundo();
+	injetarSistemasNoLobby();
+	carregarRpgSistemas();
 
 	const audio = document.getElementById("musica-fundo");
 	if (!audio) return;
