@@ -1,4 +1,13 @@
 (function () {
+	document.addEventListener("click", (evento) => {
+		const botaoInventario = evento.target.closest("#botao-inventario");
+		if (!botaoInventario) return;
+
+		evento.preventDefault();
+		evento.stopImmediatePropagation();
+		window.location.href = "inventario.html";
+	}, true);
+
 	const audio = document.getElementById("musica-fundo");
 	if (!audio) return;
 
