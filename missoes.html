@@ -383,7 +383,7 @@
     <script src="banco-personagens.js"></script>
     <script src="musica-fundo.js"></script>
     <script>
-        const ranks = ["E", "D", "C", "B", "A", "S", "SS"];
+        const ranks = ["E", "D", "C", "B", "A"];
         const periodos = [
             { chave: "diarias", nome: "Diárias", horas: 24 },
             { chave: "semanais", nome: "Semanais", horas: 24 * 7 },
@@ -421,9 +421,7 @@
             D: "Operação curta com risco controlado.",
             C: "Missão de campo com conflito provável.",
             B: "Ação perigosa que exige preparo real.",
-            A: "Operação de alto impacto para agentes experientes.",
-            S: "Missão crítica que pode mudar uma região inteira.",
-            SS: "Ordem lendária, reservada para feitos absurdos."
+            A: "Operação de alto impacto para agentes experientes."
         };
 
         const recompensaPorRank = {
@@ -431,9 +429,7 @@
             D: "Recompensa comum, avanço de confiança",
             C: "Recompensa média, reconhecimento local",
             B: "Recompensa alta, destaque regional",
-            A: "Recompensa muito alta, renome nos mares",
-            S: "Recompensa especial, influência global",
-            SS: "Recompensa lendária, registro histórico"
+            A: "Recompensa muito alta, renome nos mares"
         };
 
         const acoesPorRank = {
@@ -441,9 +437,7 @@
             D: ["Intervenção", "Vistoria armada", "Rastreamento", "Guarda avançada", "Recuperação"],
             C: ["Incursão", "Captura tática", "Operação de cerco", "Emboscada", "Varredura"],
             B: ["Assalto coordenado", "Neutralização", "Quebra de bloqueio", "Extração hostil", "Operação de risco"],
-            A: ["Dominação", "Ataque cirúrgico", "Ofensiva estratégica", "Supressão total", "Tomada de território"],
-            S: ["Operação lendária", "Guerra secreta", "Execução imperial", "Colapso regional", "Conquista decisiva"],
-            SS: ["Cataclismo", "Ordem final", "Incidente mundial", "Operação proibida", "Mandato absoluto"]
+            A: ["Dominação", "Ataque cirúrgico", "Ofensiva estratégica", "Supressão total", "Tomada de território"]
         };
 
         const codinomesPorRank = {
@@ -451,9 +445,7 @@
             D: ["Maré", "Lanterna", "Bússola", "Portão", "Corrente"],
             C: ["Trovão", "Cicatriz", "Canhão", "Arpão", "Vórtice"],
             B: ["Tempestade", "Baluarte", "Quilha Negra", "Ruptura", "Mandíbula"],
-            A: ["Leviatã", "Coroa Partida", "Aurora Vermelha", "Mar Profundo", "Sentença"],
-            S: ["Rei Afogado", "Eclipse", "Trono de Ferro", "Abismo", "Juízo"],
-            SS: ["Século Perdido", "Deus do Mar", "Fim da Era", "Maré Negra", "Última Ordem"]
+            A: ["Leviatã", "Coroa Partida", "Aurora Vermelha", "Mar Profundo", "Sentença"]
         };
 
         const focoPorPeriodo = {
@@ -512,26 +504,6 @@
                 { nome: "Assassinato evitado", texto: "impedir a eliminação de uma peça importante" },
                 { nome: "Rota do Novo Mundo", texto: "abrir passagem em uma rota mortal" },
                 { nome: "Código negro", texto: "decifrar e agir sobre uma ordem inimiga crítica" }
-            ],
-            S: [
-                { nome: "Incidente internacional", texto: "resolver uma crise capaz de envolver grandes potências" },
-                { nome: "Aliança impossível", texto: "forjar ou destruir uma aliança de impacto global" },
-                { nome: "Arma ancestral falsa", texto: "desmascarar ou proteger um segredo que pode iniciar guerra" },
-                { nome: "Cerco ao imperador", texto: "enfrentar forças ligadas a uma lenda dos mares" },
-                { nome: "Revolta continental", texto: "alterar o destino de várias ilhas conectadas" },
-                { nome: "Bandeira caída", texto: "derrubar o símbolo máximo de uma força inimiga" },
-                { nome: "Julgamento dos mares", texto: "cumprir uma sentença que todos tentarão impedir" },
-                { nome: "Pacto de sangue", texto: "concluir um acordo sob ameaça de guerra total" }
-            ],
-            SS: [
-                { nome: "Século Perdido", texto: "lidar com uma verdade capaz de abalar o mundo" },
-                { nome: "Queda de trono", texto: "derrubar uma autoridade lendária dos mares" },
-                { nome: "Fim da era", texto: "executar uma missão que entrará para a história" },
-                { nome: "Deus do mar", texto: "sobreviver a uma ameaça tratada como mito vivo" },
-                { nome: "Última ordem", texto: "cumprir uma decisão absoluta sem margem para erro" },
-                { nome: "Guerra impossível", texto: "vencer um conflito considerado perdido desde o início" },
-                { nome: "Nome apagado", texto: "proteger ou eliminar um segredo apagado dos registros" },
-                { nome: "Maré negra", texto: "impedir um desastre que engoliria várias rotas" }
             ]
         };
 
@@ -540,9 +512,7 @@
             D: ["Caçada de Pistas", "Cerco ao Contrabando", "Escolta de Comboio", "Linha de Defesa", "Busca de Foragidos", "Recuperação de Cargas"],
             C: ["Rede de Espiões", "Queda do Armazém", "Cerco de Rua", "Sabotagem de Doca", "Captura de Oficial", "Varredura de Arsenal"],
             B: ["Operação Baluarte", "Frente de Bloqueio", "Resgate em Território Hostil", "Quebra da Frota", "Ataque ao Laboratório", "Traidor em Movimento"],
-            A: ["Campanha de Domínio", "Cerco ao Comandante", "Guerra de Influência", "Rota Mortal", "Código Negro", "Frota em Chamas"],
-            S: ["Incidente dos Sete Dias", "Aliança Impossível", "Cerco ao Imperador", "Revolta Continental", "Bandeira Caída", "Pacto de Sangue"],
-            SS: ["Semana do Século Perdido", "Guerra Impossível", "Última Ordem", "Maré Negra", "Nome Apagado", "Fim da Era"]
+            A: ["Campanha de Domínio", "Cerco ao Comandante", "Guerra de Influência", "Rota Mortal", "Código Negro", "Frota em Chamas"]
         };
 
         const arcosMensaisPorRank = {
@@ -550,9 +520,7 @@
             D: ["Operação Baía Fechada", "Mês dos Procurados", "Campanha da Ponte Velha", "Círculo dos Contrabandistas", "Acordo de Docas"],
             C: ["Arco do Arsenal Oculto", "Mês da Base Inimiga", "Campanha dos Informantes", "Domínio do Mercado Hostil", "Noite do Cerco"],
             B: ["Arco da Fortaleza Costeira", "Campanha do Comboio Blindado", "Mês do Bloqueio Naval", "Caçada ao Traidor Armado", "Ofensiva do Laboratório"],
-            A: ["Campanha da Ilha Inteira", "Arco do Comandante Caído", "Mês da Relíquia Proibida", "Guerra de Influência Total", "Rota do Novo Mundo"],
-            S: ["Arco do Incidente Internacional", "Campanha da Aliança Impossível", "Mês da Bandeira Caída", "Cerco às Lendas", "Julgamento dos Mares"],
-            SS: ["Arco do Século Perdido", "Mês da Queda do Trono", "Campanha do Fim da Era", "Maré Negra Global", "Última Ordem Mundial"]
+            A: ["Campanha da Ilha Inteira", "Arco do Comandante Caído", "Mês da Relíquia Proibida", "Guerra de Influência Total", "Rota do Novo Mundo"]
         };
 
         let personagemAtual = null;
