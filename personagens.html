@@ -214,6 +214,31 @@
             "Homem-Bomba",
             "Mestre em Haki"
         ];
+        const familiasAdmin = [
+            "Clou D",
+            "Gol D",
+            "Nefetari D",
+            "Newgate",
+            "Vegapunk",
+            "Dracule",
+            "Hawkins",
+            "Lucci",
+            "Shimotsuki",
+            "Silvers",
+            "Smoker",
+            "Davy D",
+            "Charllote",
+            "Chinjao",
+            "Eusstass",
+            "Kaidou",
+            "Mont blanck",
+            "Shiki",
+            "Vismoke",
+            "Kozuki",
+            "Bullet",
+            "Ganzui",
+            "Kyu"
+        ];
         const descricoesClasseAtualizacaoFicha = {
             "Espadachins": "Guerreiros dedicados que passam a vida aprimorando a arte da espada.",
             "Combatentes": "Mestres da luta corpo a corpo que usam punhos e corpo como armas.",
@@ -395,6 +420,7 @@
                     <p><strong>Gmail:</strong> ${escaparHtml(personagem.gmail)}</p>
                     <p><strong>Código de recuperação:</strong> ${escaparHtml(personagem.codigoRecuperacao || "Será gerado na primeira recuperação")}</p>
                     <p><strong>Familia:</strong> ${escaparHtml(personagem.familia)}</p>
+                    <p><strong>Escolha manual de família:</strong> ${personagem.familiaEscolhidaPeloDev ? "Usada" : "Disponível"}</p>
                     <p><strong>Raca:</strong> ${escaparHtml(personagem.raca)}</p>
                     <p><strong>Troca de raça:</strong> ${personagem.atualizacaoFicha?.racaAlterada ? "Usada" : "Disponível"}</p>
                     <p><strong>Estilo de luta:</strong> ${escaparHtml(personagem.estiloLuta)}</p>
@@ -414,6 +440,7 @@
                                 <button class="botao-principal" type="button" onclick="event.stopPropagation(); verAtributos('${escaparHtml(personagem.nome).replace(/'/g, "\\'")}')">Atributos</button>
                                 <button class="botao-principal" type="button" onclick="event.stopPropagation(); abrirAtualizaOrgAdmin('${escaparHtml(personagem.nome).replace(/'/g, "\\'")}')">Atualizar Org</button>
                                 <button class="botao-principal" type="button" onclick="event.stopPropagation(); abrirAtualizacaoFichaAdmin('${escaparHtml(personagem.nome).replace(/'/g, "\\'")}')">Atualização de Ficha</button>
+                                <button class="botao-principal" type="button" onclick="event.stopPropagation(); abrirEscolhaFamiliaAdmin('${escaparHtml(personagem.nome).replace(/'/g, "\\'")}')">Escolher Família</button>
                     </div>
                 </article>
             `).join("");
@@ -601,6 +628,113 @@
 
             status.textContent = "Ficha atualizada com sucesso.";
             fecharModalAtualizacaoFicha();
+            desenharPersonagens();
+        }
+
+        async function abrirEscolhaFamiliaAdmin(nomePersonagem) {
+            const modal = document.getElementById("modal-admin-escolha-familia");
+            const campoNome = document.getElementById("modal-familia-nome");
+            const campoChave = document.getElementById("modal-familia-chave");
+            const selectFamilia = document.getElementById("modal-familia-select");
+            const status = document.getElementById("modal-familia-status");
+            const botaoSalvar = document.getElementById("modal-familia-salvar");
+            const personagem = await BancoPersonagens.buscarPorNome(nomePersonagem);
+
+            if (!personagem) {
+                alert("Personagem não encontrado.");
+                return;
+            }
+
+            const chave = BancoPersonagens.chaveTravaFamilia(personagem);
+            const trava = await BancoPersonagens.obterTravaFamilia(chave);
+            const familiaTravada = trava?.familia || personagem.familiaEscolhidaPeloDev?.familia || "";
+
+            campoNome.value = personagem.nome;
+            campoChave.value = chave;
+            preencherSelect(selectFamilia, familiasAdmin, familiaTravada || personagem.familia);
+
+            if (trava || personagem.familiaEscolhidaPeloDev) {
+                selectFamilia.disabled = true;
+                botaoSalvar.disabled = true;
+                status.textContent = `Trava ativada para este Gmail. Família já escolhida: ${familiaTravada || personagem.familia}.`;
+            } else {
+                selectFamilia.disabled = false;
+                botaoSalvar.disabled = false;
+                status.textContent = "Escolha com cuidado: depois de salvar, nem resetar, apagar ou criar outro personagem libera de novo.";
+            }
+
+            modal.classList.add("ativo");
+        }
+
+        function fecharModalEscolhaFamilia() {
+            document.getElementById("modal-admin-escolha-familia").classList.remove("ativo");
+        }
+
+        async function salvarEscolhaFamiliaAdmin() {
+            const nome = document.getElementById("modal-familia-nome").value;
+            const chave = document.getElementById("modal-familia-chave").value;
+            const novaFamilia = document.getElementById("modal-familia-select").value;
+            const status = document.getElementById("modal-familia-status");
+            const personagens = await BancoPersonagens.obterTodos();
+            const idx = personagens.findIndex((p) => p.nome === nome);
+
+            if (idx === -1) {
+                status.textContent = "Personagem não encontrado.";
+                return;
+            }
+
+            const travaExistente = await BancoPersonagens.obterTravaFamilia(chave);
+            if (travaExistente || personagens[idx].familiaEscolhidaPeloDev) {
+                const familiaTravada = travaExistente?.familia || personagens[idx].familiaEscolhidaPeloDev?.familia || personagens[idx].familia;
+                status.textContent = `Esta escolha já foi usada. Família travada: ${familiaTravada}.`;
+                document.getElementById("modal-familia-select").disabled = true;
+                document.getElementById("modal-familia-salvar").disabled = true;
+                return;
+            }
+
+            const personagem = personagens[idx];
+            const agora = new Date();
+            const trava = await BancoPersonagens.salvarTravaFamilia({
+                chave,
+                gmail: personagem.gmail,
+                personagemNome: personagem.nome,
+                familia: novaFamilia,
+                criadoEm: agora.toISOString(),
+                criadoEmTexto: agora.toLocaleString("pt-BR")
+            });
+
+            if (trava.familia !== novaFamilia) {
+                status.textContent = `A trava já existia no banco. Família travada: ${trava.familia}.`;
+                return;
+            }
+
+            personagem.familia = novaFamilia;
+            personagem.familiaEscolhidaPeloDev = {
+                chave,
+                familia: novaFamilia,
+                quando: agora.toISOString(),
+                quandoTexto: agora.toLocaleString("pt-BR")
+            };
+            personagem.historicoFamiliaAdmin = [
+                ...(personagem.historicoFamiliaAdmin || []),
+                {
+                    quando: agora.toLocaleString("pt-BR"),
+                    autor: "admin",
+                    familia: novaFamilia,
+                    trava: chave
+                }
+            ];
+
+            personagens[idx] = personagem;
+            await BancoPersonagens.salvarTodos(personagens);
+
+            const ultimo = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+            if (ultimo?.nome && ultimo.nome.toLowerCase() === personagem.nome.toLowerCase()) {
+                localStorage.setItem("ultimoPersonagem", JSON.stringify(personagem));
+            }
+
+            status.textContent = "Família escolhida e trava permanente ativada.";
+            fecharModalEscolhaFamilia();
             desenharPersonagens();
         }
 
@@ -874,6 +1008,39 @@
                 <div class="org-acoes">
                     <button class="btn-adicionar" onclick="salvarAtualizacaoFichaAdmin()" type="button">Salvar ficha</button>
                     <button class="btn-cancelar" onclick="fecharModalAtualizacaoFicha()" type="button">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-admin-escolha-familia">
+        <div class="modal-conteudo modal-org">
+            <div class="modal-cabecalho org-cabecalho">
+                <div>
+                    <div class="modal-titulo">Escolher Família</div>
+                    <p class="org-subtitulo">Escolha administrativa única. A trava fica ligada ao Gmail e não libera com reset, exclusão ou novo cadastro.</p>
+                </div>
+                <button class="fechar-modal" onclick="fecharModalEscolhaFamilia()" type="button">✕</button>
+            </div>
+
+            <div class="form-adicionar org-form">
+                <div class="form-grupo">
+                    <label for="modal-familia-nome">Nome do personagem</label>
+                    <input id="modal-familia-nome" readonly>
+                </div>
+
+                <input id="modal-familia-chave" type="hidden">
+
+                <div class="form-grupo">
+                    <label for="modal-familia-select">Família</label>
+                    <select id="modal-familia-select"></select>
+                </div>
+
+                <p class="mensagem-status" id="modal-familia-status" aria-live="polite"></p>
+
+                <div class="org-acoes">
+                    <button class="btn-adicionar" id="modal-familia-salvar" onclick="salvarEscolhaFamiliaAdmin()" type="button">Salvar família</button>
+                    <button class="btn-cancelar" onclick="fecharModalEscolhaFamilia()" type="button">Cancelar</button>
                 </div>
             </div>
         </div>

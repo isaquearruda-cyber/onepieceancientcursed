@@ -3,6 +3,8 @@ const BancoPersonagens = (() => {
 	const versao = 1;
 	const storePersonagens = "personagens";
 	const tabelaSupabase = "personagens";
+	const chaveTravasFamilia = "travasFamiliaDev";
+	const tipoTravaFamilia = "trava_familia_dev";
 
 	function chavePersonagem(personagem) {
 		return String(personagem?.nome || "").trim().toLowerCase();
@@ -22,6 +24,31 @@ const BancoPersonagens = (() => {
 
 	function supabaseAtivo() {
 		return Boolean(configuracaoSupabase());
+	}
+
+	function normalizarValor(valor) {
+		return String(valor || "")
+			.trim()
+			.toLowerCase()
+			.normalize("NFD")
+			.replace(/[\u0300-\u036f]/g, "");
+	}
+
+	function ehRegistroInterno(dados) {
+		return dados?.tipoRegistro === tipoTravaFamilia;
+	}
+
+	function chaveTravaFamilia(personagem) {
+		const gmail = normalizarValor(personagem?.gmail);
+		if (gmail) {
+			return `gmail:${gmail}`;
+		}
+
+		return `nome:${normalizarValor(personagem?.nome)}`;
+	}
+
+	function idTravaFamilia(chave) {
+		return `trava-familia:${String(chave || "").trim().toLowerCase()}`;
 	}
 
 	async function chamarSupabase(caminho, opcoes = {}) {
@@ -108,7 +135,7 @@ const BancoPersonagens = (() => {
 
 	function lerCacheLocal() {
 		try {
-			return JSON.parse(localStorage.getItem("personagensCriados") || "[]");
+			return JSON.parse(localStorage.getItem("personagensCriados") || "[]").filter((personagem) => !ehRegistroInterno(personagem));
 		} catch (erro) {
 			console.warn("Cache local de personagens invalido:", erro);
 			return [];
@@ -116,7 +143,22 @@ const BancoPersonagens = (() => {
 	}
 
 	function gravarCacheLocal(personagens) {
-		localStorage.setItem("personagensCriados", JSON.stringify(personagens));
+		localStorage.setItem("personagensCriados", JSON.stringify(personagens.filter((personagem) => !ehRegistroInterno(personagem))));
+	}
+
+	function lerTravasFamiliaLocal() {
+		try {
+			return JSON.parse(localStorage.getItem(chaveTravasFamilia) || "{}");
+		} catch (erro) {
+			console.warn("Cache local de travas de familia invalido:", erro);
+			return {};
+		}
+	}
+
+	function gravarTravaFamiliaLocal(trava) {
+		const travas = lerTravasFamiliaLocal();
+		travas[trava.chave] = trava;
+		localStorage.setItem(chaveTravasFamilia, JSON.stringify(travas));
 	}
 
 	async function obterTodosLocal() {
@@ -158,7 +200,7 @@ const BancoPersonagens = (() => {
 
 	async function obterTodosRemoto() {
 		const linhas = await chamarSupabase(`${tabelaSupabase}?select=id,dados&order=criado_em.asc`);
-		const personagens = linhas.map((linha) => linha.dados).filter(Boolean);
+		const personagens = linhas.map((linha) => linha.dados).filter((dados) => dados && !ehRegistroInterno(dados));
 		gravarCacheLocal(personagens);
 		await salvarTodosLocal(personagens);
 		return personagens;
@@ -196,6 +238,70 @@ const BancoPersonagens = (() => {
 				Prefer: "return=minimal"
 			}
 		});
+	}
+
+	async function obterTravaFamilia(chave) {
+		const chaveNormalizada = String(chave || "").trim().toLowerCase();
+		if (!chaveNormalizada) return null;
+
+		if (supabaseAtivo()) {
+			try {
+				const linhas = await chamarSupabase(`${tabelaSupabase}?id=eq.${encodeURIComponent(idTravaFamilia(chaveNormalizada))}&select=dados&limit=1`);
+				if (linhas[0]?.dados?.tipoRegistro === tipoTravaFamilia) {
+					gravarTravaFamiliaLocal(linhas[0].dados);
+					return linhas[0].dados;
+				}
+			} catch (erro) {
+				console.warn("Nao foi possivel consultar a trava de familia online:", erro);
+			}
+		}
+
+		return lerTravasFamiliaLocal()[chaveNormalizada] || null;
+	}
+
+	async function salvarTravaFamilia(trava) {
+		const chave = String(trava?.chave || "").trim().toLowerCase();
+		if (!chave) {
+			throw new Error("Trava de familia sem chave.");
+		}
+
+		const existente = await obterTravaFamilia(chave);
+		if (existente) {
+			return existente;
+		}
+
+		const registro = {
+			tipoRegistro: tipoTravaFamilia,
+			chave,
+			gmail: String(trava.gmail || "").trim(),
+			personagemNome: String(trava.personagemNome || "").trim(),
+			familia: String(trava.familia || "").trim(),
+			criadoEm: trava.criadoEm || new Date().toISOString(),
+			criadoEmTexto: trava.criadoEmTexto || new Date().toLocaleString("pt-BR")
+		};
+
+		gravarTravaFamiliaLocal(registro);
+
+		if (supabaseAtivo()) {
+			try {
+				await chamarSupabase(`${tabelaSupabase}?on_conflict=id`, {
+					method: "POST",
+					headers: {
+						Prefer: "resolution=ignore-duplicates,return=minimal"
+					},
+					body: JSON.stringify({
+						id: idTravaFamilia(chave),
+						nome: `__trava_familia__:${chave}`,
+						dados: registro,
+						atualizado_em: new Date().toISOString()
+					})
+				});
+			} catch (erro) {
+				console.warn("Trava de familia salva localmente, mas nao no banco online:", erro);
+			}
+		}
+
+		return registro;
 	}
 
 	async function obterTodos() {
@@ -292,6 +398,9 @@ const BancoPersonagens = (() => {
 		buscarPorNome,
 		removerPorNome,
 		restaurarCache,
+		chaveTravaFamilia,
+		obterTravaFamilia,
+		salvarTravaFamilia,
 		supabaseAtivo
 	};
 })();
