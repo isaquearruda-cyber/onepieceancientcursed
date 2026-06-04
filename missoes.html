@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missões de Organização - One Piece RPG</title>
+    <link rel="stylesheet" href="estilo.css">
+    <style>
+        html,
+        body {
+            min-height: 100%;
+            background: #040c0d;
+        }
+
+        body.pagina-formulario {
+            min-height: 100vh;
+            padding: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background:
+                linear-gradient(135deg, rgba(4, 12, 13, 0.96), rgba(11, 37, 40, 0.9)),
+                radial-gradient(circle at 50% 0%, rgba(247, 200, 75, 0.16), transparent 34%);
+        }
+
+        .missoes-app {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            gap: 18px;
+            width: min(1180px, calc(100% - 28px));
+            margin: 0 auto;
+            padding: clamp(18px, 4vw, 42px) 0;
+        }
+
+        .missoes-topo,
+        .missoes-painel,
+        .missao-card,
+        .modal-conteudo {
+            border: 1px solid rgba(247, 200, 75, 0.28);
+            border-radius: 8px;
+            background:
+                linear-gradient(180deg, rgba(7, 20, 22, 0.9), rgba(3, 8, 10, 0.92)),
+                radial-gradient(circle at 50% 0%, rgba(247, 200, 75, 0.09), transparent 34%);
+            box-shadow: 0 22px 54px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(255, 247, 223, 0.05);
+        }
+
+        .missoes-topo {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 18px;
+            align-items: center;
+            padding: clamp(16px, 3vw, 26px);
+        }
+
+        .missoes-topo small,
+        .missao-meta {
+            color: #ffe28a;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .missoes-topo h1 {
+            margin: 4px 0 8px;
+            color: #fff7df;
+            font-family: "Segoe UI Black", "Arial Black", Impact, sans-serif;
+            font-size: clamp(2.2rem, 6vw, 4.4rem);
+            line-height: 0.94;
+            text-transform: uppercase;
+            text-shadow: 0 5px 0 #2a0d08, 0 14px 28px rgba(0, 0, 0, 0.68);
+        }
+
+        .missoes-topo p {
+            max-width: 760px;
+            color: #d9e8d4;
+            line-height: 1.5;
+        }
+
+        .missoes-status {
+            display: grid;
+            gap: 8px;
+            min-width: min(100%, 260px);
+            padding: 14px;
+            border: 1px solid rgba(247, 200, 75, 0.24);
+            border-radius: 8px;
+            background: rgba(4, 12, 13, 0.58);
+        }
+
+        .missoes-status span {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            color: #fff7df;
+        }
+
+        .missoes-status b {
+            color: #ffe28a;
+        }
+
+        .missoes-painel {
+            display: grid;
+            gap: 14px;
+            padding: clamp(14px, 3vw, 22px);
+        }
+
+        .abas-missoes,
+        .ranks-missoes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .aba-missao,
+        .rank-missao {
+            min-height: 42px;
+            padding: 0 14px;
+            border: 1px solid rgba(247, 200, 75, 0.34);
+            border-radius: 8px;
+            background: rgba(255, 247, 223, 0.05);
+            color: #fff7df;
+            font-weight: 900;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .aba-missao.ativa,
+        .rank-missao.ativa,
+        .aba-missao:hover,
+        .rank-missao:hover {
+            border-color: #ffe28a;
+            background: rgba(247, 200, 75, 0.18);
+            box-shadow: 0 0 18px rgba(247, 200, 75, 0.18);
+        }
+
+        .missoes-resumo {
+            display: grid;
+            gap: 6px;
+            padding: 12px 14px;
+            border-left: 3px solid #f7c84b;
+            background: rgba(4, 12, 13, 0.5);
+            color: #d9e8d4;
+        }
+
+        .missoes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .missao-card {
+            display: grid;
+            gap: 12px;
+            padding: 16px;
+            min-height: 290px;
+        }
+
+        .missao-card.concluida {
+            border-color: rgba(120, 255, 160, 0.38);
+            box-shadow: 0 0 22px rgba(70, 255, 125, 0.12), inset 0 1px 0 rgba(255, 247, 223, 0.05);
+        }
+
+        .missao-card h2 {
+            color: #fff7df;
+            font-size: 1.25rem;
+            line-height: 1.15;
+        }
+
+        .missao-card p {
+            color: #d9e8d4;
+            line-height: 1.45;
+        }
+
+        .missao-detalhes {
+            display: grid;
+            gap: 7px;
+            margin-top: auto;
+            color: #fff7df;
+            font-size: 0.92rem;
+        }
+
+        .missao-detalhes strong {
+            color: #ffe28a;
+        }
+
+        .missao-card button,
+        .botao-voltar,
+        .modal-acoes button {
+            min-height: 42px;
+            padding: 0 14px;
+            border: 1px solid rgba(255, 226, 138, 0.52);
+            border-radius: 8px;
+            color: #1e211c;
+            background: #f7c84b;
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .missao-card button:hover,
+        .botao-voltar:hover,
+        .modal-acoes button:hover {
+            background: #ffe28a;
+        }
+
+        .missao-card button:disabled {
+            opacity: 0.56;
+            cursor: not-allowed;
+        }
+
+        .botao-voltar {
+            display: inline-grid;
+            place-items: center;
+            color: #fff7df;
+            text-decoration: none;
+            background: rgba(4, 12, 13, 0.72);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            background: rgba(0, 0, 0, 0.68);
+        }
+
+        .modal-overlay.ativo {
+            display: flex;
+        }
+
+        .modal-conteudo {
+            display: grid;
+            gap: 14px;
+            width: min(620px, 100%);
+            max-height: 88vh;
+            overflow-y: auto;
+            padding: 22px;
+        }
+
+        .modal-cabecalho {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .modal-cabecalho h2 {
+            color: #fff7df;
+            font-size: 1.55rem;
+        }
+
+        .fechar-modal {
+            width: 38px;
+            height: 38px;
+            border: 1px solid rgba(247, 200, 75, 0.38);
+            border-radius: 8px;
+            color: #fff7df;
+            background: rgba(4, 12, 13, 0.72);
+            cursor: pointer;
+        }
+
+        .form-missao {
+            display: grid;
+            gap: 12px;
+        }
+
+        .campo-missao {
+            display: grid;
+            gap: 8px;
+        }
+
+        .campo-missao input {
+            margin: 0;
+        }
+
+        .preview-print {
+            display: none;
+            max-height: 220px;
+            width: 100%;
+            object-fit: contain;
+            border: 1px solid rgba(247, 200, 75, 0.24);
+            border-radius: 8px;
+            background: rgba(4, 12, 13, 0.58);
+        }
+
+        .preview-print.visivel {
+            display: block;
+        }
+
+        .mensagem-status {
+            min-height: 22px;
+        }
+
+        @media (max-width: 920px) {
+            .missoes-topo {
+                grid-template-columns: 1fr;
+            }
+
+            .missoes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="pagina-formulario">
+    <audio id="musica-fundo" loop preload="auto">
+        <source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg">
+    </audio>
+
+    <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true">
+        <source src="fundo-login.mp4" type="video/mp4">
+    </video>
+
+    <main class="missoes-app">
+        <header class="missoes-topo">
+            <div>
+                <small>Quadro de operações</small>
+                <h1>Missões</h1>
+                <p id="texto-org">Carregando missões da organização...</p>
+            </div>
+
+            <aside class="missoes-status">
+                <span>Personagem <b id="status-nome">---</b></span>
+                <span>Organização <b id="status-org">---</b></span>
+                <span>Concluídas <b id="status-total">0</b></span>
+            </aside>
+        </header>
+
+        <section class="missoes-painel">
+            <div class="abas-missoes" id="abas-periodo"></div>
+            <div class="ranks-missoes" id="abas-rank"></div>
+            <div class="missoes-resumo">
+                <strong id="resumo-titulo">Rank E</strong>
+                <span id="resumo-prazo">As missões diárias mudam a cada 24 horas.</span>
+            </div>
+            <div class="missoes-grid" id="grade-missoes"></div>
+        </section>
+
+        <a class="botao-voltar" href="lobby.html">Voltar ao Lobby</a>
+    </main>
+
+    <div class="modal-overlay" id="modal-concluir">
+        <div class="modal-conteudo">
+            <div class="modal-cabecalho">
+                <div>
+                    <small class="missao-meta" id="modal-meta">Missão</small>
+                    <h2 id="modal-titulo">Concluir missão</h2>
+                </div>
+                <button class="fechar-modal" id="fechar-modal" type="button">X</button>
+            </div>
+
+            <form class="form-missao" id="form-concluir">
+                <div class="campo-missao">
+                    <label for="missao-gmail">Gmail cadastrado</label>
+                    <input id="missao-gmail" type="email" autocomplete="email" required>
+                </div>
+
+                <div class="campo-missao">
+                    <label for="missao-senha">Senha do jogador</label>
+                    <input id="missao-senha" type="password" autocomplete="current-password" required>
+                </div>
+
+                <div class="campo-missao">
+                    <label for="missao-print">Print de comprovação</label>
+                    <input id="missao-print" type="file" accept="image/*" required>
+                    <img class="preview-print" id="preview-print" alt="Prévia do print">
+                </div>
+
+                <p class="mensagem-status" id="status-envio" aria-live="polite"></p>
+
+                <div class="modal-acoes">
+                    <button id="botao-enviar-conclusao" type="submit">Enviar conclusão</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="supabase-config.js"></script>
+    <script src="banco-personagens.js"></script>
+    <script src="musica-fundo.js"></script>
+    <script>
+        const ranks = ["E", "D", "C", "B", "A", "S", "SS"];
+        const periodos = [
+            { chave: "diarias", nome: "Diárias", horas: 24 },
+            { chave: "semanais", nome: "Semanais", horas: 24 * 7 },
+            { chave: "mensais", nome: "Mensais", horas: 24 * 30 }
+        ];
+
+        const orgs = [
+            "Marinha",
+            "Piratas",
+            "Exército Revolucionário",
+            "Cipher Pol",
+            "Neo Marinha",
+            "Caçadores de Recompensa",
+            "Germá 66",
+            "Galley-la Company",
+            "MADs",
+            "Baroque Works"
+        ];
+
+        const temasPorOrg = {
+            "Marinha": ["patrulha costeira", "prisão de criminosos", "proteção civil", "investigação naval", "cerco a base pirata", "operação de justiça"],
+            "Piratas": ["saque estratégico", "caça ao tesouro", "duelo de tripulações", "exploração de ilha", "fuga da Marinha", "domínio territorial"],
+            "Exército Revolucionário": ["libertação de vila", "sabotagem de tirania", "resgate de informantes", "propaganda secreta", "queda de corruptos", "levante popular"],
+            "Cipher Pol": ["infiltração", "extração de alvo", "silenciamento de ameaça", "roubo de documento", "vigilância secreta", "operação encoberta"],
+            "Neo Marinha": ["expurgo pirata", "ocupação militar", "julgamento sumário", "bloqueio naval", "captura de traidores", "ofensiva radical"],
+            "Caçadores de Recompensa": ["captura de procurado", "rastreamento de pista", "emboscada", "entrega de alvo", "negociação de recompensa", "caçada de elite"],
+            "Germá 66": ["teste de tecnologia", "assalto tático", "proteção de laboratório", "operações de clone", "contrato militar", "guerra-relâmpago"],
+            "Galley-la Company": ["reparo naval", "escolta de carga", "resgate de embarcação", "construção avançada", "inspeção de docas", "projeto especial"],
+            "MADs": ["experimento proibido", "coleta de amostra", "defesa de laboratório", "captura científica", "teste de protótipo", "pesquisa instável"],
+            "Baroque Works": ["contrato secreto", "manipulação política", "eliminação discreta", "roubo de rota", "golpe comercial", "operação nas sombras"]
+        };
+
+        const briefingPorRank = {
+            E: "Trabalho simples para provar presença e disciplina.",
+            D: "Operação curta com risco controlado.",
+            C: "Missão de campo com conflito provável.",
+            B: "Ação perigosa que exige preparo real.",
+            A: "Operação de alto impacto para agentes experientes.",
+            S: "Missão crítica que pode mudar uma região inteira.",
+            SS: "Ordem lendária, reservada para feitos absurdos."
+        };
+
+        const recompensaPorRank = {
+            E: "Baixa recompensa, reputação inicial",
+            D: "Recompensa comum, avanço de confiança",
+            C: "Recompensa média, reconhecimento local",
+            B: "Recompensa alta, destaque regional",
+            A: "Recompensa muito alta, renome nos mares",
+            S: "Recompensa especial, influência global",
+            SS: "Recompensa lendária, registro histórico"
+        };
+
+        let personagemAtual = null;
+        let periodoAtual = "diarias";
+        let rankAtual = "E";
+        let missaoSelecionada = null;
+        let printBase64 = "";
+
+        const textoOrg = document.getElementById("texto-org");
+        const statusNome = document.getElementById("status-nome");
+        const statusOrg = document.getElementById("status-org");
+        const statusTotal = document.getElementById("status-total");
+        const abasPeriodo = document.getElementById("abas-periodo");
+        const abasRank = document.getElementById("abas-rank");
+        const resumoTitulo = document.getElementById("resumo-titulo");
+        const resumoPrazo = document.getElementById("resumo-prazo");
+        const gradeMissoes = document.getElementById("grade-missoes");
+        const modal = document.getElementById("modal-concluir");
+        const formConcluir = document.getElementById("form-concluir");
+        const inputGmail = document.getElementById("missao-gmail");
+        const inputSenha = document.getElementById("missao-senha");
+        const inputPrint = document.getElementById("missao-print");
+        const previewPrint = document.getElementById("preview-print");
+        const statusEnvio = document.getElementById("status-envio");
+        const botaoEnviar = document.getElementById("botao-enviar-conclusao");
+
+        function escaparHtml(texto) {
+            return String(texto || "").replace(/[&<>"']/g, (caractere) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            }[caractere]));
+        }
+
+        function normalizar(texto) {
+            return String(texto || "")
+                .trim()
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "");
+        }
+
+        function organizacaoPersonagem(personagem) {
+            return personagem?.organizacao || personagem?.organização || personagem?.organization || "Piratas";
+        }
+
+        function hashTexto(texto) {
+            let hash = 0;
+            for (let i = 0; i < texto.length; i += 1) {
+                hash = ((hash << 5) - hash) + texto.charCodeAt(i);
+                hash |= 0;
+            }
+            return Math.abs(hash);
+        }
+
+        function inicioSemana(data) {
+            const base = new Date(data);
+            const dia = base.getDay() || 7;
+            base.setHours(0, 0, 0, 0);
+            base.setDate(base.getDate() - dia + 1);
+            return base;
+        }
+
+        function chavePeriodo(periodo) {
+            const agora = new Date();
+            if (periodo === "semanais") {
+                const semana = inicioSemana(agora);
+                return `${semana.getFullYear()}-${String(semana.getMonth() + 1).padStart(2, "0")}-${String(semana.getDate()).padStart(2, "0")}`;
+            }
+            if (periodo === "mensais") {
+                return `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, "0")}`;
+            }
+            return `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, "0")}-${String(agora.getDate()).padStart(2, "0")}`;
+        }
+
+        function proximaVirada(periodo) {
+            const agora = new Date();
+            const proxima = new Date(agora);
+            if (periodo === "semanais") {
+                const semana = inicioSemana(agora);
+                proxima.setTime(semana.getTime());
+                proxima.setDate(proxima.getDate() + 7);
+            } else if (periodo === "mensais") {
+                proxima.setFullYear(agora.getFullYear(), agora.getMonth() + 1, 1);
+                proxima.setHours(0, 0, 0, 0);
+            } else {
+                proxima.setDate(agora.getDate() + 1);
+                proxima.setHours(0, 0, 0, 0);
+            }
+            return proxima;
+        }
+
+        function textoPrazo(periodo) {
+            const proxima = proximaVirada(periodo);
+            const horas = Math.max(1, Math.ceil((proxima.getTime() - Date.now()) / 3600000));
+            if (periodo === "semanais") return `Missões semanais renovam em aproximadamente ${horas} hora(s).`;
+            if (periodo === "mensais") return `Missões mensais renovam em aproximadamente ${horas} hora(s).`;
+            return `Missões diárias renovam em aproximadamente ${horas} hora(s).`;
+        }
+
+        function gerarMissoes(periodo, rank, org) {
+            const temas = temasPorOrg[org] || temasPorOrg.Piratas;
+            const quantidade = periodo === "diarias" ? 3 : 2;
+            const chave = chavePeriodo(periodo);
+            const rotuloPeriodo = periodos.find((item) => item.chave === periodo)?.nome || "Missões";
+
+            return Array.from({ length: quantidade }, (_, indice) => {
+                const semente = hashTexto(`${org}-${periodo}-${rank}-${chave}-${indice}`);
+                const tema = temas[semente % temas.length];
+                const local = ["East Blue", "Grand Line", "Novo Mundo", "Red Line", "ilha aliada", "rota desconhecida"][semente % 6];
+                const intensidade = ["baixa", "moderada", "alta", "crítica", "extrema"][Math.min(ranks.indexOf(rank), 4)];
+                return {
+                    id: `${periodo}:${chave}:${normalizar(org)}:${rank}:${indice}`,
+                    titulo: `${rotuloPeriodo} Rank ${rank}: ${tema}`,
+                    periodo,
+                    rank,
+                    org,
+                    local,
+                    intensidade,
+                    descricao: `${briefingPorRank[rank]} Objetivo: executar ${tema} em ${local} e registrar a prova da conclusão.`,
+                    recompensa: recompensaPorRank[rank],
+                    prazoTexto: proximaVirada(periodo).toLocaleString("pt-BR")
+                };
+            });
+        }
+
+        function conclusoes() {
+            return Array.isArray(personagemAtual?.missoesConcluidas) ? personagemAtual.missoesConcluidas : [];
+        }
+
+        function missaoConcluida(id) {
+            return conclusoes().some((item) => item.id === id);
+        }
+
+        function renderizarAbas() {
+            abasPeriodo.innerHTML = periodos.map((periodo) => `
+                <button class="aba-missao ${periodoAtual === periodo.chave ? "ativa" : ""}" type="button" data-periodo="${periodo.chave}">
+                    ${periodo.nome}
+                </button>
+            `).join("");
+
+            abasRank.innerHTML = ranks.map((rank) => `
+                <button class="rank-missao ${rankAtual === rank ? "ativa" : ""}" type="button" data-rank="${rank}">
+                    Rank ${rank}
+                </button>
+            `).join("");
+
+            abasPeriodo.querySelectorAll("[data-periodo]").forEach((botao) => {
+                botao.addEventListener("click", () => {
+                    periodoAtual = botao.dataset.periodo;
+                    renderizar();
+                });
+            });
+
+            abasRank.querySelectorAll("[data-rank]").forEach((botao) => {
+                botao.addEventListener("click", () => {
+                    rankAtual = botao.dataset.rank;
+                    renderizar();
+                });
+            });
+        }
+
+        function renderizar() {
+            const org = organizacaoPersonagem(personagemAtual);
+            const missoes = gerarMissoes(periodoAtual, rankAtual, org);
+            const concluidas = conclusoes();
+
+            statusNome.textContent = personagemAtual?.nome || "---";
+            statusOrg.textContent = org;
+            statusTotal.textContent = concluidas.length;
+            textoOrg.textContent = `Operações disponíveis para ${org}. As listas mudam conforme o prazo de cada aba.`;
+            resumoTitulo.textContent = `${periodos.find((item) => item.chave === periodoAtual).nome} - Rank ${rankAtual}`;
+            resumoPrazo.textContent = textoPrazo(periodoAtual);
+            renderizarAbas();
+
+            gradeMissoes.innerHTML = missoes.map((missao) => {
+                const feita = missaoConcluida(missao.id);
+                return `
+                    <article class="missao-card ${feita ? "concluida" : ""}">
+                        <span class="missao-meta">${escaparHtml(missao.org)} / Rank ${escaparHtml(missao.rank)}</span>
+                        <h2>${escaparHtml(missao.titulo)}</h2>
+                        <p>${escaparHtml(missao.descricao)}</p>
+                        <div class="missao-detalhes">
+                            <span><strong>Intensidade:</strong> ${escaparHtml(missao.intensidade)}</span>
+                            <span><strong>Recompensa:</strong> ${escaparHtml(missao.recompensa)}</span>
+                            <span><strong>Renova em:</strong> ${escaparHtml(missao.prazoTexto)}</span>
+                        </div>
+                        <button type="button" data-missao="${escaparHtml(missao.id)}" ${feita ? "disabled" : ""}>
+                            ${feita ? "Concluída" : "Concluir missão"}
+                        </button>
+                    </article>
+                `;
+            }).join("");
+
+            gradeMissoes.querySelectorAll("[data-missao]").forEach((botao) => {
+                botao.addEventListener("click", () => {
+                    const missao = missoes.find((item) => item.id === botao.dataset.missao);
+                    abrirConclusao(missao);
+                });
+            });
+        }
+
+        function abrirConclusao(missao) {
+            missaoSelecionada = missao;
+            printBase64 = "";
+            document.getElementById("modal-meta").textContent = `${missao.org} / Rank ${missao.rank}`;
+            document.getElementById("modal-titulo").textContent = missao.titulo;
+            inputGmail.value = personagemAtual.gmail || "";
+            inputSenha.value = "";
+            inputPrint.value = "";
+            previewPrint.removeAttribute("src");
+            previewPrint.classList.remove("visivel");
+            statusEnvio.textContent = "Anexe o print e confirme com Gmail e senha do personagem.";
+            modal.classList.add("ativo");
+        }
+
+        function fecharConclusao() {
+            modal.classList.remove("ativo");
+        }
+
+        function lerPrint(arquivo) {
+            return new Promise((resolve, reject) => {
+                if (!arquivo || !arquivo.type.startsWith("image/")) {
+                    reject(new Error("Anexe uma imagem válida."));
+                    return;
+                }
+
+                const leitor = new FileReader();
+                leitor.onerror = () => reject(new Error("Não foi possível ler o print."));
+                leitor.onload = () => {
+                    const imagem = new Image();
+                    imagem.onerror = () => reject(new Error("Não foi possível carregar o print."));
+                    imagem.onload = () => {
+                        const limite = 1100;
+                        const escala = Math.min(1, limite / Math.max(imagem.width, imagem.height));
+                        const largura = Math.max(1, Math.round(imagem.width * escala));
+                        const altura = Math.max(1, Math.round(imagem.height * escala));
+                        const canvas = document.createElement("canvas");
+                        canvas.width = largura;
+                        canvas.height = altura;
+                        canvas.getContext("2d").drawImage(imagem, 0, 0, largura, altura);
+                        resolve(canvas.toDataURL("image/jpeg", 0.82));
+                    };
+                    imagem.src = leitor.result;
+                };
+                leitor.readAsDataURL(arquivo);
+            });
+        }
+
+        async function enviarConclusao(evento) {
+            evento.preventDefault();
+
+            if (!missaoSelecionada) return;
+            if (missaoConcluida(missaoSelecionada.id)) {
+                statusEnvio.textContent = "Esta missão já foi contabilizada.";
+                return;
+            }
+
+            const gmail = normalizar(inputGmail.value);
+            const senha = inputSenha.value;
+
+            if (gmail !== normalizar(personagemAtual.gmail)) {
+                statusEnvio.textContent = "Gmail diferente do personagem logado.";
+                inputGmail.focus();
+                return;
+            }
+
+            if (String(personagemAtual.senha || "") !== senha) {
+                statusEnvio.textContent = "Senha inválida.";
+                inputSenha.focus();
+                return;
+            }
+
+            if (!printBase64) {
+                statusEnvio.textContent = "Anexe o print da conclusão.";
+                inputPrint.focus();
+                return;
+            }
+
+            botaoEnviar.disabled = true;
+            statusEnvio.textContent = "Salvando conclusão no personagem...";
+
+            personagemAtual.missoesConcluidas = [
+                ...conclusoes(),
+                {
+                    id: missaoSelecionada.id,
+                    titulo: missaoSelecionada.titulo,
+                    organizacao: missaoSelecionada.org,
+                    rank: missaoSelecionada.rank,
+                    periodo: missaoSelecionada.periodo,
+                    print: printBase64,
+                    gmail: personagemAtual.gmail,
+                    concluidaEm: new Date().toISOString(),
+                    concluidaEmTexto: new Date().toLocaleString("pt-BR")
+                }
+            ];
+
+            try {
+                await BancoPersonagens.salvarPersonagem(personagemAtual);
+                localStorage.setItem("ultimoPersonagem", JSON.stringify(personagemAtual));
+                statusEnvio.textContent = "Missão concluída e contabilizada.";
+                fecharConclusao();
+                renderizar();
+            } catch (erro) {
+                statusEnvio.textContent = "Não foi possível salvar no banco. Tente novamente.";
+                console.warn("Erro ao salvar missão:", erro);
+            } finally {
+                botaoEnviar.disabled = false;
+            }
+        }
+
+        async function carregarPersonagem() {
+            const local = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+            if (!local?.nome) {
+                window.location.href = "index.html";
+                return;
+            }
+
+            personagemAtual = local;
+
+            try {
+                const remoto = await BancoPersonagens.buscarPorNome(local.nome);
+                if (remoto) {
+                    personagemAtual = remoto;
+                    localStorage.setItem("ultimoPersonagem", JSON.stringify(remoto));
+                }
+            } catch (erro) {
+                console.warn("Usando personagem local para missões:", erro);
+            }
+
+            const orgUrl = new URLSearchParams(window.location.search).get("org");
+            if (orgUrl && normalizar(orgUrl) !== normalizar(organizacaoPersonagem(personagemAtual))) {
+                history.replaceState(null, "", `missoes.html?org=${encodeURIComponent(organizacaoPersonagem(personagemAtual))}`);
+            }
+
+            renderizar();
+        }
+
+        inputPrint.addEventListener("change", async () => {
+            const arquivo = inputPrint.files?.[0];
+            if (!arquivo) return;
+            try {
+                statusEnvio.textContent = "Preparando print...";
+                printBase64 = await lerPrint(arquivo);
+                previewPrint.src = printBase64;
+                previewPrint.classList.add("visivel");
+                statusEnvio.textContent = "Print anexado. Agora confirme a conclusão.";
+            } catch (erro) {
+                printBase64 = "";
+                previewPrint.removeAttribute("src");
+                previewPrint.classList.remove("visivel");
+                statusEnvio.textContent = erro.message || "Print inválido.";
+            }
+        });
+
+        document.getElementById("fechar-modal").addEventListener("click", fecharConclusao);
+        modal.addEventListener("click", (evento) => {
+            if (evento.target === modal) fecharConclusao();
+        });
+        formConcluir.addEventListener("submit", enviarConclusao);
+
+        carregarPersonagem();
+    </script>
+</body>
+</html>

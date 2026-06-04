@@ -435,6 +435,7 @@
                     <p><strong>Criado em:</strong> ${escaparHtml(personagem.criadoEm)}</p>
                     <p><strong>Acessos registrados:</strong> ${(personagem.historicoAcesso || []).length}</p>
                     <p><strong>Último acesso:</strong> ${escaparHtml((personagem.historicoAcesso || []).at(-1)?.quando || "Nenhum")}</p>
+                    <p><strong>Missões concluídas:</strong> ${(personagem.missoesConcluidas || []).length}</p>
                     <div class="acoes-cartao-admin">
                                 <button class="botao-principal" type="button" onclick="event.stopPropagation(); verInventario('${escaparHtml(personagem.nome).replace(/'/g, "\\'")}')">Inventário</button>
                                 <button class="botao-principal" type="button" onclick="event.stopPropagation(); verAtributos('${escaparHtml(personagem.nome).replace(/'/g, "\\'")}')">Atributos</button>

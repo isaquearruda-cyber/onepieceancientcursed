@@ -2541,10 +2541,19 @@
 
         document.querySelectorAll("[data-menu-acao]").forEach((botao) => {
             botao.addEventListener("click", () => {
+                if (botao.dataset.menuAcao === "missoes") {
+                    if (!personagem) {
+                        alert("Nenhum personagem ativo.");
+                        return;
+                    }
+                    const org = encodeURIComponent(obterOrganizacaoPersonagem(personagem));
+                    window.location.href = `missoes.html?org=${org}`;
+                    return;
+                }
+
                 const nomes = {
                     lojas: "Lojas",
                     eventos: "Eventos",
-                    missoes: "Missões de Organização",
                     viagem: "Viagem"
                 };
                 alert(`${nomes[botao.dataset.menuAcao]} em breve.`);
