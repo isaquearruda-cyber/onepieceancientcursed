@@ -1475,6 +1475,76 @@
             }
         }
 
+        #modal-aparencia-lobby.ativo {
+            align-items: center;
+            padding: 10px;
+        }
+
+        #modal-aparencia-lobby .modal-conteudo {
+            width: min(94vw, 620px);
+            max-height: calc(100dvh - 20px);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        #modal-aparencia-lobby .org-acoes {
+            position: sticky;
+            bottom: -1px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding-top: 10px;
+            background: linear-gradient(180deg, rgba(4, 12, 13, 0), rgba(4, 12, 13, 0.96) 28%);
+        }
+
+        @media (max-height: 520px) and (orientation: landscape) {
+            #modal-aparencia-lobby.ativo {
+                align-items: flex-start;
+                justify-content: center;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            #modal-aparencia-lobby .modal-conteudo {
+                width: min(94vw, 760px);
+                max-height: calc(100dvh - 14px);
+                margin: 7px 0;
+                padding: 14px;
+            }
+
+            #modal-aparencia-lobby .modal-cabecalho {
+                margin-bottom: 10px;
+                padding-bottom: 8px;
+            }
+
+            #modal-aparencia-lobby .modal-titulo {
+                font-size: 1.05rem;
+            }
+
+            #modal-aparencia-lobby .org-subtitulo {
+                font-size: 0.78rem;
+                line-height: 1.25;
+            }
+
+            #modal-aparencia-lobby .form-adicionar.org-form {
+                gap: 8px;
+            }
+
+            #modal-aparencia-lobby .form-adicionar.org-form input {
+                height: 38px;
+            }
+
+            #modal-aparencia-lobby .mensagem-status {
+                min-height: 18px;
+                font-size: 0.78rem;
+            }
+
+            #modal-aparencia-lobby .org-acoes button {
+                min-height: 38px;
+                padding: 8px;
+            }
+        }
+
         /* ==================== MODAL SCROLLBAR ====================*/
         .modal-conteudo::-webkit-scrollbar {
             width: 10px;
