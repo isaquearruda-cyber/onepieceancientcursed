@@ -13,8 +13,11 @@
 		};
 		const botaoPagina = evento.target.closest("#botao-inventario, #botao-atributos");
 		const botaoMenu = evento.target.closest("[data-menu-acao]");
-		const destino = botaoPagina ? destinoPaginas[botaoPagina.id] : destinosMenu[botaoMenu?.dataset?.menuAcao] || "";
+		const destino = botaoPagina
+			? destinoPaginas[botaoPagina.id]
+			: destinosMenu[botaoMenu?.dataset?.menuAcao] || "";
 		if (!destino) return;
+
 		evento.preventDefault();
 		evento.stopImmediatePropagation();
 		window.location.href = destino;
@@ -23,6 +26,7 @@
 	function garantirVideoDeFundo() {
 		if (!document.body || document.querySelector(".video-fundo")) return;
 		if (!document.body.classList.contains("pagina-inventario") && !document.body.classList.contains("pagina-atributos")) return;
+
 		const video = document.createElement("video");
 		video.className = "video-fundo";
 		video.autoplay = true;
@@ -35,27 +39,25 @@
 		document.body.style.position = "relative";
 	}
 
-	function iconeMenuSvg(acao, texto) {
-		const mapa = {
-			atributos: ["#8eeaff", "radar"], inventario: ["#ffd36d", "bag"], lojas: ["#d8a6ff", "coin"],
-			eventos: ["#36ffd1", "spiral"], missoes: ["#ffcf72", "map"], treinos: ["#ff7a3d", "fist"],
-			habilidades: ["#67f0ff", "tree"], amigos: ["#ffffff", "eye"], grupo: ["#ffffff", "banner"], viagem: ["#7bd3ff", "compass"]
+	garantirVideoDeFundo();
+
+	function iconeMenu(acao) {
+		const tema = {
+			atributos: ["#49d8ff", "M48 13 67 76 48 63 29 76Z M48 23v38 M37 55h22", "ATR"],
+			inventario: ["#f7c84b", "M25 42h46v33H25Z M31 42V31c0-18 34-18 34 0v11 M36 54h24", "INV"],
+			lojas: ["#b989ff", "M22 38h52l-6-15H28Z M27 38v35h42V38 M36 48h24 M38 57h20", "LOJ"],
+			eventos: ["#21e0c2", "M48 17c21 16 19 45 0 62-19-17-21-46 0-62Z M48 29c9 11 9 25 0 36-9-11-9-25 0-36Z", "EVT"],
+			missoes: ["#f5d06f", "M29 18h31l9 9v51H29Z M58 18v12h11 M37 42h23 M37 54h23 M37 66h15", "MIS"],
+			treinos: ["#ff7a35", "M24 68c8-25 10-39 24-54 14 15 16 29 24 54-16 10-32 10-48 0Z M35 62c9 5 17 5 26 0", "TRN"],
+			habilidades: ["#36e0ff", "M48 16v18 M48 62v18 M20 48h18 M58 48h18 M38 38l-13-13 M58 38l13-13 M38 58 25 71 M58 58l13 13 M39 39h18v18H39Z", "SKL"],
+			amigos: ["#f5f5f0", "M36 42a12 12 0 1 0 0-24 12 12 0 0 0 0 24Z M60 45a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z M18 76c3-18 33-18 36 0 M48 73c4-13 25-13 30 0", "SOC"],
+			grupo: ["#dce7dc", "M24 25h34l14 13v33H24Z M58 25v14h14 M33 47h21 M33 58h27", "ORG"],
+			viagem: ["#7fdfff", "M19 57 77 23 50 77 45 55Z M45 55l18 13", "NAV"],
+			ajustes: ["#bfc8c1", "M48 22l7 7 10-2 4 9-7 7 2 10-9 4-7-7-10 2-4-9 7-7-2-10 9-4 7 7Z M48 39a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z", "CFG"],
+			aparencia: ["#ff8f4a", "M48 17c16 0 28 12 28 28 0 20-13 33-28 33S20 65 20 45c0-16 12-28 28-28Z M35 45h26 M39 58c6 5 12 5 18 0", "VIS"]
 		};
-		const [cor, tipo] = mapa[acao] || ["#ffe28a", "star"];
-		const formas = {
-			radar: '<path d="M48 13 70 83 48 70 26 83Z"/><path d="M48 27v43M32 73l16-46 16 46" fill="none" stroke="#05090b" stroke-width="5" stroke-linecap="round"/>',
-			bag: '<path d="M26 34h44l-4 45H30Z"/><path d="M36 34c0-17 24-17 24 0" fill="none" stroke="#05090b" stroke-width="7" stroke-linecap="round"/>',
-			coin: '<circle cx="48" cy="48" r="27"/><path d="M48 26v44M34 38c6-8 22-8 28 0M34 58c6 8 22 8 28 0" fill="none" stroke="#05090b" stroke-width="5" stroke-linecap="round"/>',
-			spiral: '<path d="M70 48c0 15-13 27-29 22-17-5-18-30 1-34 12-2 22 8 17 19-4 9-18 8-19-2" fill="none" stroke="#05090b" stroke-width="8" stroke-linecap="round"/>',
-			map: '<path d="M18 25 37 18l22 8 19-7v52l-19 7-22-8-19 7Z"/><path d="M37 18v52M59 26v52" fill="none" stroke="#05090b" stroke-width="5"/>',
-			fist: '<path d="M29 41V25a8 8 0 0 1 15 0v12h2V19a8 8 0 0 1 15 0v18h2V27a8 8 0 0 1 15 0v26c0 23-15 34-32 34-16 0-28-10-28-27V47a7 7 0 0 1 11-6Z"/>',
-			tree: '<path d="M48 12 74 36 59 37 76 60 58 59 48 82 38 59 20 60 37 37 22 36Z"/>',
-			eye: '<path d="M10 48s15-22 38-22 38 22 38 22-15 22-38 22S10 48 10 48Z"/><circle cx="48" cy="48" r="12" fill="#05090b"/>',
-			banner: '<path d="M22 18h39l13 12-13 12H22Z"/><path d="M22 18v62" fill="none" stroke="#05090b" stroke-width="7" stroke-linecap="round"/>',
-			compass: '<circle cx="48" cy="48" r="31"/><path d="M58 22 51 51 22 58 45 45Z" fill="#05090b"/>',
-			star: '<path d="M48 12 58 37 85 39 64 56 71 83 48 68 25 83 32 56 11 39 38 37Z"/>'
-		};
-		const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><defs><radialGradient id="g" cx="45%" cy="35%" r="65%"><stop offset="0" stop-color="#fff7df"/><stop offset=".45" stop-color="${cor}"/><stop offset="1" stop-color="#071011"/></radialGradient><filter id="s"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="${cor}"/></filter></defs><rect width="96" height="96" rx="14" fill="#06100d"/><circle cx="48" cy="48" r="39" fill="rgba(255,255,255,.04)" stroke="${cor}" stroke-width="3"/><g fill="url(#g)" filter="url(#s)">${formas[tipo]}</g><text x="48" y="89" text-anchor="middle" fill="#fff7df" font-size="8" font-family="Arial" font-weight="900">${String(texto || acao).slice(0, 3).toUpperCase()}</text></svg>`;
+		const item = tema[acao] || tema.habilidades;
+		const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><defs><radialGradient id="bg" cx="38%" cy="26%" r="78%"><stop offset="0" stop-color="#344247"/><stop offset=".58" stop-color="#071112"/><stop offset="1" stop-color="#020303"/></radialGradient><linearGradient id="g" x1="18%" y1="12%" x2="82%" y2="86%"><stop offset="0" stop-color="#fff7df"/><stop offset=".36" stop-color="${item[0]}"/><stop offset=".72" stop-color="#ffe28a"/><stop offset="1" stop-color="${item[0]}"/></linearGradient><filter id="glow"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="${item[0]}"/></filter></defs><rect width="96" height="96" rx="18" fill="url(#bg)"/><circle cx="48" cy="48" r="39" fill="none" stroke="${item[0]}" stroke-width="3" opacity=".88"/><circle cx="48" cy="48" r="29" fill="${item[0]}" opacity=".12"/><path d="${item[1]}" fill="url(#g)" stroke="#050808" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/><text x="48" y="87" text-anchor="middle" fill="#fff7df" font-size="8" font-family="Arial Black,Arial" font-weight="900">${item[2]}</text></svg>`;
 		return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 	}
 
@@ -64,17 +66,26 @@
 		botao.className = "atalho-menu-lobby";
 		botao.type = "button";
 		botao.dataset.menuAcao = acao;
-		botao.innerHTML = `<img src="${imagem || iconeMenuSvg(acao, texto)}" alt=""><span>${texto}</span>`;
+		botao.innerHTML = `<img src="${imagem || iconeMenu(acao)}" alt=""><span>${texto}</span>`;
 		return botao;
 	}
 
 	function atualizarIconesMenuLobby() {
-		const mapa = { "botao-atributos": ["atributos", "Atributos"], "botao-inventario": ["inventario", "Inventário"] };
-		document.querySelectorAll("#grade-menu-lobby .atalho-menu-lobby").forEach((botao) => {
+		const mapa = {
+			"botao-atributos": ["atributos", "Atributos"],
+			"botao-inventario": ["inventario", "Inventário"],
+			"botao-menu-lobby": ["habilidades", "Menu"],
+			"botao-menu-ajustes": ["ajustes", "Ajustes"],
+			"botao-atualiza-org-lobby": ["grupo", "Atualizar Organização"],
+			"botao-aparencia-lobby": ["aparencia", "Atualizar Aparência"],
+			"botao-imagem-personagem": ["aparencia", "Imagem do Personagem"]
+		};
+		document.querySelectorAll("#grade-menu-lobby .atalho-menu-lobby, .botao-menu-lobby").forEach((botao) => {
 			const acao = botao.dataset.menuAcao || mapa[botao.id]?.[0] || "";
 			const texto = botao.querySelector("span")?.textContent?.trim() || mapa[botao.id]?.[1] || acao;
 			const img = botao.querySelector("img");
-			if (img && acao) img.src = iconeMenuSvg(acao, texto);
+			if (img && texto) img.alt = texto;
+			if (img && acao) img.src = iconeMenu(acao);
 		});
 	}
 
@@ -82,8 +93,17 @@
 		const grade = document.getElementById("grade-menu-lobby");
 		if (!grade || grade.dataset.sistemasRpg === "ok") return;
 		grade.dataset.sistemasRpg = "ok";
-		[["treinos", "Treinos", ""], ["habilidades", "Árvore de Habilidades", ""], ["amigos", "Adicionar Amigos", ""], ["grupo", "Bando / Organização", ""]].forEach(([acao, texto, imagem]) => {
-			if (!grade.querySelector(`[data-menu-acao="${acao}"]`)) grade.appendChild(criarAtalhoSistema(acao, texto, imagem));
+
+		const atalhos = [
+			["treinos", "Treinos", ""],
+			["habilidades", "Árvore de Habilidades", ""],
+			["amigos", "Adicionar Amigos", ""],
+			["grupo", "Bando / Organização", ""]
+		];
+		atalhos.forEach(([acao, texto, imagem]) => {
+			if (!grade.querySelector(`[data-menu-acao="${acao}"]`)) {
+				grade.appendChild(criarAtalhoSistema(acao, texto, imagem));
+			}
 		});
 	}
 
@@ -95,27 +115,53 @@
 		document.head.appendChild(script);
 	}
 
-	garantirVideoDeFundo();
 	injetarSistemasNoLobby();
 	atualizarIconesMenuLobby();
 	carregarRpgSistemas();
 
 	const audio = document.getElementById("musica-fundo");
 	if (!audio) return;
+
 	const chaveVolume = "onePieceRpgVolumeMusica";
 	const controleSom = document.getElementById("controle-som");
 	const botaoSom = document.getElementById("botao-som");
 	const volumeMusica = document.getElementById("volume-musica");
+
 	function aplicarVolume(valor) {
 		const volume = Math.max(0, Math.min(Number(valor) || 0, 100));
 		audio.volume = volume / 100;
 		audio.muted = volume === 0;
 		localStorage.setItem(chaveVolume, String(volume));
-		if (volumeMusica) volumeMusica.value = String(volume);
+
+		if (volumeMusica) {
+			volumeMusica.value = String(volume);
+		}
 	}
-	async function tocar() { try { await audio.play(); } catch (erro) { document.addEventListener("pointerdown", tocar, { once: true }); } }
-	aplicarVolume(localStorage.getItem(chaveVolume) === null ? 50 : localStorage.getItem(chaveVolume));
+
+	async function tocar() {
+		try {
+			await audio.play();
+		} catch (erro) {
+			document.addEventListener("pointerdown", tocar, { once: true });
+		}
+	}
+
+	const volumeSalvo = localStorage.getItem(chaveVolume);
+	aplicarVolume(volumeSalvo === null ? 50 : volumeSalvo);
 	tocar();
-	if (botaoSom && controleSom) botaoSom.addEventListener("click", () => { const visivel = controleSom.classList.toggle("visivel"); controleSom.setAttribute("aria-hidden", visivel ? "false" : "true"); tocar(); });
-	if (volumeMusica) volumeMusica.addEventListener("input", () => { aplicarVolume(volumeMusica.value); tocar(); });
+
+	if (botaoSom && controleSom) {
+		botaoSom.addEventListener("click", () => {
+			const visivel = controleSom.classList.toggle("visivel");
+			controleSom.setAttribute("aria-hidden", visivel ? "false" : "true");
+			tocar();
+		});
+	}
+
+	if (volumeMusica) {
+		volumeMusica.addEventListener("input", () => {
+			aplicarVolume(volumeMusica.value);
+			tocar();
+		});
+	}
 })();
