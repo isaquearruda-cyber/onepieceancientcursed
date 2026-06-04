@@ -1476,14 +1476,23 @@
         }
 
         #modal-aparencia-lobby.ativo {
-            align-items: center;
+            display: block;
+            align-items: unset;
+            justify-content: unset;
             padding: 10px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            touch-action: pan-y;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            background: rgba(0, 0, 0, 0.42);
         }
 
         #modal-aparencia-lobby .modal-conteudo {
             width: min(94vw, 620px);
-            max-height: calc(100dvh - 20px);
-            overflow-y: auto;
+            max-height: none;
+            margin: 12px auto 80px;
+            overflow: visible;
             -webkit-overflow-scrolling: touch;
         }
 
@@ -1499,17 +1508,21 @@
 
         @media (max-height: 520px) and (orientation: landscape) {
             #modal-aparencia-lobby.ativo {
-                align-items: flex-start;
-                justify-content: center;
+                display: block;
+                align-items: unset;
+                justify-content: unset;
                 overflow-y: auto;
+                overflow-x: hidden;
+                touch-action: pan-y;
                 -webkit-overflow-scrolling: touch;
             }
 
             #modal-aparencia-lobby .modal-conteudo {
                 width: min(94vw, 760px);
-                max-height: calc(100dvh - 14px);
-                margin: 7px 0;
+                max-height: none;
+                margin: 8px auto 90px;
                 padding: 14px;
+                overflow: visible;
             }
 
             #modal-aparencia-lobby .modal-cabecalho {
