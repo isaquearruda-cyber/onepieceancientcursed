@@ -436,6 +436,32 @@
             SS: "Recompensa lendária, registro histórico"
         };
 
+        const acoesPorRank = {
+            E: ["Reconhecimento", "Entrega", "Escolta leve", "Patrulha inicial", "Coleta"],
+            D: ["Intervenção", "Vistoria armada", "Rastreamento", "Guarda avançada", "Recuperação"],
+            C: ["Incursão", "Captura tática", "Operação de cerco", "Emboscada", "Varredura"],
+            B: ["Assalto coordenado", "Neutralização", "Quebra de bloqueio", "Extração hostil", "Operação de risco"],
+            A: ["Dominação", "Ataque cirúrgico", "Ofensiva estratégica", "Supressão total", "Tomada de território"],
+            S: ["Operação lendária", "Guerra secreta", "Execução imperial", "Colapso regional", "Conquista decisiva"],
+            SS: ["Cataclismo", "Ordem final", "Incidente mundial", "Operação proibida", "Mandato absoluto"]
+        };
+
+        const codinomesPorRank = {
+            E: ["Gaivota", "Farol", "Âncora", "Brisa", "Mapa"],
+            D: ["Maré", "Lanterna", "Bússola", "Portão", "Corrente"],
+            C: ["Trovão", "Cicatriz", "Canhão", "Arpão", "Vórtice"],
+            B: ["Tempestade", "Baluarte", "Quilha Negra", "Ruptura", "Mandíbula"],
+            A: ["Leviatã", "Coroa Partida", "Aurora Vermelha", "Mar Profundo", "Sentença"],
+            S: ["Rei Afogado", "Eclipse", "Trono de Ferro", "Abismo", "Juízo"],
+            SS: ["Século Perdido", "Deus do Mar", "Fim da Era", "Maré Negra", "Última Ordem"]
+        };
+
+        const focoPorPeriodo = {
+            diarias: ["Ação rápida", "Plantão de campo", "Ordem emergencial"],
+            semanais: ["Campanha semanal", "Operação prolongada", "Plano de influência"],
+            mensais: ["Grande campanha", "Operação de domínio", "Marco histórico"]
+        };
+
         let personagemAtual = null;
         let periodoAtual = "diarias";
         let rankAtual = "E";
@@ -538,24 +564,30 @@
 
         function gerarMissoes(periodo, rank, org) {
             const temas = temasPorOrg[org] || temasPorOrg.Piratas;
+            const acoes = acoesPorRank[rank] || acoesPorRank.E;
+            const codinomes = codinomesPorRank[rank] || codinomesPorRank.E;
+            const focos = focoPorPeriodo[periodo] || focoPorPeriodo.diarias;
             const quantidade = periodo === "diarias" ? 3 : 2;
             const chave = chavePeriodo(periodo);
             const rotuloPeriodo = periodos.find((item) => item.chave === periodo)?.nome || "Missões";
 
             return Array.from({ length: quantidade }, (_, indice) => {
                 const semente = hashTexto(`${org}-${periodo}-${rank}-${chave}-${indice}`);
-                const tema = temas[semente % temas.length];
+                const tema = temas[(semente + ranks.indexOf(rank) + indice) % temas.length];
+                const acao = acoes[(semente + indice) % acoes.length];
+                const codinome = codinomes[(semente + temas.length + indice) % codinomes.length];
+                const foco = focos[(semente + ranks.indexOf(rank)) % focos.length];
                 const local = ["East Blue", "Grand Line", "Novo Mundo", "Red Line", "ilha aliada", "rota desconhecida"][semente % 6];
                 const intensidade = ["baixa", "moderada", "alta", "crítica", "extrema"][Math.min(ranks.indexOf(rank), 4)];
                 return {
                     id: `${periodo}:${chave}:${normalizar(org)}:${rank}:${indice}`,
-                    titulo: `${rotuloPeriodo} Rank ${rank}: ${tema}`,
+                    titulo: `${rotuloPeriodo} Rank ${rank}: ${acao} ${codinome}`,
                     periodo,
                     rank,
                     org,
                     local,
                     intensidade,
-                    descricao: `${briefingPorRank[rank]} Objetivo: executar ${tema} em ${local} e registrar a prova da conclusão.`,
+                    descricao: `${briefingPorRank[rank]} ${foco}: executar ${tema} em ${local} e registrar a prova da conclusão.`,
                     recompensa: recompensaPorRank[rank],
                     prazoTexto: proximaVirada(periodo).toLocaleString("pt-BR")
                 };
