@@ -535,6 +535,26 @@
             ]
         };
 
+        const campanhasSemanaisPorRank = {
+            E: ["Semana de Abastecimento", "Ronda dos Três Portos", "Treino de Recrutas", "Rede de Mensageiros", "Rotas Seguras", "Postos de Vigia"],
+            D: ["Caçada de Pistas", "Cerco ao Contrabando", "Escolta de Comboio", "Linha de Defesa", "Busca de Foragidos", "Recuperação de Cargas"],
+            C: ["Rede de Espiões", "Queda do Armazém", "Cerco de Rua", "Sabotagem de Doca", "Captura de Oficial", "Varredura de Arsenal"],
+            B: ["Operação Baluarte", "Frente de Bloqueio", "Resgate em Território Hostil", "Quebra da Frota", "Ataque ao Laboratório", "Traidor em Movimento"],
+            A: ["Campanha de Domínio", "Cerco ao Comandante", "Guerra de Influência", "Rota Mortal", "Código Negro", "Frota em Chamas"],
+            S: ["Incidente dos Sete Dias", "Aliança Impossível", "Cerco ao Imperador", "Revolta Continental", "Bandeira Caída", "Pacto de Sangue"],
+            SS: ["Semana do Século Perdido", "Guerra Impossível", "Última Ordem", "Maré Negra", "Nome Apagado", "Fim da Era"]
+        };
+
+        const arcosMensaisPorRank = {
+            E: ["Mês dos Novatos", "Plano dos Pequenos Portos", "Ciclo de Suprimentos", "Mapa da Primeira Rota", "Rede de Auxiliares"],
+            D: ["Operação Baía Fechada", "Mês dos Procurados", "Campanha da Ponte Velha", "Círculo dos Contrabandistas", "Acordo de Docas"],
+            C: ["Arco do Arsenal Oculto", "Mês da Base Inimiga", "Campanha dos Informantes", "Domínio do Mercado Hostil", "Noite do Cerco"],
+            B: ["Arco da Fortaleza Costeira", "Campanha do Comboio Blindado", "Mês do Bloqueio Naval", "Caçada ao Traidor Armado", "Ofensiva do Laboratório"],
+            A: ["Campanha da Ilha Inteira", "Arco do Comandante Caído", "Mês da Relíquia Proibida", "Guerra de Influência Total", "Rota do Novo Mundo"],
+            S: ["Arco do Incidente Internacional", "Campanha da Aliança Impossível", "Mês da Bandeira Caída", "Cerco às Lendas", "Julgamento dos Mares"],
+            SS: ["Arco do Século Perdido", "Mês da Queda do Trono", "Campanha do Fim da Era", "Maré Negra Global", "Última Ordem Mundial"]
+        };
+
         let personagemAtual = null;
         let periodoAtual = "diarias";
         let rankAtual = "E";
@@ -558,6 +578,24 @@
         const previewPrint = document.getElementById("preview-print");
         const statusEnvio = document.getElementById("status-envio");
         const botaoEnviar = document.getElementById("botao-enviar-conclusao");
+
+        function montarObjetivosDePeriodo(periodo, rank) {
+            if (periodo === "semanais") {
+                return (campanhasSemanaisPorRank[rank] || campanhasSemanaisPorRank.E).map((nome) => ({
+                    nome,
+                    texto: `cumprir etapas da campanha ${nome.toLowerCase()} durante a semana`
+                }));
+            }
+
+            if (periodo === "mensais") {
+                return (arcosMensaisPorRank[rank] || arcosMensaisPorRank.E).map((nome) => ({
+                    nome,
+                    texto: `avançar o arco ${nome.toLowerCase()} até gerar resultado oficial para a organização`
+                }));
+            }
+
+            return objetivosPorRank[rank] || objetivosPorRank.E;
+        }
 
         function escaparHtml(texto) {
             return String(texto || "").replace(/[&<>"']/g, (caractere) => ({
@@ -640,7 +678,7 @@
             const acoes = acoesPorRank[rank] || acoesPorRank.E;
             const codinomes = codinomesPorRank[rank] || codinomesPorRank.E;
             const focos = focoPorPeriodo[periodo] || focoPorPeriodo.diarias;
-            const objetivos = objetivosPorRank[rank] || objetivosPorRank.E;
+            const objetivos = montarObjetivosDePeriodo(periodo, rank);
             const quantidade = periodo === "diarias" ? 8 : periodo === "semanais" ? 6 : 5;
             const chave = chavePeriodo(periodo);
             const rotuloPeriodo = periodos.find((item) => item.chave === periodo)?.nome || "Missões";
@@ -679,19 +717,22 @@
 
         function renderizarAbas() {
             abasPeriodo.innerHTML = periodos.map((periodo) => `
-                <button class="aba-missao ${periodoAtual === periodo.chave ? "ativa" : ""}" type="button" data-periodo="${periodo.chave}">
+                <button class="aba-missao ${periodoAtual === periodo.chave ? "ativa" : ""}" type="button" data-periodo="${periodo.chave}" aria-pressed="${periodoAtual === periodo.chave ? "true" : "false"}">
                     ${periodo.nome}
                 </button>
             `).join("");
 
             abasRank.innerHTML = ranks.map((rank) => `
-                <button class="rank-missao ${rankAtual === rank ? "ativa" : ""}" type="button" data-rank="${rank}">
+                <button class="rank-missao ${rankAtual === rank ? "ativa" : ""}" type="button" data-rank="${rank}" aria-pressed="${rankAtual === rank ? "true" : "false"}">
                     Rank ${rank}
                 </button>
             `).join("");
 
             abasPeriodo.querySelectorAll("[data-periodo]").forEach((botao) => {
                 botao.addEventListener("click", () => {
+                    if (periodoAtual === botao.dataset.periodo) return;
+                    missaoSelecionada = null;
+                    fecharConclusao();
                     periodoAtual = botao.dataset.periodo;
                     renderizar();
                 });
@@ -699,6 +740,9 @@
 
             abasRank.querySelectorAll("[data-rank]").forEach((botao) => {
                 botao.addEventListener("click", () => {
+                    if (rankAtual === botao.dataset.rank) return;
+                    missaoSelecionada = null;
+                    fecharConclusao();
                     rankAtual = botao.dataset.rank;
                     renderizar();
                 });
