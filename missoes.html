@@ -462,6 +462,79 @@
             mensais: ["Grande campanha", "Operação de domínio", "Marco histórico"]
         };
 
+        const objetivosPorRank = {
+            E: [
+                { nome: "Rota de suprimentos", texto: "levar uma carga simples sem chamar atenção" },
+                { nome: "Mensagem lacrada", texto: "entregar uma ordem confidencial ao contato indicado" },
+                { nome: "Vigia do porto", texto: "observar movimentações suspeitas e registrar nomes" },
+                { nome: "Mapa perdido", texto: "recuperar um mapa deixado em uma taverna local" },
+                { nome: "Escolta de civil", texto: "acompanhar um aliado até uma zona segura" },
+                { nome: "Inventário de doca", texto: "conferir caixas, barris e recursos antes da partida" },
+                { nome: "Sinalizador quebrado", texto: "reparar ou substituir um sinal de comunicação" },
+                { nome: "Relato de testemunha", texto: "coletar depoimento sobre um incidente recente" }
+            ],
+            D: [
+                { nome: "Contrabandista menor", texto: "seguir um suspeito e interceptar mercadoria ilegal" },
+                { nome: "Armazém fechado", texto: "investigar um depósito usado por inimigos locais" },
+                { nome: "Pista de procurado", texto: "rastrear marcas deixadas por um alvo em fuga" },
+                { nome: "Defesa de ponte", texto: "impedir passagem inimiga por uma rota estreita" },
+                { nome: "Resgate curto", texto: "tirar um aliado preso de uma situação controlada" },
+                { nome: "Carga roubada", texto: "recuperar suprimentos antes que sejam revendidos" },
+                { nome: "Patrulha armada", texto: "varrer uma área com chance real de confronto" },
+                { nome: "Posto avançado", texto: "estabelecer presença em um ponto estratégico" }
+            ],
+            C: [
+                { nome: "Base improvisada", texto: "invadir um esconderijo e destruir seus recursos" },
+                { nome: "Capitão menor", texto: "capturar ou expulsar um líder inimigo regional" },
+                { nome: "Arquivo secreto", texto: "roubar documentos protegidos por guardas armados" },
+                { nome: "Cerco noturno", texto: "cercar inimigos durante a noite e forçar rendição" },
+                { nome: "Sabotagem naval", texto: "danificar uma embarcação antes que ela zarpe" },
+                { nome: "Informante duplo", texto: "confirmar traição e extrair a informação correta" },
+                { nome: "Mercado hostil", texto: "retomar controle de uma zona tomada por rivais" },
+                { nome: "Arsenal escondido", texto: "encontrar e neutralizar armas armazenadas" }
+            ],
+            B: [
+                { nome: "Comboio blindado", texto: "atacar um comboio protegido por combatentes fortes" },
+                { nome: "Fortaleza costeira", texto: "romper defesas e abrir caminho para aliados" },
+                { nome: "Alvo prioritário", texto: "neutralizar uma figura perigosa sem perder a prova" },
+                { nome: "Reféns em rota", texto: "resgatar prisioneiros durante deslocamento inimigo" },
+                { nome: "Bloqueio naval", texto: "furar ou manter um bloqueio em área de risco" },
+                { nome: "Duelo público", texto: "vencer um campeão rival diante de testemunhas" },
+                { nome: "Laboratório oculto", texto: "tomar amostras e destruir experimentos instáveis" },
+                { nome: "Traidor armado", texto: "conter um desertor com informações sensíveis" }
+            ],
+            A: [
+                { nome: "Domínio de ilha", texto: "tomar ou proteger uma ilha inteira sob ataque" },
+                { nome: "Queda de comandante", texto: "derrotar um comandante de alto valor estratégico" },
+                { nome: "Relíquia proibida", texto: "recuperar um artefato antes que caia em mãos erradas" },
+                { nome: "Guerra de influência", texto: "mudar o controle político de uma região" },
+                { nome: "Frota inimiga", texto: "desorganizar uma força naval numerosa" },
+                { nome: "Assassinato evitado", texto: "impedir a eliminação de uma peça importante" },
+                { nome: "Rota do Novo Mundo", texto: "abrir passagem em uma rota mortal" },
+                { nome: "Código negro", texto: "decifrar e agir sobre uma ordem inimiga crítica" }
+            ],
+            S: [
+                { nome: "Incidente internacional", texto: "resolver uma crise capaz de envolver grandes potências" },
+                { nome: "Aliança impossível", texto: "forjar ou destruir uma aliança de impacto global" },
+                { nome: "Arma ancestral falsa", texto: "desmascarar ou proteger um segredo que pode iniciar guerra" },
+                { nome: "Cerco ao imperador", texto: "enfrentar forças ligadas a uma lenda dos mares" },
+                { nome: "Revolta continental", texto: "alterar o destino de várias ilhas conectadas" },
+                { nome: "Bandeira caída", texto: "derrubar o símbolo máximo de uma força inimiga" },
+                { nome: "Julgamento dos mares", texto: "cumprir uma sentença que todos tentarão impedir" },
+                { nome: "Pacto de sangue", texto: "concluir um acordo sob ameaça de guerra total" }
+            ],
+            SS: [
+                { nome: "Século Perdido", texto: "lidar com uma verdade capaz de abalar o mundo" },
+                { nome: "Queda de trono", texto: "derrubar uma autoridade lendária dos mares" },
+                { nome: "Fim da era", texto: "executar uma missão que entrará para a história" },
+                { nome: "Deus do mar", texto: "sobreviver a uma ameaça tratada como mito vivo" },
+                { nome: "Última ordem", texto: "cumprir uma decisão absoluta sem margem para erro" },
+                { nome: "Guerra impossível", texto: "vencer um conflito considerado perdido desde o início" },
+                { nome: "Nome apagado", texto: "proteger ou eliminar um segredo apagado dos registros" },
+                { nome: "Maré negra", texto: "impedir um desastre que engoliria várias rotas" }
+            ]
+        };
+
         let personagemAtual = null;
         let periodoAtual = "diarias";
         let rankAtual = "E";
@@ -567,7 +640,8 @@
             const acoes = acoesPorRank[rank] || acoesPorRank.E;
             const codinomes = codinomesPorRank[rank] || codinomesPorRank.E;
             const focos = focoPorPeriodo[periodo] || focoPorPeriodo.diarias;
-            const quantidade = periodo === "diarias" ? 3 : 2;
+            const objetivos = objetivosPorRank[rank] || objetivosPorRank.E;
+            const quantidade = periodo === "diarias" ? 8 : periodo === "semanais" ? 6 : 5;
             const chave = chavePeriodo(periodo);
             const rotuloPeriodo = periodos.find((item) => item.chave === periodo)?.nome || "Missões";
 
@@ -577,17 +651,18 @@
                 const acao = acoes[(semente + indice) % acoes.length];
                 const codinome = codinomes[(semente + temas.length + indice) % codinomes.length];
                 const foco = focos[(semente + ranks.indexOf(rank)) % focos.length];
+                const objetivo = objetivos[(semente + indice) % objetivos.length];
                 const local = ["East Blue", "Grand Line", "Novo Mundo", "Red Line", "ilha aliada", "rota desconhecida"][semente % 6];
                 const intensidade = ["baixa", "moderada", "alta", "crítica", "extrema"][Math.min(ranks.indexOf(rank), 4)];
                 return {
                     id: `${periodo}:${chave}:${normalizar(org)}:${rank}:${indice}`,
-                    titulo: `${rotuloPeriodo} Rank ${rank}: ${acao} ${codinome}`,
+                    titulo: `${acao}: ${objetivo.nome}`,
                     periodo,
                     rank,
                     org,
                     local,
                     intensidade,
-                    descricao: `${briefingPorRank[rank]} ${foco}: executar ${tema} em ${local} e registrar a prova da conclusão.`,
+                    descricao: `${foco} ${codinome}. ${briefingPorRank[rank]} Objetivo: ${objetivo.texto} durante uma operação de ${tema} em ${local}.`,
                     recompensa: recompensaPorRank[rank],
                     prazoTexto: proximaVirada(periodo).toLocaleString("pt-BR")
                 };
