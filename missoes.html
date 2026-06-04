@@ -648,10 +648,10 @@
             return Array.from({ length: quantidade }, (_, indice) => {
                 const semente = hashTexto(`${org}-${periodo}-${rank}-${chave}-${indice}`);
                 const tema = temas[(semente + ranks.indexOf(rank) + indice) % temas.length];
-                const acao = acoes[(semente + indice) % acoes.length];
-                const codinome = codinomes[(semente + temas.length + indice) % codinomes.length];
+                const acao = acoes[indice % acoes.length];
+                const codinome = codinomes[(indice + ranks.indexOf(rank)) % codinomes.length];
                 const foco = focos[(semente + ranks.indexOf(rank)) % focos.length];
-                const objetivo = objetivos[(semente + indice) % objetivos.length];
+                const objetivo = objetivos[indice % objetivos.length];
                 const local = ["East Blue", "Grand Line", "Novo Mundo", "Red Line", "ilha aliada", "rota desconhecida"][semente % 6];
                 const intensidade = ["baixa", "moderada", "alta", "crítica", "extrema"][Math.min(ranks.indexOf(rank), 4)];
                 return {
