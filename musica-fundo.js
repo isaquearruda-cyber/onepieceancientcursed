@@ -4,14 +4,42 @@
 			"botao-inventario": "inventario.html",
 			"botao-atributos": "atributos.html"
 		};
+		const destinosMenu = {
+			treinos: "treinos.html",
+			habilidades: "habilidades.html",
+			amigos: "amigos.html",
+			grupo: "amigos.html#grupo",
+			eventos: "eventos.html"
+		};
 		const botaoPagina = evento.target.closest("#botao-inventario, #botao-atributos");
-		const destino = botaoPagina ? destinoPaginas[botaoPagina.id] : "";
+		const botaoMenu = evento.target.closest("[data-menu-acao]");
+		const destino = botaoPagina
+			? destinoPaginas[botaoPagina.id]
+			: destinosMenu[botaoMenu?.dataset?.menuAcao] || "";
 		if (!destino) return;
 
 		evento.preventDefault();
 		evento.stopImmediatePropagation();
 		window.location.href = destino;
 	}, true);
+
+	function garantirVideoDeFundo() {
+		if (!document.body || document.querySelector(".video-fundo")) return;
+		if (!document.body.classList.contains("pagina-inventario") && !document.body.classList.contains("pagina-atributos")) return;
+
+		const video = document.createElement("video");
+		video.className = "video-fundo";
+		video.autoplay = true;
+		video.muted = true;
+		video.loop = true;
+		video.playsInline = true;
+		video.setAttribute("aria-hidden", "true");
+		video.innerHTML = '<source src="fundo-login.mp4" type="video/mp4">';
+		document.body.prepend(video);
+		document.body.style.position = "relative";
+	}
+
+	garantirVideoDeFundo();
 
 	const audio = document.getElementById("musica-fundo");
 	if (!audio) return;
