@@ -309,8 +309,8 @@
             --c: #36e0ff;
             position: absolute;
             z-index: 2;
-            width: 54px;
-            height: 54px;
+            width: 48px;
+            height: 48px;
             border: 1px solid rgba(255,247,223,.18);
             border-radius: 50%;
             background: radial-gradient(circle, rgba(255,255,255,.08), rgba(2,5,6,.94) 65%);
@@ -325,8 +325,8 @@
         .skill-core {
             left: 8%;
             top: 50%;
-            width: 88px;
-            height: 88px;
+            width: 78px;
+            height: 78px;
             border-width: 2px;
             border-color: var(--c);
             box-shadow: 0 0 38px color-mix(in srgb, var(--c) 42%, transparent), inset 0 0 28px color-mix(in srgb, var(--c) 20%, transparent);
@@ -628,24 +628,16 @@
             return habilidades;
         }
 
-        const eixoLinhas = [15, 32.5, 50, 67.5, 85];
-        const eixoColunas = [22, 30, 38, 47, 57, 67, 76, 84, 90, 95];
-        const curvaRamificacao = [
-            [-1, -3, -5, -6, -8, -9, -10, -11, -12, -13],
-            [0, -1, -2, -3, -4, -5, -6, -7, -8, -9],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-            [1, 3, 5, 6, 8, 9, 10, 11, 12, 13]
-        ];
+        const eixoLinhas = [12, 31, 50, 69, 88];
+        const eixoColunas = [21, 29, 37, 45, 53, 61, 69, 77, 85, 93];
 
         function posicao(indice) {
             const coluna = Math.floor(indice / 5);
             const linha = indice % 5;
             const x = eixoColunas[Math.min(coluna, eixoColunas.length - 1)];
-            const y = eixoLinhas[linha] + curvaRamificacao[linha][Math.min(coluna, curvaRamificacao[linha].length - 1)];
             return {
-                x: Math.max(18, Math.min(95, x)),
-                y: Math.max(11, Math.min(89, y))
+                x,
+                y: eixoLinhas[linha]
             };
         }
 
