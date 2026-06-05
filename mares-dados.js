@@ -39,6 +39,14 @@ window.RpgMaresDados = (function () {
 			ilha("thriller", "Thriller Bark", "Navio-ilha", ["Mansão", "Cemitério", "Floresta escura"], 7),
 			ilha("kano", "País Kano", "Reino de guerreiros", ["Portão real", "Arena", "Docas dos Happo"], 5)
 		]},
+		{ id: "reverse", pagina: "mar-reverse.html", nome: "Reverse Mountain", cor: "#ffcf5a", aberto: true, desc: "Rota especial onde as correntes dos quatro Blues sobem a montanha e abrem caminho para a Grand Line.", ilhas: [
+			ilha("canal-east", "Canal do East Blue", "Entrada de corrente", ["Farol de aproximação", "Corrente ascendente", "Recifes de impacto"], 1),
+			ilha("canal-north", "Canal do North Blue", "Entrada de corrente", ["Portão norte", "Parede vermelha", "Zona de neblina"], 2),
+			ilha("canal-south", "Canal do South Blue", "Entrada de corrente", ["Portão sul", "Corrente de subida", "Doca de reparo"], 3),
+			ilha("canal-west", "Canal do West Blue", "Entrada de corrente", ["Portão oeste", "Túnel de espuma", "Rochas de navegação"], 4),
+			ilha("reverse-mountain", "Reverse Mountain", "Cruzamento mundial", ["Topo das correntes", "Canal central", "Queda para a Grand Line"], 5),
+			ilha("twin-cape", "Twin Cape", "Entrada da Grand Line", ["Farol do Crocus", "Ponto de registro", "Rumo ao Paraíso"], 6)
+		]},
 		{ id: "calm", nome: "Calm Belt", cor: "#a9b0ad", aberto: false, desc: "Bloqueado: exige navio preparado ou habilidade de travessia.", ilhas: [] },
 		{ id: "paraiso", nome: "Grand Line: Paraíso", cor: "#ffcf5a", aberto: false, desc: "Bloqueado: precisa registrar entrada pela Reverse Mountain.", ilhas: [] },
 		{ id: "skypiea", nome: "Mar do Céu", cor: "#f4f0c8", aberto: false, desc: "Bloqueado: exige rota vertical ou Knock Up Stream.", ilhas: [] },
