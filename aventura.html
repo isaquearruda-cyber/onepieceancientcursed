@@ -22,8 +22,8 @@
         .hud-rota span { color: #d9e8d4; font-size: .86rem; }
         .mares-trilho { min-height: 372px; display: grid; grid-template-columns: repeat(10, minmax(156px, 1fr)); gap: 12px; align-items: stretch; overflow-x: auto; padding: 12px 4px; }
         .mar-card { --cor: #36e0ff; --img: none; position: relative; min-height: 318px; padding: 12px 10px; border: 1px solid color-mix(in srgb,var(--cor) 58%,transparent); border-radius: 8px; color: #fff7df; background: #030708; box-shadow: 0 0 24px color-mix(in srgb,var(--cor) 18%,transparent), inset 0 0 24px rgba(0,0,0,.28); display: grid; align-content: end; gap: 9px; justify-items: start; text-align: left; overflow: hidden; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
-        .mar-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.03), rgba(0,0,0,.25) 45%, rgba(0,0,0,.86)), var(--img); background-size: cover; background-position: center; filter: saturate(1.08); transform: scale(1.01); transition: transform .25s ease, filter .25s ease; }
-        .mar-card::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 20%, color-mix(in srgb,var(--cor) 24%,transparent), transparent 42%); opacity: .75; pointer-events: none; }
+        .mar-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.02), rgba(0,0,0,.1) 35%, rgba(0,0,0,.78)), var(--img); background-size: 100% 100%; background-position: center; filter: saturate(1.18) contrast(1.04); transform: scale(1.01); transition: transform .25s ease, filter .25s ease; }
+        .mar-card::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 17%, color-mix(in srgb,var(--cor) 30%,transparent), transparent 32%), linear-gradient(115deg, rgba(255,247,223,.12), transparent 30%, transparent 68%, rgba(255,247,223,.08)); opacity: .78; pointer-events: none; }
         .mar-card > * { position: relative; z-index: 1; }
         .mar-card:not(.bloqueado):hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 0 32px color-mix(in srgb,var(--cor) 38%,transparent), inset 0 0 28px rgba(255,247,223,.08); }
         .mar-card:not(.bloqueado):hover::before { transform: scale(1.06); filter: saturate(1.22) brightness(1.08); }
@@ -38,7 +38,7 @@
         .briefing-card strong { display: block; margin: 6px 0; color: #fff7df; font-size: 1.1rem; text-transform: uppercase; }
         .briefing-card p { margin: 0; color: #d9e8d4; line-height: 1.4; }
         .resultado { margin-top: 12px; padding: 12px; border: 1px solid rgba(255,120,120,.3); border-radius: 8px; background: rgba(80,10,10,.24); color: #ffd0d0; }
-        @media(max-width:960px){.video-fundo{display:none}.topo,.briefing,.painel-jogo{grid-template-columns:1fr}.painel{backdrop-filter:none}.mares-trilho{grid-template-columns:repeat(10,160px)}}
+        @media(max-width:960px){.video-fundo{display:none}.app{padding:10px}.topo,.briefing,.painel-jogo{grid-template-columns:1fr}.topo{padding:12px 14px;margin-bottom:10px}.topo p{margin:0;font-size:.86rem}.painel{backdrop-filter:none}.mares{padding:12px}.painel-jogo{gap:8px;margin-top:8px}.hud-rota{min-height:auto;padding:9px}.hud-rota b{font-size:.96rem}.hud-rota span{font-size:.76rem}.mares-trilho{grid-template-columns:repeat(10,190px);min-height:302px;gap:10px;padding-top:8px}.mar-card{min-height:258px;padding:10px}.mar-card strong{font-size:.95rem}.mar-desc{min-height:58px;font-size:.74rem}.mar-status{font-size:.62rem;padding:4px 7px}.briefing{display:none}}
     </style>
 </head>
 <body>
