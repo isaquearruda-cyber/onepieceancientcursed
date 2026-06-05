@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca de Itens - One Piece RPG</title>
+    <link rel="stylesheet" href="estilo.css">
+    <style>
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            background: #030708;
+            color: #fff7df;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        .video-fundo {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(.34) saturate(1.18);
+            z-index: 0;
+        }
+
+        .biblioteca-app {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            padding: clamp(14px, 2.4vw, 28px);
+            background:
+                radial-gradient(circle at 18% 22%, rgba(255, 226, 138, .14), transparent 30%),
+                radial-gradient(circle at 76% 38%, rgba(54, 224, 255, .11), transparent 30%);
+        }
+
+        .biblioteca-topo,
+        .biblioteca-filtros,
+        .item-card {
+            border: 1px solid rgba(247, 200, 75, .26);
+            border-radius: 8px;
+            background: linear-gradient(180deg, rgba(5, 12, 14, .92), rgba(1, 4, 6, .95));
+            box-shadow: 0 18px 44px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,247,223,.06);
+            backdrop-filter: blur(8px);
+        }
+
+        .biblioteca-topo {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 14px;
+            align-items: center;
+            padding: 16px 18px;
+            margin-bottom: 14px;
+        }
+
+        .biblioteca-topo small,
+        .item-raridade,
+        .filtro-label {
+            color: #ffe28a;
+            font-weight: 900;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        .biblioteca-topo h1 {
+            margin: 4px 0 6px;
+            color: #fff7df;
+            font-family: "Segoe UI Black", "Arial Black", Impact, sans-serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            line-height: .92;
+            text-transform: uppercase;
+            text-shadow: 0 5px 0 #210b08, 0 16px 30px rgba(0,0,0,.72);
+        }
+
+        .biblioteca-topo p {
+            max-width: 860px;
+            margin: 0;
+            color: #d9e8d4;
+        }
+
+        .voltar-lobby {
+            min-height: 42px;
+            padding: 0 14px;
+            border: 1px solid rgba(255,226,138,.52);
+            border-radius: 8px;
+            color: #fff7df;
+            background: rgba(4,12,13,.72);
+            font-weight: 900;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-grid;
+            place-items: center;
+        }
+
+        .biblioteca-filtros {
+            display: grid;
+            gap: 12px;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+
+        .busca-biblioteca {
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 46px;
+            border: 1px solid rgba(54, 224, 255, .38);
+            border-radius: 8px;
+            padding: 0 12px;
+            color: #fff7df;
+            background: rgba(3, 8, 10, .78);
+            font: inherit;
+            font-weight: 800;
+        }
+
+        .filtro-grupo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .filtro-botao {
+            min-height: 34px;
+            padding: 0 12px;
+            border: 1px solid rgba(247, 200, 75, .3);
+            border-radius: 999px;
+            color: #d9e8d4;
+            background: rgba(255,247,223,.05);
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        .filtro-botao.ativo {
+            color: #07100d;
+            background: #ffe28a;
+            border-color: #ffe28a;
+            box-shadow: 0 0 18px rgba(255,226,138,.24);
+        }
+
+        .biblioteca-status {
+            margin: 0;
+            color: #d9e8d4;
+            font-weight: 800;
+        }
+
+        .biblioteca-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 12px;
+        }
+
+        .item-card {
+            --raridade-cor: #d9e8d4;
+            position: relative;
+            overflow: hidden;
+            min-height: 236px;
+            padding: 14px;
+            border-color: color-mix(in srgb, var(--raridade-cor) 54%, transparent);
+        }
+
+        .item-card::before {
+            content: "";
+            position: absolute;
+            inset: -40% -20% auto auto;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: radial-gradient(circle, color-mix(in srgb, var(--raridade-cor) 24%, transparent), transparent 70%);
+        }
+
+        .item-card[data-raridade="Supremo Grau"] { --raridade-cor: #ffcf5a; }
+        .item-card[data-raridade="Grande Grau"] { --raridade-cor: #b989ff; }
+        .item-card[data-raridade="Grau Habilidoso"] { --raridade-cor: #49d8ff; }
+        .item-card[data-raridade="Grau"] { --raridade-cor: #64d6a4; }
+        .item-card[data-raridade="Grau Desconhecido"] { --raridade-cor: #d9e8d4; }
+        .item-card[data-raridade="Sem Grau"] { --raridade-cor: #a9b0ad; }
+
+        .item-cabeca {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .item-icone {
+            flex: 0 0 auto;
+            width: 56px;
+            height: 56px;
+            border: 1px solid color-mix(in srgb, var(--raridade-cor) 64%, transparent);
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            background:
+                radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--raridade-cor) 28%, transparent), transparent 52%),
+                #061011;
+            box-shadow: 0 0 18px color-mix(in srgb, var(--raridade-cor) 25%, transparent);
+        }
+
+        .item-icone::before {
+            content: "";
+            width: 12px;
+            height: 42px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, #fff7df, var(--raridade-cor) 45%, #121917);
+            transform: rotate(38deg);
+            box-shadow: 0 0 14px color-mix(in srgb, var(--raridade-cor) 48%, transparent);
+        }
+
+        .item-card h2 {
+            margin: 0;
+            color: #fff7df;
+            font-size: 1.25rem;
+            line-height: 1.05;
+        }
+
+        .item-card p {
+            position: relative;
+            z-index: 1;
+            margin: 0 0 10px;
+            color: #d9e8d4;
+            line-height: 1.45;
+        }
+
+        .item-meta {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 12px;
+        }
+
+        .item-meta span {
+            border: 1px solid rgba(255,247,223,.12);
+            border-radius: 999px;
+            padding: 4px 8px;
+            color: #fff7df;
+            background: rgba(255,247,223,.05);
+            font-size: .78rem;
+            font-weight: 900;
+        }
+
+        .fonte-biblioteca {
+            margin: 16px 0 0;
+            color: #b9c9c2;
+            font-size: .86rem;
+        }
+
+        .fonte-biblioteca a {
+            color: #ffe28a;
+        }
+
+        @media (max-width: 720px) {
+            .video-fundo {
+                display: none;
+            }
+
+            .biblioteca-app {
+                background: linear-gradient(135deg, #041010, #050708);
+            }
+
+            .biblioteca-topo {
+                grid-template-columns: 1fr;
+            }
+
+            .voltar-lobby {
+                width: 100%;
+            }
+
+            .biblioteca-topo,
+            .biblioteca-filtros,
+            .item-card {
+                backdrop-filter: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <audio id="musica-fundo" loop preload="auto"><source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg"></audio>
+    <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true"><source src="fundo-login.mp4" type="video/mp4"></video>
+
+    <main class="biblioteca-app">
+        <header class="biblioteca-topo">
+            <div>
+                <small>Inventário / Enciclopédia</small>
+                <h1>Biblioteca de Itens</h1>
+                <p>Catálogo de Meito para consulta rápida durante o RPG. As raridades seguem a classificação da wiki, com descrições resumidas em linguagem de jogo.</p>
+            </div>
+            <a class="voltar-lobby" href="lobby.html">Voltar ao Lobby</a>
+        </header>
+
+        <section class="biblioteca-filtros" aria-label="Filtros da biblioteca">
+            <input class="busca-biblioteca" id="busca-biblioteca" type="search" placeholder="Buscar por nome, usuário, tipo ou descrição">
+            <span class="filtro-label">Raridade</span>
+            <div class="filtro-grupo" id="filtros-raridade"></div>
+            <span class="filtro-label">Categoria</span>
+            <div class="filtro-grupo" id="filtros-categoria"></div>
+            <p class="biblioteca-status" id="biblioteca-status"></p>
+        </section>
+
+        <section class="biblioteca-grid" id="biblioteca-grid" aria-live="polite"></section>
+        <p class="fonte-biblioteca">Fonte de classificação: <a href="https://onepiece.fandom.com/pt/wiki/Meito" target="_blank" rel="noopener">One Piece Wiki - Meito</a>.</p>
+    </main>
+
+    <script src="musica-fundo.js?v=20260605-rpg3"></script>
+    <script>
+        const itensMeito = [
+            { nome: "Yoru", raridade: "Supremo Grau", categoria: "Espada Negra", usuario: "Dracule Mihawk", descricao: "Lamina negra gigantesca, tratada como uma das armas mais fortes do mundo. Ideal para builds de corte absoluto e domínio técnico." },
+            { nome: "Ace", raridade: "Supremo Grau", categoria: "Sabre", usuario: "Gol D. Roger", descricao: "Sabre lendário associado ao Rei dos Piratas. Representa pressão, autoridade e ataques de altíssimo impacto." },
+            { nome: "Murakumogiri", raridade: "Supremo Grau", categoria: "Naginata", usuario: "Edward Newgate", descricao: "Arma de haste usada por Barba Branca. Excelente referência para golpes de área, força brutal e presença de comandante." },
+            { nome: "Shodai Kitetsu", raridade: "Supremo Grau", categoria: "Katana Amaldiçoada", usuario: "Desconhecido", descricao: "Primeira lâmina Kitetsu conhecida, famosa por sua maldição. Boa para efeitos de risco, poder alto e custo narrativo." },
+
+            { nome: "Wado Ichimonji", raridade: "Grande Grau", categoria: "Katana", usuario: "Roronoa Zoro", descricao: "Katana de grande prestígio, ligada à promessa de Zoro. Combina precisão, disciplina e resistência emocional." },
+            { nome: "Enma", raridade: "Grande Grau", categoria: "Katana", usuario: "Roronoa Zoro", descricao: "Lâmina exigente que força a saída de Haki do usuário. Boa para armas que aumentam dano, mas cobram controle." },
+            { nome: "Ame no Habakiri", raridade: "Grande Grau", categoria: "Katana", usuario: "Kozuki Momonosuke", descricao: "Espada herdada de Kozuki Oden. Carrega peso de linhagem, corte nobre e valor histórico." },
+            { nome: "Nidai Kitetsu", raridade: "Grande Grau", categoria: "Katana Amaldiçoada", usuario: "Tenguyama Hitetsu", descricao: "Segunda geração das Kitetsu. Mantém o tema de maldição, com potencial alto para campanhas sombrias." },
+            { nome: "Shusui", raridade: "Grande Grau", categoria: "Espada Negra", usuario: "Ryuma", descricao: "Espada negra lendária de Wano. Excelente para defesa firme, corte pesado e fama regional." },
+
+            { nome: "Yubashiri", raridade: "Grau Habilidoso", categoria: "Katana", usuario: "Roronoa Zoro", descricao: "Katana leve e bem equilibrada. Boa para personagens focados em velocidade, combo e técnica limpa." },
+            { nome: "Sandai Kitetsu", raridade: "Grau Habilidoso", categoria: "Katana Amaldiçoada", usuario: "Roronoa Zoro", descricao: "Terceira Kitetsu, perigosa e imprevisível. Funciona bem com bônus ofensivo e penalidades de azar." },
+            { nome: "Kashu", raridade: "Grau Habilidoso", categoria: "Katana", usuario: "Mr. 11", descricao: "Meito de grau habilidoso com visual clássico. Boa opção intermediária para espadachins em evolução." },
+            { nome: "Yamaoroshi", raridade: "Grau Habilidoso", categoria: "Katana", usuario: "Billy", descricao: "Lâmina reconhecida entre as Meito. Pode entrar como recompensa rara para caçadores e duelistas." },
+            { nome: "Raiu", raridade: "Grau Habilidoso", categoria: "Nodachi", usuario: "Shiryu", descricao: "Espada associada a um usuário brutal e silencioso. Serve para builds de assassinato, sangramento e pressão." },
+            { nome: "Durandal", raridade: "Grau Habilidoso", categoria: "Espada", usuario: "Cavendish", descricao: "Espada elegante e veloz. Combina com personagens de duelo, fama pública e golpes refinados." },
+
+            { nome: "Hana Arashi", raridade: "Grau", categoria: "Espada Dupla", usuario: "Vista", descricao: "Par de espadas usado com estilo florido. Boa para técnicas de duas lâminas e ataques em sequência." },
+            { nome: "Terry Sword", raridade: "Grau", categoria: "Espada", usuario: "Dorry", descricao: "Arma gigante de guerreiro. Funciona como item de força extrema e escala colossal." },
+            { nome: "Bruiser Axe", raridade: "Grau", categoria: "Machado", usuario: "Brogy", descricao: "Machado de grande porte. Boa categoria para usuários de impacto, destruição e combate pesado." },
+
+            { nome: "Kikoku", raridade: "Grau Desconhecido", categoria: "Nodachi Amaldiçoada", usuario: "Trafalgar Law", descricao: "Lâmina amaldiçoada usada com precisão cirúrgica. Ideal para habilidades técnicas e efeitos de controle." },
+            { nome: "Soto Muso", raridade: "Grau Desconhecido", categoria: "Espada", usuario: "Shiki", descricao: "Uma das lâminas usadas por Shiki. Boa para temas de veterano lendário e mobilidade incomum." },
+            { nome: "Oto", raridade: "Grau Desconhecido", categoria: "Espada", usuario: "Shiki", descricao: "Par de Soto Muso nas armas de Shiki. Pode ser usada em conjunto para estilo aéreo e cortes amplos." },
+            { nome: "Pretzel", raridade: "Grau Desconhecido", categoria: "Espada", usuario: "Charlotte Cracker", descricao: "Lâmina usada por Cracker. Boa para personagens que combinam defesa, soldados criados e golpes de biscoito." },
+            { nome: "Napoleon", raridade: "Grau Desconhecido", categoria: "Espada Homie", usuario: "Charlotte Linlin", descricao: "Espada viva ligada a Big Mom. Excelente para itens conscientes, poderes elementais e presença imperial." },
+            { nome: "Shirauo", raridade: "Grau Desconhecido", categoria: "Espada", usuario: "Charlotte Amande", descricao: "Lâmina longa usada com cortes lentos e cruéis. Boa para técnicas de execução e pressão psicológica." },
+            { nome: "Hassaikai", raridade: "Grau Desconhecido", categoria: "Kanabo", usuario: "Kaido", descricao: "Clava massiva usada por Kaido. Perfeita para dano contundente, força monstruosa e golpes que quebram defesa." },
+            { nome: "Takeru", raridade: "Grau Desconhecido", categoria: "Katana", usuario: "Yamato", descricao: "Arma de Yamato, associada a impacto e vontade herdada. Boa para personagens de postura agressiva." },
+            { nome: "Sukesan", raridade: "Grau Desconhecido", categoria: "Espada", usuario: "Kin'emon", descricao: "Uma das espadas de Kin'emon. Adequada para estilos de samurai, fogo e corte disciplinado." },
+            { nome: "Kakun", raridade: "Grau Desconhecido", categoria: "Espada", usuario: "Kin'emon", descricao: "Par de Sukesan em combate. Boa para técnicas duplas e defesa de escolta." },
+            { nome: "Soto", raridade: "Grau Desconhecido", categoria: "Katana", usuario: "Kawamatsu", descricao: "Lâmina de samurai ligada a Wano. Boa para personagens leais, guardiões e corte tradicional." },
+            { nome: "Tsujishibai", raridade: "Grau Desconhecido", categoria: "Katana", usuario: "Kanjuro", descricao: "Espada usada por Kanjuro. Pode combinar com ilusão, tinta e truques narrativos." },
+            { nome: "Kogarashi", raridade: "Grau Desconhecido", categoria: "Espada", usuario: "Shiki", descricao: "Lâmina associada a Shiki em algumas listas. Funciona para coleção lendária e combate veterano." },
+
+            { nome: "Kiribachi", raridade: "Sem Grau", categoria: "Serra-Espada", usuario: "Arlong", descricao: "Arma serrilhada brutal. Boa para dano rasgante, intimidação e usuários de força física." },
+            { nome: "Shigure", raridade: "Sem Grau", categoria: "Katana", usuario: "Tashigi", descricao: "Katana de Tashigi. Boa para personagens disciplinados, colecionadores e caçadores de lâminas." },
+            { nome: "Funkfreed", raridade: "Sem Grau", categoria: "Espada Zoan", usuario: "Spandam", descricao: "Espada que recebeu poder de Akuma no Mi. Ideal para item vivo, forma animal e usos excêntricos." },
+            { nome: "Bambina", raridade: "Sem Grau", categoria: "Espada", usuario: "Diamante", descricao: "Espada flexível no estilo de Diamante. Boa para ataques imprevisíveis e efeitos de bandeira." },
+            { nome: "Soul Solid", raridade: "Sem Grau", categoria: "Bengala-Espada", usuario: "Brook", descricao: "Bengala-espada de Brook. Combina cortes velozes, gelo espiritual e estilo musical." },
+            { nome: "Saber de Gryphon", raridade: "Sem Grau", categoria: "Sabre", usuario: "Shanks", descricao: "Sabre usado por Shanks. Mesmo sem grau confirmado, tem alto valor de mesa por associação com Haki poderoso." },
+            { nome: "Kogatana", raridade: "Sem Grau", categoria: "Faca", usuario: "Dracule Mihawk", descricao: "Pequena lâmina usada por Mihawk. Boa para cenas de superioridade técnica e duelos desiguais." },
+            { nome: "Blue Ten", raridade: "Sem Grau", categoria: "Espada", usuario: "Blenheim", descricao: "Espada de um comandante aliado a Barba Branca. Útil como Meito secundária de guerra." },
+            { nome: "Karakuri", raridade: "Sem Grau", categoria: "Espada", usuario: "Killer", descricao: "Lâminas giratórias de Killer. Boa para combatentes ágeis, assassinos e estilo mecânico." },
+            { nome: "Punhos de lâmina de Kuro", raridade: "Sem Grau", categoria: "Garras", usuario: "Kuro", descricao: "Garras longas usadas em velocidade. Ideais para furtividade, corte múltiplo e ataques surpresa." },
+            { nome: "Espadas de Hannyabal", raridade: "Sem Grau", categoria: "Naginata Dupla", usuario: "Hannyabal", descricao: "Arma de guarda de prisão. Boa para defesa de área e controle de corredor." },
+            { nome: "Toge Toge", raridade: "Sem Grau", categoria: "Clava", usuario: "Alvida", descricao: "Clava espinhosa simples. Serve como item inicial de impacto e intimidação." },
+            { nome: "Machado de Morgan", raridade: "Sem Grau", categoria: "Machado", usuario: "Morgan", descricao: "Braço-machado de Morgan. Boa referência para armas implantadas e ataques pesados." },
+            { nome: "Jitte de Smoker", raridade: "Sem Grau", categoria: "Jitte", usuario: "Smoker", descricao: "Arma de contenção usada por Smoker. Em mesa, pode ganhar função anti-poder ou controle." },
+            { nome: "Bisento de Hody", raridade: "Sem Grau", categoria: "Bisento", usuario: "Hody Jones", descricao: "Arma de haste agressiva. Boa para usuários aquáticos e golpes de alcance." },
+            { nome: "Punhais de Buggy", raridade: "Sem Grau", categoria: "Punhais", usuario: "Buggy", descricao: "Lâminas curtas para truques e ataques fragmentados. Funcionam bem com mobilidade e blefe." },
+            { nome: "Espadas de Cabaji", raridade: "Sem Grau", categoria: "Espada", usuario: "Cabaji", descricao: "Lâminas usadas com acrobacia. Boa para personagens de circo, truques e movimento." }
+        ];
+
+        const raridades = ["Todas", "Supremo Grau", "Grande Grau", "Grau Habilidoso", "Grau", "Grau Desconhecido", "Sem Grau"];
+        const categorias = ["Todas", ...Array.from(new Set(itensMeito.map((item) => item.categoria))).sort((a, b) => a.localeCompare(b, "pt-BR"))];
+        let filtroRaridade = "Todas";
+        let filtroCategoria = "Todas";
+
+        const busca = document.getElementById("busca-biblioteca");
+        const filtrosRaridade = document.getElementById("filtros-raridade");
+        const filtrosCategoria = document.getElementById("filtros-categoria");
+        const grid = document.getElementById("biblioteca-grid");
+        const status = document.getElementById("biblioteca-status");
+
+        function escaparHtml(texto) {
+            return String(texto ?? "").replace(/[&<>"']/g, (char) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            })[char]);
+        }
+
+        function normalizar(texto) {
+            return String(texto || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
+        function criarFiltros(container, lista, tipo) {
+            container.innerHTML = lista.map((valor) => `<button class="filtro-botao ${valor === "Todas" ? "ativo" : ""}" type="button" data-${tipo}="${escaparHtml(valor)}">${escaparHtml(valor)}</button>`).join("");
+            container.querySelectorAll("button").forEach((botao) => {
+                botao.addEventListener("click", () => {
+                    if (tipo === "raridade") filtroRaridade = botao.dataset.raridade;
+                    else filtroCategoria = botao.dataset.categoria;
+                    container.querySelectorAll("button").forEach((b) => b.classList.toggle("ativo", b === botao));
+                    renderizar();
+                });
+            });
+        }
+
+        function renderizar() {
+            const termo = normalizar(busca.value);
+            const filtrados = itensMeito.filter((item) => {
+                const texto = normalizar(`${item.nome} ${item.raridade} ${item.categoria} ${item.usuario} ${item.descricao}`);
+                return (filtroRaridade === "Todas" || item.raridade === filtroRaridade)
+                    && (filtroCategoria === "Todas" || item.categoria === filtroCategoria)
+                    && (!termo || texto.includes(termo));
+            });
+            status.textContent = `${filtrados.length} item(ns) encontrados de ${itensMeito.length} cadastrados.`;
+            grid.innerHTML = filtrados.map((item) => `
+                <article class="item-card" data-raridade="${escaparHtml(item.raridade)}">
+                    <div class="item-cabeca">
+                        <span class="item-icone" aria-hidden="true"></span>
+                        <div>
+                            <span class="item-raridade">${escaparHtml(item.raridade)}</span>
+                            <h2>${escaparHtml(item.nome)}</h2>
+                        </div>
+                    </div>
+                    <p>${escaparHtml(item.descricao)}</p>
+                    <div class="item-meta">
+                        <span>${escaparHtml(item.categoria)}</span>
+                        <span>Usuário: ${escaparHtml(item.usuario)}</span>
+                    </div>
+                </article>
+            `).join("");
+        }
+
+        criarFiltros(filtrosRaridade, raridades, "raridade");
+        criarFiltros(filtrosCategoria, categorias, "categoria");
+        busca.addEventListener("input", renderizar);
+        renderizar();
+    </script>
+</body>
+</html>

@@ -7,6 +7,7 @@
 		const destinosMenu = {
 			treinos: "treinos.html",
 			habilidades: "habilidades.html",
+			biblioteca: "biblioteca-itens.html",
 			amigos: "amigos.html",
 			grupo: "amigos.html#grupo",
 			eventos: "eventos.html"
@@ -51,6 +52,7 @@
 			missoes: "missoes.webp",
 			treinos: "treinos.webp",
 			habilidades: "habilidades.webp",
+			biblioteca: "inventario.webp",
 			amigos: "amigos.webp",
 			grupo: "organizacao.webp",
 			viagem: "viagem.webp",
@@ -86,6 +88,7 @@
 			[/eventos?/i, "eventos"],
 			[/miss/i, "missoes"],
 			[/treinos?/i, "treinos"],
+			[/biblioteca|meito|itens?/i, "biblioteca"],
 			[/[aá]rvore|habilidades?/i, "habilidades"],
 			[/amigos?/i, "amigos"],
 			[/bando|organiza/i, "grupo"],
@@ -115,6 +118,7 @@
 		const atalhos = [
 			["treinos", "Treinos", ""],
 			["habilidades", "Árvore de Habilidades", ""],
+			["biblioteca", "Biblioteca de Itens", ""],
 			["amigos", "Adicionar Amigos", ""],
 			["grupo", "Bando / Organização", ""]
 		];
@@ -126,7 +130,7 @@
 	}
 
 	function carregarRpgSistemas() {
-		if (window.RpgSistemas || document.querySelector('script[src="rpg-sistemas.js"]')) return;
+		if (window.RpgSistemas || document.querySelector('script[src^="rpg-sistemas.js"]')) return;
 		const script = document.createElement("script");
 		script.src = "rpg-sistemas.js";
 		script.defer = true;
@@ -149,6 +153,19 @@
 			.skill-node.aberta img,.skill-core img{filter:contrast(1.12) saturate(1.18)!important;opacity:1!important}
 			.skill-node:hover,.skill-node.realce,.skill-core:hover,.skill-core.realce{z-index:4!important;border-color:#fff7df!important;transform:translate(-50%,-50%) scale(1.14)!important;filter:saturate(1.18)!important;box-shadow:0 0 0 5px color-mix(in srgb,var(--c,#36e0ff) 16%,transparent),0 0 24px color-mix(in srgb,var(--c,#36e0ff) 58%,transparent),0 18px 28px rgba(0,0,0,.44),inset 0 0 18px color-mix(in srgb,var(--c,#36e0ff) 18%,transparent)!important}
 			.skill-node:hover img,.skill-node.realce img,.skill-core:hover img,.skill-core.realce img{filter:contrast(1.14) saturate(1.24)!important;opacity:1!important;transform:scale(1.04)!important}
+			@media (hover:none),(pointer:coarse),(max-width:680px){
+				body{overflow:auto!important}
+				.video-fundo{display:none!important}
+				.skill-app{min-height:100dvh!important;background:linear-gradient(180deg,rgba(3,8,10,.98),rgba(5,14,16,.96))!important}
+				.skill-topo,.ramo-lista,.skill-stage,.skill-detalhe{backdrop-filter:none!important;box-shadow:0 14px 28px rgba(0,0,0,.38)!important}
+				.skill-stage{overflow-x:auto!important;overflow-y:hidden!important;touch-action:pan-x pan-y!important;-webkit-overflow-scrolling:touch!important;min-height:520px!important}
+				.skill-stage>*{min-width:720px!important}
+				.stage-bg::before,.stage-bg::after,.branch-band{display:none!important}
+				.tree-line,.tree-line.aberta,.tree-line.disponivel,.tree-line.realce{filter:none!important;animation:none!important}
+				.skill-node,.skill-core,.skill-node.disponivel{width:42px!important;height:42px!important;animation:none!important;filter:none!important}
+				.skill-core{width:64px!important;height:64px!important}
+				.skill-node:hover,.skill-node.realce,.skill-core:hover,.skill-core.realce{transform:translate(-50%,-50%) scale(1.06)!important;box-shadow:0 0 14px color-mix(in srgb,var(--c,#36e0ff) 42%,transparent)!important}
+			}
 		`;
 		document.head.appendChild(estilo);
 
@@ -210,9 +227,12 @@
 			.slot-jogo[data-raridade="raro"],.slot-inventario[data-raridade="raro"]{--raridade-cor:#49d8ff}
 			.slot-jogo[data-raridade="incomum"],.slot-inventario[data-raridade="incomum"]{--raridade-cor:#64d6a4}
 			.detalhe-item[data-raridade],.detalhe-item.rpg-raridade{border-color:color-mix(in srgb,var(--raridade-cor) 56%,transparent)!important;box-shadow:0 0 24px color-mix(in srgb,var(--raridade-cor) 16%,transparent),inset 0 0 22px rgba(0,0,0,.22)}
+			.grade-menu-lobby{width:100%!important;max-width:100%!important;box-sizing:border-box!important;overflow:hidden!important}
+			.atalho-menu-lobby{min-width:0!important}
+			.atalho-menu-lobby span{overflow-wrap:anywhere!important;word-break:normal!important}
 			@keyframes rpgToastEntrada{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
 			@keyframes rpgBrilho{to{transform:translateX(120%)}}
-			@media(max-width:700px){.rpg-hud-lobby{grid-template-columns:1fr}.rpg-toast-stack{right:14px;bottom:14px}}
+			@media(max-width:700px){.rpg-hud-lobby{grid-template-columns:1fr}.rpg-toast-stack{right:14px;bottom:14px}.grade-menu-lobby{grid-template-columns:1fr!important;padding:10px!important;gap:10px!important}.atalho-menu-lobby{grid-template-columns:54px 1fr!important;justify-items:start!important;min-height:76px!important;padding:10px 12px!important}.atalho-menu-lobby img{width:46px!important;height:46px!important}.atalho-menu-lobby span{text-align:left!important;font-size:.8rem!important;line-height:1.15!important}}
 		`;
 		document.head.appendChild(estilo);
 	}
