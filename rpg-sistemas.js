@@ -130,6 +130,15 @@
 		} else {
 			localStorage.setItem("ultimoPersonagem", JSON.stringify(personagem));
 		}
+		if (window.RpgFeedback?.recompensa) {
+			window.RpgFeedback.recompensa({
+				titulo: atividade.titulo || "Atividade concluida",
+				tipo: atividade.tipo || "atividade",
+				rank: atividade.rank || "E",
+				recompensas,
+				progresso
+			});
+		}
 		return { progresso, recompensas };
 	}
 
