@@ -113,6 +113,14 @@
 			".grade-menu-lobby{width:100%!important;max-width:100%!important;box-sizing:border-box!important;overflow:hidden!important}",
 			".atalho-menu-lobby{min-width:0!important}",
 			".atalho-menu-lobby span{overflow-wrap:anywhere!important}",
+			".status-personagem.oculto-lobby{display:none!important}",
+			".painel-proxima-acao{display:grid;gap:12px;padding:14px;border:1px solid rgba(54,224,255,.24);border-radius:8px;background:radial-gradient(circle at 18% 18%,rgba(54,224,255,.16),transparent 34%),rgba(4,12,13,.58);box-shadow:inset 0 0 20px rgba(0,0,0,.28)}",
+			".painel-proxima-acao h2{margin:0;color:#fff7df;font-size:1.35rem;text-transform:uppercase;letter-spacing:.04em}",
+			".painel-proxima-acao p{margin:0;color:#d9e8d4;line-height:1.45}",
+			".chips-rota{display:flex;flex-wrap:wrap;gap:8px}",
+			".chip-rota{padding:7px 9px;border:1px solid rgba(255,226,138,.24);border-radius:999px;background:rgba(255,247,223,.05);color:#ffe28a;font-size:.78rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase}",
+			".acoes-rapidas-lobby{display:grid;grid-template-columns:1fr 1fr;gap:10px}",
+			".botao-acao-rapida{min-height:54px;border:1px solid rgba(255,226,138,.5);border-radius:8px;color:#fff7df;background:linear-gradient(90deg,rgba(255,247,223,.07),rgba(54,224,255,.08));font-weight:900;text-transform:uppercase;cursor:pointer}",
 			".item-imagem{flex:0 0 auto;width:56px;height:56px;border:1px solid rgba(255,226,138,.52);border-radius:8px;overflow:hidden;background:#061011;box-shadow:0 0 18px rgba(255,226,138,.25)}",
 			".item-imagem img{width:100%;height:100%;object-fit:cover;display:block}",
 			"@media(max-width:700px){.battle-hud-lobby{position:relative;top:auto;left:auto;width:100%;margin:0 0 12px;grid-template-columns:1fr;grid-template-areas:'perfil' 'berris' 'xp'}.battle-berris{min-width:0}.grade-menu-lobby{grid-template-columns:1fr!important;padding:10px!important;gap:10px!important}.atalho-menu-lobby{grid-template-columns:54px 1fr!important;justify-items:start!important;min-height:76px!important;padding:10px 12px!important}.atalho-menu-lobby img{width:46px!important;height:46px!important}.atalho-menu-lobby span{text-align:left!important;font-size:.8rem!important;line-height:1.15!important}}",
@@ -171,6 +179,23 @@
 			botao.innerHTML = '<img src="' + icone(item[0]) + '" alt=""><span>' + item[1] + "</span>";
 			grade.appendChild(botao);
 		});
+	}
+
+	function substituirFichaLobby() {
+		var status = document.getElementById("status-personagem");
+		if (!status || document.getElementById("painel-proxima-acao")) return;
+		status.classList.add("oculto-lobby");
+		status.setAttribute("aria-hidden", "true");
+		var painel = document.createElement("div");
+		painel.id = "painel-proxima-acao";
+		painel.className = "painel-proxima-acao";
+		painel.innerHTML =
+			'<span class="info-label">Central de aventura</span>' +
+			"<h2>Escolha sua próxima rota</h2>" +
+			"<p>Abra o mapa dos mares, revise sua ficha completa no perfil ou pegue uma missão para ganhar EXP e berris.</p>" +
+			'<div class="chips-rota"><span class="chip-rota">4 Blues livres</span><span class="chip-rota">Rotas bloqueadas por campanha</span><span class="chip-rota">Viagem salva</span></div>' +
+			'<div class="acoes-rapidas-lobby"><button class="botao-acao-rapida" type="button" data-menu-acao="aventura">Mapa</button><button class="botao-acao-rapida" type="button" data-menu-acao="perfil">Perfil</button><button class="botao-acao-rapida" type="button" data-menu-acao="missoes">Missões</button><button class="botao-acao-rapida" type="button" data-menu-acao="biblioteca">Biblioteca</button></div>';
+		status.parentNode.insertBefore(painel, status);
 	}
 
 	function criarHudBattle() {
@@ -279,6 +304,7 @@
 		instalarCss();
 		carregarRpgSistemas();
 		injetarAtalhos();
+		substituirFichaLobby();
 		atualizarIcones();
 		habilitarScroll();
 		decorarBiblioteca();
