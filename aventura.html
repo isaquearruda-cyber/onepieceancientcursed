@@ -75,7 +75,7 @@
         const maresEl = document.getElementById("mares");
         const bloqueioEl = document.getElementById("bloqueio");
         const mares = window.RpgMaresDados || [];
-        const arteMar = (id) => `assets/mares/mar-${id}.webp`;
+        const arteMar = (id) => `assets/mares/mar-${id}.svg`;
         maresEl.innerHTML = mares.map((mar) => `<button class="mar-card ${mar.aberto ? "" : "bloqueado"}" style="--cor:${mar.cor};--img:url('${arteMar(mar.id)}')" type="button" data-mar="${mar.id}"><span class="mar-status">${mar.aberto ? "Desbloqueado" : "Bloqueado"}</span><strong>${mar.nome}</strong><span class="mar-desc">${mar.desc}</span></button>`).join("");
         maresEl.querySelectorAll("[data-mar]").forEach((botao) => {
             botao.onclick = () => {
