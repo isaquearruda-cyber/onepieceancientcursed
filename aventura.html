@@ -16,19 +16,29 @@
         h1 { margin: 3px 0 6px; font-family: "Segoe UI Black","Arial Black",Impact,sans-serif; font-size: clamp(2rem,5vw,4rem); line-height: .92; text-transform: uppercase; text-shadow: 0 5px 0 #210b08,0 16px 30px rgba(0,0,0,.72); }
         .voltar { min-height: 42px; padding: 0 14px; border: 1px solid rgba(255,226,138,.52); border-radius: 8px; color: #fff7df; background: rgba(4,12,13,.72); font-weight: 900; text-transform: uppercase; text-decoration: none; display: inline-grid; place-items: center; }
         .mares { padding: 18px; overflow: hidden; }
-        .mares-trilho { min-height: 330px; display: grid; grid-template-columns: repeat(9, minmax(92px, 1fr)); gap: 10px; align-items: center; overflow-x: auto; padding: 12px 4px; }
-        .mar-card { --cor: #36e0ff; position: relative; min-height: 270px; padding: 12px 10px; border: 1px solid color-mix(in srgb,var(--cor) 52%,transparent); border-radius: 8px; color: #fff7df; background: linear-gradient(180deg, color-mix(in srgb,var(--cor) 20%,transparent), rgba(4,12,13,.8)); box-shadow: 0 0 22px color-mix(in srgb,var(--cor) 18%,transparent), inset 0 0 24px rgba(0,0,0,.22); display: grid; align-content: space-between; justify-items: center; text-align: center; transition: transform .2s ease, box-shadow .2s ease; }
-        .mar-card::before { content: ""; width: 58px; height: 58px; border-radius: 50%; border: 1px solid color-mix(in srgb,var(--cor) 72%,transparent); background: radial-gradient(circle, rgba(255,247,223,.9), var(--cor) 44%, rgba(3,8,10,.9)); box-shadow: 0 0 24px color-mix(in srgb,var(--cor) 42%,transparent); }
+        .painel-jogo { display: grid; grid-template-columns: 1.2fr .8fr .8fr; gap: 10px; margin: 12px 0 4px; }
+        .hud-rota { min-height: 78px; padding: 12px; border: 1px solid rgba(255,226,138,.22); border-radius: 8px; background: linear-gradient(135deg, rgba(255,247,223,.06), rgba(54,224,255,.06)); }
+        .hud-rota b { display: block; margin-top: 6px; color: #fff7df; font-size: 1.1rem; text-transform: uppercase; }
+        .hud-rota span { color: #d9e8d4; font-size: .86rem; }
+        .mares-trilho { min-height: 372px; display: grid; grid-template-columns: repeat(10, minmax(156px, 1fr)); gap: 12px; align-items: stretch; overflow-x: auto; padding: 12px 4px; }
+        .mar-card { --cor: #36e0ff; --img: none; position: relative; min-height: 318px; padding: 12px 10px; border: 1px solid color-mix(in srgb,var(--cor) 58%,transparent); border-radius: 8px; color: #fff7df; background: #030708; box-shadow: 0 0 24px color-mix(in srgb,var(--cor) 18%,transparent), inset 0 0 24px rgba(0,0,0,.28); display: grid; align-content: end; gap: 9px; justify-items: start; text-align: left; overflow: hidden; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+        .mar-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.03), rgba(0,0,0,.25) 45%, rgba(0,0,0,.86)), var(--img); background-size: cover; background-position: center; filter: saturate(1.08); transform: scale(1.01); transition: transform .25s ease, filter .25s ease; }
+        .mar-card::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 20%, color-mix(in srgb,var(--cor) 24%,transparent), transparent 42%); opacity: .75; pointer-events: none; }
+        .mar-card > * { position: relative; z-index: 1; }
         .mar-card:not(.bloqueado):hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 0 32px color-mix(in srgb,var(--cor) 38%,transparent), inset 0 0 28px rgba(255,247,223,.08); }
-        .mar-card.bloqueado { filter: grayscale(1); opacity: .58; cursor: not-allowed; }
-        .mar-card strong { font-size: .98rem; text-transform: uppercase; }
+        .mar-card:not(.bloqueado):hover::before { transform: scale(1.06); filter: saturate(1.22) brightness(1.08); }
+        .mar-card.bloqueado { opacity: .62; cursor: not-allowed; }
+        .mar-card.bloqueado::before { filter: grayscale(1) brightness(.62); }
+        .mar-card strong { font-size: 1rem; text-transform: uppercase; text-shadow: 0 2px 12px rgba(0,0,0,.85); }
         .mar-card span { color: #d9e8d4; font-size: .78rem; }
+        .mar-status { justify-self: start; padding: 5px 8px; border: 1px solid color-mix(in srgb,var(--cor) 50%,transparent); border-radius: 999px; color: #fff7df; background: rgba(3,8,10,.72); font-size: .68rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+        .mar-desc { min-height: 42px; color: #d9e8d4; line-height: 1.25; text-shadow: 0 2px 10px rgba(0,0,0,.85); }
         .briefing { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; margin-top: 14px; }
         .briefing-card { min-height: 118px; padding: 14px; border: 1px solid rgba(255,226,138,.2); border-radius: 8px; background: rgba(255,247,223,.04); }
         .briefing-card strong { display: block; margin: 6px 0; color: #fff7df; font-size: 1.1rem; text-transform: uppercase; }
         .briefing-card p { margin: 0; color: #d9e8d4; line-height: 1.4; }
         .resultado { margin-top: 12px; padding: 12px; border: 1px solid rgba(255,120,120,.3); border-radius: 8px; background: rgba(80,10,10,.24); color: #ffd0d0; }
-        @media(max-width:960px){.video-fundo{display:none}.topo,.briefing{grid-template-columns:1fr}.painel{backdrop-filter:none}.mares-trilho{grid-template-columns:repeat(9,105px)}}
+        @media(max-width:960px){.video-fundo{display:none}.topo,.briefing,.painel-jogo{grid-template-columns:1fr}.painel{backdrop-filter:none}.mares-trilho{grid-template-columns:repeat(10,160px)}}
     </style>
 </head>
 <body>
@@ -45,6 +55,11 @@
         </header>
         <article class="mares painel">
             <span class="rotulo">Seleção de mar</span>
+            <div class="painel-jogo">
+                <div class="hud-rota"><small>Bússola</small><b>Log Pose Inicial</b><span>Escolha uma rota desbloqueada para abrir o mapa de ilhas.</span></div>
+                <div class="hud-rota"><small>Navio</small><b>Rank E</b><span>Melhore o barco para reduzir o tempo de viagem.</span></div>
+                <div class="hud-rota"><small>Clima</small><b>Instável</b><span>Rotas bloqueadas exigem avanço de campanha.</span></div>
+            </div>
             <div class="mares-trilho" id="mares"></div>
             <p class="resultado" id="bloqueio" hidden></p>
         </article>
@@ -60,7 +75,8 @@
         const maresEl = document.getElementById("mares");
         const bloqueioEl = document.getElementById("bloqueio");
         const mares = window.RpgMaresDados || [];
-        maresEl.innerHTML = mares.map((mar) => `<button class="mar-card ${mar.aberto ? "" : "bloqueado"}" style="--cor:${mar.cor}" type="button" data-mar="${mar.id}"><strong>${mar.nome}</strong><span>${mar.aberto ? "Desbloqueado" : "Bloqueado"}</span></button>`).join("");
+        const arteMar = (id) => `assets/mares/mar-${id}.webp`;
+        maresEl.innerHTML = mares.map((mar) => `<button class="mar-card ${mar.aberto ? "" : "bloqueado"}" style="--cor:${mar.cor};--img:url('${arteMar(mar.id)}')" type="button" data-mar="${mar.id}"><span class="mar-status">${mar.aberto ? "Desbloqueado" : "Bloqueado"}</span><strong>${mar.nome}</strong><span class="mar-desc">${mar.desc}</span></button>`).join("");
         maresEl.querySelectorAll("[data-mar]").forEach((botao) => {
             botao.onclick = () => {
                 const mar = mares.find((item) => item.id === botao.dataset.mar);
