@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>East Blue - Rotas</title>
+    <link rel="stylesheet" href="estilo.css">
+    <link rel="stylesheet" href="mar-rota.css">
+</head>
+<body>
+    <audio id="musica-fundo" loop preload="auto"><source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg"></audio>
+    <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true"><source src="fundo-login.mp4" type="video/mp4"></video>
+    <main class="app">
+        <header class="topo painel">
+            <div><small>Rotas do Mar</small><h1 id="mar-nome">East Blue</h1><p id="mar-desc"></p></div>
+            <div class="topo-acoes"><a class="voltar" href="aventura.html">Trocar Mar</a><a class="voltar" href="lobby.html">Lobby</a></div>
+        </header>
+        <section class="layout">
+            <article class="painel bloco"><span class="rotulo">Ilhas</span><div class="ilhas" id="ilhas"></div></article>
+            <section class="detalhes">
+                <article class="painel bloco"><span class="rotulo">Locais da ilha</span><h2 id="ilha-nome">Ilha</h2><div class="locais" id="locais"></div></article>
+                <article class="painel bloco"><span class="rotulo">Sistema de viagem</span><div class="viagem-grid"><label>Origem<br><select id="origem"></select></label><label>Destino<br><select id="destino"></select></label><button id="calcular" type="button">Calcular</button></div><p class="resultado" id="resultado">Selecione origem e destino para calcular tempo, custo e risco.</p></article>
+            </section>
+        </section>
+    </main>
+    <script src="musica-fundo.js?v=20260605-rpg5"></script>
+    <script src="mares-dados.js?v=20260605-rpg5"></script>
+    <script>window.RPG_MAR_ID = "east";</script>
+    <script src="mar-rota.js?v=20260605-rpg5"></script>
+</body>
+</html>
