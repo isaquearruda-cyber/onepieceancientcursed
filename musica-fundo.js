@@ -200,7 +200,8 @@
 
 	function criarHudBattle() {
 		if (!document.body.classList.contains("pagina-formulario")) return null;
-		var painel = document.querySelector(".cabecalho-lobby") || document.querySelector(".container-lobby") || document.body;
+		var painel = document.querySelector(".cabecalho-lobby") || document.querySelector(".container-lobby");
+		if (!painel) return null;
 		var hud = document.getElementById("battle-hud-lobby");
 		if (hud) return hud;
 		hud = document.createElement("div");
