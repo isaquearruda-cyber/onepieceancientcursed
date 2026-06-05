@@ -177,6 +177,11 @@
         .item-card[data-raridade="Grau"] { --raridade-cor: #64d6a4; }
         .item-card[data-raridade="Grau Desconhecido"] { --raridade-cor: #d9e8d4; }
         .item-card[data-raridade="Sem Grau"] { --raridade-cor: #a9b0ad; }
+        .item-card[data-raridade="Barco Rank A"] { --raridade-cor: #ffcf5a; }
+        .item-card[data-raridade="Barco Rank B"] { --raridade-cor: #ff7b7b; }
+        .item-card[data-raridade="Barco Rank C"] { --raridade-cor: #49d8ff; }
+        .item-card[data-raridade="Barco Rank D"] { --raridade-cor: #64d6a4; }
+        .item-card[data-raridade="Barco Rank E"] { --raridade-cor: #a9b0ad; }
 
         .item-cabeca {
             position: relative;
@@ -187,6 +192,7 @@
             margin-bottom: 10px;
         }
 
+        .item-imagem,
         .item-icone {
             flex: 0 0 auto;
             width: 56px;
@@ -199,6 +205,17 @@
                 radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--raridade-cor) 28%, transparent), transparent 52%),
                 #061011;
             box-shadow: 0 0 18px color-mix(in srgb, var(--raridade-cor) 25%, transparent);
+        }
+
+        .item-imagem {
+            overflow: hidden;
+        }
+
+        .item-imagem img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .item-icone::before {
@@ -289,7 +306,7 @@
             <div>
                 <small>Inventário / Enciclopédia</small>
                 <h1>Biblioteca de Itens</h1>
-                <p>Catálogo de Meito para consulta rápida durante o RPG. As raridades seguem a classificação da wiki, com descrições resumidas em linguagem de jogo.</p>
+                <p>Catálogo de Meito e navios para consulta rápida durante o RPG. As raridades seguem a classificação da wiki quando existir; barcos usam ranks de jogo com bônus de viagem.</p>
             </div>
             <a class="voltar-lobby" href="lobby.html">Voltar ao Lobby</a>
         </header>
@@ -304,7 +321,7 @@
         </section>
 
         <section class="biblioteca-grid" id="biblioteca-grid" aria-live="polite"></section>
-        <p class="fonte-biblioteca">Fonte de classificação: <a href="https://onepiece.fandom.com/pt/wiki/Meito" target="_blank" rel="noopener">One Piece Wiki - Meito</a>.</p>
+        <p class="fonte-biblioteca">Fontes de classificação: <a href="https://onepiece.fandom.com/pt/wiki/Meito" target="_blank" rel="noopener">One Piece Wiki - Meito</a> e <a href="https://onepiece.fandom.com/pt/wiki/Categoria:Navios" target="_blank" rel="noopener">One Piece Wiki - Navios</a>.</p>
     </main>
 
     <script src="musica-fundo.js?v=20260605-rpg3"></script>
@@ -365,8 +382,29 @@
             { nome: "Espadas de Cabaji", raridade: "Sem Grau", categoria: "Espada", usuario: "Cabaji", descricao: "Lâminas usadas com acrobacia. Boa para personagens de circo, truques e movimento." }
         ];
 
-        const raridades = ["Todas", "Supremo Grau", "Grande Grau", "Grau Habilidoso", "Grau", "Grau Desconhecido", "Sem Grau"];
-        const categorias = ["Todas", ...Array.from(new Set(itensMeito.map((item) => item.categoria))).sort((a, b) => a.localeCompare(b, "pt-BR"))];
+        const naviosBiblioteca = [
+            { nome: "Thousand Sunny", raridade: "Barco Rank A", categoria: "Navio Pirata", usuario: "Piratas do Chapéu de Palha", descricao: "Navio avançado dos Chapéus de Palha, ótimo para viagens longas, clima instável e fugas rápidas.", bonus: "Tempo -35%" },
+            { nome: "Going Merry", raridade: "Barco Rank C", categoria: "Navio Pirata", usuario: "Piratas do Chapéu de Palha", descricao: "Caravela clássica e confiável, boa para tripulações iniciantes que querem mobilidade sem custo absurdo.", bonus: "Tempo -15%" },
+            { nome: "Red Force", raridade: "Barco Rank A", categoria: "Navio Pirata", usuario: "Piratas do Ruivo", descricao: "Navio de tripulação lendária, forte para presença marítima, intimidação e rotas perigosas.", bonus: "Tempo -35%" },
+            { nome: "Oro Jackson", raridade: "Barco Rank A", categoria: "Navio Lendário", usuario: "Piratas do Roger", descricao: "Navio do Rei dos Piratas. Em jogo, funciona como embarcação lendária para rotas finais e eventos especiais.", bonus: "Tempo -35%" },
+            { nome: "Moby Dick", raridade: "Barco Rank A", categoria: "Navio Pirata", usuario: "Piratas do Barba Branca", descricao: "Navio gigantesco de frota Yonko, excelente para transportar tripulação grande e resistir a combates navais.", bonus: "Tempo -35%" },
+            { nome: "Polar Tang", raridade: "Barco Rank B", categoria: "Submarino", usuario: "Piratas Heart", descricao: "Submarino versátil para rotas submersas, emboscadas e travessias discretas.", bonus: "Tempo -25%" },
+            { nome: "Victoria Punk", raridade: "Barco Rank B", categoria: "Navio Pirata", usuario: "Piratas Kid", descricao: "Navio agressivo, pesado e intimidador, bom para campanhas com combate naval frequente.", bonus: "Tempo -25%" },
+            { nome: "Nostra Castello", raridade: "Barco Rank B", categoria: "Navio Fortaleza", usuario: "Piratas Fire Tank", descricao: "Navio com cara de fortaleza, útil para defesa, contrabando e tripulações que jogam de forma tática.", bonus: "Tempo -25%" },
+            { nome: "Queen Mama Chanter", raridade: "Barco Rank A", categoria: "Navio Pirata", usuario: "Piratas Big Mom", descricao: "Navio imperial de uma tripulação Yonko, ideal para presença de território, escolta e pressão narrativa.", bonus: "Tempo -35%" },
+            { nome: "Saber of Xebec", raridade: "Barco Rank B", categoria: "Navio Pirata", usuario: "Piratas do Barba Negra", descricao: "Navio de comando sombrio, bom para rotas arriscadas, invasões e campanhas de alta ameaça.", bonus: "Tempo -25%" },
+            { nome: "Thriller Bark", raridade: "Barco Rank A", categoria: "Navio-Ilha", usuario: "Gecko Moria", descricao: "Navio colossal tratado quase como ilha móvel. Excelente para eventos, terror e bases ambulantes.", bonus: "Tempo -35%" },
+            { nome: "Noah", raridade: "Barco Rank A", categoria: "Arca", usuario: "Ilha dos Homens-Peixe", descricao: "Arca gigantesca e lendária, pensada como peça de evento raro e transporte monumental.", bonus: "Tempo -35%" },
+            { nome: "Navio de Guerra da Marinha", raridade: "Barco Rank B", categoria: "Navio da Marinha", usuario: "Marinha", descricao: "Embarcação militar reforçada. Buff Marinha: canhões, escolta oficial e casco preparado reduzem risco de rota.", bonus: "Tempo -25% / Buff Marinha" },
+            { nome: "Encouraçado da Marinha", raridade: "Barco Rank A", categoria: "Navio da Marinha", usuario: "Marinha", descricao: "Navio superior para operações oficiais. Buff Marinha+: artilharia pesada, casco reforçado e autoridade naval.", bonus: "Tempo -35% / Buff Marinha+" },
+            { nome: "Navio de Patrulha da Marinha", raridade: "Barco Rank C", categoria: "Navio da Marinha", usuario: "Marinha", descricao: "Patrulheiro rápido para rotas curtas e perseguições. Buff Marinha: apoio local e resposta rápida.", bonus: "Tempo -15% / Buff Marinha" },
+            { nome: "Barco Simples", raridade: "Barco Rank E", categoria: "Barco Inicial", usuario: "Civil", descricao: "Embarcação básica para começo de campanha. Sem bônus, mas serve para rotas curtas e missões leves.", bonus: "Tempo normal" },
+            { nome: "Veleiro Leve", raridade: "Barco Rank D", categoria: "Barco Comum", usuario: "Aventureiros", descricao: "Barco simples com vela melhorada. Bom primeiro upgrade antes de entrar em rotas mais perigosas.", bonus: "Tempo -8%" }
+        ];
+
+        const itensBiblioteca = [...itensMeito, ...naviosBiblioteca];
+        const raridades = ["Todas", "Supremo Grau", "Grande Grau", "Grau Habilidoso", "Grau", "Grau Desconhecido", "Sem Grau", "Barco Rank A", "Barco Rank B", "Barco Rank C", "Barco Rank D", "Barco Rank E"];
+        const categorias = ["Todas", ...Array.from(new Set(itensBiblioteca.map((item) => item.categoria))).sort((a, b) => a.localeCompare(b, "pt-BR"))];
         let filtroRaridade = "Todas";
         let filtroCategoria = "Todas";
 
@@ -402,19 +440,24 @@
             });
         }
 
+        function imagemWiki(nome) {
+            const arquivo = encodeURIComponent(`${nome.replaceAll(" ", "_")}_Infobox.png`);
+            return `https://onepiece.fandom.com/wiki/Special:Redirect/file/${arquivo}`;
+        }
+
         function renderizar() {
             const termo = normalizar(busca.value);
-            const filtrados = itensMeito.filter((item) => {
-                const texto = normalizar(`${item.nome} ${item.raridade} ${item.categoria} ${item.usuario} ${item.descricao}`);
+            const filtrados = itensBiblioteca.filter((item) => {
+                const texto = normalizar(`${item.nome} ${item.raridade} ${item.categoria} ${item.usuario} ${item.descricao} ${item.bonus || ""}`);
                 return (filtroRaridade === "Todas" || item.raridade === filtroRaridade)
                     && (filtroCategoria === "Todas" || item.categoria === filtroCategoria)
                     && (!termo || texto.includes(termo));
             });
-            status.textContent = `${filtrados.length} item(ns) encontrados de ${itensMeito.length} cadastrados.`;
+            status.textContent = `${filtrados.length} item(ns) encontrados de ${itensBiblioteca.length} cadastrados.`;
             grid.innerHTML = filtrados.map((item) => `
                 <article class="item-card" data-raridade="${escaparHtml(item.raridade)}">
                     <div class="item-cabeca">
-                        <span class="item-icone" aria-hidden="true"></span>
+                        <span class="item-imagem"><img src="${imagemWiki(item.nome)}" alt="${escaparHtml(item.nome)}" loading="lazy" onerror="this.closest('.item-imagem').className='item-icone';this.remove();"></span>
                         <div>
                             <span class="item-raridade">${escaparHtml(item.raridade)}</span>
                             <h2>${escaparHtml(item.nome)}</h2>
@@ -424,6 +467,7 @@
                     <div class="item-meta">
                         <span>${escaparHtml(item.categoria)}</span>
                         <span>Usuário: ${escaparHtml(item.usuario)}</span>
+                        ${item.bonus ? `<span>${escaparHtml(item.bonus)}</span>` : ""}
                     </div>
                 </article>
             `).join("");
