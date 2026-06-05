@@ -15,7 +15,7 @@
         .topo small, .rotulo { color: #ffe28a; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
         h1 { margin: 3px 0 6px; font-family: "Segoe UI Black", "Arial Black", Impact, sans-serif; font-size: clamp(2rem, 5vw, 4rem); line-height: .92; text-transform: uppercase; text-shadow: 0 5px 0 #210b08, 0 16px 30px rgba(0,0,0,.72); }
         .voltar { min-height: 42px; padding: 0 14px; border: 1px solid rgba(255,226,138,.52); border-radius: 8px; color: #fff7df; background: rgba(4,12,13,.72); font-weight: 900; text-transform: uppercase; text-decoration: none; display: inline-grid; place-items: center; }
-        .grid { display: grid; grid-template-columns: minmax(260px, .85fr) minmax(0, 1.15fr); gap: 14px; }
+        .grid { display: grid; grid-template-columns: minmax(260px, .8fr) minmax(0, 1.2fr); gap: 14px; }
         .cartao-personagem { padding: 18px; display: grid; gap: 14px; }
         .avatar { min-height: 280px; border: 1px solid rgba(255,226,138,.26); border-radius: 8px; display: grid; place-items: center; background: radial-gradient(circle at 50% 75%, rgba(247,200,75,.22), transparent 45%), rgba(4,12,13,.58); overflow: hidden; }
         .avatar img { max-width: 100%; max-height: 360px; object-fit: contain; filter: drop-shadow(0 22px 30px rgba(0,0,0,.58)); }
@@ -23,6 +23,10 @@
         .nome { margin: 0; font-size: 1.8rem; line-height: 1; text-transform: uppercase; }
         .classe { margin: 0; color: #d9e8d4; }
         .xp-card { padding: 18px; display: grid; gap: 14px; }
+        .ficha-card { padding: 18px; display: grid; gap: 10px; }
+        .ficha-grid { display: grid; gap: 9px; }
+        .ficha-linha { display: grid; grid-template-columns: minmax(110px, 150px) 1fr; gap: 10px; align-items: center; }
+        .ficha-linha span:last-child { min-width: 0; padding: 9px 10px; border-left: 3px solid #f7c84b; border-radius: 2px; background: rgba(4,12,13,.52); color: #fff7df; overflow-wrap: anywhere; }
         .nivel { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; }
         .nivel-numero { width: 96px; height: 96px; border-radius: 50%; display: grid; place-items: center; color: #07100d; background: radial-gradient(circle, #fff7df, #ffe28a 55%, #c3922b); font-size: 2rem; font-weight: 1000; box-shadow: 0 0 28px rgba(255,226,138,.35); }
         .barra { height: 18px; border: 1px solid rgba(255,247,223,.16); border-radius: 999px; background: rgba(0,0,0,.58); overflow: hidden; }
@@ -33,7 +37,7 @@
         .historico { padding: 18px; margin-top: 14px; }
         .historico-lista { display: grid; gap: 10px; }
         .linha { padding: 11px; border: 1px solid rgba(255,247,223,.1); border-radius: 8px; background: rgba(0,0,0,.38); color: #d9e8d4; }
-        @media (max-width: 820px) { .video-fundo { display: none; } .topo, .grid { grid-template-columns: 1fr; } .stats { grid-template-columns: 1fr; } .painel { backdrop-filter: none; } }
+        @media (max-width: 820px) { .video-fundo { display: none; } .topo, .grid, .ficha-linha { grid-template-columns: 1fr; } .stats { grid-template-columns: 1fr; } .painel { backdrop-filter: none; } }
     </style>
 </head>
 <body>
@@ -72,6 +76,19 @@
                     <div class="stat"><span class="rotulo">Pontos</span><strong id="pontos-perfil">0</strong></div>
                 </div>
             </article>
+            <article class="ficha-card painel">
+                <p class="rotulo">Ficha completa</p>
+                <div class="ficha-grid">
+                    <div class="ficha-linha"><span class="rotulo">Nome</span><span id="ficha-nome">---</span></div>
+                    <div class="ficha-linha"><span class="rotulo">Família</span><span id="ficha-familia">---</span></div>
+                    <div class="ficha-linha"><span class="rotulo">Raça</span><span id="ficha-raca">---</span></div>
+                    <div class="ficha-linha"><span class="rotulo">Estilo de luta</span><span id="ficha-estilo">---</span></div>
+                    <div class="ficha-linha"><span class="rotulo">Profissão</span><span id="ficha-profissao">---</span></div>
+                    <div class="ficha-linha"><span class="rotulo">Classe</span><span id="ficha-classe">---</span></div>
+                    <div class="ficha-linha"><span class="rotulo">Organização</span><span id="ficha-organizacao">---</span></div>
+                    <div class="ficha-linha"><span class="rotulo">Aparência</span><span id="ficha-aparencia">---</span></div>
+                </div>
+            </article>
         </section>
         <section class="historico painel">
             <p class="rotulo">Últimas atividades</p>
@@ -101,6 +118,15 @@
         document.getElementById("exp-livre").textContent = fmt(progresso.expDisponivel);
         document.getElementById("berris-perfil").textContent = fmt(progresso.berris);
         document.getElementById("pontos-perfil").textContent = fmt(progresso.pontosMissao);
+        const aparenciaTexto = personagem?.aparencia ? `${personagem.aparencia.nome || "Aparência"}${personagem.aparencia.obra ? ` (${personagem.aparencia.obra})` : ""}` : (personagem?.aparenciaTexto || "---");
+        document.getElementById("ficha-nome").textContent = personagem?.nome || "---";
+        document.getElementById("ficha-familia").textContent = personagem?.familia || "---";
+        document.getElementById("ficha-raca").textContent = personagem?.raca || "---";
+        document.getElementById("ficha-estilo").textContent = personagem?.estiloLuta || personagem?.estilo || "---";
+        document.getElementById("ficha-profissao").textContent = personagem?.profissao || personagem?.ocupacao || "---";
+        document.getElementById("ficha-classe").textContent = personagem?.classe || "---";
+        document.getElementById("ficha-organizacao").textContent = personagem?.organizacao || personagem?.organização || "---";
+        document.getElementById("ficha-aparencia").textContent = aparenciaTexto;
         const avatar = document.getElementById("avatar-perfil");
         if (personagem?.imagem) avatar.innerHTML = `<img src="${personagem.imagem}" alt="">`;
         else avatar.innerHTML = "<span>Sem imagem</span>";
