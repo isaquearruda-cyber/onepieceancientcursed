@@ -219,7 +219,10 @@
 
 	function obterPersonagemAtivo() {
 		try {
-			return JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+			const direto = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+			if (direto?.nome) return direto;
+			const personagens = JSON.parse(localStorage.getItem("personagensCriados") || "[]");
+			return Array.isArray(personagens) ? personagens[personagens.length - 1] || null : null;
 		} catch (erro) {
 			return null;
 		}
@@ -271,7 +274,11 @@
 		const exp = document.getElementById("exp-lobby");
 		if (!exp) return;
 		const personagem = obterPersonagemAtivo();
-		const progresso = window.RpgSistemas?.obterProgresso?.(personagem);
+		const progresso = window.RpgSistemas?.obterProgresso?.(personagem) || personagem?.progressoRpg || {
+			expDisponivel: 0,
+			berris: 0,
+			pontosMissao: 0
+		};
 		if (!personagem || !progresso) return;
 		let hud = document.getElementById("rpg-hud-lobby");
 		if (!hud) {
