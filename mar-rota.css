@@ -20,6 +20,6 @@ h1 { margin: 3px 0 6px; font-family: "Segoe UI Black","Arial Black",Impact,sans-
 .ilha span { color: #d9e8d4; font-size: .8rem; }
 .locais { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .local { padding: 7px 9px; border-radius: 999px; border: 1px solid rgba(255,247,223,.14); background: rgba(255,247,223,.05); color: #fff7df; font-size: .82rem; font-weight: 900; }
-.viagem-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; }
+.viagem-grid { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; align-items: end; }
 .resultado { margin: 12px 0 0; padding: 12px; border: 1px solid rgba(54,224,255,.28); border-radius: 8px; background: rgba(54,224,255,.07); color: #d9e8d4; line-height: 1.45; }
 @media(max-width:900px){.video-fundo{display:none}.topo,.layout,.viagem-grid{grid-template-columns:1fr}.painel{backdrop-filter:none}.topo-acoes{justify-content:start}}
