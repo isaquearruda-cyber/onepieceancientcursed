@@ -23,8 +23,13 @@
         .mensagem header { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 7px; }
         .mensagem strong { color: #fff7df; }
         .mensagem p { margin: 0; color: #d9e8d4; line-height: 1.45; }
+        .anexo { display: grid; grid-template-columns: 46px 1fr auto; gap: 10px; align-items: center; margin-top: 10px; padding: 10px; border: 1px solid rgba(144,255,0,.28); border-radius: 8px; background: rgba(4,18,10,.52); }
+        .anexo-icone { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 8px; background: radial-gradient(circle, #ffe28a, rgba(54,224,255,.25) 48%, rgba(3,8,10,.85)); box-shadow: 0 0 14px rgba(144,255,0,.22); font-weight: 1000; color: #11170c; }
+        .anexo strong { display: block; color: #90ff00; }
+        .anexo span { display: block; color: #d9e8d4; font-size: .78rem; }
+        .anexo button[disabled] { opacity: .65; cursor: default; }
         .vazio { padding: 22px; border: 1px dashed rgba(247,200,75,.3); border-radius: 8px; color: #d9e8d4; text-align: center; }
-        @media(max-width:800px){.video-fundo{display:none}.topo,.grid{grid-template-columns:1fr}.painel{backdrop-filter:none}}
+        @media(max-width:800px){.video-fundo{display:none}.topo,.grid{grid-template-columns:1fr}.painel{backdrop-filter:none}.anexo{grid-template-columns:42px 1fr}.anexo button{grid-column:1 / -1}}
     </style>
 </head>
 <body>
@@ -49,22 +54,64 @@
     <script src="musica-fundo.js?v=20260605-rpg4"></script>
     <script>
         const chave = "rpg_correio";
+        const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
         const padrao = [
             { para: "Quartel local", tipo: "Marinha", texto: "Relatos de atividade pirata aumentaram. Recompensas podem surgir ao entrar na aventura.", data: "Sistema" },
             { para: "Mercador ambulante", tipo: "Mercador", texto: "Novas armas raras devem aparecer na biblioteca e no inventário em futuras atualizações.", data: "Sistema" }
         ];
+        function escaparHtml(texto) {
+            return String(texto || "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[c]);
+        }
         function ler() {
             try { return JSON.parse(localStorage.getItem(chave) || "null") || padrao; } catch (e) { return padrao; }
         }
         function salvar(lista) { localStorage.setItem(chave, JSON.stringify(lista)); }
+        function chaveInventario() {
+            return personagem?.nome ? `inventario_${personagem.nome}` : "";
+        }
+        function coletarAnexo(indice) {
+            if (!personagem?.nome) {
+                alert("Crie ou selecione um personagem antes de coletar o anexo.");
+                return;
+            }
+            const lista = ler();
+            const mensagem = lista[indice];
+            if (!mensagem?.anexo || mensagem.coletado) return;
+            const inventario = JSON.parse(localStorage.getItem(chaveInventario()) || "[]");
+            const item = {
+                id: Date.now(),
+                nome: mensagem.anexo.nome,
+                tipo: mensagem.anexo.tipo || "especiais",
+                sprite: mensagem.anexo.sprite || [0, 2],
+                quantidade: Math.max(1, Number(mensagem.anexo.quantidade || 1)),
+                descricao: mensagem.anexo.descricao || `Recompensa recebida por ${mensagem.anexo.origem || "correio"}.`,
+                adicionadoEm: new Date().toLocaleString("pt-BR"),
+                origem: mensagem.anexo.origem || "Correio",
+                raridade: mensagem.anexo.raridade || ""
+            };
+            inventario.push(item);
+            localStorage.setItem(chaveInventario(), JSON.stringify(inventario));
+            mensagem.coletado = true;
+            mensagem.texto = `${mensagem.texto}\n\nAnexo coletado e enviado ao inventário de ${personagem.nome}.`;
+            salvar(lista);
+            renderizar();
+            window.RpgFeedback?.aviso?.("Item coletado", [item.nome, "Inventário atualizado."]);
+        }
         function renderizar() {
             const lista = ler();
             document.getElementById("lista-correio").innerHTML = lista.length ? lista.map((m, i) => `
                 <article class="mensagem">
-                    <header><strong>${m.tipo} - ${m.para}</strong><span class="meta">${m.data}</span></header>
-                    <p>${m.texto}</p>
+                    <header><strong>${escaparHtml(m.tipo)} - ${escaparHtml(m.para)}</strong><span class="meta">${escaparHtml(m.data)}</span></header>
+                    <p>${escaparHtml(m.texto)}</p>
+                    ${m.anexo ? `
+                        <div class="anexo">
+                            <div class="anexo-icone">${m.coletado ? "✓" : "★"}</div>
+                            <div><strong>${escaparHtml(m.anexo.nome)}</strong><span>${escaparHtml(m.anexo.raridade || "Prêmio")} / x${escaparHtml(m.anexo.quantidade || 1)}</span></div>
+                            <button type="button" data-coletar="${i}" ${m.coletado ? "disabled" : ""}>${m.coletado ? "Coletado" : "Coletar"}</button>
+                        </div>` : ""}
                     <button type="button" data-remover="${i}">Arquivar</button>
                 </article>`).join("") : "<div class='vazio'>Correio vazio.</div>";
+            document.querySelectorAll("[data-coletar]").forEach((b) => b.onclick = () => coletarAnexo(Number(b.dataset.coletar)));
             document.querySelectorAll("[data-remover]").forEach((b) => b.onclick = () => {
                 const atual = ler();
                 atual.splice(Number(b.dataset.remover), 1);
