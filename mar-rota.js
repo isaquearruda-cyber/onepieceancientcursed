@@ -1,4 +1,8 @@
 (function () {
+	var scrollFix = document.createElement("style");
+	scrollFix.textContent = "@media(max-width:960px) and (orientation:landscape){html,body{height:auto!important;overflow-y:auto!important;overflow-x:hidden!important}body{touch-action:pan-y!important;-webkit-overflow-scrolling:touch!important}.app{overflow:visible!important;min-height:100dvh!important}}";
+	document.head.appendChild(scrollFix);
+
 	var mares = window.RpgMaresDados || [];
 	var mar = mares.find(function (item) { return item.id === window.RPG_MAR_ID; }) || mares[0];
 	if (!mar) return;
