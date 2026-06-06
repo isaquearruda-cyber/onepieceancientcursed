@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prêmios Beta - One Piece RPG</title>
+    <link rel="stylesheet" href="estilo.css">
+    <style>
+        html, body { margin: 0; min-height: 100%; background: #030708; color: #fff7df; overflow-y: auto; }
+        body { overflow-x: hidden; }
+        .video-fundo { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.28) saturate(1.2); z-index: 0; }
+        .app { position: relative; z-index: 1; min-height: 100vh; padding: clamp(14px,2.5vw,30px); background: radial-gradient(circle at 16% 16%, rgba(144,255,0,.14), transparent 28%), radial-gradient(circle at 84% 26%, rgba(255,226,138,.16), transparent 30%); }
+        .painel { border: 1px solid rgba(247,200,75,.28); border-radius: 8px; background: linear-gradient(180deg, rgba(5,12,14,.92), rgba(1,4,6,.96)); box-shadow: 0 22px 54px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,247,223,.06); backdrop-filter: blur(8px); }
+        .topo { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; padding: 16px 18px; margin-bottom: 14px; }
+        small, .rotulo { color: #ffe28a; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+        h1 { margin: 4px 0 6px; font-family: "Segoe UI Black","Arial Black",Impact,sans-serif; font-size: clamp(2rem,5vw,4rem); line-height: .92; text-transform: uppercase; text-shadow: 0 5px 0 #210b08,0 16px 30px rgba(0,0,0,.72); }
+        .voltar, button { min-height: 42px; padding: 0 14px; border: 1px solid rgba(255,226,138,.52); border-radius: 8px; color: #fff7df; background: rgba(4,12,13,.72); font-weight: 900; text-transform: uppercase; text-decoration: none; cursor: pointer; }
+        .resumo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+        .hud { padding: 12px; border: 1px solid rgba(144,255,0,.25); border-radius: 8px; background: rgba(4,18,10,.5); }
+        .hud b { display: block; margin-top: 4px; color: #fff7df; font-size: 1.05rem; text-transform: uppercase; }
+        .grade { display: grid; grid-template-columns: repeat(7, minmax(150px, 1fr)); gap: 12px; align-items: stretch; overflow-x: auto; padding: 16px; }
+        .premio { --cor:#36e0ff; position: relative; min-height: 312px; padding: 12px; display: grid; grid-template-rows: auto 1fr auto; gap: 10px; text-align: left; border: 1px solid color-mix(in srgb,var(--cor) 54%,transparent); border-radius: 8px; color: #fff7df; background: radial-gradient(circle at 50% 18%, color-mix(in srgb,var(--cor) 26%,transparent), transparent 38%), linear-gradient(180deg, rgba(255,247,223,.05), rgba(3,8,10,.84)); box-shadow: 0 0 24px color-mix(in srgb,var(--cor) 18%,transparent), inset 0 0 24px rgba(0,0,0,.34); overflow: hidden; }
+        .premio::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,247,223,.12), transparent 32%, transparent 64%, color-mix(in srgb,var(--cor) 14%,transparent)); opacity: .8; pointer-events: none; }
+        .premio > * { position: relative; z-index: 1; }
+        .premio-topo { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+        .dia { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 8px; color: #11170c; background: linear-gradient(135deg, #ffe28a, #90ff00); font-weight: 1000; box-shadow: 0 0 18px color-mix(in srgb,var(--cor) 40%,transparent); }
+        .raridade { padding: 5px 8px; border: 1px solid color-mix(in srgb,var(--cor) 50%,transparent); border-radius: 999px; color: #fff7df; background: rgba(0,0,0,.42); font-size: .66rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+        .arte { display: grid; place-items: center; align-self: center; width: 94px; height: 94px; margin: 0 auto; border: 1px solid color-mix(in srgb,var(--cor) 48%,transparent); border-radius: 18px; background: radial-gradient(circle, color-mix(in srgb,var(--cor) 52%,#fff7df), rgba(3,8,10,.8) 68%); box-shadow: 0 0 26px color-mix(in srgb,var(--cor) 32%,transparent), inset 0 0 20px rgba(255,247,223,.12); font-size: 2.7rem; }
+        .premio h2 { margin: 0; font-size: 1.05rem; line-height: 1.08; text-transform: uppercase; }
+        .premio p { margin: 6px 0 0; color: #d9e8d4; font-size: .82rem; line-height: 1.35; }
+        .premio button { width: 100%; border-color: color-mix(in srgb,var(--cor) 52%,transparent); background: linear-gradient(90deg, color-mix(in srgb,var(--cor) 22%,transparent), rgba(255,247,223,.06)); }
+        .premio.bloqueado { opacity: .5; filter: grayscale(.8); }
+        .premio.enviado { border-color: rgba(144,255,0,.48); }
+        .premio.enviado button { color: #90ff00; border-color: rgba(144,255,0,.42); cursor: default; }
+        .aviso { margin-top: 12px; padding: 12px; border: 1px solid rgba(54,224,255,.26); border-radius: 8px; background: rgba(54,224,255,.07); color: #d9e8d4; }
+        @media(max-width:900px){.video-fundo{display:none}.topo,.resumo{grid-template-columns:1fr}.painel{backdrop-filter:none}.app{padding:10px}.grade{grid-template-columns:repeat(7, minmax(172px, 1fr)); padding:10px}.premio{min-height:282px}}
+    </style>
+</head>
+<body>
+    <audio id="musica-fundo" loop preload="auto"><source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg"></audio>
+    <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true"><source src="fundo-login.mp4" type="video/mp4"></video>
+    <main class="app">
+        <header class="topo painel">
+            <div>
+                <small>Beta testers / 7 dias</small>
+                <h1>Prêmios Beta</h1>
+                <p>Resgate um prêmio por dia. Primeiro ele vai para o Correio; depois colete para enviar ao Inventário.</p>
+            </div>
+            <a class="voltar" href="lobby.html">Voltar ao Lobby</a>
+        </header>
+        <section class="resumo">
+            <article class="hud painel"><small>Evento</small><b>Semana Beta</b><span>7 recompensas únicas.</span></article>
+            <article class="hud painel"><small>Fluxo</small><b>Prêmio -> Correio -> Inventário</b><span>Coleta confirmada pelo jogador.</span></article>
+            <article class="hud painel"><small>Último dia</small><b>Lendário</b><span>Item exclusivo de testador.</span></article>
+        </section>
+        <section class="grade painel" id="grade-premios"></section>
+        <p class="aviso" id="aviso-premio">Clique em um prêmio liberado para enviar ao Correio.</p>
+    </main>
+    <script src="musica-fundo.js?v=20260606-beta1"></script>
+    <script>
+        const recompensasBeta = [
+            { id: "beta-dia-1", dia: 1, nome: "Kit de Navegador Beta", tipo: "navegacao", quantidade: 1, raridade: "Comum", cor: "#49d2ff", icone: "🧭", sprite: [1, 1], descricao: "Bússola, tinta de mapa e marcador de rota para testadores do RPG." },
+            { id: "beta-dia-2", dia: 2, nome: "Ração de Campanha Temperada", tipo: "alimentacao", quantidade: 5, raridade: "Comum", cor: "#ff8a3d", icone: "🍱", sprite: [1, 0], descricao: "Mantimentos especiais para longas sessões de teste e exploração." },
+            { id: "beta-dia-3", dia: 3, nome: "Den Den de Diagnóstico", tipo: "tecnologicos", quantidade: 1, raridade: "Incomum", cor: "#36e0ff", icone: "☎", sprite: [2, 2], descricao: "Pequeno comunicador usado para registrar avisos e falhas do sistema beta." },
+            { id: "beta-dia-4", dia: 4, nome: "Capa do Testador da Aurora", tipo: "vestimentas", quantidade: 1, raridade: "Raro", cor: "#8f7bff", icone: "★", sprite: [4, 0], descricao: "Capa cosmética de beta tester, com brilho discreto em cenas de lobby." },
+            { id: "beta-dia-5", dia: 5, nome: "Caixa de Materiais do Estaleiro", tipo: "materiais", quantidade: 8, raridade: "Raro", cor: "#d79a5a", icone: "▣", sprite: [3, 2], descricao: "Madeira naval, rebites e tecido de vela para futuras melhorias de navio." },
+            { id: "beta-dia-6", dia: 6, nome: "Log Pose de Calibração Azul", tipo: "navegacao", quantidade: 1, raridade: "Épico", cor: "#3aa7ff", icone: "◆", sprite: [1, 1], descricao: "Instrumento experimental que ajuda a calibrar rotas e testes de viagem." },
+            { id: "beta-dia-7", dia: 7, nome: "Núcleo de Vontade do Beta Tester", tipo: "especiais", quantidade: 1, raridade: "Lendário", cor: "#ffcf3e", icone: "✦", sprite: [0, 2], descricao: "Relíquia lendária exclusiva da primeira semana beta. Não é Akuma no Mi e não é Meito." }
+        ];
+        const umDia = 24 * 60 * 60 * 1000;
+        const chaveInicio = "rpg_beta_inicio";
+        const chaveEnviados = "rpg_beta_enviados_correio";
+        const chaveCorreio = "rpg_correio";
+        const inicio = Number(localStorage.getItem(chaveInicio) || Date.now());
+        localStorage.setItem(chaveInicio, String(inicio));
+
+        function lerJson(chave, padrao) {
+            try { return JSON.parse(localStorage.getItem(chave) || "null") || padrao; } catch (erro) { return padrao; }
+        }
+
+        function salvarJson(chave, valor) {
+            localStorage.setItem(chave, JSON.stringify(valor));
+        }
+
+        function diasLiberados() {
+            return Math.max(1, Math.min(7, Math.floor((Date.now() - inicio) / umDia) + 1));
+        }
+
+        function enviarParaCorreio(recompensa) {
+            const enviados = lerJson(chaveEnviados, []);
+            if (enviados.includes(recompensa.id)) return;
+            const correio = lerJson(chaveCorreio, []);
+            const mensagem = {
+                id: `${recompensa.id}-${Date.now()}`,
+                para: "Beta Tester",
+                tipo: "Prêmio Beta",
+                texto: `Dia ${recompensa.dia}: ${recompensa.nome}. Abra este anexo para enviar ao inventário.`,
+                data: new Date().toLocaleString("pt-BR"),
+                anexo: {
+                    origem: "Semana Beta Tester",
+                    recompensaId: recompensa.id,
+                    nome: recompensa.nome,
+                    tipo: recompensa.tipo,
+                    quantidade: recompensa.quantidade,
+                    descricao: `${recompensa.descricao} Raridade: ${recompensa.raridade}.`,
+                    sprite: recompensa.sprite,
+                    raridade: recompensa.raridade
+                },
+                coletado: false
+            };
+            salvarJson(chaveCorreio, [mensagem, ...correio].slice(0, 80));
+            salvarJson(chaveEnviados, [...enviados, recompensa.id]);
+            renderizar();
+            aviso.textContent = `${recompensa.nome} foi enviado para o Correio.`;
+            window.RpgFeedback?.aviso?.("Prêmio enviado", [recompensa.nome, "Abra o Correio para coletar."]);
+        }
+
+        function renderizar() {
+            const liberados = diasLiberados();
+            const enviados = lerJson(chaveEnviados, []);
+            gradePremios.innerHTML = recompensasBeta.map((premio) => {
+                const liberado = premio.dia <= liberados;
+                const enviado = enviados.includes(premio.id);
+                const classe = enviado ? "enviado" : liberado ? "" : "bloqueado";
+                const textoBotao = enviado ? "Enviado ao correio" : liberado ? "Enviar ao correio" : `Libera no dia ${premio.dia}`;
+                return `
+                    <article class="premio ${classe}" style="--cor:${premio.cor}">
+                        <div class="premio-topo"><span class="dia">${premio.dia}</span><span class="raridade">${premio.raridade}</span></div>
+                        <div>
+                            <div class="arte" aria-hidden="true">${premio.icone}</div>
+                            <h2>${premio.nome}</h2>
+                            <p>${premio.descricao}</p>
+                        </div>
+                        <button type="button" data-premio="${premio.id}" ${(!liberado || enviado) ? "disabled" : ""}>${textoBotao}</button>
+                    </article>
+                `;
+            }).join("");
+            document.querySelectorAll("[data-premio]").forEach((botao) => {
+                botao.onclick = () => enviarParaCorreio(recompensasBeta.find((premio) => premio.id === botao.dataset.premio));
+            });
+        }
+
+        const gradePremios = document.getElementById("grade-premios");
+        const aviso = document.getElementById("aviso-premio");
+        renderizar();
+    </script>
+</body>
+</html>
