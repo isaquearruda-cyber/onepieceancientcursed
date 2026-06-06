@@ -1,7 +1,7 @@
-html, body { margin: 0; min-height: 100%; background: #030708; color: #fff7df; }
-body { overflow-x: hidden; }
+html, body { margin: 0; min-height: 100%; background: #030708; color: #fff7df; overflow-y: auto; }
+body { overflow-x: hidden; overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
 .video-fundo { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.3) saturate(1.18); z-index: 0; }
-.app { position: relative; z-index: 1; min-height: 100vh; padding: clamp(14px,2.4vw,28px); background: radial-gradient(circle at 50% 18%, rgba(255,226,138,.14), transparent 26%), radial-gradient(circle at 22% 72%, rgba(54,224,255,.12), transparent 30%); }
+.app { position: relative; z-index: 1; min-height: 100vh; min-height: 100dvh; padding: clamp(14px,2.4vw,28px); background: radial-gradient(circle at 50% 18%, rgba(255,226,138,.14), transparent 26%), radial-gradient(circle at 22% 72%, rgba(54,224,255,.12), transparent 30%); box-sizing: border-box; }
 .painel { border: 1px solid rgba(247,200,75,.28); border-radius: 8px; background: linear-gradient(180deg, rgba(5,12,14,.92), rgba(1,4,6,.96)); box-shadow: 0 22px 54px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,247,223,.06); backdrop-filter: blur(8px); }
 .topo { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; padding: 16px 18px; margin-bottom: 14px; }
 .topo-acoes { display: flex; gap: 10px; flex-wrap: wrap; justify-content: end; }
@@ -22,4 +22,4 @@ h1 { margin: 3px 0 6px; font-family: "Segoe UI Black","Arial Black",Impact,sans-
 .local { padding: 7px 9px; border-radius: 999px; border: 1px solid rgba(255,247,223,.14); background: rgba(255,247,223,.05); color: #fff7df; font-size: .82rem; font-weight: 900; }
 .viagem-grid { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; align-items: end; }
 .resultado { margin: 12px 0 0; padding: 12px; border: 1px solid rgba(54,224,255,.28); border-radius: 8px; background: rgba(54,224,255,.07); color: #d9e8d4; line-height: 1.45; }
-@media(max-width:900px){.video-fundo{display:none}.topo,.layout,.viagem-grid{grid-template-columns:1fr}.painel{backdrop-filter:none}.topo-acoes{justify-content:start}}
+@media(max-width:900px){html,body{height:auto;overflow-y:auto!important}.video-fundo{display:none}.app{min-height:100dvh;padding:10px;overflow:visible}.topo,.layout,.viagem-grid{grid-template-columns:1fr}.layout,.detalhes{gap:10px}.painel{backdrop-filter:none}.bloco{padding:12px}.topo{padding:12px}.topo-acoes{justify-content:start}.ilhas{grid-template-columns:repeat(auto-fill,minmax(142px,1fr));gap:8px}.ilha{min-height:138px}.viagem-grid label,.viagem-grid select,.viagem-grid button,.voltar{width:100%;box-sizing:border-box}}
