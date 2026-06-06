@@ -1,4 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 520">
-<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffe28a"/><stop offset=".42" stop-color="#8a2c18"/><stop offset="1" stop-color="#080403"/></linearGradient><radialGradient id="sun" cx=".5" cy=".18" r=".35"><stop stop-color="#fff7df"/><stop offset=".38" stop-color="#ffd54c"/><stop offset="1" stop-color="#ffd54c" stop-opacity="0"/></radialGradient></defs>
-<rect width="320" height="520" fill="url(#sky)"/><circle cx="160" cy="91" r="118" fill="url(#sun)"/><path d="M38 520l62-260 60-106 61 106 61 260z" fill="#47140d"/><path d="M78 520l42-235 40-78 42 78 41 235z" fill="#7d2315"/><path d="M137 520l10-188 13-77 14 77 10 188z" fill="#ffd04d"/><path d="M112 315c30 18 65 18 96 0" fill="none" stroke="#fff2a8" stroke-width="8" opacity=".75"/><path d="M73 438c57-28 116-26 174 0" fill="none" stroke="#ffec8b" stroke-width="7" opacity=".65"/><path d="M0 407c45-27 77-21 112-13 40 9 82 4 116-12 43-20 70-17 92-4v142H0z" fill="#090504" opacity=".86"/><path d="M25 452c87-21 171-9 270-26" fill="none" stroke="#ffe28a" stroke-width="4" opacity=".45"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="384 0 96 120" width="96" height="120" preserveAspectRatio="xMidYMid slice">
+  <image href="mar-sprite.webp" x="0" y="0" width="480" height="240" preserveAspectRatio="none"/>
 </svg>

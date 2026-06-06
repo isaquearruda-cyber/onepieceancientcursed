@@ -1,4 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 520">
-<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffcf64"/><stop offset=".36" stop-color="#0fc18f"/><stop offset="1" stop-color="#03140f"/></linearGradient><radialGradient id="glow" cx=".72" cy=".18" r=".36"><stop stop-color="#fff1a0"/><stop offset=".35" stop-color="#38ffc4"/><stop offset="1" stop-color="#38ffc4" stop-opacity="0"/></radialGradient></defs>
-<rect width="320" height="520" fill="url(#sky)"/><circle cx="230" cy="92" r="118" fill="url(#glow)"/><path d="M0 344c46-70 82-88 121-69 58 28 70-75 144-88 24-4 43 2 55 15v318H0z" fill="#063b25"/><path d="M36 370c34-63 69-80 105-58 51 31 75-48 134-58 18-3 33 1 45 9v257H36z" fill="#0b5c36"/><path d="M0 392c80-21 120 12 187-10 51-17 81-49 133-42v180H0z" fill="#044b49"/><path d="M24 426c80-26 145 8 252-22" fill="none" stroke="#ffe28a" stroke-width="5" opacity=".6"/><path d="M105 300c5-39 29-72 66-96 8 45-10 76-42 109z" fill="#062015"/><path d="M142 316c24-55 67-78 118-88-20 53-56 83-118 88z" fill="#08351f"/><path d="M126 330c-10-55-45-79-84-102 2 59 31 93 84 102z" fill="#0a4127"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="192 0 96 120" width="96" height="120" preserveAspectRatio="xMidYMid slice">
+  <image href="mar-sprite.webp" x="0" y="0" width="480" height="240" preserveAspectRatio="none"/>
 </svg>
