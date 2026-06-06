@@ -21,8 +21,8 @@
         .hud-rota b { display: block; margin-top: 6px; color: #fff7df; font-size: 1.1rem; text-transform: uppercase; }
         .hud-rota span { color: #d9e8d4; font-size: .86rem; }
         .mares-trilho { min-height: 372px; display: grid; grid-template-columns: repeat(10, minmax(156px, 1fr)); gap: 12px; align-items: stretch; overflow-x: auto; padding: 12px 4px; }
-        .mar-card { --cor: #36e0ff; --img: none; position: relative; min-height: 318px; padding: 12px 10px; border: 1px solid color-mix(in srgb,var(--cor) 58%,transparent); border-radius: 8px; color: #fff7df; background: #030708; box-shadow: 0 0 24px color-mix(in srgb,var(--cor) 18%,transparent), inset 0 0 24px rgba(0,0,0,.28); display: grid; align-content: end; gap: 9px; justify-items: start; text-align: left; overflow: hidden; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
-        .mar-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.02), rgba(0,0,0,.1) 35%, rgba(0,0,0,.78)), var(--img); background-size: cover; background-position: center; filter: saturate(1.22) contrast(1.08); transform: scale(1.01); transition: transform .25s ease, filter .25s ease; }
+        .mar-card { --cor: #36e0ff; --img: none; --pos: center; position: relative; min-height: 318px; padding: 12px 10px; border: 1px solid color-mix(in srgb,var(--cor) 58%,transparent); border-radius: 8px; color: #fff7df; background: #030708; box-shadow: 0 0 24px color-mix(in srgb,var(--cor) 18%,transparent), inset 0 0 24px rgba(0,0,0,.28); display: grid; align-content: end; gap: 9px; justify-items: start; text-align: left; overflow: hidden; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+        .mar-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.02), rgba(0,0,0,.1) 35%, rgba(0,0,0,.78)), var(--img); background-size: cover, 500% 200%; background-position: center, var(--pos); filter: saturate(1.22) contrast(1.08); transform: scale(1.01); transition: transform .25s ease, filter .25s ease; }
         .mar-card::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 17%, color-mix(in srgb,var(--cor) 30%,transparent), transparent 32%), linear-gradient(115deg, rgba(255,247,223,.12), transparent 30%, transparent 68%, rgba(255,247,223,.08)); opacity: .78; pointer-events: none; }
         .mar-card > * { position: relative; z-index: 1; }
         .mar-card:not(.bloqueado):hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 0 32px color-mix(in srgb,var(--cor) 38%,transparent), inset 0 0 28px rgba(255,247,223,.08); }
@@ -75,8 +75,9 @@
         const maresEl = document.getElementById("mares");
         const bloqueioEl = document.getElementById("bloqueio");
         const mares = window.RpgMaresDados || [];
-        const arteMar = (id) => `assets/mares/mar-${id}.svg`;
-        maresEl.innerHTML = mares.map((mar) => `<button class="mar-card ${mar.aberto ? "" : "bloqueado"}" style="--cor:${mar.cor};--img:url('${arteMar(mar.id)}')" type="button" data-mar="${mar.id}"><span class="mar-status">${mar.aberto ? "Desbloqueado" : "Bloqueado"}</span><strong>${mar.nome}</strong><span class="mar-desc">${mar.desc}</span></button>`).join("");
+        const arteMar = () => "assets/mares/mar-sprite.webp";
+        const posMar = { east: "0% 0%", north: "25% 0%", south: "50% 0%", west: "75% 0%", reverse: "100% 0%", calm: "0% 100%", paraiso: "25% 100%", skypiea: "50% 100%", novo: "75% 100%", red: "100% 100%" };
+        maresEl.innerHTML = mares.map((mar) => `<button class="mar-card ${mar.aberto ? "" : "bloqueado"}" style="--cor:${mar.cor};--img:url('${arteMar()}');--pos:${posMar[mar.id] || "center"}" type="button" data-mar="${mar.id}"><span class="mar-status">${mar.aberto ? "Desbloqueado" : "Bloqueado"}</span><strong>${mar.nome}</strong><span class="mar-desc">${mar.desc}</span></button>`).join("");
         maresEl.querySelectorAll("[data-mar]").forEach((botao) => {
             botao.onclick = () => {
                 const mar = mares.find((item) => item.id === botao.dataset.mar);
