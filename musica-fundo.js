@@ -1,26 +1,134 @@
-(function(){"use strict";
-var rotasPaginas={"botao-iniciar":"aventura.html","botao-inventario":"inventario.html","botao-atributos":"atributos.html"};
-var rotasMenu={perfil:"perfil.html",aventura:"aventura.html",correio:"correio.html",notificacoes:"notificacoes.html",lojas:"loja.html",missoes:"missoes.html",viagem:"aventura.html",treinos:"treinos.html",conquistas:"conquistas.html",habilidades:"habilidades.html",biblioteca:"biblioteca-itens.html",amigos:"amigos.html",grupo:"bando.html",eventos:"eventos.html",beta:"beta-recompensas.html"};
-var icones={atributos:"atributos.webp",inventario:"inventario.webp",lojas:"lojas.webp",eventos:"eventos.webp",missoes:"missoes.webp",aventura:"viagem.webp",correio:"organizacao.webp",notificacoes:"eventos.webp",treinos:"treinos.webp",habilidades:"habilidades.webp",biblioteca:"inventario.webp",amigos:"amigos.webp",grupo:"organizacao.webp",ajustes:"ajustes.webp",aparencia:"aparencia.webp",beta:"eventos.webp"};
-function ready(fn){document.readyState==="loading"?document.addEventListener("DOMContentLoaded",fn):fn()}function j(ch,p){try{return JSON.parse(localStorage.getItem(ch)||"null")||p}catch(e){return p}}function s(ch,v){localStorage.setItem(ch,JSON.stringify(v))}function fmt(v){return Number(v||0).toLocaleString("pt-BR")}function icon(a){return"assets/img/menu-game/"+(icones[a]||icones.habilidades)}
-function personagem(){try{var p=JSON.parse(localStorage.getItem("ultimoPersonagem")||"null");if(p&&p.nome)return p;var l=JSON.parse(localStorage.getItem("personagensCriados")||"[]");return Array.isArray(l)?l[l.length-1]||null:null}catch(e){return null}}
-function prog(p){if(window.RpgSistemas&&RpgSistemas.obterProgresso)return RpgSistemas.obterProgresso(p);return p&&p.progressoRpg?p.progressoRpg:{nivel:1,expAtual:0,berris:0}}
-function nivel(pr){if(window.RpgSistemas&&RpgSistemas.estadoNivel)return RpgSistemas.estadoNivel(pr);var prox=pr.proximoNivel||100;return{nivel:pr.nivel||1,expAtual:pr.expAtual||0,proximo:prox,percentual:prox?Math.min(100,(Number(pr.expAtual||0)/prox)*100):0}}
-function css(){if(document.getElementById("rpg-hotfix-css"))return;var st=document.createElement("style");st.id="rpg-hotfix-css";st.textContent=".rpg-pagina-scroll{overflow-y:auto!important;scrollbar-gutter:stable}.battle-hud-lobby{position:relative;z-index:1;display:grid;grid-template-columns:minmax(180px,1.2fr) minmax(96px,.7fr);grid-template-areas:'perfil berris' 'xp xp';gap:8px;width:100%;margin:8px 0 12px}.battle-perfil{grid-area:perfil;display:grid;grid-template-columns:40px 1fr;gap:9px;align-items:center;min-height:52px;padding:6px 9px;border:1px solid rgba(144,255,0,.42);border-radius:8px;color:#90ff00;background:linear-gradient(90deg,rgba(4,18,10,.88),rgba(8,28,18,.72));box-shadow:0 0 16px rgba(144,255,0,.12);cursor:pointer;text-align:left}.battle-avatar{width:38px;height:38px;border-radius:8px;border:1px solid rgba(144,255,0,.45);background:radial-gradient(circle,#eaffd8,#36e0ff 42%,#07100d 72%);overflow:hidden}.battle-avatar img{width:100%;height:100%;object-fit:cover;display:block}.battle-nome{display:block;color:#90ff00;font-size:.9rem;font-weight:900;line-height:1.05;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.battle-nivel{display:block;margin-top:3px;color:#b8ff55;font-size:.7rem;font-weight:900;text-transform:uppercase}.battle-berris{grid-area:berris;display:grid;align-content:center;min-width:96px;padding:6px 9px;border:1px solid rgba(144,255,0,.34);border-radius:8px;background:linear-gradient(180deg,rgba(22,48,12,.74),rgba(4,12,13,.78))}.battle-berris small,.battle-xp small{color:#90ff00;font-size:.6rem;font-weight:900;text-transform:uppercase}.battle-berris strong{color:#d8ff9a;font-size:.98rem}.battle-xp{grid-area:xp;display:grid;gap:4px;padding:6px 9px;border:1px solid rgba(144,255,0,.28);border-radius:8px;background:rgba(3,12,8,.78)}.battle-xp-topo{display:flex;justify-content:space-between;color:#b8ff55;font-size:.7rem;font-weight:900}.battle-xp-barra{height:8px;border-radius:999px;border:1px solid rgba(144,255,0,.18);background:rgba(0,0,0,.58);overflow:hidden}.battle-xp-barra i{display:block;width:0;height:100%;background:linear-gradient(90deg,#90ff00,#d8ff9a);box-shadow:0 0 14px rgba(144,255,0,.5)}.atalho-menu-lobby,.botao-menu-lobby,.botao-lobby{position:relative!important;overflow:hidden!important}.atalho-menu-lobby:hover,.botao-menu-lobby:hover,.botao-lobby:hover{filter:saturate(1.14)!important;box-shadow:0 0 20px rgba(255,226,138,.32)!important}.grade-menu-lobby{width:100%!important;max-width:100%!important;box-sizing:border-box!important;overflow:hidden!important}.atalho-menu-lobby{min-width:0!important}.atalho-menu-lobby span{overflow-wrap:anywhere!important}.status-personagem.oculto-lobby{display:none!important}.rpg-toast-stack{position:fixed;right:16px;bottom:16px;z-index:5000;display:grid;gap:10px;width:min(360px,calc(100vw - 32px));pointer-events:none}.rpg-toast{--cor:#ffe28a;display:grid;grid-template-columns:42px 1fr;gap:10px;align-items:center;padding:11px;border:1px solid color-mix(in srgb,var(--cor) 48%,transparent);border-radius:8px;background:linear-gradient(180deg,rgba(5,12,14,.96),rgba(1,4,6,.98));box-shadow:0 18px 44px rgba(0,0,0,.5),0 0 22px color-mix(in srgb,var(--cor) 22%,transparent);animation:rpgToastIn .26s ease both;color:#fff7df}.rpg-toast i{display:grid;place-items:center;width:42px;height:42px;border-radius:8px;background:radial-gradient(circle,color-mix(in srgb,var(--cor) 68%,#fff7df),rgba(3,8,10,.86) 70%);font-style:normal;font-weight:1000;color:#11170c}.rpg-toast strong{display:block;color:#fff7df;text-transform:uppercase}.rpg-toast span{display:block;color:#d9e8d4;font-size:.82rem}.rpg-toast.sumindo{animation:rpgToastOut .22s ease both}@keyframes rpgToastIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}@keyframes rpgToastOut{to{opacity:0;transform:translateY(8px) scale(.98)}}.login-beta-overlay{position:fixed;inset:0;z-index:4500;display:grid;place-items:center;padding:18px;background:rgba(0,0,0,.66);backdrop-filter:blur(6px)}.login-beta-card{width:min(520px,100%);border:1px solid rgba(255,226,138,.42);border-radius:8px;background:linear-gradient(180deg,rgba(5,12,14,.98),rgba(1,4,6,.98));box-shadow:0 28px 80px rgba(0,0,0,.68);color:#fff7df;overflow:hidden}.login-beta-topo{display:flex;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid rgba(255,226,138,.18)}.login-beta-topo small{color:#90ff00;font-weight:900;text-transform:uppercase}.login-beta-topo h2{margin:4px 0 0;font-family:'Segoe UI Black','Arial Black',Impact,sans-serif;font-size:clamp(1.7rem,5vw,2.7rem);line-height:.92;text-transform:uppercase}.login-beta-fechar{min-width:38px;min-height:38px;border:1px solid rgba(255,226,138,.38);border-radius:8px;color:#fff7df;background:rgba(4,12,13,.72);font-weight:1000;cursor:pointer}.login-beta-premio{--cor:#36e0ff;display:grid;grid-template-columns:86px 1fr;gap:14px;padding:18px;align-items:center}.login-beta-arte{display:grid;place-items:center;width:82px;height:82px;border-radius:18px;background:radial-gradient(circle,color-mix(in srgb,var(--cor) 54%,#fff7df),rgba(3,8,10,.84) 68%);font-size:2.3rem}.login-beta-premio h3{margin:0;font-size:1.08rem;text-transform:uppercase}.login-beta-premio p{margin:7px 0 0;color:#d9e8d4}.login-beta-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.login-beta-meta span{padding:5px 8px;border:1px solid color-mix(in srgb,var(--cor) 42%,transparent);border-radius:999px;color:#ffe28a;background:rgba(0,0,0,.34);font-size:.68rem;font-weight:900;text-transform:uppercase}.login-beta-acoes{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 18px 18px}.login-beta-acoes button,.login-beta-acoes a{min-height:44px;display:grid;place-items:center;border:1px solid rgba(255,226,138,.46);border-radius:8px;color:#fff7df;background:rgba(4,12,13,.74);font-weight:900;text-transform:uppercase;text-decoration:none;cursor:pointer}.login-beta-acoes .principal{border-color:rgba(144,255,0,.52);background:linear-gradient(90deg,rgba(144,255,0,.28),rgba(255,226,138,.16));color:#eaffd8}@media(max-width:760px){body.pagina-formulario{overflow-y:auto!important}.container-lobby{grid-template-columns:1fr!important;gap:10px!important;padding:10px!important}.video-fundo{display:none!important}.battle-hud-lobby{grid-template-columns:1fr;grid-template-areas:'perfil' 'berris' 'xp'}.grade-menu-lobby{grid-template-columns:1fr!important;padding:10px!important;gap:10px!important}.atalho-menu-lobby{grid-template-columns:54px 1fr!important;justify-items:start!important;min-height:76px!important;padding:10px 12px!important}.atalho-menu-lobby img{width:46px!important;height:46px!important}.login-beta-premio,.login-beta-acoes{grid-template-columns:1fr;text-align:center}.login-beta-arte{margin:auto}}";document.head.appendChild(st)}
-function nav(e){var bp=e.target.closest("#botao-iniciar,#botao-inventario,#botao-atributos"),bm=e.target.closest("[data-menu-acao]"),d=bp?rotasPaginas[bp.id]:rotasMenu[bm&&bm.dataset.menuAcao];if(!d)return;e.preventDefault();e.stopImmediatePropagation();location.href=d}
-function rpgScript(){if(window.RpgSistemas||document.querySelector('script[src^="rpg-sistemas.js"]'))return;var sc=document.createElement("script");sc.src="rpg-sistemas.js";sc.defer=true;document.head.appendChild(sc)}
-function hud(){if(!document.body.classList.contains("pagina-formulario"))return null;var p=document.querySelector(".cabecalho-lobby")||document.querySelector(".container-lobby");if(!p)return null;var h=document.getElementById("battle-hud-lobby");if(h)return h;h=document.createElement("div");h.id="battle-hud-lobby";h.className="battle-hud-lobby";h.innerHTML='<button class="battle-perfil" type="button" data-menu-acao="perfil"><span class="battle-avatar" id="battle-avatar"></span><span><strong class="battle-nome" id="battle-nome">Perfil</strong><span class="battle-nivel" id="battle-nivel">Nv. 1</span></span></button><div class="battle-berris"><small>Berris</small><strong id="battle-berris">0</strong></div><div class="battle-xp"><div class="battle-xp-topo"><small>EXP</small><span id="battle-xp-texto">0 / 0</span></div><div class="battle-xp-barra"><i id="battle-xp-barra"></i></div></div>';var ref=document.getElementById("exp-lobby");ref&&ref.parentNode===p?p.insertBefore(h,ref):p.appendChild(h);return h}
-function updHud(){var h=hud();if(!h)return;var p=personagem(),pr=prog(p),n=nivel(pr),av=document.getElementById("battle-avatar");document.getElementById("battle-nome").textContent=p&&p.nome?p.nome:"Sem personagem";document.getElementById("battle-nivel").textContent="Nv. "+(n.nivel||1);document.getElementById("battle-berris").textContent=fmt(pr.berris);document.getElementById("battle-xp-texto").textContent=fmt(n.expAtual)+" / "+fmt(n.proximo);document.getElementById("battle-xp-barra").style.width=Math.max(0,Math.min(100,n.percentual||0))+"%";if(av&&p&&(p.imagem||p.imagemPersonagem)){var img=p.imagem||p.imagemPersonagem;if(av.dataset.src!==img){av.dataset.src=img;av.innerHTML='<img src="'+img+'" alt="">'}}}
-function atalhos(){var g=document.getElementById("grade-menu-lobby");if(!g||g.dataset.sistemasRpg==="ok")return;g.dataset.sistemasRpg="ok";[["aventura","Entrar na Aventura"],["correio","Correio"],["notificacoes","Notificações"],["lojas","Loja Rotativa"],["treinos","Treinos"],["beta","Prêmios Beta"],["conquistas","Conquistas"],["habilidades","Árvore de Habilidades"],["biblioteca","Biblioteca de Itens"],["amigos","Adicionar Amigos"],["grupo","Bando / Organização"]].forEach(function(it){if(g.querySelector('[data-menu-acao="'+it[0]+'"]'))return;var b=document.createElement("button");b.className="atalho-menu-lobby";b.type="button";b.dataset.menuAcao=it[0];b.innerHTML='<img src="'+icon(it[0])+'" alt=""><span>'+it[1]+"</span>";g.appendChild(b)})}
-function iconesMenu(){document.querySelectorAll(".atalho-menu-lobby,.botao-menu-lobby").forEach(function(b){var a=b.dataset.menuAcao||"",img=b.querySelector("img");if(img&&a)img.src=icon(a)})}
-function notif(t,txt,c){var l=j("rpg_notificacoes",[]);l.unshift({titulo:t,texto:Array.isArray(txt)?txt.join(" / "):String(txt||""),data:new Date().toLocaleString("pt-BR"),cor:c||"#ffe28a"});s("rpg_notificacoes",l.slice(0,90))}
-function toast(t,ls,c,i){var st=document.getElementById("rpg-toast-stack");if(!st){st=document.createElement("div");st.id="rpg-toast-stack";st.className="rpg-toast-stack";document.body.appendChild(st)}var el=document.createElement("div");el.className="rpg-toast";el.style.setProperty("--cor",c||"#ffe28a");el.innerHTML="<i>"+(i||"!")+"</i><span><strong>"+t+"</strong><span>"+(Array.isArray(ls)?ls.join("<br>"):String(ls||""))+"</span></span>";st.appendChild(el);setTimeout(function(){el.classList.add("sumindo")},3600);setTimeout(function(){el.remove()},3920)}
-function conquistas(){var p=personagem();if(!p||!p.nome)return;var pr=prog(p),inv=j("inventario_"+p.nome,[]),cor=j("rpg_correio",[]),sal=j("rpg_conquistas_"+p.nome,[]),cs=[{id:"primeiro-login",ok:true,titulo:"Primeiro Login",texto:"Entrou no lobby do RPG.",cor:"#36e0ff"},{id:"nivel-5",ok:Number(pr.nivel||1)>=5,titulo:"Novato em Ascensao",texto:"Alcancou nivel 5.",cor:"#90ff00"},{id:"primeiro-item",ok:inv.length>0,titulo:"Bolsa Aberta",texto:"Recebeu o primeiro item no inventario.",cor:"#ffe28a"},{id:"correio-ativo",ok:cor.length>0,titulo:"Den Den Ativo",texto:"Recebeu mensagens no correio.",cor:"#8f7bff"}];cs.forEach(function(c){if(!c.ok||sal.some(function(x){return x.id===c.id}))return;sal.unshift({id:c.id,titulo:c.titulo,texto:c.texto,cor:c.cor,quando:new Date().toLocaleString("pt-BR")});notif("Conquista desbloqueada",c.titulo,c.cor);toast("Conquista",[c.titulo,c.texto],c.cor,"◆")});s("rpg_conquistas_"+p.nome,sal)}
-function feedback(){window.RpgFeedback={recompensa:function(d){setTimeout(updHud,120);var r=d&&d.recompensas?d.recompensas:{};toast(d&&d.titulo?d.titulo:"Recompensa",["+"+fmt(r.exp)+" EXP","+"+fmt(r.berris)+" berris"],"#90ff00","+");notif("Recompensa recebida",d&&d.titulo?d.titulo:"Atividade concluida","#90ff00");setTimeout(conquistas,220)},aviso:function(t,l){toast(t||"Aviso",l||"","#ffe28a","!");notif(t||"Aviso",l||"","#ffe28a");setTimeout(conquistas,220)}}}
-var premios=[{id:"beta-dia-1",dia:1,nome:"Kit de Navegador Beta",tipo:"navegacao",quantidade:1,raridade:"Comum",cor:"#49d2ff",icone:"🧭",sprite:[1,1],descricao:"Bússola, tinta de mapa e marcador de rota para testadores do RPG."},{id:"beta-dia-2",dia:2,nome:"Ração de Campanha Temperada",tipo:"alimentacao",quantidade:5,raridade:"Comum",cor:"#ff8a3d",icone:"🍱",sprite:[1,0],descricao:"Mantimentos especiais para longas sessões de teste e exploração."},{id:"beta-dia-3",dia:3,nome:"Den Den de Diagnóstico",tipo:"tecnologicos",quantidade:1,raridade:"Incomum",cor:"#36e0ff",icone:"☎",sprite:[2,2],descricao:"Comunicador usado para registrar avisos e falhas do beta."},{id:"beta-dia-4",dia:4,nome:"Capa do Testador da Aurora",tipo:"vestimentas",quantidade:1,raridade:"Raro",cor:"#8f7bff",icone:"★",sprite:[4,0],descricao:"Capa cosmética de beta tester."},{id:"beta-dia-5",dia:5,nome:"Caixa de Materiais do Estaleiro",tipo:"materiais",quantidade:8,raridade:"Raro",cor:"#d79a5a",icone:"▣",sprite:[3,2],descricao:"Madeira naval, rebites e tecido de vela."},{id:"beta-dia-6",dia:6,nome:"Log Pose de Calibração Azul",tipo:"navegacao",quantidade:1,raridade:"Épico",cor:"#3aa7ff",icone:"◆",sprite:[1,1],descricao:"Instrumento experimental para calibrar rotas."},{id:"beta-dia-7",dia:7,nome:"Núcleo de Vontade do Beta Tester",tipo:"especiais",quantidade:1,raridade:"Lendário",cor:"#ffcf3e",icone:"✦",sprite:[0,2],descricao:"Relíquia lendária exclusiva da primeira semana beta."}];
-function premio(){var ini=Number(localStorage.getItem("rpg_beta_inicio")||Date.now());localStorage.setItem("rpg_beta_inicio",String(ini));var d=Math.max(1,Math.min(7,Math.floor((Date.now()-ini)/86400000)+1)),env=j("rpg_beta_enviados_correio",[]);return premios.find(function(p){return p.dia<=d&&!env.includes(p.id)})}
-function enviar(p){var env=j("rpg_beta_enviados_correio",[]);if(!p||env.includes(p.id))return;var cor=j("rpg_correio",[]),m={id:p.id+"-"+Date.now(),para:"Beta Tester",tipo:"Prêmio Beta",texto:"Dia "+p.dia+": "+p.nome+". Abra este anexo para enviar ao inventário.",data:new Date().toLocaleString("pt-BR"),anexo:{origem:"Semana Beta Tester",recompensaId:p.id,nome:p.nome,tipo:p.tipo,quantidade:p.quantidade,descricao:p.descricao+" Raridade: "+p.raridade+".",sprite:p.sprite,raridade:p.raridade},coletado:false};s("rpg_correio",[m].concat(cor).slice(0,80));s("rpg_beta_enviados_correio",env.concat(p.id));window.RpgFeedback&&RpgFeedback.aviso("Prêmio enviado",[p.nome,"Abra o Correio para coletar."])}
-function loginBeta(){if(!document.body.classList.contains("pagina-formulario")||!document.querySelector(".container-lobby")||document.getElementById("login-beta-overlay"))return;var p=premio();if(!p)return;var o=document.createElement("div");o.id="login-beta-overlay";o.className="login-beta-overlay";o.innerHTML='<section class="login-beta-card" role="dialog" aria-modal="true"><header class="login-beta-topo"><div><small>Login diário</small><h2>Prêmio Beta</h2></div><button class="login-beta-fechar" type="button">x</button></header><div class="login-beta-premio" style="--cor:'+p.cor+'"><div class="login-beta-arte">'+p.icone+'</div><div><h3>Dia '+p.dia+' - '+p.nome+'</h3><p>'+p.descricao+'</p><div class="login-beta-meta"><span>'+p.raridade+'</span><span>x'+p.quantidade+'</span><span>Vai para o Correio</span></div></div></div><div class="login-beta-acoes"><button class="principal" type="button" data-beta-resgatar>Enviar ao Correio</button><a href="beta-recompensas.html">Ver 7 dias</a></div></section>';document.body.appendChild(o);o.querySelector(".login-beta-fechar").onclick=function(){o.remove()};o.querySelector("[data-beta-resgatar]").onclick=function(){enviar(p);o.remove()}}
-function audio(){var a=document.getElementById("musica-fundo");if(!a)return;var ch="onePieceRpgVolumeMusica",v=localStorage.getItem(ch)===null?50:localStorage.getItem(ch);a.volume=Math.max(0,Math.min(Number(v)||0,100))/100;function play(){a.play().catch(function(){document.addEventListener("pointerdown",play,{once:true})})}play()}
-function init(){css();rpgScript();atalhos();iconesMenu();feedback();updHud();setTimeout(loginBeta,450);setTimeout(conquistas,700);audio();setInterval(updHud,1000);if(document.querySelector(".perfil-app,.biblioteca-app,.app"))document.body.classList.add("rpg-pagina-scroll")}document.addEventListener("click",nav,true);ready(init);
+(function () {
+  "use strict";
+
+  var rotasPaginas = {
+    "botao-iniciar": "aventura.html",
+    "botao-inventario": "inventario.html",
+    "botao-atributos": "atributos.html"
+  };
+
+  var rotasMenu = {
+    perfil: "perfil.html",
+    aventura: "aventura.html",
+    correio: "correio.html",
+    notificacoes: "notificacoes.html",
+    lojas: "loja.html",
+    missoes: "missoes.html",
+    viagem: "aventura.html",
+    treinos: "treinos.html",
+    conquistas: "conquistas.html",
+    habilidades: "habilidades.html",
+    biblioteca: "biblioteca-itens.html",
+    amigos: "amigos.html",
+    grupo: "bando.html",
+    eventos: "eventos.html",
+    beta: "beta-recompensas.html"
+  };
+
+  function onReady(fn) {
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn);
+    else fn();
+  }
+
+  function corrigirDownloadNoMenu() {
+    var antigo = "Tut" + "orial";
+    var antigoLower = antigo.toLowerCase();
+    var seletores = [
+      "#botao-" + antigoLower,
+      "#botao-download-app",
+      "[data-i18n='menu." + antigoLower + "']",
+      "[data-i18n='menu.download']"
+    ].join(",");
+
+    document.querySelectorAll(seletores).forEach(function (botao) {
+      botao.id = "botao-download-app";
+      botao.removeAttribute("data-i18n");
+      botao.textContent = "Dowload";
+      if (botao.tagName !== "A") botao.type = "button";
+    });
+
+    document.querySelectorAll("button, a").forEach(function (botao) {
+      var texto = (botao.textContent || "").trim().toLowerCase();
+      if (texto === antigoLower || texto === "download" || texto === "dowload") {
+        botao.id = "botao-download-app";
+        botao.removeAttribute("data-i18n");
+        botao.textContent = "Dowload";
+      }
+    });
+  }
+
+  function irParaDownload(evento) {
+    var antigo = "tut" + "orial";
+    var alvo = evento.target.closest("#botao-download-app, #botao-" + antigo + ", [data-i18n='menu." + antigo + "'], [data-i18n='menu.download']");
+    if (!alvo) return;
+    var texto = (alvo.textContent || "").trim().toLowerCase();
+    if (alvo.id !== "botao-download-app" && alvo.id !== "botao-" + antigo && texto !== antigo && texto !== "download" && texto !== "dowload") return;
+    evento.preventDefault();
+    evento.stopImmediatePropagation();
+    window.location.href = "download.html";
+  }
+
+  function navegar(evento) {
+    var botaoPagina = evento.target.closest("#botao-iniciar, #botao-inventario, #botao-atributos");
+    var botaoMenu = evento.target.closest("[data-menu-acao]");
+    var destino = botaoPagina ? rotasPaginas[botaoPagina.id] : rotasMenu[botaoMenu && botaoMenu.dataset.menuAcao];
+    if (!destino) return;
+    evento.preventDefault();
+    evento.stopImmediatePropagation();
+    window.location.href = destino;
+  }
+
+  function instalarPwa() {
+    if (!document.querySelector('link[rel="manifest"]')) {
+      var manifest = document.createElement("link");
+      manifest.rel = "manifest";
+      manifest.href = "manifest.webmanifest";
+      document.head.appendChild(manifest);
+    }
+
+    if ("serviceWorker" in navigator && location.protocol !== "file:") {
+      navigator.serviceWorker.register("service-worker.js").then(function (registro) {
+        registro.update();
+        if (registro.waiting) registro.waiting.postMessage({ type: "SKIP_WAITING" });
+      }).catch(function () {});
+    }
+  }
+
+  function iniciarAudio() {
+    var audio = document.getElementById("musica-fundo");
+    if (!audio) return;
+    var controleSom = document.getElementById("controle-som");
+    var botaoSom = document.getElementById("botao-som");
+    var volumeMusica = document.getElementById("volume-musica");
+    var chave = "onePieceRpgVolumeMusica";
+
+    function aplicar(valor) {
+      var volume = Math.max(0, Math.min(Number(valor) || 0, 100));
+      audio.volume = volume / 100;
+      audio.muted = volume === 0;
+      localStorage.setItem(chave, String(volume));
+      if (volumeMusica) volumeMusica.value = String(volume);
+    }
+
+    aplicar(localStorage.getItem(chave) === null ? 50 : localStorage.getItem(chave));
+    if (botaoSom && controleSom) {
+      botaoSom.addEventListener("click", function () {
+        var visivel = controleSom.classList.toggle("visivel");
+        controleSom.setAttribute("aria-hidden", visivel ? "false" : "true");
+        audio.play().catch(function () {});
+      });
+    }
+    if (volumeMusica) volumeMusica.addEventListener("input", function () { aplicar(volumeMusica.value); });
+  }
+
+  document.addEventListener("click", irParaDownload, true);
+  document.addEventListener("click", navegar, true);
+
+  onReady(function () {
+    instalarPwa();
+    corrigirDownloadNoMenu();
+    iniciarAudio();
+    setTimeout(corrigirDownloadNoMenu, 250);
+    setTimeout(corrigirDownloadNoMenu, 1200);
+  });
 })();
