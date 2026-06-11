@@ -1,4 +1,4 @@
-const CACHE_NAME = "one-piece-rpg-app-v6";
+const CACHE_NAME = "one-piece-rpg-app-v8";
 const CACHE_PREFIX = "one-piece-rpg-app-";
 
 const APP_SHELL = [
@@ -31,6 +31,9 @@ const APP_SHELL = [
   "./fundo-login.jpeg",
   "./fundo-login.mp4",
   "./assets/audio/drums-of-liberation.mp3",
+  "./assets/img/app-logo-source.jpeg",
+  "./assets/img/app-logo-192.png",
+  "./assets/img/app-logo-512.png",
   "./assets/img/menu-lobby.jpeg",
   "./assets/img/botao-entrar-aventura.jpeg",
   "./assets/img/botao-registros.jpeg",
@@ -99,7 +102,7 @@ function buscarRedePrimeiro(event) {
     .catch(() => caches.match(event.request).then((cached) => {
       if (cached) return cached;
       if (event.request.mode === "navigate") return caches.match("./index.html");
-      return caches.match("./assets/img/menu-lobby.jpeg");
+      return caches.match("./assets/img/app-logo-192.png");
     }));
 }
 
