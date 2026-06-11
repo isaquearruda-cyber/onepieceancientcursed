@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=One Piece Cursed Ancient Century
+Comment=Inicia o app publicado do One Piece RPG
+Exec=xdg-open https://isaquearruda-cyber.github.io/onepieceancientcursed/
+Icon=web-browser
+Terminal=false
+Categories=Game;
