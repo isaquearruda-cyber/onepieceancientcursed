@@ -5,7 +5,7 @@
   "start_url": "index.html",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone", "fullscreen"],
+  "display_override": ["standalone", "fullscreen"],
   "orientation": "any",
   "background_color": "#030809",
   "theme_color": "#f7c84b",
@@ -13,10 +13,16 @@
   "lang": "pt-BR",
   "icons": [
     {
-      "src": "assets/img/menu-lobby.jpeg",
+      "src": "assets/img/app-logo-192.png",
       "sizes": "192x192",
-      "type": "image/jpeg",
-      "purpose": "any"
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/img/app-logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "shortcuts": [
@@ -24,13 +30,13 @@
       "name": "Entrar no Lobby",
       "short_name": "Lobby",
       "url": "lobby.html",
-      "icons": [{ "src": "assets/img/menu-lobby.jpeg", "sizes": "192x192", "type": "image/jpeg" }]
+      "icons": [{ "src": "assets/img/app-logo-192.png", "sizes": "192x192", "type": "image/png" }]
     },
     {
       "name": "Dowload",
       "short_name": "Dowload",
       "url": "download.html",
-      "icons": [{ "src": "assets/img/menu-lobby.jpeg", "sizes": "192x192", "type": "image/jpeg" }]
+      "icons": [{ "src": "assets/img/app-logo-192.png", "sizes": "192x192", "type": "image/png" }]
     }
   ]
 }
