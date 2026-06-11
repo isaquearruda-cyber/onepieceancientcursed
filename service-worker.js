@@ -1,4 +1,4 @@
-const CACHE_NAME = "one-piece-rpg-app-v9";
+const CACHE_NAME = "one-piece-rpg-app-v10";
 const CACHE_PREFIX = "one-piece-rpg-app-";
 
 const APP_SHELL = [
@@ -28,10 +28,14 @@ const APP_SHELL = [
   "./downloads/one-piece-rpg-pc-app.html",
   "./downloads/one-piece-rpg-android-app.html",
   "./downloads/one-piece-rpg-ios-app.html",
+  "./downloads/one-piece-rpg-windows.url",
+  "./downloads/one-piece-rpg-linux.desktop",
+  "./downloads/one-piece-rpg-macos.webloc",
   "./fundo-login.jpeg",
   "./fundo-login.mp4",
   "./assets/audio/drums-of-liberation.mp3",
-  "./assets/img/app-logo-192.jpg",
+  "./assets/img/app-logo-icon-lite.jpg",
+  "./assets/img/app-logo-banner-lite.jpg",
   "./assets/img/menu-lobby.jpeg",
   "./assets/img/botao-entrar-aventura.jpeg",
   "./assets/img/botao-registros.jpeg",
@@ -100,7 +104,7 @@ function buscarRedePrimeiro(event) {
     .catch(() => caches.match(event.request).then((cached) => {
       if (cached) return cached;
       if (event.request.mode === "navigate") return caches.match("./index.html");
-      return caches.match("./assets/img/app-logo-192.jpg");
+      return caches.match("./assets/img/app-logo-icon-lite.jpg");
     }));
 }
 
