@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Dowload do App - One Piece RPG</title>
+	<meta name="theme-color" content="#f7c84b">
+	<link rel="manifest" href="manifest.webmanifest">
+	<link rel="apple-touch-icon" href="assets/img/app-logo-192.png">
+	<link rel="stylesheet" href="estilo.css?v=20260611-pwa6">
+	<style>
+		body { overflow: auto; min-height: 100svh; background: linear-gradient(90deg, rgba(3,8,10,.95), rgba(5,18,18,.78)), #07120e; }
+		.download-page { min-height: 100svh; display: grid; grid-template-rows: auto 1fr; gap: 18px; padding: clamp(16px, 4vw, 42px); }
+		.download-topbar, .download-shell { width: min(100%, 1180px); margin: 0 auto; }
+		.download-voltar, .download-card a { text-decoration: none; }
+		.download-voltar { display: inline-flex; align-items: center; min-height: 42px; padding: 0 14px; border: 1px solid rgba(255,226,138,.48); border-radius: 8px; color: #fff7df; background: rgba(4,12,13,.72); font: 900 .82rem Arial,sans-serif; text-transform: uppercase; }
+		.download-shell { display: grid; grid-template-columns: minmax(240px,.72fr) minmax(0,1.28fr); gap: clamp(16px,3vw,28px); align-items: center; }
+		.download-hero { display: grid; gap: 14px; align-content: center; }
+		.download-logo { width: min(190px,44vw); aspect-ratio: 1; border-radius: 26px; border: 2px solid rgba(255,226,138,.52); box-shadow: 0 22px 60px rgba(0,0,0,.52), 0 0 28px rgba(247,200,75,.24); object-fit: cover; }
+		.download-hero h1 { font-family: "Segoe UI Black", "Arial Black", Impact, sans-serif; font-size: clamp(2.1rem,7vw,5.8rem); line-height: .9; text-transform: uppercase; color: #fff7df; text-shadow: 0 5px 0 #1f0d08, 0 18px 34px rgba(0,0,0,.72); letter-spacing: 0; }
+		.download-hero p { max-width: 520px; color: #d9e8d4; font: 700 1rem/1.45 Arial,sans-serif; }
+		.download-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+		.download-card { display: grid; gap: 12px; align-content: start; min-height: 278px; padding: 16px; border: 1px solid rgba(255,226,138,.38); border-radius: 8px; background: linear-gradient(180deg,rgba(5,14,16,.92),rgba(1,5,7,.94)); box-shadow: 0 20px 56px rgba(0,0,0,.42), inset 0 0 22px rgba(255,226,138,.04); font-family: Arial,sans-serif; }
+		.download-icon { width: 58px; height: 58px; display: grid; place-items: center; border-radius: 8px; border: 1px solid rgba(144,255,0,.42); background: linear-gradient(135deg,rgba(144,255,0,.22),rgba(54,224,255,.16)); color: #eaffd8; font-size: 1.35rem; font-weight: 1000; }
+		.download-card h2 { color: #ffe28a; font-size: 1.16rem; text-transform: uppercase; letter-spacing: .08em; }
+		.download-card p { color: #d9e8d4; line-height: 1.45; font-size: .92rem; }
+		.download-card a { margin-top: auto; display: grid; place-items: center; min-height: 46px; border: 1px solid rgba(144,255,0,.58); border-radius: 8px; color: #07120e; background: linear-gradient(90deg,#90ff00,#ffe28a); font-weight: 1000; text-transform: uppercase; }
+		.download-status { grid-column: 1 / -1; padding: 12px 14px; border: 1px solid rgba(54,224,255,.32); border-radius: 8px; background: rgba(3,10,12,.74); color: #c9fbff; font: 800 .92rem/1.4 Arial,sans-serif; }
+		@media (max-width: 900px) { .download-shell { grid-template-columns: 1fr; align-items: start; } .download-grid { grid-template-columns: 1fr; } .download-card { min-height: 0; } }
+	</style>
+</head>
+<body>
+	<main class="download-page">
+		<header class="download-topbar"><a class="download-voltar" href="index.html">Voltar</a></header>
+		<section class="download-shell" aria-label="Dowload do aplicativo">
+			<div class="download-hero"><img class="download-logo" src="assets/img/app-logo-192.png" alt="Logo do app"><h1>Dowload do App</h1><p>Escolha o dispositivo e baixe o pacote do aplicativo do site.</p></div>
+			<div class="download-grid">
+				<article class="download-card"><div class="download-icon">PC</div><h2>Computador</h2><p>Pacote para abrir no PC ou notebook. Depois de baixar, abra o arquivo no navegador e instale como app quando o navegador permitir.</p><a href="downloads/one-piece-rpg-pc-app.html" download>Baixar para PC</a></article>
+				<article class="download-card"><div class="download-icon">AND</div><h2>Android</h2><p>Pacote para Android. Baixe o arquivo, abra no Chrome e use a opção de adicionar o app à tela inicial.</p><a href="downloads/one-piece-rpg-android-app.html" download>Baixar Android</a></article>
+				<article class="download-card"><div class="download-icon">iOS</div><h2>iPhone / iPad</h2><p>Pacote para iOS. No Safari, abra o arquivo e use Compartilhar para adicionar o aplicativo à tela de início.</p><a href="downloads/one-piece-rpg-ios-app.html" download>Baixar iOS</a></article>
+				<div class="download-status" id="download-status">Se o navegador bloquear instalação direta, o arquivo ainda será baixado. A instalação real depende das permissões do aparelho e do navegador.</div>
+			</div>
+		</section>
+	</main>
+	<script src="musica-fundo.js?v=20260611-pwa6"></script>
+</body>
+</html>
