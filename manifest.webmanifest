@@ -1,0 +1,36 @@
+{
+  "name": "One Piece Cursed Ancient Century",
+  "short_name": "One Piece RPG",
+  "description": "App instalavel do RPG One Piece Cursed Ancient Century.",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "fullscreen"],
+  "orientation": "any",
+  "background_color": "#030809",
+  "theme_color": "#f7c84b",
+  "categories": ["games", "entertainment", "role-playing"],
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "assets/img/menu-lobby.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Entrar no Lobby",
+      "short_name": "Lobby",
+      "url": "lobby.html",
+      "icons": [{ "src": "assets/img/menu-lobby.jpeg", "sizes": "192x192", "type": "image/jpeg" }]
+    },
+    {
+      "name": "Dowload",
+      "short_name": "Dowload",
+      "url": "download.html",
+      "icons": [{ "src": "assets/img/menu-lobby.jpeg", "sizes": "192x192", "type": "image/jpeg" }]
+    }
+  ]
+}
