@@ -126,7 +126,12 @@
 		progresso = salvarProgresso(personagem, progresso);
 		personagem.progressoRpg = progresso;
 		if (window.BancoPersonagens?.salvarPersonagem) {
-			await window.BancoPersonagens.salvarPersonagem(personagem);
+			try {
+				await window.BancoPersonagens.salvarPersonagem(personagem);
+			} catch (erro) {
+				console.warn("Nao foi possivel salvar progresso no banco; usando cache local.", erro);
+				localStorage.setItem("ultimoPersonagem", JSON.stringify(personagem));
+			}
 		} else {
 			localStorage.setItem("ultimoPersonagem", JSON.stringify(personagem));
 		}

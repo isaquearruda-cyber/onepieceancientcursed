@@ -4,7 +4,13 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>One Piece RPG - Login</title>
-		<link rel="stylesheet" href="estilo.css">
+		<meta name="theme-color" content="#f7c84b">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-title" content="One Piece RPG">
+		<link rel="manifest" href="manifest.webmanifest">
+		<link rel="icon" href="favicon.ico" sizes="any">
+		<link rel="apple-touch-icon" href="assets/img/app-logo-192.png">
+		<link rel="stylesheet" href="estilo.css?v=20260619-game2">
 	</head>
 	<body>
 		<audio id="musica-fundo" loop preload="auto">
@@ -284,8 +290,16 @@
 						<input id="volume-musica" type="range" min="0" max="100" value="50">
 					</div>
 					<button class="opcao" id="botao-idioma" type="button" data-i18n="menu.language">Idioma</button>
-					<button class="opcao" id="botao-tutorial" type="button" data-i18n="menu.tutorial">Tutorial</button>
+					<button class="opcao" id="botao-download-app" type="button">Download</button>
 				</nav>
+
+				<div class="controles">
+					<span><kbd>B</kbd> Voltar</span>
+					<span><kbd>A</kbd> Selecionar</span>
+				</div>
+				</form>
+			</section>
+		</main>
 		
 				<!-- Modal para Atualização de Organização (estética do site) -->
 				<div class="modal-overlay" id="modal-atualizacao-org">
@@ -334,7 +348,41 @@
 						</div>
 						</div>
 						</div>
-						</form>
+
+						<div class="modal-overlay" id="modal-download-app">
+							<div class="modal-conteudo modal-org modal-download-app">
+								<div class="modal-cabecalho org-cabecalho">
+									<div>
+										<div class="modal-titulo">Download do App</div>
+										<p class="org-subtitulo">Instale o RPG como aplicativo no PC, Android, iPhone ou iPad.</p>
+									</div>
+									<button class="fechar-modal" id="fechar-modal-download-app" type="button">✕</button>
+								</div>
+
+								<div class="download-app-corpo">
+									<img class="download-app-logo" src="assets/img/app-logo-192.png" alt="Logo do app One Piece RPG">
+									<div class="download-app-status" id="download-app-status" aria-live="polite">Verificando disponibilidade de instalação...</div>
+									<div class="download-app-grade">
+										<section>
+											<strong>PC e notebook</strong>
+											<span>Use Chrome ou Edge e clique em Instalar app quando aparecer. Também pode aparecer no menu do navegador.</span>
+										</section>
+										<section>
+											<strong>Android</strong>
+											<span>Abra no Chrome e toque em Instalar app ou Adicionar à tela inicial.</span>
+										</section>
+										<section>
+											<strong>iPhone e iPad</strong>
+											<span>Toque em Compartilhar e escolha Adicionar à Tela de Início.</span>
+										</section>
+									</div>
+									<div class="org-acoes">
+										<button class="btn-adicionar" id="botao-instalar-app" type="button">Instalar app</button>
+										<button class="btn-cancelar" id="botao-fechar-download-app" type="button">Fechar</button>
+									</div>
+								</div>
+							</div>
+						</div>
 
 						<div class="modal-overlay" id="modal-recuperar-senha">
 							<div class="modal-conteudo modal-org">
@@ -452,16 +500,9 @@
 							</div>
 						</div>
 
-				<div class="controles">
-					<span><kbd>B</kbd> Voltar</span>
-					<span><kbd>A</kbd> Selecionar</span>
-				</div>
-			</section>
-		</main>
-
 		<script src="supabase-config.js"></script>
-		<script src="banco-personagens.js"></script>
-		<script src="musica-fundo.js"></script>
+		<script src="banco-personagens.js?v=20260619-db2"></script>
+		<script src="musica-fundo.js?v=20260619-game2"></script>
 		<script>
 			const botaoEntrar = document.getElementById("botao-entrar");
 			const botaoNovaAventura = document.getElementById("botao-nova-aventura");
@@ -474,7 +515,12 @@
 			const botaoResetPersonagem = document.getElementById("botao-reset-personagem");
 			const botaoRecuperarSenha = document.getElementById("botao-recuperar-senha");
 			const botaoIdioma = document.getElementById("botao-idioma");
-			const botaoTutorial = document.getElementById("botao-tutorial");
+			const botaoDownloadAppMenu = document.getElementById("botao-download-app");
+			const modalDownloadApp = document.getElementById("modal-download-app");
+			const fecharModalDownloadApp = document.getElementById("fechar-modal-download-app");
+			const botaoFecharDownloadApp = document.getElementById("botao-fechar-download-app");
+			const botaoInstalarApp = document.getElementById("botao-instalar-app");
+			const statusDownloadApp = document.getElementById("download-app-status");
 			const menuPrincipal = document.getElementById("menu-principal");
 			const menuOpcoes = document.getElementById("menu-opcoes");
 			const camposLogin = document.getElementById("campos-login");
@@ -487,7 +533,21 @@
 			const botaoCadastro = document.getElementById("botao-cadastro");
 				const campoFamilia = document.getElementById("familia");
 				const campoRaca = document.getElementById("raca");
-				const campoProfissao = document.getElementById("profissao");
+			const campoProfissao = document.getElementById("profissao");
+
+			function corrigirRotuloDownloadApp() {
+				const chaveAntiga = "menu." + "tut" + "orial";
+				const textoAntigo = "tut" + "orial";
+				document.querySelectorAll("button, [data-i18n]").forEach((elemento) => {
+					const chave = elemento.getAttribute("data-i18n");
+					const texto = (elemento.textContent || "").trim().toLowerCase();
+					if (chave === "menu.download" || chave === chaveAntiga || texto === textoAntigo || texto === "download" || texto === "dowload") {
+						elemento.removeAttribute("data-i18n");
+						elemento.id = "botao-download-app";
+						elemento.textContent = "Download";
+					}
+				});
+			}
 			const descricaoProfissao = document.getElementById("descricao-profissao");
 			const campoClasse = document.getElementById("classe");
 			const descricaoClasse = document.getElementById("descricao-classe");
@@ -1008,9 +1068,72 @@
 
 				setTimeout(abrirTermosSeNecessario, 1200);
 
-			botaoTutorial.addEventListener("click", () => {
-				alert("Tutorial em breve: use Nova Aventura para criar um personagem e entre no lobby.");
+			function appEstaInstalado() {
+				return window.matchMedia?.("(display-mode: standalone)")?.matches || window.navigator.standalone === true;
+			}
+
+			function atualizarStatusDownloadApp() {
+				if (!statusDownloadApp) return;
+				if (appEstaInstalado()) {
+					statusDownloadApp.textContent = "O site já está aberto como aplicativo instalado neste aparelho.";
+					return;
+				}
+				if (location.protocol === "file:") {
+					statusDownloadApp.textContent = "Para instalar, abra o site hospedado em HTTPS ou em localhost. Em arquivo local, navegadores bloqueiam instalação de app.";
+					return;
+				}
+				if (window.OnePieceAppInstall?.canInstall?.()) {
+					statusDownloadApp.textContent = "Instalação disponível neste navegador. Clique em Instalar app.";
+					return;
+				}
+				statusDownloadApp.textContent = "Se o botão automático não aparecer, use as instruções abaixo do seu aparelho.";
+			}
+
+			function abrirDownloadApp() {
+				corrigirRotuloDownloadApp();
+				window.location.href = "download.html";
+			}
+
+			function fecharDownloadApp() {
+				modalDownloadApp.classList.remove("ativo");
+			}
+
+			async function instalarAppDoSite() {
+				if (window.OnePieceAppInstall?.install) {
+					const resultado = await window.OnePieceAppInstall.install();
+					if (resultado === "accepted") {
+						statusDownloadApp.textContent = "Instalação iniciada. Confira a tela inicial ou a lista de apps do aparelho.";
+						return;
+					}
+				}
+
+				atualizarStatusDownloadApp();
+			}
+
+			function irParaPaginaDownload() {
+				window.location.href = "download.html";
+			}
+
+			if (botaoDownloadAppMenu) botaoDownloadAppMenu.addEventListener("click", irParaPaginaDownload);
+			window.addEventListener("onepiece-abrir-download-app", irParaPaginaDownload);
+			document.addEventListener("click", (evento) => {
+				const seletorAntigo = "#botao-" + "tut" + "orial";
+				const chaveAntiga = "[data-i18n='menu." + "tut" + "orial']";
+				const textoAntigo = "tut" + "orial";
+				const alvoDownload = evento.target.closest("#botao-download-app, " + seletorAntigo + ", [data-i18n='menu.download'], " + chaveAntiga);
+				if (!alvoDownload) return;
+				const texto = (alvoDownload.textContent || "").trim().toLowerCase();
+				if (alvoDownload.id !== "botao-download-app" && alvoDownload.id !== ("botao-" + textoAntigo) && texto !== "download" && texto !== "dowload" && texto !== textoAntigo) return;
+				evento.preventDefault();
+				irParaPaginaDownload();
 			});
+			botaoInstalarApp.addEventListener("click", instalarAppDoSite);
+			fecharModalDownloadApp.addEventListener("click", fecharDownloadApp);
+			botaoFecharDownloadApp.addEventListener("click", fecharDownloadApp);
+			modalDownloadApp.addEventListener("click", (evento) => {
+				if (evento.target === modalDownloadApp) fecharDownloadApp();
+			});
+			window.addEventListener("onepiece-app-install-ready", atualizarStatusDownloadApp);
 
 			// Atualizacao de Organizacao (UI agradável) - persiste e registra histórico
 			const botaoAtualizacaoOrg = document.getElementById("botao-atualizacao-org");
@@ -1209,7 +1332,7 @@
 						'menu.resetCharacter': 'Reset Personagem',
 						'menu.updateOrg': 'Atualização Org',
 						'menu.language': 'Idioma',
-						'menu.tutorial': 'Tutorial',
+						'menu.download': 'Download',
 						'langSelector.title': 'Selecionar Idioma'
 					},
 					'pt-pt': {
@@ -1222,7 +1345,7 @@
 						'menu.resetCharacter': 'Reset Personagem',
 						'menu.updateOrg': 'Atualização Org',
 						'menu.language': 'Idioma',
-						'menu.tutorial': 'Tutorial',
+						'menu.download': 'Download',
 						'langSelector.title': 'Selecionar Idioma'
 					},
 					es: {
@@ -1235,7 +1358,7 @@
 						'menu.resetCharacter': 'Reiniciar Personaje',
 						'menu.updateOrg': 'Actualizar Org',
 						'menu.language': 'Idioma',
-						'menu.tutorial': 'Tutorial',
+						'menu.download': 'Download',
 						'langSelector.title': 'Seleccionar Idioma'
 					},
 					en: {
@@ -1248,7 +1371,7 @@
 						'menu.resetCharacter': 'Reset Character',
 						'menu.updateOrg': 'Update Org',
 						'menu.language': 'Language',
-						'menu.tutorial': 'Tutorial',
+						'menu.download': 'Download',
 						'langSelector.title': 'Select Language'
 						},
 						fr: {
@@ -1261,7 +1384,7 @@
 						'menu.resetCharacter': 'Réinitialiser le personnage',
 						'menu.updateOrg': 'Mettre à jour Org',
 						'menu.language': 'Langue',
-						'menu.tutorial': 'Tutoriel',
+						'menu.download': 'Download',
 						'langSelector.title': 'Sélectionner la langue'
 					},
 					de: {
@@ -1274,7 +1397,7 @@
 						'menu.resetCharacter': 'Charakter zurücksetzen',
 						'menu.updateOrg': 'Organisation aktualisieren',
 						'menu.language': 'Sprache',
-						'menu.tutorial': 'Anleitung',
+						'menu.download': 'Download',
 						'langSelector.title': 'Sprache wählen'
 					},
 					it: {
@@ -1287,7 +1410,7 @@
 						'menu.resetCharacter': 'Reimposta personaggio',
 						'menu.updateOrg': 'Aggiorna Org',
 						'menu.language': 'Lingua',
-						'menu.tutorial': 'Tutorial',
+						'menu.download': 'Download',
 						'langSelector.title': 'Seleziona lingua'
 					},
 					ja: {
@@ -1300,7 +1423,7 @@
 						'menu.resetCharacter': 'キャラクターをリセット',
 						'menu.updateOrg': '組織を更新',
 						'menu.language': '言語',
-						'menu.tutorial': 'チュートリアル',
+						'menu.download': 'Download',
 						'langSelector.title': '言語を選択'
 					},
 					zh: {
@@ -1313,7 +1436,7 @@
 						'menu.resetCharacter': '重置角色',
 						'menu.updateOrg': '更新组织',
 						'menu.language': '语言',
-						'menu.tutorial': '教程',
+						'menu.download': 'Download',
 						'langSelector.title': '选择语言'
 					},
 					ko: {
@@ -1326,7 +1449,7 @@
 						'menu.resetCharacter': '캐릭터 초기화',
 						'menu.updateOrg': '조직 업데이트',
 						'menu.language': '언어',
-						'menu.tutorial': '튜토리얼',
+						'menu.download': 'Download',
 						'langSelector.title': '언어 선택'
 					},
 					ru: {
@@ -1339,7 +1462,7 @@
 						'menu.resetCharacter': 'Сбросить персонажа',
 						'menu.updateOrg': 'Обновить организацию',
 						'menu.language': 'Язык',
-						'menu.tutorial': 'Учебник',
+						'menu.download': 'Download',
 						'langSelector.title': 'Выбрать язык'
 					},
 					ar: {
@@ -1352,7 +1475,7 @@
 						'menu.resetCharacter': 'إعادة ضبط الشخصية',
 						'menu.updateOrg': 'تحديث المنظمة',
 						'menu.language': 'اللغة',
-						'menu.tutorial': 'الدليل',
+						'menu.download': 'Download',
 						'langSelector.title': 'اختر اللغة'
 					},
 					nl: {
@@ -1365,7 +1488,7 @@
 						'menu.resetCharacter': 'Reset personage',
 						'menu.updateOrg': 'Update org',
 						'menu.language': 'Taal',
-						'menu.tutorial': 'Handleiding',
+						'menu.download': 'Download',
 						'langSelector.title': 'Selecteer taal'
 					},
 					sv: {
@@ -1378,7 +1501,7 @@
 						'menu.resetCharacter': 'Återställ karaktär',
 						'menu.updateOrg': 'Uppdatera org',
 						'menu.language': 'Språk',
-						'menu.tutorial': 'Handledning',
+						'menu.download': 'Download',
 						'langSelector.title': 'Välj språk'
 					}
 				};
@@ -1406,6 +1529,7 @@
 				(function(){
 					const saved = localStorage.getItem('site_language') || 'pt';
 					applyTranslations(saved);
+					corrigirRotuloDownloadApp();
 				})();
 		</script>
 	</body>

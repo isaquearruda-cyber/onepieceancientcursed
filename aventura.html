@@ -4,44 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Entrar na Aventura - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css">
-    <style>
-        html, body { margin: 0; min-height: 100%; background: #030708; color: #fff7df; }
-        body { overflow-x: hidden; }
-        .video-fundo { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.3) saturate(1.18); z-index: 0; }
-        .app { position: relative; z-index: 1; min-height: 100vh; padding: clamp(14px,2.4vw,28px); background: radial-gradient(circle at 50% 18%, rgba(255,226,138,.14), transparent 26%), radial-gradient(circle at 22% 72%, rgba(54,224,255,.12), transparent 30%); }
-        .painel { border: 1px solid rgba(247,200,75,.28); border-radius: 8px; background: linear-gradient(180deg, rgba(5,12,14,.92), rgba(1,4,6,.96)); box-shadow: 0 22px 54px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,247,223,.06); backdrop-filter: blur(8px); }
-        .topo { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; padding: 16px 18px; margin-bottom: 14px; }
-        small, .rotulo { color: #ffe28a; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
-        h1 { margin: 3px 0 6px; font-family: "Segoe UI Black","Arial Black",Impact,sans-serif; font-size: clamp(2rem,5vw,4rem); line-height: .92; text-transform: uppercase; text-shadow: 0 5px 0 #210b08,0 16px 30px rgba(0,0,0,.72); }
-        .voltar { min-height: 42px; padding: 0 14px; border: 1px solid rgba(255,226,138,.52); border-radius: 8px; color: #fff7df; background: rgba(4,12,13,.72); font-weight: 900; text-transform: uppercase; text-decoration: none; display: inline-grid; place-items: center; }
-        .mares { padding: 18px; overflow: hidden; }
-        .painel-jogo { display: grid; grid-template-columns: 1.2fr .8fr .8fr; gap: 10px; margin: 12px 0 4px; }
-        .hud-rota { min-height: 78px; padding: 12px; border: 1px solid rgba(255,226,138,.22); border-radius: 8px; background: linear-gradient(135deg, rgba(255,247,223,.06), rgba(54,224,255,.06)); }
-        .hud-rota b { display: block; margin-top: 6px; color: #fff7df; font-size: 1.1rem; text-transform: uppercase; }
-        .hud-rota span { color: #d9e8d4; font-size: .86rem; }
-        .mares-trilho { min-height: 372px; display: grid; grid-template-columns: repeat(10, minmax(156px, 1fr)); gap: 12px; align-items: stretch; overflow-x: auto; padding: 12px 4px; }
-        .mar-card { --cor: #36e0ff; --img: none; --pos: center; position: relative; min-height: 318px; padding: 12px 10px; border: 1px solid color-mix(in srgb,var(--cor) 58%,transparent); border-radius: 8px; color: #fff7df; background: #030708; box-shadow: 0 0 24px color-mix(in srgb,var(--cor) 18%,transparent), inset 0 0 24px rgba(0,0,0,.28); display: grid; align-content: end; gap: 9px; justify-items: start; text-align: left; overflow: hidden; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
-        .mar-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.02), rgba(0,0,0,.1) 35%, rgba(0,0,0,.78)), var(--img); background-size: cover, 500% 200%; background-position: center, var(--pos); filter: saturate(1.22) contrast(1.08); transform: scale(1.01); transition: transform .25s ease, filter .25s ease; }
-        .mar-card::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 17%, color-mix(in srgb,var(--cor) 30%,transparent), transparent 32%), linear-gradient(115deg, rgba(255,247,223,.12), transparent 30%, transparent 68%, rgba(255,247,223,.08)); opacity: .78; pointer-events: none; }
-        .mar-card > * { position: relative; z-index: 1; }
-        .mar-card:not(.bloqueado):hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 0 32px color-mix(in srgb,var(--cor) 38%,transparent), inset 0 0 28px rgba(255,247,223,.08); }
-        .mar-card:not(.bloqueado):hover::before { transform: scale(1.06); filter: saturate(1.22) brightness(1.08); }
-        .mar-card.bloqueado { opacity: .62; cursor: not-allowed; }
-        .mar-card.bloqueado::before { filter: grayscale(1) brightness(.62); }
-        .mar-card strong { font-size: 1rem; text-transform: uppercase; text-shadow: 0 2px 12px rgba(0,0,0,.85); }
-        .mar-card span { color: #d9e8d4; font-size: .78rem; }
-        .mar-status { justify-self: start; padding: 5px 8px; border: 1px solid color-mix(in srgb,var(--cor) 50%,transparent); border-radius: 999px; color: #fff7df; background: rgba(3,8,10,.72); font-size: .68rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
-        .mar-desc { min-height: 42px; color: #d9e8d4; line-height: 1.25; text-shadow: 0 2px 10px rgba(0,0,0,.85); }
-        .briefing { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; margin-top: 14px; }
-        .briefing-card { min-height: 118px; padding: 14px; border: 1px solid rgba(255,226,138,.2); border-radius: 8px; background: rgba(255,247,223,.04); }
-        .briefing-card strong { display: block; margin: 6px 0; color: #fff7df; font-size: 1.1rem; text-transform: uppercase; }
-        .briefing-card p { margin: 0; color: #d9e8d4; line-height: 1.4; }
-        .resultado { margin-top: 12px; padding: 12px; border: 1px solid rgba(255,120,120,.3); border-radius: 8px; background: rgba(80,10,10,.24); color: #ffd0d0; }
-        @media(max-width:960px){.video-fundo{display:none}.app{padding:10px}.topo,.briefing,.painel-jogo{grid-template-columns:1fr}.topo{padding:12px 14px;margin-bottom:10px}.topo p{margin:0;font-size:.86rem}.painel{backdrop-filter:none}.mares{padding:12px}.painel-jogo{gap:8px;margin-top:8px}.hud-rota{min-height:auto;padding:9px}.hud-rota b{font-size:.96rem}.hud-rota span{font-size:.76rem}.mares-trilho{grid-template-columns:repeat(10,190px);min-height:302px;gap:10px;padding-top:8px}.mar-card{min-height:258px;padding:10px}.mar-card strong{font-size:.95rem}.mar-desc{min-height:58px;font-size:.74rem}.mar-status{font-size:.62rem;padding:4px 7px}.briefing{display:none}}
-    </style>
+    <link rel="stylesheet" href="estilo.css?v=20260619-game2">
 </head>
-<body>
+<body class="pagina-aventura">
     <audio id="musica-fundo" loop preload="auto"><source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg"></audio>
     <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true"><source src="fundo-login.mp4" type="video/mp4"></video>
     <main class="app">
@@ -69,8 +34,8 @@
             <article class="briefing-card painel"><small>Registro</small><strong>Viagem salva</strong><p>O cálculo de rota salva tempo, custo, risco e última viagem no navegador do jogador.</p></article>
         </section>
     </main>
-    <script src="musica-fundo.js?v=20260605-rpg5"></script>
-    <script src="mares-dados.js?v=20260605-rpg5"></script>
+    <script src="musica-fundo.js?v=20260619-game2"></script>
+    <script src="mares-dados.js?v=20260619-rpg8"></script>
     <script>
         const maresEl = document.getElementById("mares");
         const bloqueioEl = document.getElementById("bloqueio");

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Missões de Organização - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game2">
     <style>
         html,
         body {
@@ -380,8 +380,9 @@
     </div>
 
     <script src="supabase-config.js"></script>
-    <script src="banco-personagens.js"></script>
-    <script src="musica-fundo.js"></script>
+    <script src="banco-personagens.js?v=20260619-db2"></script>
+    <script src="musica-fundo.js?v=20260619-game2"></script>
+    <script src="rpg-sistemas.js?v=20260619-rpg8"></script>
     <script>
         const ranks = ["E", "D", "C", "B", "A"];
         const periodos = [
@@ -853,9 +854,15 @@
             ];
 
             try {
+                const resultado = await RpgSistemas.concluirAtividade(personagemAtual, {
+                    tipo: "missao",
+                    titulo: missaoSelecionada.titulo,
+                    rank: missaoSelecionada.rank,
+                    periodo: missaoSelecionada.periodo
+                });
                 await BancoPersonagens.salvarPersonagem(personagemAtual);
                 localStorage.setItem("ultimoPersonagem", JSON.stringify(personagemAtual));
-                statusEnvio.textContent = "Missão concluída e contabilizada.";
+                statusEnvio.textContent = `Missão concluída: +${resultado.recompensas.exp} EXP, +${resultado.recompensas.berris} berris e +${resultado.recompensas.pontosAtributo} ponto(s).`;
                 fecharConclusao();
                 renderizar();
             } catch (erro) {

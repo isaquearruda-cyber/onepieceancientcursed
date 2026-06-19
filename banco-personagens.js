@@ -143,7 +143,30 @@ const BancoPersonagens = (() => {
 	}
 
 	function gravarCacheLocal(personagens) {
-		localStorage.setItem("personagensCriados", JSON.stringify(personagens.filter((personagem) => !ehRegistroInterno(personagem))));
+		const limpos = personagens.filter((personagem) => !ehRegistroInterno(personagem));
+		try {
+			const atuais = JSON.parse(localStorage.getItem("personagensCriados") || "[]").filter((personagem) => !ehRegistroInterno(personagem));
+			if (atuais.length > limpos.length) {
+				localStorage.setItem("personagensCriadosBackup", JSON.stringify({
+					quando: new Date().toISOString(),
+					personagens: atuais
+				}));
+			}
+		} catch (erro) {
+			console.warn("Nao foi possivel criar backup do cache local:", erro);
+		}
+		localStorage.setItem("personagensCriados", JSON.stringify(limpos));
+	}
+
+	function mesclarPersonagens(personagensBase, personagensNovos) {
+		const mapa = new Map();
+		[...(personagensBase || []), ...(personagensNovos || [])].forEach((personagem) => {
+			const id = chavePersonagem(personagem);
+			if (id && !ehRegistroInterno(personagem)) {
+				mapa.set(id, personagem);
+			}
+		});
+		return Array.from(mapa.values());
 	}
 
 	function lerTravasFamiliaLocal() {
@@ -201,9 +224,16 @@ const BancoPersonagens = (() => {
 	async function obterTodosRemoto() {
 		const linhas = await chamarSupabase(`${tabelaSupabase}?select=id,dados&order=criado_em.asc`);
 		const personagens = linhas.map((linha) => linha.dados).filter((dados) => dados && !ehRegistroInterno(dados));
-		gravarCacheLocal(personagens);
-		await salvarTodosLocal(personagens);
-		return personagens;
+		const cache = lerCacheLocal();
+		const mesclados = mesclarPersonagens(cache, personagens);
+
+		if (personagens.length === 0 && cache.length > 0) {
+			console.warn("Banco online retornou vazio; mantendo personagens do cache local.");
+		}
+
+		gravarCacheLocal(mesclados);
+		await salvarTodosLocal(mesclados);
+		return mesclados;
 	}
 
 	async function salvarPersonagemRemoto(personagem) {

@@ -1,1 +1,1185 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Inventário - One Piece RPG</title><link rel="stylesheet" href="estilo.css"><style>html,body{margin:0;min-height:100%;background:#06100d;color:#fff7df}.video-fundo{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;filter:brightness(.42) saturate(1.15)}.app{position:relative;z-index:1;min-height:100vh;display:grid;grid-template-rows:auto auto auto 1fr auto;gap:12px;padding:clamp(14px,2.6vw,34px);background:radial-gradient(circle at 78% 24%,rgba(247,200,75,.18),transparent 30%),radial-gradient(circle at 18% 14%,rgba(36,99,74,.26),transparent 32%)}header,footer{display:flex;align-items:center;justify-content:space-between;gap:16px;width:min(1180px,100%);margin:0 auto;text-shadow:0 2px 10px #000}h1{margin:0;font-size:clamp(1.7rem,4vw,3rem);line-height:1}p{margin:0;color:#d9e8d4}.back{min-width:112px;padding:10px 14px;border:1px solid rgba(255,247,223,.34);border-radius:8px;color:#fff7df;background:rgba(3,8,10,.56);text-align:center;text-decoration:none;font-weight:900}.back:hover{border-color:#ffe28a;background:rgba(247,200,75,.16)}.add,.history{display:none;width:min(1180px,100%);margin:0 auto;padding:14px;border:1px solid rgba(247,200,75,.22);background:rgba(3,8,10,.72);backdrop-filter:blur(8px)}.add.on,.history.on{display:grid}.form{display:grid;grid-template-columns:minmax(150px,1fr) minmax(150px,.9fr) 90px minmax(220px,1.4fr) auto auto;gap:10px;align-items:end}.form label{display:grid;gap:6px;color:#ffe28a;font-size:.78rem;font-weight:900;text-transform:uppercase}.form input,.form select{min-height:42px;border:1px solid rgba(255,247,223,.14);border-radius:8px;padding:9px 11px;color:#fff7df;background:rgba(2,5,5,.72)}.form button,.acao{min-height:42px;padding:9px 12px;border:1px solid rgba(247,200,75,.34);border-radius:8px;color:#fff7df;background:rgba(247,200,75,.14);cursor:pointer;font-weight:900}.shell{width:min(1180px,100%);margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,330px);gap:clamp(16px,2.4vw,28px);min-height:0;border:1px solid rgba(255,247,223,.14);background:linear-gradient(90deg,rgba(2,7,8,.88),rgba(14,26,20,.66)),repeating-linear-gradient(0deg,rgba(255,255,255,.025),rgba(255,255,255,.025) 1px,transparent 1px,transparent 5px);box-shadow:0 26px 80px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,247,223,.08);backdrop-filter:blur(8px)}.main{display:grid;grid-template-rows:auto auto 1fr;gap:14px;min-width:0;padding:clamp(16px,2.3vw,26px)}.tabs{display:flex;align-items:center;gap:14px;padding-bottom:10px;border-bottom:1px solid rgba(255,247,223,.12);overflow:auto}.tabs button{display:grid;place-items:center;width:42px;height:40px;border:1px solid transparent;border-radius:8px;background:transparent;color:#ffe28a;cursor:pointer}.tabs button.on,.tabs button:hover{border-color:rgba(255,226,138,.52);background:rgba(255,247,223,.08)}.icon{display:block;width:var(--sz,28px);height:var(--sz,28px);border-radius:7px;background-image:url('assets/img/inventario/categorias-sprite.webp');background-size:600% 300%;background-position:var(--x,0%) var(--y,0%);box-shadow:0 0 12px rgba(247,200,75,.24)}.status{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center}.status strong{font-size:clamp(1.05rem,2vw,1.35rem)}.actions{display:flex;gap:8px}.body{display:grid;grid-template-columns:minmax(132px,168px) 1fr;gap:14px;min-height:0}.fold{display:grid;grid-template-rows:auto 1fr;gap:8px;min-height:0}.fold.closed{grid-template-rows:auto}.fold.closed nav{display:none}.foldBtn{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:8px;min-height:40px;padding:6px 8px;border:1px solid rgba(247,200,75,.32);border-radius:8px;color:#fff7df;background:linear-gradient(90deg,rgba(247,200,75,.18),rgba(3,8,10,.72));cursor:pointer;font-weight:900;text-align:left;font-size:.8rem}.cats{display:grid;align-content:start;gap:7px;max-height:clamp(180px,calc(100vh - 520px),310px);overflow:auto;padding-right:3px}.cat{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:7px;min-height:42px;padding:6px 8px;border:1px solid rgba(255,247,223,.12);border-radius:8px;background:rgba(3,8,10,.54);color:#d9e8d4;cursor:pointer;text-align:left;font-size:.78rem}.cat.on,.cat:hover{border-color:color-mix(in srgb,var(--c,#ffe28a) 68%,transparent);background:linear-gradient(90deg,color-mix(in srgb,var(--c,#f7c84b) 24%,transparent),rgba(3,8,10,.62));color:#fff7df}.cat small{min-width:24px;padding:3px 6px;border-radius:999px;color:#172018;background:#f7c84b;font-size:.7rem;font-weight:900;text-align:center}.gridWrap{min-width:0;border:1px solid rgba(255,247,223,.08);background:rgba(2,5,5,.46);box-shadow:inset 0 0 32px rgba(0,0,0,.42)}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:9px;align-content:start;max-height:clamp(280px,calc(100vh - 450px),420px);overflow:auto;padding:12px}.slot,.empty{position:relative;aspect-ratio:1;border:1px solid rgba(255,247,223,.12);border-radius:4px;background:radial-gradient(circle at 50% 28%,color-mix(in srgb,var(--c,#f7c84b) 20%,transparent),transparent 46%),linear-gradient(180deg,rgba(31,38,27,.86),rgba(6,10,8,.9));box-shadow:inset 0 1px 0 rgba(255,247,223,.06),0 12px 20px rgba(0,0,0,.24);overflow:hidden;color:#fff7df}.slot{display:grid;grid-template-rows:auto 1fr auto;gap:5px;padding:8px}.slot:hover{border-color:var(--c,#ffe28a);box-shadow:0 0 0 2px color-mix(in srgb,var(--c,#f7c84b) 26%,transparent)}.slotIcon{display:grid;place-items:center;align-self:center}.slotIcon .icon{--sz:58px}.slotName{align-self:end;font-size:.78rem;line-height:1.15;text-align:center;overflow-wrap:anywhere}.qtd{position:absolute;left:7px;bottom:6px;font-size:.74rem;font-weight:900;text-shadow:0 2px 6px #000}.remove{justify-self:end;width:26px;height:26px;border:1px solid rgba(255,148,122,.34);border-radius:50%;color:#ffd6cc;background:rgba(80,12,9,.68);cursor:pointer;font-weight:900}.empty{background:linear-gradient(135deg,rgba(255,247,223,.035),transparent 42%),rgba(0,0,0,.26)}.empty:after{content:"";position:absolute;inset:38%;border:1px solid rgba(255,247,223,.08);transform:rotate(45deg)}.side{position:relative;display:grid;grid-template-rows:auto 1fr auto;gap:14px;padding:clamp(16px,2.2vw,24px);border-left:1px solid rgba(255,247,223,.1);background:linear-gradient(180deg,rgba(255,247,223,.05),rgba(3,8,10,.32));overflow:hidden}.sideTop{text-align:center}.sideTop span{color:#ffe28a;font-size:.78rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.sideTop strong{font-size:clamp(1.25rem,2.2vw,1.8rem);overflow-wrap:anywhere}.figure{display:grid;place-items:end center;min-height:clamp(230px,calc(100vh - 500px),430px)}.figure img{display:none;max-width:min(100%,280px);max-height:clamp(280px,calc(100vh - 330px),500px);object-fit:contain;filter:drop-shadow(0 22px 22px rgba(0,0,0,.6))}.figure.has img{display:block}.placeholder{display:grid;place-items:center;width:min(90%,250px);aspect-ratio:3/4;border:1px solid rgba(255,226,138,.28);border-radius:8px;color:rgba(255,247,223,.7);background:rgba(255,247,223,.06);text-align:center;padding:16px}.figure.has .placeholder{display:none}.detail{min-height:110px;padding:14px;border:1px solid rgba(255,247,223,.16);background:rgba(3,8,10,.46)}.detail strong{display:block;color:#ffe28a;margin-bottom:7px}.hist{display:grid;gap:6px;padding:10px;border:1px solid rgba(255,247,223,.1);color:#d9e8d4;background:rgba(0,0,0,.26)}@media(max-width:960px){.shell{grid-template-columns:1fr}.side{border-left:0;border-top:1px solid rgba(255,247,223,.1)}.body,.form{grid-template-columns:1fr}.status{grid-template-columns:1fr}}@media(max-width:560px){header,footer{align-items:stretch;flex-direction:column}.grid{grid-template-columns:repeat(3,1fr)}}</style></head><body><video class="video-fundo" autoplay muted loop playsinline><source src="fundo-login.mp4" type="video/mp4"></video><main class="app"><header><div><p id="pstatus">Carregando personagem...</p><h1>Inventário</h1></div><a class="back" href="lobby.html">Voltar ao Lobby</a></header><section class="add" id="add"><form class="form" id="form"><label>Item<input id="iname" placeholder="Espada, fruta, mapa..."></label><label>Categoria<select id="itype"></select></label><label>Qtd.<input id="iqtd" type="number" min="1" value="1"></label><label>Descrição<input id="idesc" placeholder="Efeito, origem ou observação"></label><button type="submit">Adicionar</button><button type="button" id="clear">Limpar</button></form></section><section class="history" id="history"></section><section class="shell"><div class="main"><nav class="tabs" id="tabs"></nav><div class="status"><div><strong id="title">Todos os itens</strong><p id="summary">0 itens no inventário</p></div><div class="actions"><button class="acao" id="toggleAdd">Adicionar</button><button class="acao" id="toggleHist">Histórico</button></div></div><div class="body"><div class="fold" id="fold"><button class="foldBtn" id="foldBtn" type="button"><span class="icon" id="curIcon"></span><span id="curText">Categorias</span><b>▾</b></button><nav class="cats" id="cats"></nav></div><div class="gridWrap"><div class="grid" id="grid"></div></div></div></div><aside class="side"><div class="sideTop"><span>Personagem</span><strong id="pname">Sem personagem</strong></div><div class="figure" id="fig"><img id="pimg" alt=""><div class="placeholder">Imagem do personagem não enviada</div></div><div class="detail" id="detail"><strong>Selecione um item</strong><p>Passe o mouse ou toque em um slot para ver a descrição aqui.</p></div></aside></section><footer><span id="foot">Sort: categoria</span><span>Back: lobby</span></footer></main><script src="musica-fundo.js"></script><script src="rpg-sistemas.js"></script><script>const personagem=JSON.parse(localStorage.getItem('ultimoPersonagem')||'null');let active=new URLSearchParams(location.search).get('categoria')||'todos',closed=false;const minSlots=36,catsData=[['todos','Todos',[0,0],'#f7c84b'],['alimentacao','Alimentação',[1,0],'#ff8a3d'],['armamentos','Armamentos',[2,0],'#ff4f3a'],['equipamentos','Equipamentos',[3,0],'#78c7ff'],['vestimentas','Vestimentas',[4,0],'#8f7bff'],['medicinais','Medicinais',[5,0],'#ff6d6d'],['ferramentas','Ferramentas',[0,1],'#c4a46b'],['navegacao','Navegação',[1,1],'#49d2ff'],['recursos','Recursos',[2,1],'#b78953'],['nauticos','Náuticos',[3,1],'#3aa7ff'],['tesouros','Tesouros',[4,1],'#ffd44d'],['documentos','Documentos',[5,1],'#d7b277'],['especiais','Especiais',[0,2],'#b64cff'],['consumiveis','Consumíveis',[1,2],'#ffa536'],['tecnologicos','Tecnológicos',[2,2],'#36e0ff'],['materiais','Materiais',[3,2],'#d79a5a'],['berris','Berris',[4,2],'#ffcf3e'],['cacaepesca','Caça e Pesca',[5,2],'#64d6a4'],['diversos','Diversos',[0,0],'#f7c84b']];function esc(t){return String(t||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}function cat(k){return catsData.find(c=>c[0]==k)||catsData[0]}function key(){return personagem?.nome?`inventario_${personagem.nome}`:''}function inv(){return personagem?JSON.parse(localStorage.getItem(key())||'[]'):[]}function save(a){if(personagem)localStorage.setItem(key(),JSON.stringify(a))}function sprite(o,sz=''){let s=Array.isArray(o)?o:(o?.sprite||cat(o?.tipo||o?.chave)[2]),x=s[0]<=0?0:s[0]>=5?100:s[0]*20,y=s[1]<=0?0:s[1]>=2?100:s[1]*50;return`--x:${x}%;--y:${y}%;${sz?`--sz:${sz};`:''}`}function icon(o,sz=''){return`<span class="icon" style="${sprite(o,sz)}"></span>`}function counts(a){return catsData.reduce((m,c)=>(m[c[0]]=c[0]=='todos'?a.length:a.filter(i=>i.tipo==c[0]).length,m),{})}function empties(n){return Array.from({length:Math.max(0,n)},()=>'<div class="empty"></div>').join('')}function detailItem(i){if(!i){detail.innerHTML='<strong>Selecione um item</strong><p>Passe o mouse ou toque em um slot para ver a descrição aqui.</p>';return}let c=cat(i.tipo);detail.innerHTML=`<div style="display:grid;grid-template-columns:52px 1fr;gap:10px;align-items:center;margin-bottom:8px">${icon(i,'52px')}<div><strong>${esc(i.nome)}</strong><p>${esc(c[1])} / x${esc(i.quantidade)}</p></div></div><p>${esc(i.descricao||'Sem descrição registrada.')}</p>`}function hist(de,para){if(!personagem)return;try{let k=`personagem_backup_${personagem.nome}`,b=JSON.parse(localStorage.getItem(k)||'{}'),h=Array.isArray(b.historico)?b.historico:[];h.push({quando:new Date().toLocaleString('pt-BR'),autor:personagem.nome,tipo:'inventario',de,para});localStorage.setItem(k,JSON.stringify({...b,personagem,historico:h}))}catch(e){}}function renderCats(a){let cnt=counts(a);cats.innerHTML=catsData.map(c=>`<button class="cat ${active==c[0]?'on':''}" data-cat="${c[0]}" style="--c:${c[3]}">${icon(c[2])}<strong>${c[1]}</strong><small>${cnt[c[0]]||0}</small></button>`).join('');cats.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{active=b.dataset.cat;render()});tabs.innerHTML=catsData.slice(0,6).map(c=>`<button class="${active==c[0]?'on':''}" data-cat="${c[0]}" title="${c[1]}">${icon(c[2],'28px')}</button>`).join('');tabs.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{active=b.dataset.cat;render()});let c=cat(active);curIcon.setAttribute('style',sprite(c[2]));curText.textContent=active=='todos'?'Categorias':c[1]}function render(){let a=inv(),c=cat(active),f=active=='todos'?a:a.filter(i=>i.tipo==active);renderCats(a);title.textContent=active=='todos'?'Todos os itens':c[1];summary.textContent=`${f.length} ${f.length==1?'item':'itens'} ${active=='todos'?'no inventário':'nesta categoria'}`;foot.textContent=`Sort: ${c[1]}`;if(!f.length){grid.innerHTML=empties(minSlots);detailItem(null)}else{grid.innerHTML=f.map(i=>{let cc=cat(i.tipo);return`<article class="slot" data-id="${i.id}" tabindex="0" style="--c:${cc[3]}"><button class="remove" data-rm="${i.id}" type="button">x</button><div class="slotIcon">${icon(i,'58px')}</div><strong class="slotName">${esc(i.nome)}</strong><span class="qtd">x${esc(i.quantidade)}</span></article>`}).join('')+empties(minSlots-f.length);grid.querySelectorAll('.slot').forEach(s=>{let i=f.find(x=>String(x.id)==s.dataset.id);s.onmouseenter=s.onfocus=s.onclick=e=>{if(!e.target.closest('[data-rm]'))detailItem(i)}});grid.querySelectorAll('[data-rm]').forEach(b=>b.onclick=e=>{e.stopPropagation();remove(Number(b.dataset.rm))})}}function renderHist(){let b=personagem?JSON.parse(localStorage.getItem(`personagem_backup_${personagem.nome}`)||'{}'):{};let h=(b.historico||[]).filter(x=>x.tipo=='inventario').reverse();history.innerHTML=h.length?h.slice(0,8).map(x=>`<div class="hist"><strong>${esc(x.quando)}</strong><span>Autor: ${esc(x.autor||'sistema')}</span></div>`).join(''):'<div class="hist">Nenhuma alteração de inventário registrada.</div>'}function addItem(e){e.preventDefault();if(!personagem)return;let nome=iname.value.trim();if(!nome){iname.focus();return}let a=inv(),before=JSON.parse(JSON.stringify(a)),c=cat(itype.value),item={id:Date.now(),nome,tipo:itype.value,sprite:c[2],quantidade:Math.max(1,parseInt(iqtd.value,10)||1),descricao:idesc.value.trim(),adicionadoEm:new Date().toLocaleString('pt-BR')};a.push(item);save(a);hist(before,a);form.reset();iqtd.value='1';itype.value='alimentacao';render();renderHist();detailItem(item)}function remove(id){if(!personagem||!confirm('Remover este item do inventário?'))return;let a=inv(),before=JSON.parse(JSON.stringify(a)),n=a.filter(i=>Number(i.id)!=Number(id));save(n);hist(before,n);render();renderHist()}function init(){itype.innerHTML=catsData.filter(c=>c[0]!='todos').map(c=>`<option value="${c[0]}">${c[1]}</option>`).join('');if(!personagem){pstatus.textContent='Nenhum personagem ativo';pname.textContent='Sem personagem'}else{pstatus.textContent=`${personagem.classe||'Classe'} / ${personagem.profissao||'Especialidade'}`;pname.textContent=personagem.nome||'Personagem';if(personagem.imagemPersonagem){pimg.src=personagem.imagemPersonagem;fig.classList.add('has')}}}toggleAdd.onclick=()=>{add.classList.toggle('on');if(add.classList.contains('on'))iname.focus()};toggleHist.onclick=()=>{history.classList.toggle('on');renderHist()};foldBtn.onclick=()=>{closed=!closed;fold.classList.toggle('closed',closed);foldBtn.setAttribute('aria-expanded',closed?'false':'true')};clear.onclick=()=>{form.reset();iqtd.value='1';itype.value='alimentacao';iname.focus()};form.onsubmit=addItem;init();render();renderHist()</script></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventário - One Piece RPG</title>
+    <link rel="stylesheet" href="estilo.css?v=20260619-game2">
+    <style>
+        html,
+        body {
+            min-height: 100%;
+            background: #06100d;
+        }
+
+        body.pagina-inventario {
+            position: relative;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            color: #fff7df;
+            background: #06100d;
+        }
+
+        .inventario-jogo {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 12px;
+            padding: clamp(14px, 2.6vw, 34px);
+            background:
+                radial-gradient(circle at 78% 24%, rgba(247, 200, 75, 0.18), transparent 30%),
+                radial-gradient(circle at 18% 14%, rgba(36, 99, 74, 0.26), transparent 32%),
+                rgba(0, 0, 0, 0.18);
+        }
+
+        .inventario-topo,
+        .inventario-rodape {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            width: min(1180px, 100%);
+            margin: 0 auto;
+            color: rgba(255, 247, 223, 0.9);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .inventario-topo h1 {
+            margin: 0;
+            color: #fff7df;
+            font-size: clamp(1.7rem, 4vw, 3rem);
+            line-height: 1;
+        }
+
+        .inventario-topo p,
+        .inventario-rodape span {
+            margin: 0;
+            color: #d9e8d4;
+            font-size: 0.92rem;
+            font-weight: 700;
+        }
+
+        .inventario-voltar {
+            min-width: 112px;
+            padding: 10px 14px;
+            border: 1px solid rgba(255, 247, 223, 0.34);
+            border-radius: 8px;
+            color: #fff7df;
+            background: rgba(3, 8, 10, 0.56);
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+        }
+
+        .inventario-voltar:hover,
+        .inventario-voltar:focus-visible {
+            border-color: #ffe28a;
+            background: rgba(247, 200, 75, 0.16);
+            outline: none;
+            transform: translateY(-1px);
+        }
+
+        .inventario-shell {
+            width: min(1180px, 100%);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(250px, 330px);
+            gap: clamp(16px, 2.4vw, 28px);
+            align-items: stretch;
+            min-height: 0;
+            border: 1px solid rgba(255, 247, 223, 0.14);
+            background:
+                linear-gradient(90deg, rgba(2, 7, 8, 0.88), rgba(14, 26, 20, 0.66)),
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 5px);
+            box-shadow: 0 26px 80px rgba(0, 0, 0, 0.62), inset 0 1px 0 rgba(255, 247, 223, 0.08);
+            backdrop-filter: blur(8px);
+        }
+
+        .inventario-painel {
+            display: grid;
+            grid-template-rows: auto auto 1fr;
+            gap: 14px;
+            min-width: 0;
+            padding: clamp(16px, 2.3vw, 26px);
+        }
+
+        .inventario-abas {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 247, 223, 0.12);
+        }
+
+        .inventario-abas button {
+            display: grid;
+            place-items: center;
+            width: 46px;
+            height: 42px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            background: transparent;
+            color: rgba(255, 247, 223, 0.66);
+            font-size: 1.35rem;
+            cursor: pointer;
+        }
+
+        .inventario-abas img {
+            width: 30px;
+            height: 30px;
+            object-fit: cover;
+            border-radius: 6px;
+            filter: drop-shadow(0 0 8px rgba(247, 200, 75, 0.26));
+        }
+
+        .icone-sprite {
+            display: block;
+            width: var(--icone-tamanho, 34px);
+            height: var(--icone-tamanho, 34px);
+            border-radius: var(--icone-raio, 7px);
+            background-image: url("assets/img/inventario/categorias-sprite.webp");
+            background-size: 600% 300%;
+            background-position: var(--sprite-x, 0%) var(--sprite-y, 0%);
+            box-shadow: 0 0 12px rgba(247, 200, 75, 0.24);
+        }
+
+        .inventario-abas button.ativa,
+        .inventario-abas button:hover,
+        .inventario-abas button:focus-visible {
+            border-color: rgba(255, 226, 138, 0.52);
+            background: rgba(255, 247, 223, 0.08);
+            color: #ffe28a;
+            outline: none;
+        }
+
+        .inventario-status {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .inventario-status strong {
+            display: block;
+            color: #fff7df;
+            font-size: clamp(1.05rem, 2vw, 1.35rem);
+        }
+
+        .inventario-status span {
+            display: block;
+            margin-top: 4px;
+            color: #d9e8d4;
+            font-size: 0.92rem;
+        }
+
+        .inventario-acoes {
+            display: flex;
+            gap: 8px;
+        }
+
+        .inventario-acao {
+            min-height: 40px;
+            padding: 9px 12px;
+            border: 1px solid rgba(247, 200, 75, 0.28);
+            border-radius: 8px;
+            color: #fff7df;
+            background: rgba(3, 8, 10, 0.64);
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        .inventario-acao:hover,
+        .inventario-acao:focus-visible {
+            border-color: #ffe28a;
+            background: rgba(247, 200, 75, 0.16);
+            outline: none;
+        }
+
+        .inventario-corpo {
+            display: grid;
+            grid-template-columns: minmax(132px, 168px) 1fr;
+            gap: 14px;
+            min-height: 0;
+        }
+
+        .categorias-recolhiveis {
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 8px;
+            min-height: 0;
+        }
+
+        .botao-categorias {
+            display: grid;
+            grid-template-columns: 28px 1fr auto;
+            align-items: center;
+            gap: 9px;
+            min-height: 40px;
+            padding: 6px 8px;
+            border: 1px solid rgba(247, 200, 75, 0.32);
+            border-radius: 8px;
+            color: #fff7df;
+            background: linear-gradient(90deg, rgba(247, 200, 75, 0.18), rgba(3, 8, 10, 0.72));
+            cursor: pointer;
+            font-weight: 900;
+            text-align: left;
+        }
+
+        .botao-categorias img,
+        .botao-categorias .icone-sprite {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            object-fit: cover;
+            box-shadow: 0 0 12px rgba(247, 200, 75, 0.28);
+        }
+
+        .botao-categorias span {
+            color: #d9e8d4;
+            font-size: 0.8rem;
+            overflow-wrap: anywhere;
+        }
+
+        .botao-categorias b {
+            color: #ffe28a;
+            font-size: 1.05rem;
+            transition: transform 0.18s ease;
+        }
+
+        .categorias-recolhiveis.recolhido {
+            grid-template-rows: auto;
+        }
+
+        .categorias-recolhiveis.recolhido .inventario-categorias-jogo {
+            display: none;
+        }
+
+        .categorias-recolhiveis.recolhido .botao-categorias b {
+            transform: rotate(-90deg);
+        }
+
+        .inventario-categorias-jogo {
+            display: grid;
+            align-content: start;
+            gap: 8px;
+            max-height: clamp(180px, calc(100vh - 520px), 310px);
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .categoria-jogo {
+            display: grid;
+            grid-template-columns: 28px 1fr auto;
+            align-items: center;
+            gap: 8px;
+            min-height: 42px;
+            padding: 6px 8px;
+            border: 1px solid rgba(255, 247, 223, 0.12);
+            border-radius: 8px;
+            background: rgba(3, 8, 10, 0.54);
+            color: #d9e8d4;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .categoria-jogo.ativa,
+        .categoria-jogo:hover,
+        .categoria-jogo:focus-visible {
+            border-color: color-mix(in srgb, var(--cor-categoria, #ffe28a) 68%, transparent);
+            background: linear-gradient(90deg, color-mix(in srgb, var(--cor-categoria, #f7c84b) 24%, transparent), rgba(3, 8, 10, 0.62));
+            color: #fff7df;
+            outline: none;
+        }
+
+        .categoria-jogo img,
+        .categoria-jogo .icone-sprite {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            object-fit: cover;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.34);
+        }
+
+        .categoria-jogo small {
+            min-width: 28px;
+            padding: 4px 7px;
+            border-radius: 999px;
+            color: #172018;
+            background: #f7c84b;
+            font-size: 0.76rem;
+            font-weight: 900;
+            text-align: center;
+        }
+
+        .inventario-grid-wrap {
+            min-width: 0;
+            border: 1px solid rgba(255, 247, 223, 0.08);
+            background: rgba(2, 5, 5, 0.46);
+            box-shadow: inset 0 0 32px rgba(0, 0, 0, 0.42);
+        }
+
+        .inventario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
+            gap: 9px;
+            align-content: start;
+            max-height: clamp(280px, calc(100vh - 450px), 420px);
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .slot-jogo {
+            position: relative;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 5px;
+            min-height: 0;
+            aspect-ratio: 1 / 1;
+            padding: 8px;
+            border: 1px solid rgba(255, 247, 223, 0.12);
+            border-radius: 4px;
+            background:
+                radial-gradient(circle at 50% 28%, color-mix(in srgb, var(--cor-item, #f7c84b) 20%, transparent), transparent 46%),
+                linear-gradient(180deg, rgba(31, 38, 27, 0.86), rgba(6, 10, 8, 0.9));
+            box-shadow: inset 0 1px 0 rgba(255, 247, 223, 0.06), 0 12px 20px rgba(0, 0, 0, 0.24);
+            overflow: hidden;
+            color: #fff7df;
+        }
+
+        .slot-jogo::before,
+        .slot-vazio-quadrado::before {
+            content: "";
+            position: absolute;
+            inset: 6px;
+            border: 1px solid rgba(255, 247, 223, 0.06);
+            pointer-events: none;
+        }
+
+        .slot-jogo:hover {
+            border-color: var(--cor-item, #ffe28a);
+            box-shadow: inset 0 1px 0 rgba(255, 247, 223, 0.08), 0 0 0 2px color-mix(in srgb, var(--cor-item, #f7c84b) 26%, transparent);
+        }
+
+        .slot-qtd {
+            position: absolute;
+            left: 7px;
+            bottom: 6px;
+            font-size: 0.74rem;
+            font-weight: 900;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+        }
+
+        .slot-icone {
+            display: grid;
+            place-items: center;
+            align-self: center;
+            min-height: 0;
+        }
+
+        .slot-icone img,
+        .slot-icone .icone-sprite {
+            width: min(70%, 58px);
+            height: auto;
+            aspect-ratio: 1 / 1;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 0 18px color-mix(in srgb, var(--cor-item, #f7c84b) 36%, transparent);
+        }
+
+        .slot-nome {
+            align-self: end;
+            color: #fff7df;
+            font-size: 0.78rem;
+            line-height: 1.15;
+            text-align: center;
+            overflow-wrap: anywhere;
+        }
+
+        .slot-remover {
+            justify-self: end;
+            width: 26px;
+            height: 26px;
+            border: 1px solid rgba(255, 148, 122, 0.34);
+            border-radius: 50%;
+            color: #ffd6cc;
+            background: rgba(80, 12, 9, 0.68);
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        .slot-vazio-quadrado {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            min-height: 0;
+            border: 1px solid rgba(255, 247, 223, 0.07);
+            border-radius: 4px;
+            background:
+                linear-gradient(135deg, rgba(255, 247, 223, 0.035), transparent 42%),
+                rgba(0, 0, 0, 0.26);
+            box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.36);
+        }
+
+        .slot-vazio-quadrado::after {
+            content: "";
+            position: absolute;
+            inset: 38%;
+            border: 1px solid rgba(255, 247, 223, 0.08);
+            transform: rotate(45deg);
+        }
+
+        .slot-vazio {
+            display: grid;
+            grid-column: 1 / -1;
+            place-items: center;
+            min-height: 120px;
+            padding: 18px;
+            border: 1px dashed rgba(255, 247, 223, 0.22);
+            color: rgba(255, 247, 223, 0.7);
+            text-align: center;
+        }
+
+        .personagem-inventario {
+            position: relative;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 14px;
+            padding: clamp(16px, 2.2vw, 24px);
+            border-left: 1px solid rgba(255, 247, 223, 0.1);
+            background: linear-gradient(180deg, rgba(255, 247, 223, 0.05), rgba(3, 8, 10, 0.32));
+            overflow: hidden;
+        }
+
+        .personagem-inventario::after {
+            content: "";
+            position: absolute;
+            inset: auto 10% 7% 10%;
+            height: 28%;
+            background: radial-gradient(ellipse, rgba(247, 200, 75, 0.28), transparent 64%);
+            filter: blur(4px);
+            pointer-events: none;
+        }
+
+        .personagem-card-topo {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            gap: 4px;
+            text-align: center;
+        }
+
+        .personagem-card-topo span {
+            color: #ffe28a;
+            font-size: 0.78rem;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .personagem-card-topo strong {
+            color: #fff7df;
+            font-size: clamp(1.25rem, 2.2vw, 1.8rem);
+            line-height: 1.05;
+            overflow-wrap: anywhere;
+        }
+
+        .personagem-figura {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            place-items: end center;
+            min-height: clamp(230px, calc(100vh - 500px), 430px);
+        }
+
+        .personagem-figura img {
+            display: none;
+            max-width: min(100%, 280px);
+            max-height: clamp(280px, calc(100vh - 330px), 500px);
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.6));
+        }
+
+        .personagem-figura.tem-imagem img {
+            display: block;
+        }
+
+        .personagem-placeholder {
+            display: grid;
+            place-items: center;
+            width: min(90%, 250px);
+            aspect-ratio: 3 / 4;
+            border: 1px solid rgba(255, 226, 138, 0.28);
+            border-radius: 8px;
+            color: rgba(255, 247, 223, 0.7);
+            background:
+                linear-gradient(180deg, rgba(255, 247, 223, 0.08), rgba(3, 8, 10, 0.32)),
+                repeating-linear-gradient(0deg, rgba(255, 247, 223, 0.035), rgba(255, 247, 223, 0.035) 1px, transparent 1px, transparent 10px);
+            text-align: center;
+            padding: 16px;
+        }
+
+        .personagem-figura.tem-imagem .personagem-placeholder {
+            display: none;
+        }
+
+        .detalhe-item {
+            position: relative;
+            z-index: 1;
+            min-height: 110px;
+            padding: 14px;
+            border: 1px solid rgba(255, 247, 223, 0.16);
+            background: rgba(3, 8, 10, 0.46);
+        }
+
+        .detalhe-item strong {
+            display: block;
+            color: #ffe28a;
+            font-size: 1.05rem;
+            margin-bottom: 7px;
+        }
+
+        .detalhe-item p {
+            margin: 0;
+            color: #d9e8d4;
+            font-size: 0.88rem;
+            line-height: 1.38;
+        }
+
+        .detalhe-item-cabecalho {
+            display: grid;
+            grid-template-columns: 52px 1fr;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .detalhe-item-cabecalho img,
+        .detalhe-item-cabecalho .icone-sprite {
+            width: 52px;
+            height: 52px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 0 18px rgba(247, 200, 75, 0.28);
+        }
+
+        .detalhe-item-cabecalho strong {
+            margin-bottom: 3px;
+        }
+
+        .detalhe-item-cabecalho span {
+            color: #d9e8d4;
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+
+
+        .painel-adicionar {
+            display: none;
+            width: min(1180px, 100%);
+            margin: 0 auto;
+            padding: 14px;
+            border: 1px solid rgba(247, 200, 75, 0.22);
+            background: rgba(3, 8, 10, 0.72);
+        }
+
+        .painel-adicionar.ativo {
+            display: grid;
+        }
+
+        .form-adicionar-inventario {
+            display: grid;
+            grid-template-columns: minmax(150px, 1fr) minmax(150px, 0.9fr) 100px minmax(220px, 1.4fr) auto auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .form-adicionar-inventario label {
+            display: grid;
+            gap: 6px;
+            color: #ffe28a;
+            font-size: 0.78rem;
+            font-weight: 900;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .form-adicionar-inventario input,
+        .form-adicionar-inventario select {
+            min-height: 42px;
+            border: 1px solid rgba(255, 247, 223, 0.14);
+            border-radius: 8px;
+            padding: 9px 11px;
+            color: #fff7df;
+            background: rgba(2, 5, 5, 0.72);
+        }
+
+        .form-adicionar-inventario button {
+            min-height: 42px;
+            padding: 9px 12px;
+            border: 1px solid rgba(247, 200, 75, 0.34);
+            border-radius: 8px;
+            color: #fff7df;
+            background: rgba(247, 200, 75, 0.14);
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        .form-adicionar-inventario button[type="button"] {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .historico-inventario {
+            display: none;
+            width: min(1180px, 100%);
+            margin: 0 auto;
+            max-height: 230px;
+            overflow-y: auto;
+            padding: 14px;
+            border: 1px solid rgba(247, 200, 75, 0.2);
+            background: rgba(3, 8, 10, 0.72);
+        }
+
+        .historico-inventario.ativo {
+            display: grid;
+            gap: 10px;
+        }
+
+        .historico-card {
+            display: grid;
+            gap: 6px;
+            padding: 10px;
+            border: 1px solid rgba(255, 247, 223, 0.1);
+            color: #d9e8d4;
+            background: rgba(0, 0, 0, 0.26);
+        }
+
+        @media (max-width: 960px) {
+            .inventario-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .personagem-inventario {
+                border-left: 0;
+                border-top: 1px solid rgba(255, 247, 223, 0.1);
+            }
+
+            .personagem-figura {
+                min-height: 330px;
+            }
+
+            .inventario-corpo,
+            .form-adicionar-inventario {
+                grid-template-columns: 1fr;
+            }
+
+            .inventario-status {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .inventario-topo,
+            .inventario-rodape {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .inventario-abas {
+                gap: 8px;
+                overflow-x: auto;
+            }
+
+            .inventario-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+<body class="pagina-inventario">
+    <audio id="musica-fundo" loop preload="auto">
+        <source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg">
+    </audio>
+    <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true">
+        <source src="fundo-login.mp4" type="video/mp4">
+    </video>
+
+    <main class="inventario-jogo">
+        <header class="inventario-topo">
+            <div>
+                <p id="inventario-personagem-status">Carregando personagem...</p>
+                <h1>Inventário</h1>
+            </div>
+            <a class="inventario-voltar" href="lobby.html">Voltar ao Lobby</a>
+        </header>
+
+        <section class="painel-adicionar" id="painel-adicionar" aria-label="Adicionar item ao inventário">
+            <form class="form-adicionar-inventario" id="form-adicionar-inventario">
+                <label>
+                    Item
+                    <input id="input-item-nome" type="text" placeholder="Espada, fruta, mapa...">
+                </label>
+                <label>
+                    Categoria
+                    <select id="input-item-tipo"></select>
+                </label>
+                <label>
+                    Qtd.
+                    <input id="input-item-quantidade" type="number" min="1" value="1">
+                </label>
+                <label>
+                    Descrição
+                    <input id="input-item-descricao" type="text" placeholder="Efeito, origem ou observação">
+                </label>
+                <button type="submit">Adicionar</button>
+                <button type="button" id="limpar-formulario">Limpar</button>
+            </form>
+        </section>
+
+        <section class="historico-inventario" id="historico-inventario" aria-label="Histórico do inventário"></section>
+
+        <section class="inventario-shell" aria-label="Inventário do personagem">
+            <div class="inventario-painel">
+                <nav class="inventario-abas" aria-label="Abas do inventário">
+                    <button class="ativa" type="button" data-categoria="todos" title="Todos"><span class="icone-sprite" style="--icone-tamanho:30px;--sprite-x:0%;--sprite-y:0%"></span></button>
+                    <button type="button" data-categoria="armamentos" title="Armamentos"><span class="icone-sprite" style="--icone-tamanho:30px;--sprite-x:40%;--sprite-y:0%"></span></button>
+                    <button type="button" data-categoria="equipamentos" title="Equipamentos"><span class="icone-sprite" style="--icone-tamanho:30px;--sprite-x:60%;--sprite-y:0%"></span></button>
+                    <button type="button" data-categoria="alimentacao" title="Alimentação"><span class="icone-sprite" style="--icone-tamanho:30px;--sprite-x:20%;--sprite-y:0%"></span></button>
+                    <button type="button" data-categoria="tesouros" title="Tesouros"><span class="icone-sprite" style="--icone-tamanho:30px;--sprite-x:80%;--sprite-y:50%"></span></button>
+                    <button type="button" data-categoria="documentos" title="Documentos"><span class="icone-sprite" style="--icone-tamanho:30px;--sprite-x:100%;--sprite-y:50%"></span></button>
+                </nav>
+
+                <div class="inventario-status">
+                    <div>
+                        <strong id="inventario-titulo">Todos os itens</strong>
+                        <span id="inventario-resumo">0 itens no inventário</span>
+                    </div>
+                    <div class="inventario-acoes">
+                        <button class="inventario-acao" id="alternar-adicionar" type="button">Adicionar</button>
+                        <button class="inventario-acao" id="alternar-historico" type="button">Histórico</button>
+                    </div>
+                </div>
+
+                <div class="inventario-corpo">
+                    <div class="categorias-recolhiveis" id="categorias-recolhiveis">
+                        <button class="botao-categorias" id="alternar-categorias" type="button" aria-expanded="true" aria-controls="inventario-categorias">
+                            <span class="icone-sprite" id="categoria-atual-imagem" style="--sprite-x:0%;--sprite-y:0%"></span>
+                            <span id="categoria-atual-texto">Categorias</span>
+                            <b>▾</b>
+                        </button>
+                        <nav class="inventario-categorias-jogo" id="inventario-categorias" aria-label="Categorias"></nav>
+                    </div>
+                    <div class="inventario-grid-wrap">
+                        <div class="inventario-grid" id="inventario-grid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="personagem-inventario" aria-label="Personagem">
+                <div class="personagem-card-topo">
+                    <span>Personagem</span>
+                    <strong id="nome-personagem">Sem personagem</strong>
+                </div>
+
+                <div class="personagem-figura" id="personagem-figura">
+                    <img id="imagem-personagem" alt="">
+                    <div class="personagem-placeholder">Imagem do personagem não enviada</div>
+                </div>
+
+                <div class="detalhe-item" id="detalhe-item">
+                    <strong>Selecione um item</strong>
+                    <p>Passe o mouse ou toque em um slot para ver a descrição aqui.</p>
+                </div>
+            </aside>
+        </section>
+
+        <footer class="inventario-rodape">
+            <span id="inventario-rodape-resumo">Sort: categoria</span>
+            <span>Back: lobby</span>
+        </footer>
+    </main>
+
+    <script src="musica-fundo.js?v=20260619-game2"></script>
+    <script src="rpg-sistemas.js?v=20260619-rpg8"></script>
+    <script>
+        const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+        const categoriaInicial = new URLSearchParams(window.location.search).get("categoria") || "todos";
+        let categoriaAtiva = categoriaInicial;
+        let categoriasRecolhidas = false;
+        const slotsMinimos = 36;
+
+        const categoriasInventario = [
+            { chave: "todos", nome: "Todos", sprite: [0, 0], cor: "#f7c84b" },
+            { chave: "alimentacao", nome: "Alimentação", sprite: [1, 0], cor: "#ff8a3d" },
+            { chave: "armamentos", nome: "Armamentos", sprite: [2, 0], cor: "#ff4f3a" },
+            { chave: "equipamentos", nome: "Equipamentos", sprite: [3, 0], cor: "#78c7ff" },
+            { chave: "vestimentas", nome: "Vestimentas", sprite: [4, 0], cor: "#8f7bff" },
+            { chave: "medicinais", nome: "Medicinais", sprite: [5, 0], cor: "#ff6d6d" },
+            { chave: "ferramentas", nome: "Ferramentas", sprite: [0, 1], cor: "#c4a46b" },
+            { chave: "navegacao", nome: "Navegação", sprite: [1, 1], cor: "#49d2ff" },
+            { chave: "recursos", nome: "Recursos", sprite: [2, 1], cor: "#b78953" },
+            { chave: "nauticos", nome: "Náuticos", sprite: [3, 1], cor: "#3aa7ff" },
+            { chave: "tesouros", nome: "Tesouros", sprite: [4, 1], cor: "#ffd44d" },
+            { chave: "documentos", nome: "Documentos", sprite: [5, 1], cor: "#d7b277" },
+            { chave: "especiais", nome: "Especiais", sprite: [0, 2], cor: "#b64cff" },
+            { chave: "consumiveis", nome: "Consumíveis", sprite: [1, 2], cor: "#ffa536" },
+            { chave: "tecnologicos", nome: "Tecnológicos", sprite: [2, 2], cor: "#36e0ff" },
+            { chave: "materiais", nome: "Materiais", sprite: [3, 2], cor: "#d79a5a" },
+            { chave: "berris", nome: "Berris", sprite: [4, 2], cor: "#ffcf3e" },
+            { chave: "cacaepesca", nome: "Caça e Pesca", sprite: [5, 2], cor: "#64d6a4" },
+            { chave: "diversos", nome: "Diversos", sprite: [0, 0], cor: "#f7c84b" }
+        ];
+
+        const statusPersonagem = document.getElementById("inventario-personagem-status");
+        const nomePersonagem = document.getElementById("nome-personagem");
+        const imagemPersonagem = document.getElementById("imagem-personagem");
+        const personagemFigura = document.getElementById("personagem-figura");
+        const categoriasEl = document.getElementById("inventario-categorias");
+        const gridEl = document.getElementById("inventario-grid");
+        const tituloEl = document.getElementById("inventario-titulo");
+        const resumoEl = document.getElementById("inventario-resumo");
+        const rodapeResumo = document.getElementById("inventario-rodape-resumo");
+        const detalheItem = document.getElementById("detalhe-item");
+        const painelAdicionar = document.getElementById("painel-adicionar");
+        const historicoInventario = document.getElementById("historico-inventario");
+        const formAdicionar = document.getElementById("form-adicionar-inventario");
+        const inputNome = document.getElementById("input-item-nome");
+        const inputTipo = document.getElementById("input-item-tipo");
+        const inputQuantidade = document.getElementById("input-item-quantidade");
+        const inputDescricao = document.getElementById("input-item-descricao");
+        const categoriasRecolhiveis = document.getElementById("categorias-recolhiveis");
+        const alternarCategorias = document.getElementById("alternar-categorias");
+        const categoriaAtualImagem = document.getElementById("categoria-atual-imagem");
+        const categoriaAtualTexto = document.getElementById("categoria-atual-texto");
+
+        function escaparHtml(texto) {
+            return String(texto || "").replace(/[&<>"']/g, (caractere) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            })[caractere]);
+        }
+
+        function chaveInventario() {
+            return personagem?.nome ? `inventario_${personagem.nome}` : "";
+        }
+
+        function obterInventario() {
+            if (!personagem) return [];
+            return JSON.parse(localStorage.getItem(chaveInventario()) || "[]");
+        }
+
+        function salvarInventario(itens) {
+            if (!personagem) return;
+            localStorage.setItem(chaveInventario(), JSON.stringify(itens));
+        }
+
+        function obterCategoria(chave) {
+            return categoriasInventario.find((categoria) => categoria.chave === chave) || categoriasInventario[0];
+        }
+
+        function obterSprite(itemOuCategoria) {
+            const sprite = itemOuCategoria?.sprite || obterCategoria(itemOuCategoria?.tipo || itemOuCategoria?.chave).sprite || [0, 0];
+            return Array.isArray(sprite) ? sprite : [0, 0];
+        }
+
+        function estiloSprite(itemOuCategoria, tamanho = "") {
+            const [coluna, linha] = obterSprite(itemOuCategoria);
+            const x = coluna <= 0 ? 0 : coluna >= 5 ? 100 : coluna * 20;
+            const y = linha <= 0 ? 0 : linha >= 2 ? 100 : linha * 50;
+            return `--sprite-x:${x}%;--sprite-y:${y}%;${tamanho ? `--icone-tamanho:${tamanho};` : ""}`;
+        }
+
+        function iconeSprite(itemOuCategoria, tamanho = "") {
+            return `<span class="icone-sprite" style="${estiloSprite(itemOuCategoria, tamanho)}"></span>`;
+        }
+
+        function renderizarSlotsVazios(quantidade) {
+            return Array.from({ length: Math.max(0, quantidade) }, (_, indice) => `
+                <div class="slot-vazio-quadrado" aria-hidden="true" style="--slot-indice:${indice}"></div>
+            `).join("");
+        }
+
+        function obterBackupPersonagem() {
+            if (!personagem) return { historico: [] };
+            const backup = JSON.parse(localStorage.getItem(`personagem_backup_${personagem.nome}`) || "{}");
+            return {
+                historico: Array.isArray(backup.historico) ? backup.historico : []
+            };
+        }
+
+        function registrarHistorico(de, para) {
+            if (!personagem) return;
+            try {
+                const chaveBackup = `personagem_backup_${personagem.nome}`;
+                const backup = JSON.parse(localStorage.getItem(chaveBackup) || "{}");
+                const historico = Array.isArray(backup.historico) ? backup.historico : [];
+                historico.push({
+                    quando: new Date().toLocaleString("pt-BR"),
+                    quem: personagem.nome,
+                    autor: personagem.nome,
+                    tipo: "inventario",
+                    de,
+                    para
+                });
+                localStorage.setItem(chaveBackup, JSON.stringify({ ...backup, personagem, historico }));
+            } catch (erro) {
+                console.warn("Não foi possível registrar histórico do inventário.", erro);
+            }
+        }
+
+        function contarPorCategoria(inventario) {
+            return categoriasInventario.reduce((contadores, categoria) => {
+                contadores[categoria.chave] = categoria.chave === "todos"
+                    ? inventario.length
+                    : inventario.filter((item) => item.tipo === categoria.chave).length;
+                return contadores;
+            }, {});
+        }
+
+        function selecionarCategoria(chave) {
+            categoriaAtiva = obterCategoria(chave).chave;
+            renderizarInventario();
+        }
+
+        function mostrarDetalhe(item) {
+            if (!item) {
+                detalheItem.innerHTML = `
+                    <strong>Selecione um item</strong>
+                    <p>Passe o mouse ou toque em um slot para ver a descrição aqui.</p>
+                `;
+                return;
+            }
+
+            const categoria = obterCategoria(item.tipo);
+            detalheItem.innerHTML = `
+                <div class="detalhe-item-cabecalho">
+                    ${iconeSprite(item, "52px")}
+                    <div>
+                        <strong>${escaparHtml(item.nome)}</strong>
+                        <span>${escaparHtml(categoria.nome)} / x${escaparHtml(item.quantidade)}</span>
+                    </div>
+                </div>
+                <p>${escaparHtml(item.descricao || "Sem descrição registrada.")}</p>
+            `;
+        }
+
+        function renderizarCategorias(inventario) {
+            const contadores = contarPorCategoria(inventario);
+            categoriasEl.innerHTML = categoriasInventario.map((categoria) => `
+                <button class="categoria-jogo ${categoriaAtiva === categoria.chave ? "ativa" : ""}" type="button" data-categoria="${categoria.chave}" style="--cor-categoria:${categoria.cor}">
+                    ${iconeSprite(categoria)}
+                    <strong>${categoria.nome}</strong>
+                    <small>${contadores[categoria.chave] || 0}</small>
+                </button>
+            `).join("");
+
+            categoriasEl.querySelectorAll("[data-categoria]").forEach((botao) => {
+                botao.addEventListener("click", () => selecionarCategoria(botao.dataset.categoria));
+            });
+
+            document.querySelectorAll(".inventario-abas [data-categoria]").forEach((botao) => {
+                botao.classList.toggle("ativa", categoriaAtiva === botao.dataset.categoria);
+            });
+
+            const categoria = obterCategoria(categoriaAtiva);
+            categoriaAtualImagem.setAttribute("style", estiloSprite(categoria));
+            categoriaAtualTexto.textContent = categoriaAtiva === "todos" ? "Categorias" : categoria.nome;
+        }
+
+        function renderizarInventario() {
+            const inventario = obterInventario();
+            const categoria = obterCategoria(categoriaAtiva);
+            const filtrados = categoriaAtiva === "todos"
+                ? inventario
+                : inventario.filter((item) => item.tipo === categoriaAtiva);
+
+            renderizarCategorias(inventario);
+            tituloEl.textContent = categoriaAtiva === "todos" ? "Todos os itens" : categoria.nome;
+            resumoEl.textContent = `${filtrados.length} ${filtrados.length === 1 ? "item" : "itens"} ${categoriaAtiva === "todos" ? "no inventário" : "nesta categoria"}`;
+            rodapeResumo.textContent = `Sort: ${categoria.nome}`;
+
+            if (!personagem) {
+                gridEl.innerHTML = renderizarSlotsVazios(slotsMinimos);
+                mostrarDetalhe(null);
+                return;
+            }
+
+            if (inventario.length === 0) {
+                gridEl.innerHTML = renderizarSlotsVazios(slotsMinimos);
+                mostrarDetalhe(null);
+                return;
+            }
+
+            if (filtrados.length === 0) {
+                gridEl.innerHTML = renderizarSlotsVazios(slotsMinimos);
+                mostrarDetalhe(null);
+                return;
+            }
+
+            const slotsOcupados = filtrados.map((item) => {
+                const itemCategoria = obterCategoria(item.tipo);
+                return `
+                    <article class="slot-jogo" data-id="${Number(item.id)}" tabindex="0" style="--cor-item:${itemCategoria.cor}">
+                        <button class="slot-remover" type="button" data-remover="${Number(item.id)}" title="Remover">x</button>
+                        <div class="slot-icone">${iconeSprite(item, "58px")}</div>
+                        <strong class="slot-nome">${escaparHtml(item.nome)}</strong>
+                        <span class="slot-qtd">x${escaparHtml(item.quantidade)}</span>
+                    </article>
+                `;
+            }).join("");
+            gridEl.innerHTML = slotsOcupados + renderizarSlotsVazios(slotsMinimos - filtrados.length);
+
+            gridEl.querySelectorAll(".slot-jogo").forEach((slot) => {
+                const item = filtrados.find((entrada) => Number(entrada.id) === Number(slot.dataset.id));
+                slot.addEventListener("mouseenter", () => mostrarDetalhe(item));
+                slot.addEventListener("focus", () => mostrarDetalhe(item));
+                slot.addEventListener("click", (evento) => {
+                    if (!evento.target.closest("[data-remover]")) mostrarDetalhe(item);
+                });
+            });
+
+            gridEl.querySelectorAll("[data-remover]").forEach((botao) => {
+                botao.addEventListener("click", (evento) => {
+                    evento.stopPropagation();
+                    removerItem(Number(botao.dataset.remover));
+                });
+            });
+        }
+
+        function renderizarHistorico() {
+            const historico = obterBackupPersonagem().historico.filter((item) => item.tipo === "inventario").reverse();
+
+            if (historico.length === 0) {
+                historicoInventario.innerHTML = `<div class="historico-card">Nenhuma alteração de inventário registrada.</div>`;
+                return;
+            }
+
+            historicoInventario.innerHTML = historico.slice(0, 8).map((item) => `
+                <div class="historico-card">
+                    <strong>${escaparHtml(item.quando)}</strong>
+                    <span>Autor: ${escaparHtml(item.autor || item.quem || "sistema")}</span>
+                    <span>Antes: ${resumoInventario(item.de)}</span>
+                    <span>Depois: ${resumoInventario(item.para)}</span>
+                </div>
+            `).join("");
+        }
+
+        function resumoInventario(inventario) {
+            if (!Array.isArray(inventario) || inventario.length === 0) return "Vazio";
+            return inventario.map((item) => `${escaparHtml(item.nome)} x${escaparHtml(item.quantidade)}`).slice(0, 4).join(", ");
+        }
+
+        function adicionarItem(evento) {
+            evento.preventDefault();
+            if (!personagem) return;
+
+            const nome = inputNome.value.trim();
+            if (!nome) {
+                inputNome.focus();
+                return;
+            }
+
+            const inventario = obterInventario();
+            const antes = JSON.parse(JSON.stringify(inventario));
+            const categoria = obterCategoria(inputTipo.value);
+            const novoItem = {
+                id: Date.now(),
+                nome,
+                tipo: inputTipo.value,
+                sprite: categoria.sprite,
+                quantidade: Math.max(1, Number.parseInt(inputQuantidade.value, 10) || 1),
+                descricao: inputDescricao.value.trim(),
+                adicionadoEm: new Date().toLocaleString("pt-BR")
+            };
+
+            inventario.push(novoItem);
+            salvarInventario(inventario);
+            registrarHistorico(antes, inventario);
+            formAdicionar.reset();
+            inputQuantidade.value = "1";
+            inputTipo.value = "alimentacao";
+            renderizarInventario();
+            renderizarHistorico();
+            mostrarDetalhe(novoItem);
+        }
+
+        function removerItem(id) {
+            if (!personagem || !confirm("Remover este item do inventário?")) return;
+
+            const inventario = obterInventario();
+            const antes = JSON.parse(JSON.stringify(inventario));
+            const atualizado = inventario.filter((item) => Number(item.id) !== Number(id));
+            salvarInventario(atualizado);
+            registrarHistorico(antes, atualizado);
+            renderizarInventario();
+            renderizarHistorico();
+        }
+
+        function inicializarPersonagem() {
+            inputTipo.innerHTML = categoriasInventario
+                .filter((categoria) => categoria.chave !== "todos")
+                .map((categoria) => `<option value="${categoria.chave}">${categoria.nome}</option>`)
+                .join("");
+
+            if (!personagem) {
+                statusPersonagem.textContent = "Nenhum personagem ativo";
+                nomePersonagem.textContent = "Sem personagem";
+                return;
+            }
+
+            statusPersonagem.textContent = `${personagem.classe || "Classe"} / ${personagem.profissao || "Especialidade"}`;
+            nomePersonagem.textContent = personagem.nome || "Personagem";
+
+            if (personagem.imagemPersonagem) {
+                imagemPersonagem.src = personagem.imagemPersonagem;
+                personagemFigura.classList.add("tem-imagem");
+            }
+        }
+
+        document.getElementById("alternar-adicionar").addEventListener("click", () => {
+            painelAdicionar.classList.toggle("ativo");
+            if (painelAdicionar.classList.contains("ativo")) inputNome.focus();
+        });
+
+        document.getElementById("alternar-historico").addEventListener("click", () => {
+            historicoInventario.classList.toggle("ativo");
+            renderizarHistorico();
+        });
+
+        alternarCategorias.addEventListener("click", () => {
+            categoriasRecolhidas = !categoriasRecolhidas;
+            categoriasRecolhiveis.classList.toggle("recolhido", categoriasRecolhidas);
+            alternarCategorias.setAttribute("aria-expanded", categoriasRecolhidas ? "false" : "true");
+        });
+
+        document.getElementById("limpar-formulario").addEventListener("click", () => {
+            formAdicionar.reset();
+            inputQuantidade.value = "1";
+            inputTipo.value = "alimentacao";
+            inputNome.focus();
+        });
+
+        document.querySelectorAll(".inventario-abas [data-categoria]").forEach((botao) => {
+            botao.addEventListener("click", () => selecionarCategoria(botao.dataset.categoria));
+        });
+
+        formAdicionar.addEventListener("submit", adicionarItem);
+        window.addEventListener("storage", (evento) => {
+            if (evento.key === chaveInventario() || evento.key === "ultimoPersonagem") {
+                window.location.reload();
+            }
+        });
+
+        inicializarPersonagem();
+        renderizarInventario();
+        renderizarHistorico();
+    </script>
+</body>
+</html>

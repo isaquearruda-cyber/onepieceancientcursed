@@ -1,1 +1,113 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Loja Rotativa - One Piece RPG</title><link rel="stylesheet" href="estilo.css"><style>html,body{margin:0;min-height:100%;background:#030708;color:#fff7df;overflow-y:auto}.video-fundo{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.3) saturate(1.15);z-index:0}.app{position:relative;z-index:1;width:min(1220px,calc(100% - 28px));margin:0 auto;padding:clamp(16px,4vw,42px) 0;display:grid;gap:16px}.painel,.item{border:1px solid rgba(247,200,75,.28);border-radius:8px;background:linear-gradient(180deg,rgba(7,20,22,.92),rgba(3,8,10,.96));box-shadow:0 22px 54px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,247,223,.06)}.topo{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:clamp(16px,3vw,26px)}small,.meta{color:#ffe28a;font-weight:900;letter-spacing:.12em;text-transform:uppercase}h1{margin:4px 0 8px;font-family:"Segoe UI Black","Arial Black",Impact,sans-serif;font-size:clamp(2.2rem,6vw,4.3rem);line-height:.92;text-transform:uppercase;text-shadow:0 5px 0 #210b08,0 16px 30px rgba(0,0,0,.72)}.voltar,button{min-height:42px;padding:0 14px;border:1px solid rgba(255,226,138,.52);border-radius:8px;color:#fff7df;background:rgba(4,12,13,.72);font-weight:900;text-transform:uppercase;text-decoration:none;cursor:pointer}button.compra{color:#1b1a10;background:linear-gradient(90deg,#ffe28a,#f7c84b)}button:disabled{opacity:.55;cursor:default}.hud{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.hud .painel{padding:14px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.item{--cor:#ffe28a;position:relative;overflow:hidden;min-height:330px;padding:14px;display:grid;align-content:space-between;gap:12px}.item:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,color-mix(in srgb,var(--cor) 22%,transparent),transparent 42%);pointer-events:none}.arte{position:relative;display:grid;place-items:center;height:118px;border:1px solid color-mix(in srgb,var(--cor) 38%,transparent);border-radius:8px;background:radial-gradient(circle,color-mix(in srgb,var(--cor) 46%,#fff7df),rgba(3,8,10,.82) 62%);box-shadow:0 0 24px color-mix(in srgb,var(--cor) 24%,transparent);font-size:3rem}.item h2{position:relative;margin:0;color:#fff7df;font-size:1.1rem;text-transform:uppercase}.item p{position:relative;margin:0;color:#d9e8d4;line-height:1.42}.tags{position:relative;display:flex;flex-wrap:wrap;gap:7px}.tags span{padding:5px 8px;border:1px solid color-mix(in srgb,var(--cor) 42%,transparent);border-radius:999px;color:#ffe28a;background:rgba(0,0,0,.28);font-size:.68rem;font-weight:900;text-transform:uppercase}@media(max-width:900px){.grid,.hud,.topo{grid-template-columns:1fr}.video-fundo{display:none}}</style></head><body><audio id="musica-fundo" loop preload="auto"><source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg"></audio><video class="video-fundo" autoplay muted loop playsinline aria-hidden="true"><source src="fundo-login.mp4" type="video/mp4"></video><main class="app"><header class="topo painel"><div><small>Mercado do Dia</small><h1>Loja Rotativa</h1><p id="status">Carregando estoque...</p></div><a class="voltar" href="lobby.html">Voltar ao Lobby</a></header><section class="hud"><article class="painel"><small>Berris</small><h2 id="berris">0</h2></article><article class="painel"><small>Troca em</small><h2 id="contador">--:--:--</h2></article><article class="painel"><small>Compras</small><h2 id="compras">0/0</h2></article></section><section class="grid" id="grid"></section></main><script src="musica-fundo.js?v=20260606-game1"></script><script src="rpg-sistemas.js?v=20260605-rpg3"></script><script>const personagem=JSON.parse(localStorage.getItem("ultimoPersonagem")||"null"),catalogo=[{nome:"Kit de Reparo Naval",tipo:"materiais",raridade:"Comum",preco:900,cor:"#d79a5a",icon:"▣",desc:"Madeira, corda e rebites para pequenas melhorias de navio."},{nome:"Mapa Riscado dos Blues",tipo:"documentos",raridade:"Incomum",preco:1400,cor:"#49d2ff",icon:"⌖",desc:"Mapa usado por navegadores para marcar rotas curtas."},{nome:"Ração de Convés",tipo:"alimentacao",raridade:"Comum",preco:650,cor:"#ff8a3d",icon:"◒",desc:"Mantimento simples para treinos e viagens."},{nome:"Lanterna de Vigia",tipo:"ferramentas",raridade:"Incomum",preco:1800,cor:"#ffe28a",icon:"✦",desc:"Ferramenta de exploração para locais escuros."},{nome:"Bússola de Corrente",tipo:"navegacao",raridade:"Raro",preco:3600,cor:"#36e0ff",icon:"◇",desc:"Instrumento naval instável, útil para eventos de rota."},{nome:"Capa de Marinheiro Antiga",tipo:"vestimentas",raridade:"Raro",preco:4200,cor:"#8f7bff",icon:"▲",desc:"Cosmético de viagem com aura discreta no lobby."},{nome:"Selo de Contrato Mercante",tipo:"tesouros",raridade:"Épico",preco:7600,cor:"#ffcf3e",icon:"◆",desc:"Documento raro para futuras trocas especiais."},{nome:"Caixa de Sinalizadores",tipo:"tecnologicos",raridade:"Incomum",preco:2300,cor:"#64d6a4",icon:"✧",desc:"Sinais visuais para bando, organização e navegação."}];function ler(c,p){try{return JSON.parse(localStorage.getItem(c)||"null")||p}catch{return p}}function salvar(c,v){localStorage.setItem(c,JSON.stringify(v))}function chaveDia(){return new Date().toISOString().slice(0,10)}function progresso(){return RpgSistemas.obterProgresso(personagem)}function inventario(){return ler(`inventario_${personagem.nome}`,[])}function estoqueDoDia(){const seed=chaveDia().split("-").reduce((s,p)=>s+Number(p),0);return[0,1,2,3].map((_,i)=>catalogo[(seed+i*3)%catalogo.length])}function comprasDoDia(){return ler("rpg_loja_compras_"+chaveDia()+"_"+personagem.nome,[])}function fimDoDia(){const d=new Date;return d.setHours(24,0,0,0),d}function comprar(i){const item=estoqueDoDia()[i],feitas=comprasDoDia();if(feitas.includes(i))return;const prog=progresso();if(prog.berris<item.preco){RpgFeedback?.aviso?.("Berris insuficientes",[item.nome]);return}prog.berris-=item.preco;RpgSistemas.salvarProgresso(personagem,prog);const inv=inventario();inv.push({id:Date.now(),nome:item.nome,tipo:item.tipo,quantidade:1,raridade:item.raridade,descricao:item.desc,origem:"Loja rotativa",adicionadoEm:new Date().toLocaleString("pt-BR"),sprite:[0,2]});salvar(`inventario_${personagem.nome}`,inv);salvar("rpg_loja_compras_"+chaveDia()+"_"+personagem.nome,[...feitas,i]);RpgFeedback?.aviso?.("Compra realizada",[item.nome,"Enviado ao inventário."]);renderizar()}function renderizar(){if(!personagem?.nome){location.href="index.html";return}const prog=progresso(),feitas=comprasDoDia();berris.textContent=prog.berris.toLocaleString("pt-BR");compras.textContent=`${feitas.length}/4`;status.textContent=`${personagem.nome}, estoque raro troca diariamente e cada item pode ser comprado uma vez.`;grid.innerHTML=estoqueDoDia().map((item,i)=>`<article class="item" style="--cor:${item.cor}"><div class="arte">${item.icon}</div><div><small>${item.raridade}</small><h2>${item.nome}</h2><p>${item.desc}</p></div><div class="tags"><span>${item.tipo}</span><span>${item.preco.toLocaleString("pt-BR")} berris</span></div><button class="compra" data-i="${i}" ${feitas.includes(i)?"disabled":""}>${feitas.includes(i)?"Comprado":"Comprar"}</button></article>`).join("");document.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>comprar(Number(b.dataset.i)))}setInterval(()=>{const ms=fimDoDia()-new Date,h=String(Math.floor(ms/36e5)).padStart(2,"0"),m=String(Math.floor(ms/6e4)%60).padStart(2,"0"),s=String(Math.floor(ms/1e3)%60).padStart(2,"0");contador.textContent=`${h}:${m}:${s}`},1e3);renderizar();</script></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja Rotativa - One Piece RPG</title>
+    <link rel="stylesheet" href="estilo.css?v=20260619-game2">
+    <style>
+        html, body { margin: 0; min-height: 100%; background: #030708; color: #fff7df; overflow-y: auto; }
+        .video-fundo { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.3) saturate(1.15); z-index: 0; }
+        .app { position: relative; z-index: 1; width: min(1220px, calc(100% - 28px)); margin: 0 auto; padding: clamp(16px, 4vw, 42px) 0; display: grid; gap: 16px; }
+        .painel, .item { border: 1px solid rgba(247,200,75,.28); border-radius: 8px; background: linear-gradient(180deg, rgba(7,20,22,.92), rgba(3,8,10,.96)); box-shadow: 0 22px 54px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,247,223,.06); }
+        .topo { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; padding: clamp(16px,3vw,26px); }
+        small, .meta { color: #ffe28a; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+        h1 { margin: 4px 0 8px; font-family: "Segoe UI Black","Arial Black",Impact,sans-serif; font-size: clamp(2.2rem,6vw,4.3rem); line-height: .92; text-transform: uppercase; text-shadow: 0 5px 0 #210b08,0 16px 30px rgba(0,0,0,.72); }
+        .voltar, button { min-height: 42px; padding: 0 14px; border: 1px solid rgba(255,226,138,.52); border-radius: 8px; color: #fff7df; background: rgba(4,12,13,.72); font-weight: 900; text-transform: uppercase; text-decoration: none; cursor: pointer; }
+        button.compra { color: #1b1a10; background: linear-gradient(90deg,#ffe28a,#f7c84b); }
+        button:disabled { opacity: .55; cursor: default; }
+        .hud { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+        .hud .painel { padding: 14px; }
+        .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+        .item { --cor: #ffe28a; position: relative; overflow: hidden; min-height: 330px; padding: 14px; display: grid; align-content: space-between; gap: 12px; }
+        .item::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 0%, color-mix(in srgb,var(--cor) 22%,transparent), transparent 42%); pointer-events: none; }
+        .arte { position: relative; display: grid; place-items: center; height: 118px; border: 1px solid color-mix(in srgb,var(--cor) 38%,transparent); border-radius: 8px; background: radial-gradient(circle, color-mix(in srgb,var(--cor) 46%,#fff7df), rgba(3,8,10,.82) 62%); box-shadow: 0 0 24px color-mix(in srgb,var(--cor) 24%,transparent); font-size: 3rem; }
+        .item h2 { position: relative; margin: 0; color: #fff7df; font-size: 1.1rem; text-transform: uppercase; }
+        .item p { position: relative; margin: 0; color: #d9e8d4; line-height: 1.42; }
+        .tags { position: relative; display: flex; flex-wrap: wrap; gap: 7px; }
+        .tags span { padding: 5px 8px; border: 1px solid color-mix(in srgb,var(--cor) 42%,transparent); border-radius: 999px; color: #ffe28a; background: rgba(0,0,0,.28); font-size: .68rem; font-weight: 900; text-transform: uppercase; }
+        @media(max-width:900px){.grid,.hud,.topo{grid-template-columns:1fr}.video-fundo{display:none}}
+    </style>
+</head>
+<body>
+    <audio id="musica-fundo" loop preload="auto"><source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg"></audio>
+    <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true"><source src="fundo-login.mp4" type="video/mp4"></video>
+    <main class="app">
+        <header class="topo painel">
+            <div><small>Mercado do Dia</small><h1>Loja Rotativa</h1><p id="status">Carregando estoque...</p></div>
+            <a class="voltar" href="lobby.html">Voltar ao Lobby</a>
+        </header>
+        <section class="hud">
+            <article class="painel"><small>Berris</small><h2 id="berris">0</h2></article>
+            <article class="painel"><small>Troca em</small><h2 id="contador">--:--:--</h2></article>
+            <article class="painel"><small>Compras</small><h2 id="compras">0/0</h2></article>
+        </section>
+        <section class="grid" id="grid"></section>
+    </main>
+    <script src="musica-fundo.js?v=20260619-game2"></script>
+    <script src="rpg-sistemas.js?v=20260619-rpg8"></script>
+    <script>
+        const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+        const catalogo = [
+            { nome: "Kit de Reparo Naval", tipo: "materiais", raridade: "Comum", preco: 900, cor: "#d79a5a", icon: "▣", desc: "Madeira, corda e rebites para pequenas melhorias de navio." },
+            { nome: "Mapa Riscado dos Blues", tipo: "documentos", raridade: "Incomum", preco: 1400, cor: "#49d2ff", icon: "⌖", desc: "Mapa usado por navegadores para marcar rotas curtas." },
+            { nome: "Ração de Convés", tipo: "alimentacao", raridade: "Comum", preco: 650, cor: "#ff8a3d", icon: "◒", desc: "Mantimento simples para treinos e viagens." },
+            { nome: "Lanterna de Vigia", tipo: "ferramentas", raridade: "Incomum", preco: 1800, cor: "#ffe28a", icon: "✦", desc: "Ferramenta de exploração para locais escuros." },
+            { nome: "Bússola de Corrente", tipo: "navegacao", raridade: "Raro", preco: 3600, cor: "#36e0ff", icon: "◇", desc: "Instrumento naval instável, útil para eventos de rota." },
+            { nome: "Capa de Marinheiro Antiga", tipo: "vestimentas", raridade: "Raro", preco: 4200, cor: "#8f7bff", icon: "▲", desc: "Cosmético de viagem com aura discreta no lobby." },
+            { nome: "Selo de Contrato Mercante", tipo: "tesouros", raridade: "Épico", preco: 7600, cor: "#ffcf3e", icon: "◆", desc: "Documento raro para futuras trocas especiais." },
+            { nome: "Caixa de Sinalizadores", tipo: "tecnologicos", raridade: "Incomum", preco: 2300, cor: "#64d6a4", icon: "✧", desc: "Sinais visuais para bando, organização e navegação." }
+        ];
+        function ler(chave, padrao) { try { return JSON.parse(localStorage.getItem(chave) || "null") || padrao; } catch { return padrao; } }
+        function salvar(chave, valor) { localStorage.setItem(chave, JSON.stringify(valor)); }
+        function chaveDia() { return new Date().toISOString().slice(0, 10); }
+        function progresso() { return RpgSistemas.obterProgresso(personagem); }
+        function inventario() { return ler(`inventario_${personagem.nome}`, []); }
+        function estoqueDoDia() {
+            const seed = chaveDia().split("-").reduce((s, p) => s + Number(p), 0);
+            return [0,1,2,3].map((_, i) => catalogo[(seed + i * 3) % catalogo.length]);
+        }
+        function comprasDoDia() { return ler("rpg_loja_compras_" + chaveDia() + "_" + personagem.nome, []); }
+        function fimDoDia() { const d = new Date(); d.setHours(24,0,0,0); return d; }
+        function comprar(indice) {
+            const item = estoqueDoDia()[indice];
+            const feitas = comprasDoDia();
+            if (feitas.includes(indice)) return;
+            const prog = progresso();
+            if (prog.berris < item.preco) { RpgFeedback?.aviso?.("Berris insuficientes", [item.nome]); return; }
+            prog.berris -= item.preco;
+            RpgSistemas.salvarProgresso(personagem, prog);
+            const inv = inventario();
+            inv.push({ id: Date.now(), nome: item.nome, tipo: item.tipo, quantidade: 1, raridade: item.raridade, descricao: item.desc, origem: "Loja rotativa", adicionadoEm: new Date().toLocaleString("pt-BR"), sprite: [0,2] });
+            salvar(`inventario_${personagem.nome}`, inv);
+            salvar("rpg_loja_compras_" + chaveDia() + "_" + personagem.nome, [...feitas, indice]);
+            RpgFeedback?.aviso?.("Compra realizada", [item.nome, "Enviado ao inventário."]);
+            renderizar();
+        }
+        function renderizar() {
+            if (!personagem?.nome) { location.href = "index.html"; return; }
+            const prog = progresso();
+            const feitas = comprasDoDia();
+            document.getElementById("berris").textContent = prog.berris.toLocaleString("pt-BR");
+            document.getElementById("compras").textContent = `${feitas.length}/4`;
+            document.getElementById("status").textContent = `${personagem.nome}, estoque raro troca diariamente e cada item pode ser comprado uma vez.`;
+            document.getElementById("grid").innerHTML = estoqueDoDia().map((item, i) => `
+                <article class="item" style="--cor:${item.cor}">
+                    <div class="arte">${item.icon}</div>
+                    <div><small>${item.raridade}</small><h2>${item.nome}</h2><p>${item.desc}</p></div>
+                    <div class="tags"><span>${item.tipo}</span><span>${item.preco.toLocaleString("pt-BR")} berris</span></div>
+                    <button class="compra" data-i="${i}" ${feitas.includes(i) ? "disabled" : ""}>${feitas.includes(i) ? "Comprado" : "Comprar"}</button>
+                </article>`).join("");
+            document.querySelectorAll("[data-i]").forEach((b) => b.onclick = () => comprar(Number(b.dataset.i)));
+        }
+        setInterval(() => {
+            const ms = fimDoDia() - new Date();
+            const h = String(Math.floor(ms / 3600000)).padStart(2, "0");
+            const m = String(Math.floor(ms / 60000) % 60).padStart(2, "0");
+            const s = String(Math.floor(ms / 1000) % 60).padStart(2, "0");
+            document.getElementById("contador").textContent = `${h}:${m}:${s}`;
+        }, 1000);
+        renderizar();
+    </script>
+</body>
+</html>

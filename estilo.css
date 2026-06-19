@@ -13,7 +13,7 @@ body {
 	font-family: Georgia, "Times New Roman", serif;
 	color: #fff7df;
 	background: #07120e;
-	overflow: hidden;
+	overflow-x: hidden;
 }
 
 .tela-login {
@@ -22,6 +22,7 @@ body {
 	grid-template-columns: minmax(280px, 1fr) minmax(360px, 560px);
 	align-items: center;
 	min-height: 100vh;
+	min-height: 100svh;
 	padding: clamp(28px, 6vw, 78px);
 	overflow: hidden;
 	background: #07120e;
@@ -33,6 +34,7 @@ body {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
+	filter: brightness(0.82) saturate(1.08);
 	z-index: 0;
 }
 
@@ -41,7 +43,9 @@ body {
 	content: "";
 	position: absolute;
 	inset: 0;
-	background: transparent;
+	background:
+		linear-gradient(90deg, rgba(1, 5, 6, 0.64), rgba(1, 5, 6, 0.18) 48%, rgba(1, 5, 6, 0.72)),
+		linear-gradient(180deg, rgba(1, 5, 6, 0.18), rgba(1, 5, 6, 0.68));
 	pointer-events: none;
 	z-index: 0;
 }
@@ -63,6 +67,12 @@ body {
 	width: min(100%, 540px);
 	max-height: calc(100vh - 72px);
 	font-family: Arial, sans-serif;
+	padding: clamp(10px, 1.6vw, 18px);
+	border: 1px solid rgba(255, 237, 179, 0.14);
+	border-radius: 8px;
+	background: linear-gradient(180deg, rgba(3, 10, 11, 0.42), rgba(3, 10, 11, 0.18));
+	box-shadow: 0 22px 60px rgba(0, 0, 0, 0.22);
+	backdrop-filter: blur(2px);
 }
 
 .marca-jogo {
@@ -271,6 +281,12 @@ input {
 	box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.34);
 }
 
+button,
+input,
+select {
+	font: inherit;
+}
+
 .opcao-check {
 	display: grid;
 	grid-template-columns: auto 1fr;
@@ -326,6 +342,14 @@ input:focus,
 select:focus {
 	border-color: #f7c84b;
 	box-shadow: 0 0 0 2px rgba(247, 200, 75, 0.16), inset 0 0 18px rgba(0, 0, 0, 0.34);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+	outline: 2px solid #ffe28a;
+	outline-offset: 3px;
 }
 
 .controle-som {
@@ -399,10 +423,12 @@ select:focus {
 	min-height: 44px;
 	padding: 0 18px;
 	border: 1px solid rgba(255, 226, 138, 0.52);
+	border-radius: 6px;
 	font-weight: 700;
 	letter-spacing: 0.03em;
 	text-transform: uppercase;
 	cursor: pointer;
+	transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
 }
 
 .botao-cadastro,
@@ -417,6 +443,8 @@ select:focus {
 .botao-principal:hover,
 .botao-principal:focus-visible {
 	background: #ffe28a;
+	box-shadow: 0 0 18px rgba(247, 200, 75, 0.28);
+	transform: translateY(-1px);
 	outline: none;
 }
 
@@ -436,6 +464,7 @@ select:focus {
 .botao-secundario:hover,
 .botao-secundario:focus-visible {
 	border-color: #ffe28a;
+	background: rgba(247, 200, 75, 0.12);
 	outline: none;
 }
 
@@ -449,17 +478,6 @@ select:focus {
 	color: #fff7df;
 	background: rgba(4, 12, 13, 0.7);
 	font-weight: 700;
-	.modal-conteudo {
-		background: linear-gradient(135deg, rgba(13, 53, 58, 0.88), rgba(4, 12, 13, 0.88));
-		border: 2px solid #f7c84b;
-		border-radius: 8px;
-		padding: 20px;
-		max-width: 620px;
-		width: 92%;
-		max-height: 88vh;
-		overflow-y: auto;
-		box-shadow: 0 0 40px rgba(247, 200, 75, 0.3);
-	}
 }
 
 .menu-login {
@@ -582,11 +600,12 @@ select:focus {
 	display: none;
 	position: fixed;
 	inset: 0;
-	background: transparent;
+	background: rgba(0, 0, 0, 0.58);
 	z-index: 9999;
-	backdrop-filter: none;
+	backdrop-filter: blur(3px);
 	align-items: center;
 	justify-content: center;
+	padding: 18px;
 }
 
 .modal-overlay.ativo {
@@ -739,6 +758,78 @@ select:focus {
 	border-radius: 6px;
 	text-transform: uppercase;
 	letter-spacing: 0.04em;
+}
+
+.modal-download-app {
+	width: min(94vw, 680px);
+}
+
+.download-app-corpo {
+	display: grid;
+	gap: 14px;
+	padding: 18px;
+	background:
+		linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+	background-size: 28px 28px;
+}
+
+.download-app-logo {
+	width: 104px;
+	height: 104px;
+	justify-self: center;
+	border: 2px solid rgba(247, 200, 75, 0.58);
+	border-radius: 22px;
+	object-fit: cover;
+	box-shadow: 0 14px 38px rgba(0, 0, 0, 0.42), 0 0 26px rgba(247, 200, 75, 0.22);
+}
+
+.download-app-status {
+	padding: 12px;
+	border: 1px solid rgba(54, 224, 255, 0.28);
+	border-radius: 8px;
+	color: #d9f7ff;
+	background: rgba(3, 12, 15, 0.74);
+	font-weight: 800;
+	line-height: 1.35;
+	text-align: center;
+}
+
+.download-app-grade {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 10px;
+}
+
+.download-app-grade section {
+	display: grid;
+	gap: 8px;
+	padding: 12px;
+	border: 1px solid rgba(255, 237, 179, 0.18);
+	border-radius: 8px;
+	background: linear-gradient(135deg, rgba(4, 12, 13, 0.76), rgba(13, 53, 58, 0.34));
+}
+
+.download-app-grade strong {
+	color: #ffe28a;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.download-app-grade span {
+	color: rgba(217, 232, 212, 0.86);
+	font-size: 0.9rem;
+	line-height: 1.35;
+}
+
+@media (max-width: 700px) {
+	.download-app-grade {
+		grid-template-columns: 1fr;
+	}
+
+	.download-app-corpo .org-acoes {
+		grid-template-columns: 1fr;
+	}
 }
 
 .modal-termos-overlay {
@@ -1114,25 +1205,99 @@ kbd {
 }
 
 @media (max-width: 760px) {
+	html,
+	body {
+		width: 100%;
+		max-width: 100%;
+		overflow-x: hidden !important;
+	}
+
 	body {
 		overflow: auto;
 	}
 
 	.tela-login {
 		grid-template-columns: 1fr;
-		align-content: center;
-		gap: 34px;
+		align-content: start;
+		gap: 24px;
 		padding: 32px 22px;
+		overflow-y: auto;
+		overflow-x: hidden;
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.tela-login::after {
+		background:
+			linear-gradient(180deg, rgba(1, 5, 6, 0.78), rgba(1, 5, 6, 0.34) 44%, rgba(1, 5, 6, 0.82)),
+			rgba(1, 5, 6, 0.22);
 	}
 
 	.marca-jogo {
 		max-width: 100%;
+		min-width: 0;
+	}
+
+	.selo-rpg {
+		min-width: 0;
+		max-width: 100%;
+		padding: 0 22px;
+		font-size: 0.84rem;
+		letter-spacing: 0.12em;
+	}
+
+	.marca-jogo h1 {
+		max-width: 100%;
+		font-size: clamp(2.35rem, 13vw, 3.35rem);
+		overflow-wrap: anywhere;
+	}
+
+	.marca-jogo h1 .titulo-principal {
+		white-space: normal;
+	}
+
+	.marca-jogo h1 strong {
+		font-size: 0.34em;
+	}
+
+	.marca-jogo .subtitulo {
+		max-width: 100%;
+		font-size: 0.98rem;
+		line-height: 1.35;
+		overflow-wrap: anywhere;
 	}
 
 	.painel-login {
 		justify-self: stretch;
-		width: 100%;
+		width: calc(100vw - 44px);
+		max-width: calc(100vw - 44px);
 		max-height: none;
+		padding: 12px;
+		overflow: hidden;
+	}
+
+	.formulario-login,
+	.menu-login,
+	.menu-opcoes {
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+	}
+
+	.opcao {
+		width: 100%;
+		min-width: 0;
+		padding-left: 40px;
+		font-size: 0.96rem;
+		letter-spacing: 0.08em;
+	}
+
+	.opcao.ativa::before,
+	.opcao:hover::before,
+	.opcao:focus-visible::before {
+		left: 13px;
+		width: 13px;
+		height: 13px;
 	}
 
 	.painel-criacao.visivel {
@@ -1146,6 +1311,19 @@ kbd {
 
 	.controles {
 		justify-content: flex-start;
+		flex-wrap: wrap;
+		gap: 10px 14px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		scroll-behavior: auto !important;
+		transition-duration: 0.01ms !important;
 	}
 }
 
@@ -1589,6 +1767,365 @@ kbd {
 
 .admin-bloqueado .area-admin {
 	display: none;
+}
+
+/* ==================== AVENTURA / SELEÇÃO DE MAR ==================== */
+.pagina-aventura {
+	margin: 0;
+	min-height: 100%;
+	background: #030708;
+	color: #fff7df;
+	overflow-x: hidden;
+}
+
+.pagina-aventura .video-fundo {
+	position: fixed;
+	filter: brightness(0.3) saturate(1.18);
+}
+
+.pagina-aventura .app {
+	position: relative;
+	z-index: 1;
+	min-height: 100vh;
+	min-height: 100svh;
+	padding: clamp(14px, 2.4vw, 28px);
+	background:
+		radial-gradient(circle at 50% 18%, rgba(255, 226, 138, 0.14), transparent 26%),
+		radial-gradient(circle at 22% 72%, rgba(54, 224, 255, 0.12), transparent 30%);
+}
+
+.pagina-aventura .painel {
+	border: 1px solid rgba(247, 200, 75, 0.28);
+	border-radius: 8px;
+	background: linear-gradient(180deg, rgba(5, 12, 14, 0.92), rgba(1, 4, 6, 0.96));
+	box-shadow: 0 22px 54px rgba(0, 0, 0, 0.46), inset 0 1px 0 rgba(255, 247, 223, 0.06);
+	backdrop-filter: blur(8px);
+}
+
+.pagina-aventura .topo {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 14px;
+	align-items: center;
+	padding: 16px 18px;
+	margin-bottom: 14px;
+}
+
+.pagina-aventura small,
+.pagina-aventura .rotulo {
+	color: #ffe28a;
+	font-weight: 900;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.pagina-aventura h1 {
+	margin: 3px 0 6px;
+	font-family: "Segoe UI Black", "Arial Black", Impact, sans-serif;
+	font-size: clamp(2rem, 5vw, 4rem);
+	line-height: 0.92;
+	text-transform: uppercase;
+	text-shadow: 0 5px 0 #210b08, 0 16px 30px rgba(0, 0, 0, 0.72);
+}
+
+.pagina-aventura .voltar {
+	display: inline-grid;
+	place-items: center;
+	min-height: 42px;
+	padding: 0 14px;
+	border: 1px solid rgba(255, 226, 138, 0.52);
+	border-radius: 8px;
+	color: #fff7df;
+	background: rgba(4, 12, 13, 0.72);
+	font-weight: 900;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+.pagina-aventura .mares {
+	padding: 18px;
+	overflow: hidden;
+}
+
+.pagina-aventura .painel-jogo {
+	display: grid;
+	grid-template-columns: 1.2fr 0.8fr 0.8fr;
+	gap: 10px;
+	margin: 12px 0 4px;
+}
+
+.pagina-aventura .hud-rota {
+	min-height: 78px;
+	padding: 12px;
+	border: 1px solid rgba(255, 226, 138, 0.22);
+	border-radius: 8px;
+	background: linear-gradient(135deg, rgba(255, 247, 223, 0.06), rgba(54, 224, 255, 0.06));
+}
+
+.pagina-aventura .hud-rota b {
+	display: block;
+	margin-top: 6px;
+	color: #fff7df;
+	font-size: 1.1rem;
+	text-transform: uppercase;
+}
+
+.pagina-aventura .hud-rota span {
+	color: #d9e8d4;
+	font-size: 0.86rem;
+}
+
+.pagina-aventura .mares-trilho {
+	display: grid;
+	grid-template-columns: repeat(10, minmax(156px, 1fr));
+	gap: 12px;
+	align-items: stretch;
+	min-height: 372px;
+	padding: 12px 4px;
+	overflow-x: auto;
+}
+
+.pagina-aventura .mar-card {
+	--cor: #36e0ff;
+	--img: none;
+	--pos: center;
+	position: relative;
+	display: grid;
+	align-content: end;
+	justify-items: start;
+	gap: 9px;
+	min-height: 318px;
+	padding: 12px 10px;
+	border: 1px solid color-mix(in srgb, var(--cor) 58%, transparent);
+	border-radius: 8px;
+	color: #fff7df;
+	background: #030708;
+	box-shadow: 0 0 24px color-mix(in srgb, var(--cor) 18%, transparent), inset 0 0 24px rgba(0, 0, 0, 0.28);
+	text-align: left;
+	overflow: hidden;
+	transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.pagina-aventura .mar-card::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.1) 35%, rgba(0, 0, 0, 0.78)), var(--img);
+	background-size: cover, 500% 200%;
+	background-position: center, var(--pos);
+	filter: saturate(1.22) contrast(1.08);
+	transform: scale(1.01);
+	transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.pagina-aventura .mar-card::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background:
+		radial-gradient(circle at 50% 17%, color-mix(in srgb, var(--cor) 30%, transparent), transparent 32%),
+		linear-gradient(115deg, rgba(255, 247, 223, 0.12), transparent 30%, transparent 68%, rgba(255, 247, 223, 0.08));
+	opacity: 0.78;
+	pointer-events: none;
+}
+
+.pagina-aventura .mar-card > * {
+	position: relative;
+	z-index: 1;
+}
+
+.pagina-aventura .mar-card:not(.bloqueado):hover {
+	transform: translateY(-5px) scale(1.02);
+	box-shadow: 0 0 32px color-mix(in srgb, var(--cor) 38%, transparent), inset 0 0 28px rgba(255, 247, 223, 0.08);
+}
+
+.pagina-aventura .mar-card:not(.bloqueado):hover::before {
+	transform: scale(1.06);
+	filter: saturate(1.22) brightness(1.08);
+}
+
+.pagina-aventura .mar-card.bloqueado {
+	opacity: 0.62;
+	cursor: not-allowed;
+}
+
+.pagina-aventura .mar-card.bloqueado::before {
+	filter: grayscale(1) brightness(0.62);
+}
+
+.pagina-aventura .mar-card strong {
+	font-size: 1rem;
+	text-transform: uppercase;
+	text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85);
+}
+
+.pagina-aventura .mar-card span {
+	color: #d9e8d4;
+	font-size: 0.78rem;
+}
+
+.pagina-aventura .mar-status {
+	justify-self: start;
+	padding: 5px 8px;
+	border: 1px solid color-mix(in srgb, var(--cor) 50%, transparent);
+	border-radius: 999px;
+	color: #fff7df;
+	background: rgba(3, 8, 10, 0.72);
+	font-size: 0.68rem;
+	font-weight: 900;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.pagina-aventura .mar-desc {
+	min-height: 42px;
+	color: #d9e8d4;
+	line-height: 1.25;
+	text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+}
+
+.pagina-aventura .briefing {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 12px;
+	margin-top: 14px;
+}
+
+.pagina-aventura .briefing-card {
+	min-height: 118px;
+	padding: 14px;
+	border: 1px solid rgba(255, 226, 138, 0.2);
+	border-radius: 8px;
+	background: rgba(255, 247, 223, 0.04);
+}
+
+.pagina-aventura .briefing-card strong {
+	display: block;
+	margin: 6px 0;
+	color: #fff7df;
+	font-size: 1.1rem;
+	text-transform: uppercase;
+}
+
+.pagina-aventura .briefing-card p {
+	margin: 0;
+	color: #d9e8d4;
+	line-height: 1.4;
+}
+
+.pagina-aventura .resultado {
+	margin-top: 12px;
+	padding: 12px;
+	border: 1px solid rgba(255, 120, 120, 0.3);
+	border-radius: 8px;
+	background: rgba(80, 10, 10, 0.24);
+	color: #ffd0d0;
+}
+
+@media (max-width: 960px) {
+	html,
+	body,
+	.pagina-aventura,
+	.pagina-aventura .app {
+		max-width: 100%;
+		overflow-x: hidden;
+	}
+
+	.pagina-aventura .video-fundo {
+		display: none;
+	}
+
+	.pagina-aventura .app {
+		padding: 10px;
+	}
+
+	.pagina-aventura .topo,
+	.pagina-aventura .briefing,
+	.pagina-aventura .painel-jogo {
+		grid-template-columns: 1fr;
+	}
+
+	.pagina-aventura .topo {
+		padding: 12px 14px;
+		margin-bottom: 10px;
+		max-width: 100%;
+		overflow: visible;
+	}
+
+	.pagina-aventura .topo > div {
+		min-width: 0;
+	}
+
+	.pagina-aventura h1 {
+		font-size: clamp(1.65rem, 8.8vw, 2.45rem);
+		line-height: 0.98;
+		overflow-wrap: anywhere;
+	}
+
+	.pagina-aventura .topo p {
+		margin: 0;
+		font-size: 0.86rem;
+		max-width: 100%;
+		overflow-wrap: anywhere;
+		white-space: normal;
+	}
+
+	.pagina-aventura .painel {
+		backdrop-filter: none;
+	}
+
+	.pagina-aventura .mares {
+		padding: 12px;
+		max-width: 100%;
+	}
+
+	.pagina-aventura .painel-jogo {
+		gap: 8px;
+		margin-top: 8px;
+	}
+
+	.pagina-aventura .hud-rota {
+		min-height: auto;
+		padding: 9px;
+	}
+
+	.pagina-aventura .hud-rota b {
+		font-size: 0.96rem;
+	}
+
+	.pagina-aventura .hud-rota span {
+		font-size: 0.76rem;
+	}
+
+	.pagina-aventura .mares-trilho {
+		grid-template-columns: repeat(10, 190px);
+		min-height: 302px;
+		gap: 10px;
+		padding-top: 8px;
+	}
+
+	.pagina-aventura .mar-card {
+		min-height: 258px;
+		padding: 10px;
+	}
+
+	.pagina-aventura .mar-card strong {
+		font-size: 0.95rem;
+	}
+
+	.pagina-aventura .mar-desc {
+		min-height: 58px;
+		font-size: 0.74rem;
+	}
+
+	.pagina-aventura .mar-status {
+		padding: 4px 7px;
+		font-size: 0.62rem;
+	}
+
+	.pagina-aventura .briefing {
+		display: none;
+	}
 }
 
 @media (max-width: 760px) {

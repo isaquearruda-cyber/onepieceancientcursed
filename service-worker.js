@@ -1,4 +1,4 @@
-const CACHE_NAME = "one-piece-rpg-app-v10";
+const CACHE_NAME = "one-piece-rpg-app-v14";
 const CACHE_PREFIX = "one-piece-rpg-app-";
 
 const APP_SHELL = [
@@ -23,19 +23,21 @@ const APP_SHELL = [
   "./estilo.css",
   "./musica-fundo.js",
   "./rpg-sistemas.js",
-  "./banco-personagens.js",
+  "./banco-personagens.js?v=20260619-db2",
   "./supabase-config.js",
+  "./mares-dados.js",
+  "./mar-rota.js",
+  "./mar-rota.css",
   "./downloads/one-piece-rpg-pc-app.html",
   "./downloads/one-piece-rpg-android-app.html",
   "./downloads/one-piece-rpg-ios-app.html",
-  "./downloads/one-piece-rpg-windows.url",
-  "./downloads/one-piece-rpg-linux.desktop",
-  "./downloads/one-piece-rpg-macos.webloc",
   "./fundo-login.jpeg",
   "./fundo-login.mp4",
   "./assets/audio/drums-of-liberation.mp3",
-  "./assets/img/app-logo-icon-lite.jpg",
-  "./assets/img/app-logo-banner-lite.jpg",
+  "./assets/img/app-logo-source.jpeg",
+  "./assets/img/app-logo-192.png",
+  "./assets/img/app-logo-512.png",
+  "./favicon.ico",
   "./assets/img/menu-lobby.jpeg",
   "./assets/img/botao-entrar-aventura.jpeg",
   "./assets/img/botao-registros.jpeg",
@@ -50,7 +52,12 @@ const APP_SHELL = [
   "./assets/img/menu-game/organizacao.webp",
   "./assets/img/menu-game/aparencia.webp",
   "./assets/img/menu-game/ajustes.webp",
-  "./assets/img/menu-game/viagem.webp"
+  "./assets/img/menu-game/viagem.webp",
+  "./assets/mares/mar-sprite.webp",
+  "./assets/mares/mar-east.webp",
+  "./assets/mares/mar-north.webp",
+  "./assets/mares/mar-south.webp",
+  "./assets/mares/mar-west.webp"
 ];
 
 self.addEventListener("install", (event) => {
@@ -104,7 +111,7 @@ function buscarRedePrimeiro(event) {
     .catch(() => caches.match(event.request).then((cached) => {
       if (cached) return cached;
       if (event.request.mode === "navigate") return caches.match("./index.html");
-      return caches.match("./assets/img/app-logo-icon-lite.jpg");
+      return caches.match("./assets/img/app-logo-192.png");
     }));
 }
 

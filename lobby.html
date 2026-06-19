@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lobby - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game2">
     <style>
         html,
         body {
@@ -79,6 +79,119 @@
             background: rgba(4, 12, 13, 0.55);
             border-radius: 8px;
             box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.28);
+        }
+
+        .status-personagem.oculto-lobby {
+            display: none !important;
+        }
+
+        .painel-proxima-acao {
+            display: grid;
+            gap: 12px;
+            padding: 14px;
+            border: 1px solid rgba(54, 224, 255, 0.24);
+            border-radius: 8px;
+            background:
+                radial-gradient(circle at 18% 18%, rgba(54, 224, 255, 0.16), transparent 34%),
+                rgba(4, 12, 13, 0.58);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.28);
+        }
+
+        .painel-proxima-acao h2 {
+            margin: 0;
+            color: #fff7df;
+            font-size: 1.35rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .painel-proxima-acao p {
+            margin: 0;
+            color: #d9e8d4;
+            line-height: 1.45;
+        }
+
+        .chips-rota {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip-rota {
+            padding: 7px 9px;
+            border: 1px solid rgba(255, 226, 138, 0.24);
+            border-radius: 999px;
+            background: rgba(255, 247, 223, 0.05);
+            color: #ffe28a;
+            font-size: 0.78rem;
+            font-weight: 900;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .acoes-rapidas-lobby {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .botao-acao-rapida {
+            min-height: 54px;
+            border: 1px solid rgba(255, 226, 138, 0.5);
+            border-radius: 8px;
+            color: #fff7df;
+            background: linear-gradient(90deg, rgba(255, 247, 223, 0.07), rgba(54, 224, 255, 0.08));
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .rpg-exp-lobby {
+            display: grid;
+            gap: 6px;
+            margin: 12px 0;
+            padding: 10px;
+            border: 1px solid rgba(247, 200, 75, 0.34);
+            border-radius: 8px;
+            background: rgba(4, 12, 13, 0.58);
+        }
+
+        .rpg-exp-lobby:empty {
+            display: none;
+        }
+
+        .rpg-exp-chip {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            color: #fff7df;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .rpg-exp-chip span {
+            color: #ffe28a;
+        }
+
+        .rpg-exp-barra {
+            height: 10px;
+            border: 1px solid rgba(255, 247, 223, 0.14);
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.55);
+            overflow: hidden;
+        }
+
+        .rpg-exp-barra i {
+            display: block;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #36e0ff, #ffe28a);
+            box-shadow: 0 0 16px rgba(54, 224, 255, 0.55);
+        }
+
+        .rpg-exp-lobby small {
+            color: #d9e8d4;
+            font-weight: 800;
         }
 
         .info-linha {
@@ -425,11 +538,13 @@
 
         .botao-menu-lobby img,
         .atalho-menu-lobby img {
-            width: 48px;
-            height: 48px;
+            width: 58px;
+            height: 58px;
             object-fit: cover;
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 16px rgba(247, 200, 75, 0.2), inset 0 0 10px rgba(255, 247, 223, 0.12);
+            transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
         }
 
         .menu-seta {
@@ -450,6 +565,10 @@
             border: 1px solid rgba(247, 200, 75, 0.2);
             border-radius: 8px;
             background: rgba(4, 12, 13, 0.58);
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
         .menu-lobby-recolhivel.aberto .grade-menu-lobby {
@@ -461,12 +580,14 @@
             place-items: center;
             gap: 8px;
             min-height: 112px;
+            min-width: 0;
             padding: 12px 8px;
             border: 1px solid rgba(247, 200, 75, 0.38);
             border-radius: 8px;
             background: rgba(255, 247, 223, 0.04);
             color: #fff7df;
             font-weight: 900;
+            text-decoration: none;
             text-align: center;
             cursor: pointer;
             transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
@@ -479,10 +600,19 @@
             transform: translateY(-2px);
         }
 
+        .atalho-menu-lobby:hover img,
+        .botao-menu-lobby:hover img,
+        .menu-lobby-recolhivel.aberto .botao-menu-lobby img {
+            filter: saturate(1.2) contrast(1.08);
+            transform: scale(1.08);
+            box-shadow: 0 0 22px rgba(255, 226, 138, 0.38), inset 0 0 12px rgba(255, 247, 223, 0.18);
+        }
+
         .atalho-menu-lobby span {
             font-size: 0.82rem;
             line-height: 1.15;
             text-transform: uppercase;
+            overflow-wrap: anywhere;
         }
 
         /* ==================== MODAL ====================*/
@@ -1864,6 +1994,9 @@
             .container-lobby {
                 gap: 20px;
                 padding: 16px;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
             }
 
             .painel-personagem,
@@ -1891,22 +2024,66 @@
             .palco-placeholder {
                 width: min(92%, 260px);
             }
+
+            .menu-lobby-recolhivel,
+            .grade-menu-lobby {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .grade-menu-lobby {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .atalho-menu-lobby {
+                min-height: 86px;
+                grid-template-columns: 54px 1fr;
+                justify-items: start;
+                text-align: left;
+                padding: 10px;
+            }
+
+            .atalho-menu-lobby img,
+            .botao-menu-lobby img {
+                width: 48px;
+                height: 48px;
+            }
         }
 
         @media (max-width: 900px) and (orientation: landscape) {
             .container-lobby {
-                grid-template-columns: minmax(210px, 0.82fr) minmax(260px, 1.1fr) minmax(220px, 0.9fr);
+                grid-template-columns: 1fr;
+                max-width: 680px;
                 gap: 12px;
                 padding: 12px;
             }
 
+            .painel-personagem {
+                order: 1;
+            }
+
+            .painel-comandos {
+                order: 2;
+            }
+
+            .personagem-palco {
+                order: 3;
+            }
+
+            .painel-personagem,
+            .painel-comandos {
+                padding: 12px;
+            }
+
             .cabecalho-lobby h1 {
-                font-size: 1.75rem;
+                font-size: 1.8rem;
+                margin-bottom: 4px;
             }
 
             .cabecalho-lobby .subtitulo-lobby {
                 font-size: 0.86rem;
-                margin-bottom: 10px;
+                margin-bottom: 8px;
             }
 
             .status-personagem {
@@ -1929,11 +2106,11 @@
             }
 
             .personagem-palco {
-                min-height: calc(100vh - 24px);
+                min-height: 360px;
             }
 
             .palco-moldura {
-                min-height: 330px;
+                min-height: 300px;
             }
 
             .palco-identidade {
@@ -1946,8 +2123,22 @@
             }
 
             .botao-lobby {
-                min-height: 42px;
-                font-size: 0.78rem;
+                min-height: 58px;
+                font-size: 0.86rem;
+            }
+
+            .botao-menu-lobby {
+                min-height: 58px;
+            }
+
+            .painel-titulo {
+                font-size: 0.82rem;
+            }
+
+            .acoes-lobby,
+            .grupo-comandos,
+            .menu-lobby-recolhivel {
+                gap: 9px;
             }
 
             .botao-acesso-rapido {
@@ -1961,9 +2152,1207 @@
             }
         }
 
+        @media (max-width: 1180px) and (hover: none), (max-width: 1180px) and (pointer: coarse) {
+            body.pagina-formulario {
+                overflow-y: auto;
+            }
+
+            .container-lobby {
+                grid-template-columns: 1fr !important;
+                width: min(100%, 680px);
+                max-width: 680px;
+                margin: 0 auto;
+                padding: 12px;
+                gap: 12px;
+            }
+
+            .painel-personagem {
+                order: 1;
+            }
+
+            .painel-comandos {
+                order: 2;
+            }
+
+            .personagem-palco {
+                order: 3;
+                min-height: 340px;
+            }
+
+            .cabecalho-lobby {
+                text-align: center;
+            }
+
+            .cabecalho-lobby h1 {
+                font-size: clamp(1.75rem, 7vw, 2.3rem);
+            }
+
+            .battle-hud-lobby {
+                grid-template-columns: 1fr minmax(92px, 0.38fr) !important;
+                gap: 8px !important;
+            }
+
+            .painel-proxima-acao {
+                padding: 12px;
+            }
+
+            .painel-proxima-acao h2 {
+                font-size: 1.12rem;
+            }
+
+            .acoes-rapidas-lobby {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .botao-lobby,
+            .botao-menu-lobby {
+                grid-template-columns: 58px 1fr auto;
+                min-height: 64px;
+                padding: 8px 12px;
+            }
+
+            .botao-lobby img,
+            .botao-menu-lobby img,
+            .atalho-menu-lobby img {
+                width: 52px;
+                height: 52px;
+            }
+
+            .grade-menu-lobby {
+                grid-template-columns: 1fr !important;
+            }
+
+            .atalho-menu-lobby {
+                min-height: 74px;
+                grid-template-columns: 56px 1fr;
+                justify-items: start;
+                text-align: left;
+            }
+        }
+
         @media (max-width: 760px) and (orientation: portrait) {
             .orientacao-celular {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 960px) and (orientation: landscape) {
+            html,
+            body,
+            body.pagina-formulario {
+                width: 100%;
+                min-height: 100svh;
+                overflow: hidden !important;
+                background: #030809;
+            }
+
+            .video-fundo {
+                display: block !important;
+                filter: brightness(0.34) saturate(1.12);
+            }
+
+            .orientacao-celular {
+                display: none !important;
+            }
+
+            .container-lobby {
+                width: 100%;
+                height: 100svh;
+                height: 100vh;
+                min-height: 100vh;
+                max-width: none !important;
+                display: grid !important;
+                grid-template-columns: minmax(156px, 0.72fr) minmax(260px, 1.55fr) minmax(178px, 0.82fr) !important;
+                grid-template-rows: 1fr;
+                gap: 7px !important;
+                padding: 6px !important;
+                margin: 0 !important;
+                align-items: stretch;
+                overflow: hidden;
+            }
+
+            .painel-lobby,
+            .personagem-palco {
+                min-height: 0 !important;
+            }
+
+            .painel-personagem,
+            .painel-comandos,
+            .personagem-palco {
+                padding: 8px !important;
+                border-color: rgba(144, 255, 0, 0.2);
+                background: linear-gradient(180deg, rgba(2, 8, 10, 0.66), rgba(2, 5, 7, 0.58));
+                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32), inset 0 0 24px rgba(54, 224, 255, 0.04);
+                backdrop-filter: blur(3px);
+            }
+
+            .painel-personagem {
+                order: 1 !important;
                 display: grid;
+                grid-template-rows: auto auto;
+                align-content: start;
+                gap: 8px !important;
+                overflow: hidden;
+            }
+
+            .personagem-palco {
+                order: 2 !important;
+                padding: 4px 10px 8px !important;
+                display: grid;
+                place-items: center;
+                overflow: hidden;
+            }
+
+            .painel-comandos {
+                order: 3 !important;
+                display: grid;
+                grid-template-rows: 1fr auto auto;
+                gap: 8px !important;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .cabecalho-lobby {
+                text-align: left !important;
+                display: grid;
+                gap: 6px;
+            }
+
+            .cabecalho-lobby h1,
+            .cabecalho-lobby .subtitulo-lobby,
+            .status-online {
+                display: none !important;
+            }
+
+            .battle-hud-lobby {
+                margin: 0 !important;
+                grid-template-columns: 1fr !important;
+                grid-template-areas: "perfil" "berris" "xp" !important;
+                gap: 6px !important;
+            }
+
+            .battle-perfil,
+            .battle-berris,
+            .battle-xp {
+                min-height: 0 !important;
+                padding: 6px 7px !important;
+                border-radius: 7px !important;
+            }
+
+            .battle-perfil {
+                grid-template-columns: 34px 1fr !important;
+            }
+
+            .battle-avatar {
+                width: 32px !important;
+                height: 32px !important;
+            }
+
+            .battle-nome {
+                font-size: 0.82rem !important;
+            }
+
+            .battle-nivel,
+            .battle-xp-topo {
+                font-size: 0.62rem !important;
+            }
+
+            .battle-berris strong {
+                font-size: 0.9rem !important;
+            }
+
+            .battle-xp-barra {
+                height: 6px !important;
+            }
+
+            .painel-proxima-acao {
+                align-self: start;
+                gap: 6px !important;
+                padding: 9px !important;
+                overflow: hidden;
+            }
+
+            .painel-proxima-acao .info-label,
+            .painel-proxima-acao h2 {
+                display: none !important;
+            }
+
+            .painel-proxima-acao p,
+            .chips-rota {
+                display: none;
+            }
+
+            .acoes-rapidas-lobby {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+
+            .botao-acao-rapida {
+                min-height: 34px;
+                border-radius: 6px;
+                font-size: 0.62rem;
+            }
+
+            .palco-identidade {
+                top: 8px !important;
+                width: min(68%, 260px);
+                padding: 7px 10px !important;
+                background: rgba(2, 8, 10, 0.56);
+            }
+
+            .palco-identidade span {
+                font-size: 0.55rem;
+            }
+
+            .palco-identidade strong {
+                font-size: clamp(1rem, 3vw, 1.55rem);
+            }
+
+            .palco-moldura {
+                width: 100%;
+                min-height: 0 !important;
+                height: 100%;
+                padding-top: 38px;
+            }
+
+            .palco-placeholder {
+                width: min(56%, 238px) !important;
+                max-height: calc(100svh - 74px);
+                aspect-ratio: 3 / 4;
+                background: radial-gradient(circle at 50% 78%, rgba(247, 200, 75, 0.18), transparent 46%);
+            }
+
+            .palco-placeholder.tem-imagem {
+                width: min(64%, 270px) !important;
+            }
+
+            .painel-titulo {
+                font-size: 0.72rem !important;
+                letter-spacing: 0.14em;
+            }
+
+            .acoes-lobby,
+            .grupo-comandos,
+            .menu-lobby-recolhivel {
+                gap: 6px !important;
+            }
+
+            .botao-lobby,
+            .botao-menu-lobby,
+            .botao-registros {
+                grid-template-columns: 38px 1fr auto !important;
+                min-height: 46px !important;
+                padding: 5px 8px !important;
+                gap: 8px !important;
+                border-radius: 7px !important;
+                font-size: 0.72rem !important;
+            }
+
+            .botao-registros {
+                grid-template-columns: 38px 1fr !important;
+            }
+
+            .botao-lobby img,
+            .botao-menu-lobby img,
+            .botao-registros img {
+                width: 36px !important;
+                height: 36px !important;
+                border-radius: 6px !important;
+            }
+
+            .menu-seta {
+                font-size: 0.95rem;
+            }
+
+            .grade-menu-lobby {
+                grid-template-columns: 1fr !important;
+                gap: 5px !important;
+                padding: 6px !important;
+                max-height: 44svh;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .atalho-menu-lobby {
+                min-height: 40px !important;
+                grid-template-columns: 34px 1fr !important;
+                justify-items: start !important;
+                text-align: left !important;
+                gap: 7px !important;
+                padding: 5px 7px !important;
+                border-radius: 7px !important;
+            }
+
+            .atalho-menu-lobby img {
+                width: 32px !important;
+                height: 32px !important;
+                border-radius: 6px !important;
+            }
+
+            .atalho-menu-lobby span {
+                font-size: 0.62rem !important;
+                line-height: 1.05 !important;
+            }
+
+            .botao-voltar-inicio {
+                min-height: 34px !important;
+                font-size: 0.62rem !important;
+                padding: 4px 7px !important;
+            }
+        }
+
+        @media (max-width: 760px) and (orientation: portrait) {
+            body.pagina-formulario {
+                overflow-y: auto !important;
+            }
+
+            .container-lobby {
+                grid-template-columns: 1fr !important;
+                gap: 10px !important;
+                padding: 10px !important;
+            }
+
+            .personagem-palco {
+                order: 2 !important;
+                min-height: 360px !important;
+            }
+
+            .painel-personagem {
+                order: 1 !important;
+            }
+
+            .painel-comandos {
+                order: 3 !important;
+            }
+
+            .cabecalho-lobby h1 {
+                font-size: 1.7rem !important;
+            }
+
+            .botao-lobby,
+            .botao-menu-lobby,
+            .botao-registros {
+                min-height: 54px !important;
+            }
+        }
+
+        /* Lobby estilo HUD de jogo */
+        body.pagina-formulario {
+            min-height: 100svh;
+            background:
+                linear-gradient(90deg, rgba(2, 7, 9, 0.92) 0%, rgba(2, 7, 9, 0.38) 34%, rgba(2, 7, 9, 0.5) 68%, rgba(2, 7, 9, 0.94) 100%),
+                radial-gradient(circle at 50% 58%, rgba(247, 200, 75, 0.18), transparent 34%),
+                #030809;
+            overflow: hidden;
+        }
+
+        .video-fundo {
+            filter: brightness(0.5) saturate(1.18) contrast(1.06);
+        }
+
+        .container-lobby {
+            width: 100%;
+            min-height: 100svh;
+            grid-template-columns: minmax(230px, 0.78fr) minmax(360px, 1.52fr) minmax(280px, 0.9fr);
+            grid-template-rows: minmax(0, 1fr);
+            gap: clamp(8px, 1.2vw, 16px);
+            padding: clamp(10px, 1.5vw, 18px);
+            align-items: stretch;
+        }
+
+        .painel-lobby,
+        .personagem-palco {
+            min-height: 0;
+        }
+
+        .painel-personagem,
+        .painel-comandos,
+        .personagem-palco {
+            border-color: rgba(137, 228, 255, 0.32);
+            background:
+                linear-gradient(180deg, rgba(4, 16, 20, 0.82), rgba(2, 6, 8, 0.72)),
+                linear-gradient(90deg, rgba(255, 226, 138, 0.1), transparent 42%, rgba(54, 224, 255, 0.08));
+            box-shadow:
+                0 18px 38px rgba(0, 0, 0, 0.42),
+                inset 0 0 28px rgba(54, 224, 255, 0.07),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(4px);
+        }
+
+        .painel-personagem,
+        .painel-comandos {
+            padding: clamp(10px, 1.25vw, 15px);
+        }
+
+        .painel-personagem {
+            display: grid;
+            grid-template-rows: auto minmax(0, 1fr);
+            gap: 10px;
+            align-content: start;
+        }
+
+        .cabecalho-lobby {
+            display: grid;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .cabecalho-lobby h1 {
+            margin: 0;
+            color: #fff2a8;
+            font-family: "Segoe UI Black", "Arial Black", Impact, sans-serif;
+            font-size: clamp(1.55rem, 2.5vw, 2.45rem);
+            line-height: 0.95;
+            letter-spacing: 0;
+            text-transform: uppercase;
+            -webkit-text-stroke: 1px rgba(37, 11, 6, 0.75);
+        }
+
+        .cabecalho-lobby .subtitulo-lobby {
+            margin: 0;
+            color: #d9f7ff;
+            font-family: Arial, sans-serif;
+            font-size: clamp(0.78rem, 1vw, 0.92rem);
+            line-height: 1.2;
+            letter-spacing: 0.03em;
+        }
+
+        .status-online {
+            width: max-content;
+            max-width: 100%;
+            padding: 6px 9px;
+            border: 1px solid rgba(144, 255, 0, 0.34);
+            border-radius: 4px;
+            background: rgba(8, 20, 10, 0.62);
+            font-family: Arial, sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .rpg-exp-lobby {
+            margin: 0;
+            padding: 8px;
+            border-color: rgba(54, 224, 255, 0.28);
+            background: rgba(1, 7, 9, 0.56);
+        }
+
+        .painel-proxima-acao {
+            align-content: start;
+            gap: 10px;
+            min-height: 0;
+            padding: 12px;
+            border-color: rgba(247, 200, 75, 0.34);
+            background:
+                linear-gradient(180deg, rgba(10, 28, 31, 0.7), rgba(3, 8, 10, 0.62)),
+                radial-gradient(circle at 18% 12%, rgba(255, 226, 138, 0.14), transparent 35%);
+        }
+
+        .painel-proxima-acao h2 {
+            font-family: "Segoe UI Black", "Arial Black", Impact, sans-serif;
+            font-size: clamp(1.05rem, 1.55vw, 1.32rem);
+            letter-spacing: 0;
+        }
+
+        .painel-proxima-acao p {
+            font-family: Arial, sans-serif;
+            font-size: 0.88rem;
+        }
+
+        .chip-rota {
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            font-size: 0.66rem;
+        }
+
+        .acoes-rapidas-lobby {
+            margin-top: 2px;
+            gap: 8px;
+        }
+
+        .botao-acao-rapida {
+            min-height: 42px;
+            border-color: rgba(137, 228, 255, 0.42);
+            border-radius: 4px;
+            background: linear-gradient(180deg, rgba(16, 45, 54, 0.82), rgba(4, 12, 14, 0.82));
+            color: #e8fbff;
+            font-family: Arial, sans-serif;
+            font-size: 0.74rem;
+            letter-spacing: 0.04em;
+        }
+
+        .personagem-palco {
+            min-height: 0;
+            padding: clamp(8px, 1.2vw, 16px);
+            background:
+                linear-gradient(180deg, rgba(2, 8, 11, 0.34), rgba(2, 6, 8, 0.74)),
+                radial-gradient(ellipse at 50% 72%, rgba(247, 200, 75, 0.24), transparent 46%),
+                linear-gradient(90deg, rgba(54, 224, 255, 0.1), transparent 22%, transparent 78%, rgba(255, 68, 68, 0.08));
+        }
+
+        .personagem-palco::before {
+            inset: 10px;
+            border-color: rgba(137, 228, 255, 0.18);
+            background:
+                linear-gradient(90deg, transparent 49%, rgba(137, 228, 255, 0.11) 50%, transparent 51%),
+                linear-gradient(0deg, transparent 49%, rgba(137, 228, 255, 0.07) 50%, transparent 51%);
+        }
+
+        .personagem-palco::after {
+            inset: auto 12% 6% 12%;
+            height: 22%;
+            background: radial-gradient(ellipse at center, rgba(255, 219, 91, 0.4), rgba(54, 224, 255, 0.14) 42%, transparent 70%);
+        }
+
+        .palco-moldura {
+            width: 100%;
+            min-height: 0;
+            height: 100%;
+        }
+
+        .palco-identidade {
+            top: 14px;
+            width: min(76%, 360px);
+            padding: 8px 13px;
+            border-color: rgba(137, 228, 255, 0.36);
+            border-radius: 4px;
+            background: linear-gradient(90deg, rgba(2, 8, 10, 0.28), rgba(2, 8, 10, 0.74), rgba(2, 8, 10, 0.28));
+        }
+
+        .palco-identidade span {
+            font-family: Arial, sans-serif;
+            font-size: 0.62rem;
+            color: #89e4ff;
+        }
+
+        .palco-identidade strong {
+            font-family: "Segoe UI Black", "Arial Black", Impact, sans-serif;
+            font-size: clamp(1.2rem, 2.45vw, 2rem);
+            letter-spacing: 0;
+        }
+
+        .palco-placeholder {
+            width: min(68%, 330px);
+            max-height: calc(100svh - 120px);
+            border: 0;
+            background: radial-gradient(circle at 50% 78%, rgba(255, 226, 138, 0.22), transparent 44%);
+            box-shadow: none;
+        }
+
+        .palco-placeholder.tem-imagem {
+            width: min(74%, 380px);
+            max-height: calc(100svh - 104px);
+            background: radial-gradient(circle at 50% 78%, rgba(255, 226, 138, 0.24), transparent 45%);
+        }
+
+        .imagem-personagem {
+            filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.68)) drop-shadow(0 0 18px rgba(255, 226, 138, 0.16));
+        }
+
+        .painel-comandos {
+            display: grid;
+            grid-template-rows: minmax(0, 1fr) auto auto;
+            gap: 10px;
+            overflow: hidden;
+        }
+
+        .acoes-lobby {
+            min-height: 0;
+            gap: 9px;
+            overflow: hidden;
+        }
+
+        .painel-titulo {
+            color: #89e4ff;
+            font-family: Arial, sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.16em;
+        }
+
+        .grupo-comandos,
+        .menu-lobby-recolhivel {
+            gap: 8px;
+            min-height: 0;
+        }
+
+        .botao-lobby,
+        .botao-menu-lobby,
+        .botao-registros,
+        .atalho-menu-lobby {
+            font-family: Arial, sans-serif;
+            border-radius: 4px;
+        }
+
+        .botao-entrar-jogo {
+            min-height: 62px;
+            grid-template-columns: 54px 1fr;
+            border-color: rgba(255, 226, 75, 0.9);
+            background: linear-gradient(180deg, #ffe375 0%, #ffb22e 48%, #b94a0e 100%);
+            color: #241106;
+            text-shadow: 0 1px 0 rgba(255, 248, 202, 0.65);
+            box-shadow: 0 7px 0 rgba(92, 32, 6, 0.85), 0 0 26px rgba(255, 177, 46, 0.34);
+        }
+
+        .botao-entrar-jogo:hover {
+            background: linear-gradient(180deg, #fff3a8 0%, #ffc13f 50%, #c94f10 100%);
+            box-shadow: 0 8px 0 rgba(92, 32, 6, 0.85), 0 0 32px rgba(255, 211, 83, 0.5);
+        }
+
+        .botao-menu-lobby {
+            min-height: 50px;
+            grid-template-columns: 44px 1fr auto;
+            padding: 6px 10px;
+            border-color: rgba(137, 228, 255, 0.36);
+            background: linear-gradient(180deg, rgba(14, 43, 54, 0.78), rgba(4, 12, 15, 0.84));
+            color: #e8fbff;
+        }
+
+        .botao-menu-lobby:hover,
+        .menu-lobby-recolhivel.aberto .botao-menu-lobby {
+            border-color: rgba(255, 226, 138, 0.72);
+            background: linear-gradient(180deg, rgba(43, 56, 32, 0.82), rgba(4, 12, 15, 0.88));
+            box-shadow: 0 0 18px rgba(255, 226, 138, 0.22);
+        }
+
+        .botao-menu-lobby img,
+        .atalho-menu-lobby img {
+            width: 42px;
+            height: 42px;
+            border-radius: 4px;
+        }
+
+        .menu-seta {
+            display: none;
+        }
+
+        .grade-menu-lobby,
+        .menu-lobby-recolhivel.aberto .grade-menu-lobby {
+            display: grid;
+        }
+
+        .grade-menu-lobby {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 7px;
+            min-height: 0;
+            padding: 7px;
+            border-color: rgba(137, 228, 255, 0.18);
+            border-radius: 4px;
+            background: rgba(1, 7, 9, 0.46);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        #grade-menu-lobby {
+            max-height: min(42vh, 360px);
+        }
+
+        #grade-menu-ajustes {
+            grid-template-columns: 1fr;
+            max-height: 190px;
+        }
+
+        .atalho-menu-lobby {
+            min-height: 68px;
+            grid-template-columns: 38px 1fr;
+            justify-items: start;
+            gap: 8px;
+            padding: 7px;
+            border-color: rgba(255, 226, 138, 0.24);
+            background: linear-gradient(90deg, rgba(255, 247, 223, 0.075), rgba(54, 224, 255, 0.055));
+            text-align: left;
+        }
+
+        .atalho-menu-lobby:hover {
+            background: linear-gradient(90deg, rgba(255, 226, 138, 0.16), rgba(54, 224, 255, 0.1));
+        }
+
+        .atalho-menu-lobby img {
+            width: 36px;
+            height: 36px;
+        }
+
+        .atalho-menu-lobby span {
+            color: #fff7df;
+            font-size: clamp(0.62rem, 0.76vw, 0.75rem);
+            line-height: 1.05;
+        }
+
+        .botao-registros {
+            min-height: 48px;
+            grid-template-columns: 40px 1fr;
+            padding: 6px 10px;
+            border-color: rgba(137, 228, 255, 0.34);
+            background: linear-gradient(180deg, rgba(12, 37, 45, 0.76), rgba(3, 9, 12, 0.8));
+            font-size: 0.78rem;
+        }
+
+        .botao-registros img {
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+        }
+
+        .botao-voltar-inicio {
+            min-height: 38px;
+            border-color: rgba(255, 91, 91, 0.42);
+            background: rgba(72, 10, 12, 0.48);
+            font-size: 0.74rem;
+        }
+
+        @media (min-width: 1181px) {
+            .painel-comandos {
+                max-height: calc(100svh - 20px);
+            }
+        }
+
+        @media (max-width: 1180px) {
+            body.pagina-formulario {
+                overflow-y: auto;
+            }
+
+            .container-lobby {
+                min-height: 100svh;
+                grid-template-columns: minmax(220px, 0.82fr) minmax(310px, 1.45fr) minmax(235px, 0.9fr) !important;
+                width: 100%;
+                max-width: none;
+                margin: 0;
+                padding: 8px;
+                gap: 8px;
+            }
+
+            .cabecalho-lobby h1 {
+                font-size: clamp(1.25rem, 2vw, 1.7rem);
+            }
+
+            .painel-proxima-acao p,
+            .chips-rota {
+                display: none;
+            }
+
+            .botao-acao-rapida {
+                min-height: 36px;
+                font-size: 0.66rem;
+            }
+
+            #grade-menu-lobby {
+                max-height: 40vh;
+            }
+        }
+
+        @media (max-width: 920px) and (orientation: landscape) {
+            html,
+            body,
+            body.pagina-formulario {
+                width: 100%;
+                min-height: 100svh;
+                overflow: hidden !important;
+            }
+
+            .container-lobby {
+                height: 100svh;
+                min-height: 100svh;
+                grid-template-columns: minmax(155px, 0.72fr) minmax(238px, 1.5fr) minmax(168px, 0.86fr) !important;
+                gap: 5px !important;
+                padding: 5px !important;
+            }
+
+            .painel-personagem,
+            .painel-comandos,
+            .personagem-palco {
+                padding: 6px !important;
+                border-width: 1px;
+            }
+
+            .cabecalho-lobby h1,
+            .cabecalho-lobby .subtitulo-lobby,
+            .status-online,
+            .painel-titulo,
+            .painel-proxima-acao .info-label,
+            .painel-proxima-acao h2,
+            .painel-proxima-acao p,
+            .chips-rota {
+                display: none !important;
+            }
+
+            .rpg-exp-lobby {
+                padding: 6px;
+            }
+
+            .rpg-exp-chip,
+            .rpg-exp-lobby small {
+                font-size: 0.62rem;
+            }
+
+            .painel-proxima-acao {
+                padding: 7px !important;
+            }
+
+            .acoes-rapidas-lobby {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+
+            .botao-acao-rapida {
+                min-height: 30px;
+                font-size: 0.58rem;
+                padding: 0 4px;
+            }
+
+            .palco-identidade {
+                top: 6px !important;
+                padding: 5px 8px !important;
+            }
+
+            .palco-identidade span {
+                display: none;
+            }
+
+            .palco-identidade strong {
+                font-size: clamp(0.9rem, 2.4vw, 1.25rem);
+            }
+
+            .palco-placeholder,
+            .palco-placeholder.tem-imagem {
+                width: min(61%, 230px) !important;
+                max-height: calc(100svh - 56px);
+            }
+
+            .botao-entrar-jogo {
+                min-height: 42px !important;
+                grid-template-columns: 34px 1fr !important;
+                padding: 5px 8px !important;
+                font-size: 0.66rem !important;
+                box-shadow: 0 4px 0 rgba(92, 32, 6, 0.85), 0 0 18px rgba(255, 177, 46, 0.28);
+            }
+
+            .botao-entrar-jogo img,
+            .botao-menu-lobby img,
+            .botao-registros img,
+            .atalho-menu-lobby img {
+                width: 30px !important;
+                height: 30px !important;
+            }
+
+            .botao-menu-lobby,
+            .botao-registros {
+                min-height: 38px !important;
+                grid-template-columns: 32px 1fr !important;
+                padding: 4px 6px !important;
+                gap: 6px !important;
+                font-size: 0.6rem !important;
+            }
+
+            .grade-menu-lobby {
+                gap: 4px !important;
+                padding: 4px !important;
+            }
+
+            #grade-menu-lobby {
+                max-height: calc(100svh - 192px);
+            }
+
+            #grade-menu-ajustes {
+                max-height: 118px;
+            }
+
+            .atalho-menu-lobby {
+                min-height: 34px !important;
+                grid-template-columns: 30px 1fr !important;
+                padding: 3px 5px !important;
+                gap: 5px !important;
+            }
+
+            .atalho-menu-lobby span {
+                font-size: 0.54rem !important;
+            }
+
+            .botao-voltar-inicio {
+                min-height: 30px !important;
+                font-size: 0.56rem !important;
+            }
+        }
+
+        @media (max-width: 760px) and (orientation: portrait) {
+            body.pagina-formulario {
+                overflow-y: auto !important;
+            }
+
+            .container-lobby {
+                grid-template-columns: 1fr !important;
+                grid-template-rows: auto auto auto;
+                width: min(100%, 520px);
+                min-height: auto;
+                margin: 0 auto;
+                padding: 10px !important;
+                gap: 10px !important;
+            }
+
+            .painel-personagem {
+                order: 1 !important;
+            }
+
+            .personagem-palco {
+                order: 2 !important;
+                min-height: min(58svh, 430px) !important;
+            }
+
+            .painel-comandos {
+                order: 3 !important;
+                overflow: visible;
+            }
+
+            .cabecalho-lobby {
+                text-align: left !important;
+            }
+
+            .cabecalho-lobby h1 {
+                font-size: clamp(1.55rem, 8vw, 2rem) !important;
+            }
+
+            .painel-proxima-acao p,
+            .chips-rota {
+                display: none;
+            }
+
+            .acoes-rapidas-lobby,
+            .grade-menu-lobby {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+
+            #grade-menu-lobby,
+            #grade-menu-ajustes {
+                max-height: none;
+            }
+
+            #grade-menu-ajustes {
+                grid-template-columns: 1fr !important;
+            }
+
+            .atalho-menu-lobby {
+                min-height: 62px !important;
+                grid-template-columns: 34px 1fr !important;
+            }
+
+            .atalho-menu-lobby span {
+                font-size: 0.62rem !important;
+            }
+
+            .palco-placeholder,
+            .palco-placeholder.tem-imagem {
+                width: min(72%, 300px) !important;
+                max-height: 370px;
+            }
+
+            .botao-entrar-jogo {
+                min-height: 58px !important;
+            }
+        }
+
+        @media (max-width: 430px) and (orientation: portrait) {
+            .container-lobby {
+                padding: 8px !important;
+            }
+
+            .painel-personagem,
+            .painel-comandos,
+            .personagem-palco {
+                padding: 8px !important;
+            }
+
+            .acoes-rapidas-lobby,
+            .grade-menu-lobby {
+                gap: 6px !important;
+            }
+
+            .atalho-menu-lobby {
+                min-height: 58px !important;
+                padding: 6px !important;
+            }
+
+            .atalho-menu-lobby img {
+                width: 30px !important;
+                height: 30px !important;
+            }
+        }
+
+        /* Ajustes finais de encaixe do HUD */
+        @media (min-width: 921px) {
+            html,
+            body,
+            body.pagina-formulario {
+                height: 100%;
+                overflow: hidden !important;
+            }
+
+            .container-lobby {
+                height: 100svh;
+                min-height: 100svh;
+                box-sizing: border-box;
+                grid-template-columns: minmax(250px, 0.8fr) minmax(360px, 1.35fr) minmax(340px, 0.95fr);
+            }
+
+            .painel-personagem {
+                overflow: hidden;
+            }
+
+            .painel-proxima-acao {
+                overflow: hidden;
+            }
+
+            .painel-proxima-acao p,
+            .painel-proxima-acao .chips-rota {
+                display: none !important;
+            }
+
+            .painel-proxima-acao h2 {
+                font-size: clamp(1rem, 1.35vw, 1.18rem);
+            }
+
+            .botao-acao-rapida {
+                min-height: 38px;
+            }
+
+            .personagem-palco {
+                min-height: 0;
+            }
+
+            .painel-comandos {
+                max-height: calc(100svh - 20px);
+            }
+
+            #grade-menu-ajustes {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                max-height: none;
+            }
+
+            #grade-menu-lobby {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                max-height: none;
+            }
+
+            .atalho-menu-lobby {
+                min-height: 58px;
+                grid-template-columns: 32px 1fr;
+                gap: 6px;
+                padding: 6px;
+            }
+
+            .atalho-menu-lobby img {
+                width: 30px;
+                height: 30px;
+            }
+
+            .atalho-menu-lobby span {
+                font-size: 0.58rem;
+            }
+        }
+
+        @media (max-width: 760px) and (orientation: portrait) {
+            html,
+            body {
+                width: 100%;
+                overflow-x: hidden !important;
+            }
+
+            .container-lobby,
+            .container-lobby * {
+                max-width: 100%;
+                min-width: 0 !important;
+            }
+
+            .container-lobby {
+                box-sizing: border-box;
+                inline-size: min(100%, 370px) !important;
+                width: min(100%, 370px) !important;
+                max-width: 370px !important;
+                margin-inline: auto !important;
+                overflow: hidden;
+                transform: scale(0.92);
+                transform-origin: top center;
+            }
+
+            .painel-personagem,
+            .painel-comandos,
+            .personagem-palco {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .cabecalho-lobby {
+                overflow: hidden;
+            }
+
+            .cabecalho-lobby h1 {
+                max-width: 100%;
+                font-size: clamp(1.35rem, 7vw, 1.75rem) !important;
+                line-height: 1;
+                overflow-wrap: anywhere;
+                text-align: center;
+            }
+
+            .cabecalho-lobby .subtitulo-lobby {
+                text-align: center;
+            }
+
+            .cabecalho-lobby > :nth-child(3) {
+                display: none !important;
+            }
+
+            .battle-hud-lobby {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+                grid-template-areas: "perfil" "berris" "xp" !important;
+                width: 100% !important;
+            }
+
+            .battle-hud-lobby > * {
+                grid-column: auto !important;
+            }
+
+            .rpg-exp-lobby,
+            .rpg-exp-lobby > div {
+                grid-template-columns: 1fr !important;
+                width: 100% !important;
+                overflow: hidden !important;
+            }
+
+            .rpg-exp-lobby {
+                display: none !important;
+            }
+
+            .rpg-exp-lobby > div:first-child > :nth-child(2) {
+                display: none !important;
+            }
+
+            .battle-perfil,
+            .battle-berris,
+            .battle-xp {
+                min-width: 0 !important;
+                width: 100% !important;
+            }
+
+            .painel-proxima-acao {
+                overflow: hidden;
+            }
+
+            .painel-proxima-acao .chips-rota {
+                display: none !important;
+            }
+
+            .acoes-rapidas-lobby,
+            .grade-menu-lobby {
+                grid-template-columns: 1fr !important;
+            }
+
+            .botao-acao-rapida {
+                width: 100% !important;
+            }
+
+            .chip-rota {
+                white-space: normal;
+            }
+
+            .palco-identidade {
+                width: min(86%, 320px);
             }
         }
     </style>
@@ -1991,13 +3380,31 @@
             <div class="cabecalho-lobby">
                 <h1>Bem-vindo ao Lobby</h1>
                 <p class="subtitulo-lobby" id="mensagem-organizacao-lobby">Sua jornada como pirata está prestes a começar</p>
+                <div class="rpg-exp-lobby" id="exp-lobby"></div>
                 <div class="status-online">
                     <div class="ponto-online"></div>
                     Pronto para a aventura
                 </div>
             </div>
 
-            <div class="status-personagem" id="status-personagem">
+            <div class="painel-proxima-acao" id="painel-proxima-acao">
+                <span class="info-label">Central de aventura</span>
+                <h2>Escolha sua próxima rota</h2>
+                <p>Abra o mapa dos mares, revise sua ficha completa no perfil ou pegue uma missão para ganhar EXP e berris.</p>
+                <div class="chips-rota">
+                    <span class="chip-rota">4 Blues livres</span>
+                    <span class="chip-rota">Rotas bloqueadas por campanha</span>
+                    <span class="chip-rota">Viagem salva</span>
+                </div>
+                <div class="acoes-rapidas-lobby">
+                    <button class="botao-acao-rapida" type="button" data-menu-acao="aventura">Mapa</button>
+                    <button class="botao-acao-rapida" type="button" data-menu-acao="perfil">Perfil</button>
+                    <button class="botao-acao-rapida" type="button" data-menu-acao="missoes">Missões</button>
+                    <button class="botao-acao-rapida" type="button" data-menu-acao="biblioteca">Biblioteca</button>
+                </div>
+            </div>
+
+            <div class="status-personagem oculto-lobby" id="status-personagem" aria-hidden="true">
                 <div class="info-linha">
                     <span class="info-label">Nome</span>
                     <span class="info-valor" id="nome-pers">---</span>
@@ -2052,7 +3459,7 @@
             <div class="acoes-lobby">
                 <h2 class="painel-titulo">Comandos</h2>
                 <div class="grupo-comandos">
-                    <button class="botao-lobby botao-entrar-jogo" id="botao-iniciar" type="button">
+                    <button class="botao-lobby botao-entrar-jogo" id="botao-iniciar" type="button" data-menu-acao="aventura">
                         <img src="assets/img/botao-entrar-aventura.jpeg" alt="">
                         <span>Entrar na Aventura</span>
                     </button>
@@ -2060,18 +3467,18 @@
 
                 <div class="menu-lobby-recolhivel" id="menu-ajustes-recolhivel">
                     <button class="botao-menu-lobby" id="botao-menu-ajustes" type="button" aria-expanded="false">
-                        <img src="assets/img/menu-ajustes.jpeg" alt="">
+                        <img src="assets/img/menu-game/ajustes.webp" alt="">
                         <span>Ajustes</span>
                         <span class="menu-seta">▾</span>
                     </button>
 
                     <div class="grade-menu-lobby" id="grade-menu-ajustes">
                         <button class="atalho-menu-lobby" id="botao-atualiza-org-lobby" type="button">
-                            <img src="assets/img/menu-organizacao.jpeg" alt="">
+                            <img src="assets/img/menu-game/organizacao.webp" alt="">
                             <span>Atualizar Organização</span>
                         </button>
                         <button class="atalho-menu-lobby" id="botao-aparencia-lobby" type="button">
-                            <img src="assets/img/menu-aparencia.jpeg" alt="">
+                            <img src="assets/img/menu-game/aparencia.webp" alt="">
                             <span>Atualizar Aparência</span>
                         </button>
                         <button class="atalho-menu-lobby" id="botao-imagem-personagem" type="button">
@@ -2090,28 +3497,48 @@
                     </button>
 
                     <div class="grade-menu-lobby" id="grade-menu-lobby">
-                        <button class="atalho-menu-lobby" id="botao-atributos" type="button">
-                            <img src="assets/img/menu-atributos.jpeg" alt="">
+                        <a class="atalho-menu-lobby" id="botao-atributos" href="atributos.html">
+                            <img src="assets/img/menu-game/atributos.webp" alt="">
                             <span>Atributos</span>
-                        </button>
-                        <button class="atalho-menu-lobby" id="botao-inventario" type="button">
-                            <img src="assets/img/menu-inventario.jpeg" alt="">
+                        </a>
+                        <a class="atalho-menu-lobby" id="botao-inventario" href="inventario.html">
+                            <img src="assets/img/menu-game/inventario.webp" alt="">
                             <span>Inventário</span>
-                        </button>
+                        </a>
                         <button class="atalho-menu-lobby" data-menu-acao="lojas" type="button">
-                            <img src="assets/img/menu-lojas.jpeg" alt="">
+                            <img src="assets/img/menu-game/lojas.webp" alt="">
                             <span>Lojas</span>
                         </button>
                         <button class="atalho-menu-lobby" data-menu-acao="eventos" type="button">
-                            <img src="assets/img/menu-eventos.jpeg" alt="">
+                            <img src="assets/img/menu-game/eventos.webp" alt="">
                             <span>Eventos</span>
                         </button>
                         <button class="atalho-menu-lobby" data-menu-acao="missoes" type="button">
-                            <img src="assets/img/menu-missoes.jpeg" alt="">
+                            <img src="assets/img/menu-game/missoes.webp" alt="">
                             <span>Missões de Organização</span>
                         </button>
+                        <button class="atalho-menu-lobby" data-menu-acao="treinos" type="button">
+                            <img src="assets/img/menu-game/treinos.webp" alt="">
+                            <span>Treinos</span>
+                        </button>
+                        <button class="atalho-menu-lobby" data-menu-acao="habilidades" type="button">
+                            <img src="assets/img/menu-game/habilidades.webp" alt="">
+                            <span>Árvore de Habilidades</span>
+                        </button>
+                        <button class="atalho-menu-lobby" data-menu-acao="biblioteca" type="button">
+                            <img src="assets/img/menu-game/inventario.webp" alt="">
+                            <span>Biblioteca de Itens</span>
+                        </button>
+                        <button class="atalho-menu-lobby" data-menu-acao="amigos" type="button">
+                            <img src="assets/img/menu-game/amigos.webp" alt="">
+                            <span>Adicionar Amigos</span>
+                        </button>
+                        <button class="atalho-menu-lobby" data-menu-acao="grupo" id="botao-grupo-social" type="button">
+                            <img src="assets/img/menu-game/organizacao.webp" alt="">
+                            <span>Bando</span>
+                        </button>
                         <button class="atalho-menu-lobby" data-menu-acao="viagem" type="button">
-                            <img src="assets/img/menu-viagem.jpeg" alt="">
+                            <img src="assets/img/menu-game/viagem.webp" alt="">
                             <span>Viagem</span>
                         </button>
                     </div>
@@ -2341,8 +3768,9 @@
     </div>
 
     <script src="supabase-config.js"></script>
-    <script src="banco-personagens.js"></script>
-    <script src="musica-fundo.js"></script>
+    <script src="banco-personagens.js?v=20260619-db2"></script>
+    <script src="musica-fundo.js?v=20260619-game2"></script>
+    <script src="rpg-sistemas.js?v=20260619-rpg8"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
 
@@ -2361,6 +3789,8 @@
         const palcoPersonagem = document.getElementById("palco-personagem");
         const imagemPersonagem = document.getElementById("imagem-personagem");
         const mensagemOrganizacaoLobby = document.getElementById("mensagem-organizacao-lobby");
+        const expLobby = document.getElementById("exp-lobby");
+        const botaoGrupoSocial = document.getElementById("botao-grupo-social");
 
         // Botões
         const botaoIniciar = document.getElementById("botao-iniciar");
@@ -3070,6 +4500,16 @@
             const org = obterOrganizacaoPersonagem(personagem);
             document.getElementById("organizacao-pers").textContent = org;
             atualizarMensagemOrganizacao(org);
+            RpgSistemas.aplicarBarraExp(expLobby, personagem);
+            if (botaoGrupoSocial) {
+                const textoGrupo = botaoGrupoSocial.querySelector("span");
+                const orgNormalizada = RpgSistemas.normalizar(org);
+                if (orgNormalizada.includes("cacadores")) {
+                    textoGrupo.textContent = "Organização";
+                } else {
+                    textoGrupo.textContent = "Bando";
+                }
+            }
             dataCriacao.textContent = personagem.criadoEm || "Hoje";
             descricaoClasseLobby.textContent = personagem.descricaoClasse || "Aguardando dados...";
             descricaoProfissaoLobby.textContent = personagem.descricaoProfissao || "Aguardando dados...";
@@ -3081,19 +4521,15 @@
         }
 
         botaoIniciar.addEventListener("click", () => {
-            alert("🎮 Bem-vindo à aventura, " + (personagem?.nome || "navegante") + "!\n\nO jogo em breve estará disponível.");
+            window.location.href = "aventura.html";
         });
 
         botaoInventario.addEventListener("click", () => {
-            mostrarAbaInventario('itens');
-            renderizarInventario();
-            abrirModal("modal-inventario");
+            window.location.href = "inventario.html";
         });
 
         botaoAtributos.addEventListener("click", () => {
-            mostrarAbaAtributos('valores');
-            renderizarAtributos();
-            abrirModal("modal-atributos");
+            window.location.href = "atributos.html";
         });
 
         botaoAparenciaLobby.addEventListener("click", abrirModalAparencia);
@@ -3122,9 +4558,38 @@
                     return;
                 }
 
+                if (botao.dataset.menuAcao === "treinos") {
+                    window.location.href = "treinos.html";
+                    return;
+                }
+
+                if (botao.dataset.menuAcao === "habilidades") {
+                    window.location.href = "habilidades.html";
+                    return;
+                }
+
+                if (botao.dataset.menuAcao === "biblioteca") {
+                    window.location.href = "biblioteca-itens.html";
+                    return;
+                }
+
+                if (botao.dataset.menuAcao === "amigos") {
+                    window.location.href = "amigos.html";
+                    return;
+                }
+
+                if (botao.dataset.menuAcao === "grupo") {
+                    window.location.href = "amigos.html#grupo";
+                    return;
+                }
+
+                if (botao.dataset.menuAcao === "eventos") {
+                    window.location.href = "eventos.html";
+                    return;
+                }
+
                 const nomes = {
                     lojas: "Lojas",
-                    eventos: "Eventos",
                     viagem: "Viagem"
                 };
                 alert(`${nomes[botao.dataset.menuAcao]} em breve.`);

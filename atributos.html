@@ -1,1 +1,833 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Atributos - One Piece RPG</title><link rel="stylesheet" href="estilo.css"><style>html,body{margin:0;min-height:100%;background:#030708;color:#fff7df}.video-fundo{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;filter:brightness(.42) saturate(1.2)}.app{position:relative;z-index:1;min-height:100vh;display:grid;grid-template-rows:auto 1fr auto;gap:14px;padding:clamp(14px,2.5vw,34px);background:radial-gradient(circle at 18% 14%,rgba(251,72,72,.15),transparent 28%),radial-gradient(circle at 78% 18%,rgba(72,213,255,.16),transparent 30%),radial-gradient(circle at 50% 84%,rgba(247,200,75,.18),transparent 34%)}header,footer{width:min(1240px,100%);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;text-shadow:0 2px 12px #000}h1{margin:0;font-size:clamp(1.8rem,4.5vw,3.4rem);line-height:1}p{margin:0;color:#d9e8d4}.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:end}.back,.dist{min-width:112px;padding:10px 15px;border:1px solid rgba(255,247,223,.34);border-radius:8px;color:#fff7df;background:rgba(3,8,10,.6);text-align:center;text-decoration:none;font-weight:900}.dist{color:#1d1c15;border-color:rgba(255,226,138,.75);background:linear-gradient(180deg,#ffe28a,#f7c84b);cursor:pointer;text-transform:uppercase}.shell{width:min(1240px,100%);margin:0 auto;display:grid;grid-template-columns:minmax(300px,.95fr) minmax(360px,1.2fr) minmax(280px,.85fr);gap:clamp(14px,2vw,22px);min-height:0}.panel,.radar,.profile{border:1px solid rgba(255,247,223,.13);background:linear-gradient(180deg,rgba(7,13,15,.88),rgba(1,4,5,.88)),repeating-linear-gradient(0deg,rgba(255,255,255,.025),rgba(255,255,255,.025) 1px,transparent 1px,transparent 8px);box-shadow:0 28px 80px rgba(0,0,0,.58),inset 0 1px 0 rgba(255,247,223,.07);backdrop-filter:blur(8px)}.panel{display:grid;gap:10px;align-content:start;padding:clamp(14px,2vw,20px);max-height:calc(100vh - 170px);overflow:auto}.card{--c:#ffe28a;display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:center;min-height:106px;padding:10px;border:1px solid color-mix(in srgb,var(--c) 45%,transparent);border-radius:8px;background:linear-gradient(90deg,color-mix(in srgb,var(--c) 16%,transparent),rgba(3,8,10,.58)),rgba(0,0,0,.32);cursor:pointer}.card.active,.card:hover{box-shadow:0 0 22px color-mix(in srgb,var(--c) 35%,transparent);transform:translateY(-1px)}.card img{width:72px;height:72px;border-radius:8px;object-fit:cover;box-shadow:0 0 18px color-mix(in srgb,var(--c) 38%,transparent)}.info{display:grid;gap:7px}.line{display:flex;align-items:baseline;justify-content:space-between;gap:10px}.line b{color:var(--c);font-size:1.08rem}.bar{height:10px;border:1px solid rgba(255,247,223,.1);border-radius:999px;background:rgba(0,0,0,.46);overflow:hidden}.bar i{display:block;width:var(--p);height:100%;background:linear-gradient(90deg,var(--c),#fff7df);box-shadow:0 0 14px var(--c)}small{color:#d9e8d4}.up{display:none;gap:8px;align-items:center;justify-content:space-between}.mode .up{display:flex}.up button{min-height:30px;padding:0 10px;border:1px solid color-mix(in srgb,var(--c) 55%,transparent);border-radius:8px;color:#fff7df;background:rgba(0,0,0,.38);font-weight:900;cursor:pointer}.up button:disabled{opacity:.45;cursor:not-allowed}.radar{position:relative;display:grid;grid-template-rows:auto minmax(320px,1fr) auto;gap:12px;padding:clamp(14px,2vw,22px);overflow:hidden}.radar:before{content:"";position:absolute;inset:8%;background:conic-gradient(from -90deg,rgba(255,46,73,.28),rgba(198,255,0,.24),rgba(74,196,255,.24),rgba(126,90,255,.24),rgba(255,124,32,.24),rgba(255,65,40,.26));filter:blur(42px);opacity:.72}.rtop,.wrap,.notice{position:relative;z-index:1}.rtop{display:flex;justify-content:space-between;gap:14px}.rtop strong,.ptop span{display:block;color:#ffe28a;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.total{min-width:132px;padding:10px 12px;border:1px solid rgba(247,200,75,.28);border-radius:8px;background:rgba(0,0,0,.38);text-align:right}.total b{display:block;font-size:1.35rem}.wrap{display:grid;place-items:center}.svg{width:min(100%,560px);aspect-ratio:1;overflow:visible;filter:drop-shadow(0 18px 32px #000)}.grade{fill:rgba(255,255,255,.015);stroke:rgba(255,247,223,.18)}.axis{stroke-width:2.2;opacity:.78}.area{fill:rgba(255,247,223,.12);stroke:rgba(255,247,223,.54);stroke-width:2}.seg{stroke-width:4;stroke-linecap:round}.dot{stroke:#fff7df;stroke-width:2}.label{fill:#fff7df;font-size:14px;font-weight:900;text-anchor:middle;paint-order:stroke;stroke:rgba(0,0,0,.76);stroke-width:4px}.notice{padding:12px;border:1px solid rgba(255,247,223,.12);background:rgba(0,0,0,.34);color:#d9e8d4}.profile{display:grid;grid-template-rows:auto 1fr auto;gap:14px;padding:clamp(14px,2vw,20px)}.ptop{text-align:center}.ptop strong{font-size:clamp(1.25rem,2.4vw,1.9rem)}.focus{display:grid;align-content:center;gap:14px}.focus img{width:min(100%,260px);margin:0 auto;border-radius:8px;box-shadow:0 0 34px color-mix(in srgb,var(--ca,#ffe28a) 48%,transparent)}.focus h2{margin:0;color:var(--ca,#ffe28a);text-align:center}.focus p{text-align:center}.stats{display:grid;gap:8px;padding:12px;border:1px solid rgba(255,247,223,.12);background:rgba(0,0,0,.32)}.stats div{display:flex;justify-content:space-between;gap:12px;color:#d9e8d4}.stats b{text-align:right}@media(max-width:1100px){.shell{grid-template-columns:1fr}.panel{grid-template-columns:repeat(2,1fr);max-height:none}}@media(max-width:620px){header,footer,.rtop{align-items:stretch;flex-direction:column}.panel{grid-template-columns:1fr}.card{grid-template-columns:64px 1fr}.card img{width:64px;height:64px}.actions{width:100%}.back,.dist{flex:1 1 180px}}</style></head><body><video class="video-fundo" autoplay muted loop playsinline><source src="fundo-login.mp4" type="video/mp4"></video><main class="app"><header><div><p id="status">Carregando personagem...</p><h1>Atributos</h1></div><div class="actions"><button class="dist" id="dist" type="button">Distribuir Atributos</button><a class="back" href="lobby.html">Voltar ao Lobby</a></div></header><section class="shell"><aside class="panel" id="list"></aside><section class="radar"><div class="rtop"><div><strong>Radar de Poder</strong><p>Leitura cromática dos atributos ativos</p></div><div class="total"><span>Total</span><b id="total">0</b></div></div><div class="wrap" id="wrap"></div><div class="notice" id="notice">Limite máximo do RPG: 15.000 pontos totais.</div></section><aside class="profile"><div class="ptop"><span>Personagem</span><strong id="name">Sem personagem</strong></div><div class="focus" id="focus"></div><div class="stats"><div><span>Classe</span><b id="classe">---</b></div><div><span>Especialidade</span><b id="prof">---</b></div><div><span>Organização</span><b id="org">---</b></div><div><span>Saldo livre</span><b id="saldo">0</b></div></div></aside></section><footer><span>Axis: cores individuais</span><span>Back: lobby</span></footer></main><script src="musica-fundo.js"></script><script src="rpg-sistemas.js"></script><script>const personagem=JSON.parse(localStorage.getItem('ultimoPersonagem')||'null'),limit=15000;let active='forca',mode=false;const cfg=[['forca','Força Vital','#ff2e49','assets/img/atributos/forca-vital.webp','Energia de sobrevivência, fôlego de combate e capacidade de continuar lutando.'],['velocidade','Agilidade','#c6ff00','assets/img/atributos/agilidade.webp','Explosão de movimento, reflexo, esquiva e velocidade.'],['resistencia','Resistência','#4ac4ff','assets/img/atributos/resistencia.webp','Defesa bruta, absorção de impacto e firmeza.'],['inteligencia','Força Mental','#7e5aff','assets/img/atributos/forca-mental.webp','Leitura tática, concentração e estratégia.'],['vontade','Determinação','#ff7c20','assets/img/atributos/determinacao.webp','Vontade de ferro, pressão espiritual e coragem.'],['sorte','Força','#ff4128','assets/img/atributos/forca.webp','Potência física e impacto direto.']];function esc(t){return String(t||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}function fmt(v){return Number(v||0).toLocaleString('pt-BR')}function attrs(){if(!personagem)return{};return JSON.parse(localStorage.getItem(`atributos_${personagem.nome}`)||'{"forca":85,"velocidade":78,"resistencia":82,"inteligencia":70,"vontade":95,"sorte":60}')}function save(a){if(personagem)localStorage.setItem(`atributos_${personagem.nome}`,JSON.stringify(a))}function val(a,k){return Math.max(0,Number(a[k]||0))}function renderList(a){let prog=RpgSistemas.obterProgresso(personagem);list.innerHTML=cfg.map(x=>{let v=val(a,x[0]),p=Math.min(100,v/limit*100);return`<div class="card ${active==x[0]?'active':''}" data-a="${x[0]}" style="--c:${x[2]};--p:${p}%"><img src="${x[3]}" alt=""><span class="info"><span class="line"><strong>${x[1]}</strong><b>${fmt(v)}</b></span><span class="bar"><i></i></span><small>${x[4]}</small><span class="up"><small>+10 custa 1 ponto</small><button data-up="${x[0]}" ${prog.pontosAtributo<=0?'disabled':''}>Adicionar</button></span></span></div>`}).join('');list.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{active=b.dataset.a;render()});list.querySelectorAll('[data-up]').forEach(b=>b.onclick=e=>{e.stopPropagation();add(b.dataset.up)})}function radar(a){let c=260,r=166,rings=[.25,.5,.75,1],pts=cfg.map((x,i)=>{let ang=(-90+360/cfg.length*i)*Math.PI/180,v=val(a,x[0]),d=Math.min(v/limit,1)*r;return{n:x[1],cor:x[2],x:c+Math.cos(ang)*d,y:c+Math.sin(ang)*d,ex:c+Math.cos(ang)*r,ey:c+Math.sin(ang)*r,lx:c+Math.cos(ang)*(r+55),ly:c+Math.sin(ang)*(r+55)}});let ring=s=>cfg.map((_,i)=>{let ang=(-90+360/cfg.length*i)*Math.PI/180;return`${c+Math.cos(ang)*r*s},${c+Math.sin(ang)*r*s}`}).join(' '),poly=pts.map(p=>`${p.x},${p.y}`).join(' ');wrap.innerHTML=`<svg class="svg" viewBox="0 0 520 520">${rings.map(x=>`<polygon class="grade" points="${ring(x)}"></polygon>`).join('')}${pts.map(p=>`<line class="axis" x1="${c}" y1="${c}" x2="${p.ex}" y2="${p.ey}" stroke="${p.cor}"></line>`).join('')}<polygon class="area" points="${poly}"></polygon>${pts.map((p,i)=>{let n=pts[(i+1)%pts.length];return`<line class="seg" x1="${p.x}" y1="${p.y}" x2="${n.x}" y2="${n.y}" stroke="${p.cor}"></line>`}).join('')}${pts.map(p=>`<circle class="dot" cx="${p.x}" cy="${p.y}" r="7" fill="${p.cor}"></circle><text class="label" x="${p.lx}" y="${p.ly}">${esc(p.n)}</text>`).join('')}</svg>`}function focusBox(a){let x=cfg.find(i=>i[0]==active)||cfg[0],v=val(a,x[0]);focus.style.setProperty('--ca',x[2]);focus.innerHTML=`<img src="${x[3]}" alt=""><h2>${x[1]}</h2><p><b style="color:${x[2]}">${fmt(v)} pontos</b></p><p>${x[4]}</p>`}function add(k){if(!personagem)return;let p=RpgSistemas.obterProgresso(personagem);if(p.pontosAtributo<=0)return;let a=attrs(),sum=cfg.reduce((s,x)=>s+val(a,x[0]),0);if(sum+10>limit)return;a[k]=val(a,k)+10;p.pontosAtributo-=1;save(a);RpgSistemas.salvarProgresso(personagem,p);render()}function topInfo(sum){if(!personagem){status.textContent='Nenhum personagem ativo';name.textContent='Sem personagem';return}let p=RpgSistemas.obterProgresso(personagem);status.textContent=`${personagem.classe||'Classe'} / ${personagem.profissao||'Especialidade'}`;name.textContent=personagem.nome||'Personagem';classe.textContent=personagem.classe||'---';prof.textContent=personagem.profissao||'---';org.textContent=personagem.organizacao||personagem.organization||'---';saldo.textContent=`${fmt(p.pontosAtributo)} pts livres`}function render(){let a=attrs(),sum=cfg.reduce((s,x)=>s+val(a,x[0]),0),rest=Math.max(0,limit-sum);total.textContent=fmt(sum);notice.textContent=`Limite máximo do RPG: ${fmt(limit)} pontos totais. Restante disponível: ${fmt(rest)}.`;topInfo(sum);renderList(a);radar(a);focusBox(a);document.body.classList.toggle('mode',mode);dist.textContent=mode?'Fechar Distribuição':'Distribuir Atributos'}dist.onclick=()=>{mode=!mode;render()};render()</script></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atributos - One Piece RPG</title>
+    <link rel="stylesheet" href="estilo.css?v=20260619-game2">
+    <style>
+        html,
+        body {
+            min-height: 100%;
+            background: #030708;
+        }
+
+        body.pagina-atributos {
+            position: relative;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            color: #fff7df;
+            background: #030708;
+        }
+
+        .atributos-jogo {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 14px;
+            padding: clamp(14px, 2.5vw, 34px);
+            background:
+                radial-gradient(circle at 18% 14%, rgba(251, 72, 72, 0.15), transparent 28%),
+                radial-gradient(circle at 78% 18%, rgba(72, 213, 255, 0.16), transparent 30%),
+                radial-gradient(circle at 50% 84%, rgba(247, 200, 75, 0.18), transparent 34%);
+        }
+
+        .atributos-topo,
+        .atributos-rodape {
+            width: min(1240px, 100%);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85);
+        }
+
+        .atributos-topo p,
+        .atributos-rodape span {
+            margin: 0;
+            color: #d9e8d4;
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+
+        .atributos-topo h1 {
+            margin: 0;
+            color: #fff7df;
+            font-size: clamp(1.8rem, 4.5vw, 3.4rem);
+            line-height: 1;
+        }
+
+        .atributos-acoes-topo {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .atributos-voltar,
+        .atributos-distribuir {
+            min-width: 112px;
+            padding: 10px 15px;
+            border: 1px solid rgba(255, 247, 223, 0.34);
+            border-radius: 8px;
+            color: #fff7df;
+            background: rgba(3, 8, 10, 0.6);
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+        }
+
+        .atributos-distribuir {
+            color: #1d1c15;
+            border-color: rgba(255, 226, 138, 0.75);
+            background: linear-gradient(180deg, #ffe28a, #f7c84b);
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .atributos-voltar:hover,
+        .atributos-voltar:focus-visible,
+        .atributos-distribuir:hover,
+        .atributos-distribuir:focus-visible {
+            border-color: #ffe28a;
+            background: rgba(247, 200, 75, 0.16);
+            outline: none;
+        }
+
+        .atributos-distribuir:hover,
+        .atributos-distribuir:focus-visible {
+            color: #fff7df;
+        }
+
+        .atributos-shell {
+            width: min(1240px, 100%);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: minmax(300px, 0.95fr) minmax(360px, 1.2fr) minmax(280px, 0.85fr);
+            gap: clamp(14px, 2vw, 22px);
+            min-height: 0;
+        }
+
+        .painel-atributos,
+        .radar-card,
+        .perfil-atributos {
+            border: 1px solid rgba(255, 247, 223, 0.13);
+            background:
+                linear-gradient(180deg, rgba(7, 13, 15, 0.88), rgba(1, 4, 5, 0.88)),
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 8px);
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.58), inset 0 1px 0 rgba(255, 247, 223, 0.07);
+            backdrop-filter: blur(8px);
+        }
+
+        .painel-atributos {
+            display: grid;
+            gap: 10px;
+            align-content: start;
+            padding: clamp(14px, 2vw, 20px);
+            max-height: calc(100vh - 170px);
+            overflow-y: auto;
+            scrollbar-color: rgba(255, 226, 138, 0.72) rgba(0, 0, 0, 0.32);
+        }
+
+        .atributo-card {
+            --cor-atributo: #ffe28a;
+            display: grid;
+            grid-template-columns: 72px 1fr;
+            gap: 12px;
+            align-items: center;
+            min-height: 106px;
+            padding: 10px;
+            border: 1px solid color-mix(in srgb, var(--cor-atributo) 45%, transparent);
+            border-radius: 8px;
+            background:
+                linear-gradient(90deg, color-mix(in srgb, var(--cor-atributo) 16%, transparent), rgba(3, 8, 10, 0.58)),
+                rgba(0, 0, 0, 0.32);
+            cursor: pointer;
+        }
+
+        .atributo-card.ativo,
+        .atributo-card:hover,
+        .atributo-card:focus-visible {
+            outline: none;
+            box-shadow: 0 0 22px color-mix(in srgb, var(--cor-atributo) 35%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .atributo-card img {
+            width: 72px;
+            height: 72px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 0 18px color-mix(in srgb, var(--cor-atributo) 38%, transparent);
+        }
+
+        .atributo-upgrade {
+            display: none;
+            gap: 8px;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 2px;
+        }
+
+        body.modo-distribuir .atributo-upgrade {
+            display: flex;
+        }
+
+        body.modo-distribuir .atributo-card {
+            box-shadow: inset 0 0 20px color-mix(in srgb, var(--cor-atributo) 10%, transparent);
+        }
+
+        .atributo-upgrade button {
+            min-height: 30px;
+            padding: 0 10px;
+            border: 1px solid color-mix(in srgb, var(--cor-atributo) 55%, transparent);
+            border-radius: 8px;
+            color: #fff7df;
+            background: rgba(0, 0, 0, 0.38);
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        .atributo-upgrade button:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .atributo-info {
+            display: grid;
+            gap: 7px;
+            min-width: 0;
+        }
+
+        .atributo-linha {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .atributo-linha strong {
+            color: #fff7df;
+            font-size: 0.98rem;
+            overflow-wrap: anywhere;
+        }
+
+        .atributo-linha b {
+            color: var(--cor-atributo);
+            font-size: 1.08rem;
+        }
+
+        .barra-atributo {
+            height: 10px;
+            border: 1px solid rgba(255, 247, 223, 0.1);
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.46);
+            overflow: hidden;
+        }
+
+        .barra-atributo i {
+            display: block;
+            width: var(--porcentagem);
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--cor-atributo), #fff7df);
+            box-shadow: 0 0 14px var(--cor-atributo);
+        }
+
+        .atributo-info small {
+            color: #d9e8d4;
+            font-size: 0.76rem;
+            line-height: 1.25;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .radar-card {
+            position: relative;
+            display: grid;
+            grid-template-rows: auto minmax(320px, 1fr) auto;
+            gap: 12px;
+            padding: clamp(14px, 2vw, 22px);
+            overflow: hidden;
+        }
+
+        .radar-card::before {
+            content: "";
+            position: absolute;
+            inset: 8%;
+            background: conic-gradient(from -90deg, rgba(255, 46, 73, 0.28), rgba(198, 255, 0, 0.24), rgba(74, 196, 255, 0.24), rgba(126, 90, 255, 0.24), rgba(255, 124, 32, 0.24), rgba(255, 65, 40, 0.26), rgba(255, 46, 73, 0.28));
+            filter: blur(42px);
+            opacity: 0.72;
+            pointer-events: none;
+        }
+
+        .radar-topo,
+        .radar-wrap,
+        .radar-aviso {
+            position: relative;
+            z-index: 1;
+        }
+
+        .radar-topo {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            align-items: start;
+        }
+
+        .radar-topo strong {
+            display: block;
+            color: #ffe28a;
+            font-size: 1.1rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .radar-topo span {
+            display: block;
+            margin-top: 4px;
+            color: #d9e8d4;
+            font-size: 0.9rem;
+        }
+
+        .pontuacao-total {
+            min-width: 132px;
+            padding: 10px 12px;
+            border: 1px solid rgba(247, 200, 75, 0.28);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.38);
+            text-align: right;
+        }
+
+        .pontuacao-total b {
+            display: block;
+            color: #fff7df;
+            font-size: 1.35rem;
+        }
+
+        .radar-wrap {
+            display: grid;
+            place-items: center;
+            min-height: 0;
+        }
+
+        .radar-svg {
+            width: min(100%, 560px);
+            aspect-ratio: 1;
+            overflow: visible;
+            filter: drop-shadow(0 18px 32px rgba(0, 0, 0, 0.56));
+        }
+
+        .radar-grade {
+            fill: rgba(255, 255, 255, 0.015);
+            stroke: rgba(255, 247, 223, 0.18);
+            stroke-width: 1;
+        }
+
+        .radar-eixo {
+            stroke-width: 2.2;
+            opacity: 0.78;
+        }
+
+        .radar-area {
+            fill: rgba(255, 247, 223, 0.12);
+            stroke: rgba(255, 247, 223, 0.54);
+            stroke-width: 2;
+        }
+
+        .radar-segmento {
+            stroke-width: 4;
+            stroke-linecap: round;
+            opacity: 0.9;
+        }
+
+        .radar-ponto {
+            stroke: #fff7df;
+            stroke-width: 2;
+        }
+
+        .radar-label {
+            fill: #fff7df;
+            font-size: 14px;
+            font-weight: 900;
+            text-anchor: middle;
+            paint-order: stroke;
+            stroke: rgba(0, 0, 0, 0.76);
+            stroke-width: 4px;
+            stroke-linejoin: round;
+        }
+
+        .radar-aviso {
+            padding: 12px;
+            border: 1px solid rgba(255, 247, 223, 0.12);
+            color: #d9e8d4;
+            background: rgba(0, 0, 0, 0.34);
+            font-size: 0.9rem;
+            line-height: 1.35;
+        }
+
+        .perfil-atributos {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 14px;
+            padding: clamp(14px, 2vw, 20px);
+            min-height: 0;
+        }
+
+        .perfil-topo {
+            display: grid;
+            gap: 4px;
+            text-align: center;
+        }
+
+        .perfil-topo span {
+            color: #ffe28a;
+            font-size: 0.78rem;
+            font-weight: 900;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .perfil-topo strong {
+            color: #fff7df;
+            font-size: clamp(1.25rem, 2.4vw, 1.9rem);
+            line-height: 1.05;
+            overflow-wrap: anywhere;
+        }
+
+        .atributo-destaque {
+            display: grid;
+            align-content: center;
+            gap: 14px;
+            min-height: 0;
+        }
+
+        .atributo-destaque img {
+            width: min(100%, 260px);
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 0 34px color-mix(in srgb, var(--cor-ativo, #ffe28a) 48%, transparent);
+        }
+
+        .atributo-destaque h2 {
+            margin: 0;
+            color: var(--cor-ativo, #ffe28a);
+            font-size: clamp(1.35rem, 3vw, 2.1rem);
+            text-align: center;
+        }
+
+        .atributo-destaque p {
+            margin: 0;
+            color: #d9e8d4;
+            font-size: 0.92rem;
+            line-height: 1.45;
+            text-align: center;
+        }
+
+        .status-personagem-atributos {
+            display: grid;
+            gap: 8px;
+            padding: 12px;
+            border: 1px solid rgba(255, 247, 223, 0.12);
+            background: rgba(0, 0, 0, 0.32);
+        }
+
+        .status-personagem-atributos div {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            color: #d9e8d4;
+            font-size: 0.86rem;
+        }
+
+        .status-personagem-atributos b {
+            color: #fff7df;
+            text-align: right;
+        }
+
+        @media (max-width: 1100px) {
+            .atributos-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .painel-atributos {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                max-height: none;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .atributos-topo,
+            .atributos-rodape,
+            .radar-topo {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .painel-atributos {
+                grid-template-columns: 1fr;
+            }
+
+            .atributo-card {
+                grid-template-columns: 64px 1fr;
+            }
+
+            .atributo-card img {
+                width: 64px;
+                height: 64px;
+            }
+
+            .atributos-acoes-topo {
+                width: 100%;
+            }
+
+            .atributos-voltar,
+            .atributos-distribuir {
+                flex: 1 1 180px;
+            }
+        }
+    </style>
+</head>
+<body class="pagina-atributos">
+    <audio id="musica-fundo" loop preload="auto">
+        <source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg">
+    </audio>
+    <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true">
+        <source src="fundo-login.mp4" type="video/mp4">
+    </video>
+
+    <main class="atributos-jogo">
+        <header class="atributos-topo">
+            <div>
+                <p id="atributos-personagem-status">Carregando personagem...</p>
+                <h1>Atributos</h1>
+            </div>
+            <div class="atributos-acoes-topo">
+                <button class="atributos-distribuir" id="botao-distribuir-atributos" type="button">Distribuir Atributos</button>
+                <a class="atributos-voltar" href="lobby.html">Voltar ao Lobby</a>
+            </div>
+        </header>
+
+        <section class="atributos-shell" aria-label="Atributos do personagem">
+            <aside class="painel-atributos" id="lista-atributos"></aside>
+
+            <section class="radar-card" aria-label="Radar de atributos">
+                <div class="radar-topo">
+                    <div>
+                        <strong>Radar de Poder</strong>
+                        <span>Leitura cromática dos atributos ativos</span>
+                    </div>
+                    <div class="pontuacao-total">
+                        <span>Total</span>
+                        <b id="atributos-total">0</b>
+                    </div>
+                </div>
+
+                <div class="radar-wrap" id="radar-wrap"></div>
+                <div class="radar-aviso" id="atributos-aviso">Limite máximo do RPG: 15.000 pontos totais.</div>
+            </section>
+
+            <aside class="perfil-atributos" aria-label="Detalhe do atributo">
+                <div class="perfil-topo">
+                    <span>Personagem</span>
+                    <strong id="nome-personagem">Sem personagem</strong>
+                </div>
+
+                <div class="atributo-destaque" id="atributo-destaque"></div>
+
+                <div class="status-personagem-atributos">
+                    <div><span>Classe</span><b id="classe-personagem">---</b></div>
+                    <div><span>Especialidade</span><b id="profissao-personagem">---</b></div>
+                    <div><span>Organização</span><b id="organizacao-personagem">---</b></div>
+                    <div><span>Saldo livre</span><b id="saldo-atributos">0</b></div>
+                </div>
+            </aside>
+        </section>
+
+        <footer class="atributos-rodape">
+            <span>Axis: cores individuais</span>
+            <span>Back: lobby</span>
+        </footer>
+    </main>
+
+    <script src="musica-fundo.js?v=20260619-game2"></script>
+    <script src="rpg-sistemas.js?v=20260619-rpg8"></script>
+    <script>
+        const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+        const limiteTotalAtributos = 15000;
+        let atributoAtivo = "forca";
+
+        const atributosConfig = [
+            {
+                chave: "forca",
+                nome: "Força Vital",
+                cor: "#ff2e49",
+                imagem: "assets/img/atributos/forca-vital.webp",
+                descricao: "Energia de sobrevivência, fôlego de combate e capacidade de continuar lutando quando o corpo já pediu trégua."
+            },
+            {
+                chave: "velocidade",
+                nome: "Agilidade",
+                cor: "#c6ff00",
+                imagem: "assets/img/atributos/agilidade.webp",
+                descricao: "Explosão de movimento, reflexo, esquiva e velocidade para atravessar o campo antes que o inimigo entenda o golpe."
+            },
+            {
+                chave: "resistencia",
+                nome: "Resistência",
+                cor: "#4ac4ff",
+                imagem: "assets/img/atributos/resistencia.webp",
+                descricao: "Defesa bruta, armadura natural, absorção de impacto e firmeza para segurar ataques pesados."
+            },
+            {
+                chave: "inteligencia",
+                nome: "Força Mental",
+                cor: "#7e5aff",
+                imagem: "assets/img/atributos/forca-mental.webp",
+                descricao: "Leitura tática, concentração, estratégia e presença mental para virar uma luta no detalhe certo."
+            },
+            {
+                chave: "vontade",
+                nome: "Determinação",
+                cor: "#ff7c20",
+                imagem: "assets/img/atributos/determinacao.webp",
+                descricao: "Vontade de ferro, pressão espiritual, coragem e impulso para avançar mesmo contra uma maré impossível."
+            },
+            {
+                chave: "sorte",
+                nome: "Força",
+                cor: "#ff4128",
+                imagem: "assets/img/atributos/forca.webp",
+                descricao: "Potência física, impacto direto, domínio muscular e peso real por trás de cada golpe."
+            }
+        ];
+
+        const listaAtributos = document.getElementById("lista-atributos");
+        const radarWrap = document.getElementById("radar-wrap");
+        const destaque = document.getElementById("atributo-destaque");
+        const totalEl = document.getElementById("atributos-total");
+        const avisoEl = document.getElementById("atributos-aviso");
+        const saldoEl = document.getElementById("saldo-atributos");
+        const statusEl = document.getElementById("atributos-personagem-status");
+        const nomePersonagem = document.getElementById("nome-personagem");
+        const classePersonagem = document.getElementById("classe-personagem");
+        const profissaoPersonagem = document.getElementById("profissao-personagem");
+        const organizacaoPersonagem = document.getElementById("organizacao-personagem");
+        const botaoDistribuir = document.getElementById("botao-distribuir-atributos");
+        let modoDistribuir = false;
+
+        function escaparHtml(texto) {
+            return String(texto || "").replace(/[&<>"']/g, (caractere) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            })[caractere]);
+        }
+
+        function obterOrganizacao() {
+            return personagem?.organizacao || personagem?.organização || personagem?.organization || "---";
+        }
+
+        function obterAtributos() {
+            if (!personagem) return {};
+            const chave = `atributos_${personagem.nome}`;
+            return JSON.parse(localStorage.getItem(chave) || JSON.stringify({
+                forca: 85,
+                velocidade: 78,
+                resistencia: 82,
+                inteligencia: 70,
+                vontade: 95,
+                sorte: 60
+            }));
+        }
+
+        function salvarAtributos(atributos) {
+            if (!personagem) return;
+            localStorage.setItem(`atributos_${personagem.nome}`, JSON.stringify(atributos));
+        }
+
+        function formatarNumero(valor) {
+            return Number(valor || 0).toLocaleString("pt-BR");
+        }
+
+        function valorAtributo(atributos, chave) {
+            return Math.max(0, Number(atributos[chave] || 0));
+        }
+
+        function selecionarAtributo(chave) {
+            atributoAtivo = chave;
+            renderizar();
+        }
+
+        function renderizarLista(atributos) {
+            const progresso = RpgSistemas.obterProgresso(personagem);
+            listaAtributos.innerHTML = atributosConfig.map((atributo) => {
+                const valor = valorAtributo(atributos, atributo.chave);
+                const porcentagem = Math.min(100, (valor / limiteTotalAtributos) * 100);
+                return `
+                    <div class="atributo-card ${atributoAtivo === atributo.chave ? "ativo" : ""}" role="button" tabindex="0" data-atributo="${atributo.chave}" style="--cor-atributo: ${atributo.cor}; --porcentagem: ${porcentagem}%">
+                        <img src="${atributo.imagem}" alt="">
+                        <span class="atributo-info">
+                            <span class="atributo-linha">
+                                <strong>${escaparHtml(atributo.nome)}</strong>
+                                <b>${formatarNumero(valor)}</b>
+                            </span>
+                            <span class="barra-atributo"><i></i></span>
+                            <small>${escaparHtml(atributo.descricao)}</small>
+                            <span class="atributo-upgrade">
+                                <small>+10 custa 1 ponto</small>
+                                <button type="button" data-upgrade="${atributo.chave}" ${progresso.pontosAtributo <= 0 ? "disabled" : ""}>Adicionar</button>
+                            </span>
+                        </span>
+                    </div>
+                `;
+            }).join("");
+
+            listaAtributos.querySelectorAll("[data-atributo]").forEach((botao) => {
+                botao.addEventListener("click", () => selecionarAtributo(botao.dataset.atributo));
+                botao.addEventListener("keydown", (evento) => {
+                    if (evento.key === "Enter" || evento.key === " ") {
+                        evento.preventDefault();
+                        selecionarAtributo(botao.dataset.atributo);
+                    }
+                });
+            });
+            listaAtributos.querySelectorAll("[data-upgrade]").forEach((botao) => {
+                botao.addEventListener("click", (evento) => {
+                    evento.stopPropagation();
+                    adicionarPontoAtributo(botao.dataset.upgrade);
+                });
+            });
+        }
+
+        function renderizarRadar(atributos) {
+            const centro = 260;
+            const raio = 166;
+            const aneis = [0.25, 0.5, 0.75, 1];
+            const pontos = atributosConfig.map((atributo, indice) => {
+                const angulo = (-90 + (360 / atributosConfig.length) * indice) * Math.PI / 180;
+                const valor = valorAtributo(atributos, atributo.chave);
+                const distancia = Math.min(valor / limiteTotalAtributos, 1) * raio;
+                return {
+                    ...atributo,
+                    valor,
+                    x: centro + Math.cos(angulo) * distancia,
+                    y: centro + Math.sin(angulo) * distancia,
+                    eixoX: centro + Math.cos(angulo) * raio,
+                    eixoY: centro + Math.sin(angulo) * raio,
+                    labelX: centro + Math.cos(angulo) * (raio + 55),
+                    labelY: centro + Math.sin(angulo) * (raio + 55)
+                };
+            });
+
+            function pontosAnel(escala) {
+                return atributosConfig.map((_, indice) => {
+                    const angulo = (-90 + (360 / atributosConfig.length) * indice) * Math.PI / 180;
+                    return `${centro + Math.cos(angulo) * raio * escala},${centro + Math.sin(angulo) * raio * escala}`;
+                }).join(" ");
+            }
+
+            const poligono = pontos.map((ponto) => `${ponto.x},${ponto.y}`).join(" ");
+            const segmentos = pontos.map((ponto, indice) => {
+                const proximo = pontos[(indice + 1) % pontos.length];
+                return `<line class="radar-segmento" x1="${ponto.x}" y1="${ponto.y}" x2="${proximo.x}" y2="${proximo.y}" stroke="${ponto.cor}"></line>`;
+            }).join("");
+
+            radarWrap.innerHTML = `
+                <svg class="radar-svg" viewBox="0 0 520 520" role="img" aria-label="Radar colorido de atributos">
+                    ${aneis.map((anel) => `<polygon class="radar-grade" points="${pontosAnel(anel)}"></polygon>`).join("")}
+                    ${pontos.map((ponto) => `<line class="radar-eixo" x1="${centro}" y1="${centro}" x2="${ponto.eixoX}" y2="${ponto.eixoY}" stroke="${ponto.cor}"></line>`).join("")}
+                    <polygon class="radar-area" points="${poligono}"></polygon>
+                    ${segmentos}
+                    ${pontos.map((ponto) => `<circle class="radar-ponto" cx="${ponto.x}" cy="${ponto.y}" r="7" fill="${ponto.cor}"></circle>`).join("")}
+                    ${pontos.map((ponto) => `<text class="radar-label" x="${ponto.labelX}" y="${ponto.labelY}">${escaparHtml(ponto.nome)}</text>`).join("")}
+                </svg>
+            `;
+        }
+
+        function renderizarDestaque(atributos) {
+            const atributo = atributosConfig.find((item) => item.chave === atributoAtivo) || atributosConfig[0];
+            const valor = valorAtributo(atributos, atributo.chave);
+            destaque.style.setProperty("--cor-ativo", atributo.cor);
+            destaque.innerHTML = `
+                <img src="${atributo.imagem}" alt="">
+                <h2>${escaparHtml(atributo.nome)}</h2>
+                <p><strong style="color: ${atributo.cor}">${formatarNumero(valor)} pontos</strong></p>
+                <p>${escaparHtml(atributo.descricao)}</p>
+            `;
+        }
+
+        function renderizarPerfil(total) {
+            if (!personagem) {
+                statusEl.textContent = "Nenhum personagem ativo";
+                nomePersonagem.textContent = "Sem personagem";
+                return;
+            }
+
+            statusEl.textContent = `${personagem.classe || "Classe"} / ${personagem.profissao || "Especialidade"}`;
+            nomePersonagem.textContent = personagem.nome || "Personagem";
+            classePersonagem.textContent = personagem.classe || "---";
+            profissaoPersonagem.textContent = personagem.profissao || "---";
+            organizacaoPersonagem.textContent = obterOrganizacao();
+            const progresso = RpgSistemas.obterProgresso(personagem);
+            saldoEl.textContent = `${formatarNumero(progresso.pontosAtributo)} pts livres`;
+        }
+
+        function adicionarPontoAtributo(chave) {
+            if (!personagem) return;
+            const progresso = RpgSistemas.obterProgresso(personagem);
+            if (progresso.pontosAtributo <= 0) return;
+            const atributos = obterAtributos();
+            const total = atributosConfig.reduce((soma, atributo) => soma + valorAtributo(atributos, atributo.chave), 0);
+            if (total + 10 > limiteTotalAtributos) return;
+            atributos[chave] = valorAtributo(atributos, chave) + 10;
+            progresso.pontosAtributo -= 1;
+            salvarAtributos(atributos);
+            RpgSistemas.salvarProgresso(personagem, progresso);
+            renderizar();
+        }
+
+        function atualizarModoDistribuir() {
+            document.body.classList.toggle("modo-distribuir", modoDistribuir);
+            botaoDistribuir.textContent = modoDistribuir ? "Fechar Distribuição" : "Distribuir Atributos";
+        }
+
+        function renderizar() {
+            const atributos = obterAtributos();
+            const total = atributosConfig.reduce((soma, atributo) => soma + valorAtributo(atributos, atributo.chave), 0);
+            const restante = Math.max(0, limiteTotalAtributos - total);
+            const avisoExtra = total > limiteTotalAtributos ? " Total acima do limite." : "";
+
+            totalEl.textContent = formatarNumero(total);
+            avisoEl.textContent = `Limite máximo do RPG: ${formatarNumero(limiteTotalAtributos)} pontos totais. Restante disponível: ${formatarNumero(restante)}.${avisoExtra}`;
+
+            renderizarPerfil(total);
+            renderizarLista(atributos);
+            renderizarRadar(atributos);
+            renderizarDestaque(atributos);
+            atualizarModoDistribuir();
+        }
+
+        botaoDistribuir.addEventListener("click", () => {
+            modoDistribuir = !modoDistribuir;
+            atualizarModoDistribuir();
+        });
+
+        window.addEventListener("storage", (evento) => {
+            if (evento.key === "ultimoPersonagem" || evento.key === `atributos_${personagem?.nome}`) {
+                window.location.reload();
+            }
+        });
+
+        renderizar();
+    </script>
+</body>
+</html>

@@ -1,1 +1,103 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Conquistas - One Piece RPG</title><link rel="stylesheet" href="estilo.css"><style>html,body{margin:0;min-height:100%;background:#030708;color:#fff7df;overflow-y:auto}.video-fundo{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.31) saturate(1.14);z-index:0}.app{position:relative;z-index:1;width:min(1180px,calc(100% - 28px));margin:0 auto;padding:clamp(16px,4vw,42px) 0;display:grid;gap:16px}.painel,.card{border:1px solid rgba(247,200,75,.28);border-radius:8px;background:linear-gradient(180deg,rgba(7,20,22,.92),rgba(3,8,10,.96));box-shadow:0 22px 54px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,247,223,.06)}.topo{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:clamp(16px,3vw,26px)}small,.meta{color:#ffe28a;font-weight:900;letter-spacing:.12em;text-transform:uppercase}h1{margin:4px 0 8px;font-family:"Segoe UI Black","Arial Black",Impact,sans-serif;font-size:clamp(2.2rem,6vw,4.2rem);line-height:.92;text-transform:uppercase;text-shadow:0 5px 0 #210b08,0 16px 30px rgba(0,0,0,.72)}.voltar{min-height:42px;padding:0 14px;border:1px solid rgba(255,226,138,.52);border-radius:8px;color:#fff7df;background:rgba(4,12,13,.72);font-weight:900;text-transform:uppercase;text-decoration:none;display:grid;place-items:center}.resumo{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.resumo .painel{padding:14px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card{--cor:#ffe28a;position:relative;overflow:hidden;min-height:190px;padding:15px;display:grid;gap:10px;opacity:.58}.card.liberada{opacity:1;border-color:color-mix(in srgb,var(--cor) 48%,transparent);box-shadow:0 22px 54px rgba(0,0,0,.4),0 0 24px color-mix(in srgb,var(--cor) 18%,transparent)}.medalha{display:grid;place-items:center;width:58px;height:58px;border-radius:8px;background:radial-gradient(circle,color-mix(in srgb,var(--cor) 62%,#fff7df),rgba(3,8,10,.86) 70%);color:#11170c;font-size:1.8rem;font-weight:1000}.card h2{margin:0;font-size:1.08rem;text-transform:uppercase}.card p{margin:0;color:#d9e8d4;line-height:1.45}@media(max-width:860px){.grid,.resumo,.topo{grid-template-columns:1fr}.video-fundo{display:none}}</style></head><body><audio id="musica-fundo" loop preload="auto"><source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg"></audio><video class="video-fundo" autoplay muted loop playsinline aria-hidden="true"><source src="fundo-login.mp4" type="video/mp4"></video><main class="app"><header class="topo painel"><div><small>Medalhas do Personagem</small><h1>Conquistas</h1><p id="status">Carregando progresso...</p></div><a class="voltar" href="lobby.html">Voltar ao Lobby</a></header><section class="resumo"><article class="painel"><small>Liberadas</small><h2 id="liberadas">0</h2></article><article class="painel"><small>Total</small><h2 id="total">0</h2></article><article class="painel"><small>Título atual</small><h2 id="titulo-atual">Novato dos Blues</h2></article></section><section class="grid" id="grid"></section></main><script src="musica-fundo.js?v=20260606-game1"></script><script src="rpg-sistemas.js?v=20260605-rpg3"></script><script>const personagem=JSON.parse(localStorage.getItem("ultimoPersonagem")||"null"),todas=[["primeiro-login","Primeiro Login","Entrou no lobby do RPG.","#36e0ff","◆"],["correio-ativo","Den Den Ativo","Recebeu mensagens no correio.","#8f7bff","☎"],["primeiro-item","Bolsa Aberta","Recebeu o primeiro item no inventário.","#ffe28a","★"],["nivel-5","Novato em Ascensão","Alcançou nível 5.","#90ff00","+"],["comprador","Cliente do Mercado","Comprou qualquer item da loja rotativa.","#ffcf3e","$"],["viajante","Rota Marcada","Registrou uma viagem entre ilhas.","#49d2ff","⌖"],["bando","Tripulação Formada","Criou ou entrou em um bando/organização.","#64d6a4","⚑"],["evento","Presença em Evento","Concluiu ao menos um evento.","#ff7b7b","!"],["beta-dia-7","Beta Lendário","Recebeu o prêmio do sétimo dia beta.","#ffcf3e","✦"]];function ler(c,p){try{return JSON.parse(localStorage.getItem(c)||"null")||p}catch{return p}}function salvar(c,v){localStorage.setItem(c,JSON.stringify(v))}function sincronizar(){if(!personagem?.nome){location.href="index.html";return[]}const salvas=ler("rpg_conquistas_"+personagem.nome,[]),prog=RpgSistemas.obterProgresso(personagem),inv=ler(`inventario_${personagem.nome}`,[]),checks={comprador:Object.keys(localStorage).some(k=>k.startsWith("rpg_loja_compras_")&&k.endsWith("_"+personagem.nome)&&ler(k,[]).length),viajante:!!localStorage.getItem("rpg_viagem_atual"),bando:!!personagem.grupoSocial?.nome,evento:(personagem.eventosConcluidos||[]).length>0,"beta-dia-7":ler("rpg_beta_enviados_correio",[]).includes("beta-dia-7"),"nivel-5":Number(prog.nivel||1)>=5,"primeiro-item":inv.length>0,"correio-ativo":ler("rpg_correio",[]).length>0,"primeiro-login":true};todas.forEach(([id,titulo,texto,cor])=>{if(checks[id]&&!salvas.some(c=>c.id===id))salvas.unshift({id,titulo,texto,cor,quando:new Date().toLocaleString("pt-BR")})});salvar("rpg_conquistas_"+personagem.nome,salvas);return salvas}function renderizar(){const salvas=sincronizar(),ids=new Set(salvas.map(c=>c.id));liberadas.textContent=salvas.length;total.textContent=todas.length;document.getElementById("titulo-atual").textContent=salvas.length>=7?"Lenda em Construção":salvas.length>=4?"Pirata Promissor":"Novato dos Blues";status.textContent=`${personagem.nome} tem ${salvas.length} medalha(s) desbloqueada(s).`;grid.innerHTML=todas.map(([id,titulo,texto,cor,icon])=>{const salva=salvas.find(c=>c.id===id);return`<article class="card ${ids.has(id)?"liberada":""}" style="--cor:${cor}"><div class="medalha">${ids.has(id)?icon:"?"}</div><small>${ids.has(id)?"Desbloqueada":"Bloqueada"}</small><h2>${titulo}</h2><p>${texto}</p><span class="meta">${salva?.quando||"Ainda não"}</span></article>`}).join("")}renderizar();</script></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conquistas - One Piece RPG</title>
+    <link rel="stylesheet" href="estilo.css?v=20260619-game2">
+    <style>
+        html, body { margin: 0; min-height: 100%; background: #030708; color: #fff7df; overflow-y: auto; }
+        .video-fundo { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.31) saturate(1.14); z-index: 0; }
+        .app { position: relative; z-index: 1; width: min(1180px, calc(100% - 28px)); margin: 0 auto; padding: clamp(16px,4vw,42px) 0; display: grid; gap: 16px; }
+        .painel, .card { border: 1px solid rgba(247,200,75,.28); border-radius: 8px; background: linear-gradient(180deg, rgba(7,20,22,.92), rgba(3,8,10,.96)); box-shadow: 0 22px 54px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,247,223,.06); }
+        .topo { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; padding: clamp(16px,3vw,26px); }
+        small, .meta { color: #ffe28a; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+        h1 { margin: 4px 0 8px; font-family: "Segoe UI Black","Arial Black",Impact,sans-serif; font-size: clamp(2.2rem,6vw,4.2rem); line-height: .92; text-transform: uppercase; text-shadow: 0 5px 0 #210b08,0 16px 30px rgba(0,0,0,.72); }
+        .voltar, button { min-height: 42px; padding: 0 14px; border: 1px solid rgba(255,226,138,.52); border-radius: 8px; color: #fff7df; background: rgba(4,12,13,.72); font-weight: 900; text-transform: uppercase; text-decoration: none; cursor: pointer; }
+        .resumo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+        .resumo .painel { padding: 14px; }
+        .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+        .card { --cor: #ffe28a; position: relative; overflow: hidden; min-height: 190px; padding: 15px; display: grid; gap: 10px; opacity: .58; }
+        .card.liberada { opacity: 1; border-color: color-mix(in srgb,var(--cor) 48%,transparent); box-shadow: 0 22px 54px rgba(0,0,0,.4),0 0 24px color-mix(in srgb,var(--cor) 18%,transparent); }
+        .medalha { display: grid; place-items: center; width: 58px; height: 58px; border-radius: 8px; background: radial-gradient(circle, color-mix(in srgb,var(--cor) 62%,#fff7df), rgba(3,8,10,.86) 70%); color: #11170c; font-size: 1.8rem; font-weight: 1000; }
+        .card h2 { margin: 0; font-size: 1.08rem; text-transform: uppercase; }
+        .card p { margin: 0; color: #d9e8d4; line-height: 1.45; }
+        @media(max-width:860px){.grid,.resumo,.topo{grid-template-columns:1fr}.video-fundo{display:none}}
+    </style>
+</head>
+<body>
+    <audio id="musica-fundo" loop preload="auto"><source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg"></audio>
+    <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true"><source src="fundo-login.mp4" type="video/mp4"></video>
+    <main class="app">
+        <header class="topo painel">
+            <div><small>Medalhas do Personagem</small><h1>Conquistas</h1><p id="status">Carregando progresso...</p></div>
+            <a class="voltar" href="lobby.html">Voltar ao Lobby</a>
+        </header>
+        <section class="resumo">
+            <article class="painel"><small>Liberadas</small><h2 id="liberadas">0</h2></article>
+            <article class="painel"><small>Total</small><h2 id="total">0</h2></article>
+            <article class="painel"><small>Título atual</small><h2 id="titulo-atual">Novato dos Blues</h2></article>
+        </section>
+        <section class="grid" id="grid"></section>
+    </main>
+    <script src="musica-fundo.js?v=20260619-game2"></script>
+    <script src="rpg-sistemas.js?v=20260619-rpg8"></script>
+    <script>
+        const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+        const todas = [
+            ["primeiro-login", "Primeiro Login", "Entrou no lobby do RPG.", "#36e0ff", "◆"],
+            ["correio-ativo", "Den Den Ativo", "Recebeu mensagens no correio.", "#8f7bff", "☎"],
+            ["primeiro-item", "Bolsa Aberta", "Recebeu o primeiro item no inventário.", "#ffe28a", "★"],
+            ["nivel-5", "Novato em Ascensão", "Alcançou nível 5.", "#90ff00", "+"],
+            ["comprador", "Cliente do Mercado", "Comprou qualquer item da loja rotativa.", "#ffcf3e", "$"],
+            ["viajante", "Rota Marcada", "Registrou uma viagem entre ilhas.", "#49d2ff", "⌖"],
+            ["bando", "Tripulação Formada", "Criou ou entrou em um bando/organização.", "#64d6a4", "⚑"],
+            ["evento", "Presença em Evento", "Concluiu ao menos um evento.", "#ff7b7b", "!"],
+            ["beta-dia-7", "Beta Lendário", "Recebeu o prêmio do sétimo dia beta.", "#ffcf3e", "✦"]
+        ];
+        function ler(chave, padrao) { try { return JSON.parse(localStorage.getItem(chave) || "null") || padrao; } catch { return padrao; } }
+        function salvar(chave, valor) { localStorage.setItem(chave, JSON.stringify(valor)); }
+        function sincronizar() {
+            if (!personagem?.nome) { location.href = "index.html"; return []; }
+            const salvas = ler("rpg_conquistas_" + personagem.nome, []);
+            const prog = RpgSistemas.obterProgresso(personagem);
+            const inv = ler(`inventario_${personagem.nome}`, []);
+            const checks = {
+                "comprador": Object.keys(localStorage).some((k) => k.startsWith("rpg_loja_compras_") && k.endsWith("_" + personagem.nome) && ler(k, []).length),
+                "viajante": !!localStorage.getItem("rpg_viagem_atual"),
+                "bando": !!personagem.grupoSocial?.nome,
+                "evento": (personagem.eventosConcluidos || []).length > 0,
+                "beta-dia-7": ler("rpg_beta_enviados_correio", []).includes("beta-dia-7"),
+                "nivel-5": Number(prog.nivel || 1) >= 5,
+                "primeiro-item": inv.length > 0,
+                "correio-ativo": ler("rpg_correio", []).length > 0,
+                "primeiro-login": true
+            };
+            todas.forEach(([id, titulo, texto, cor]) => {
+                if (checks[id] && !salvas.some((c) => c.id === id)) salvas.unshift({ id, titulo, texto, cor, quando: new Date().toLocaleString("pt-BR") });
+            });
+            salvar("rpg_conquistas_" + personagem.nome, salvas);
+            return salvas;
+        }
+        function renderizar() {
+            const salvas = sincronizar();
+            const ids = new Set(salvas.map((c) => c.id));
+            document.getElementById("liberadas").textContent = salvas.length;
+            document.getElementById("total").textContent = todas.length;
+            document.getElementById("titulo-atual").textContent = salvas.length >= 7 ? "Lenda em Construção" : salvas.length >= 4 ? "Pirata Promissor" : "Novato dos Blues";
+            document.getElementById("status").textContent = `${personagem.nome} tem ${salvas.length} medalha(s) desbloqueada(s).`;
+            document.getElementById("grid").innerHTML = todas.map(([id, titulo, texto, cor, icon]) => {
+                const salva = salvas.find((c) => c.id === id);
+                return `<article class="card ${ids.has(id) ? "liberada" : ""}" style="--cor:${cor}">
+                    <div class="medalha">${ids.has(id) ? icon : "?"}</div>
+                    <small>${ids.has(id) ? "Desbloqueada" : "Bloqueada"}</small>
+                    <h2>${titulo}</h2>
+                    <p>${texto}</p>
+                    <span class="meta">${salva?.quando || "Ainda não"}</span>
+                </article>`;
+            }).join("");
+        }
+        renderizar();
+    </script>
+</body>
+</html>

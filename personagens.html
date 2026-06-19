@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personagens Criados - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game2">
 </head>
 <body class="pagina-formulario admin-bloqueado">
     <audio id="musica-fundo" loop preload="auto">
@@ -75,14 +75,24 @@
     </div>
 
     <script src="supabase-config.js"></script>
-    <script src="banco-personagens.js"></script>
-    <script src="musica-fundo.js"></script>
+    <script src="banco-personagens.js?v=20260619-db2"></script>
+    <script src="musica-fundo.js?v=20260619-game2"></script>
     <script>
-        // ==================== SENHA DE DESENVOLVEDOR ====================
-        const senhaDev = "dev123";     // ←←← MUDE AQUI A SENHA
-        const senhaDelecao = "dev558"; // ←←← SENHA PARA DELETAR
+        // Hashes SHA-256 das senhas administrativas. Em site estatico isso
+        // nao substitui permissao de servidor, mas evita senha em texto puro.
+        const hashSenhaDev = "87274af01876341455b32d805946f272871bb42effa6604dccf28bb027afa82b";
+        const hashSenhaDelecao = "6e4b180fedb343aafd1b25f851ebc80a29194e53f1fbabb2b381937ca1d6c62c";
 
-        // ============================================================
+        async function sha256(texto) {
+            const bytes = new TextEncoder().encode(texto);
+            const hash = await crypto.subtle.digest("SHA-256", bytes);
+            return Array.from(new Uint8Array(hash)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
+        }
+
+        async function senhaConfere(valor, hashEsperado) {
+            return await sha256(valor || "") === hashEsperado;
+        }
+
         const corpo = document.body;
         const botaoEntrarDev = document.getElementById("entrar-dev");
         const campoSenhaDev = document.getElementById("senha-dev");
@@ -382,7 +392,7 @@
                 status.textContent = "Nenhum personagem selecionado.";
                 return;
             }
-            if (senha !== senhaDelecao) {
+            if (!(await senhaConfere(senha, hashSenhaDelecao))) {
                 status.textContent = "Senha administrativa inválida.";
                 return;
             }
@@ -754,8 +764,8 @@
             desenharPersonagens();
         }
 
-        function liberarAcesso() {
-            if (campoSenhaDev.value !== senhaDev) {
+        async function liberarAcesso() {
+            if (!(await senhaConfere(campoSenhaDev.value, hashSenhaDev))) {
                 mensagemDev.textContent = "Senha incorreta.";
                 campoSenhaDev.focus();
                 return;
@@ -772,7 +782,7 @@
             }
         });
 
-        botaoEntrarDev.addEventListener("click", liberarAcesso);
+        botaoEntrarDev.addEventListener("click", () => liberarAcesso());
         campoSenhaDev.addEventListener("keydown", (evento) => {
             if (evento.key === "Enter") {
                 liberarAcesso();
