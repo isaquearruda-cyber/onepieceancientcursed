@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lobby - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game6">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game7">
     <style>
         html,
         body {
@@ -3215,7 +3215,7 @@
         }
 
         /* Ajustes finais de encaixe do HUD */
-        @media (min-width: 921px) {
+	        @media (min-width: 921px) {
             html,
             body,
             body.pagina-formulario {
@@ -3255,12 +3255,50 @@
                 min-height: 0;
             }
 
-            .painel-comandos {
-                max-height: calc(100svh - 20px);
-            }
+	            .painel-comandos {
+	                max-height: calc(100svh - 20px);
+	            }
 
-            #grade-menu-ajustes {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
+	            .acoes-lobby {
+	                align-content: start;
+	                grid-auto-rows: max-content;
+	            }
+
+	            .menu-lobby-recolhivel {
+	                align-self: start;
+	            }
+
+	            .menu-lobby-recolhivel.recolhido .botao-menu-lobby {
+	                min-height: 46px !important;
+	                height: 46px;
+	                grid-template-columns: 34px 1fr 18px !important;
+	                padding: 6px 10px !important;
+	                gap: 8px !important;
+	                border-color: rgba(137, 228, 255, 0.34);
+	                background: linear-gradient(90deg, rgba(9, 27, 34, 0.86), rgba(3, 9, 12, 0.84));
+	                box-shadow: none;
+	                transform: none;
+	            }
+
+	            .menu-lobby-recolhivel.recolhido .botao-menu-lobby img {
+	                width: 32px !important;
+	                height: 32px !important;
+	            }
+
+	            .menu-lobby-recolhivel.recolhido .botao-menu-lobby span:not(.menu-seta) {
+	                font-size: 0.72rem;
+	                justify-self: start;
+	            }
+
+	            .menu-lobby-recolhivel.recolhido .menu-seta {
+	                display: block;
+	                font-size: 0.8rem;
+	                transform: rotate(0deg);
+	                opacity: 0.78;
+	            }
+
+	            #grade-menu-ajustes {
+	                grid-template-columns: repeat(3, minmax(0, 1fr));
                 max-height: none;
             }
 
@@ -3814,8 +3852,8 @@
 
     <script src="supabase-config.js"></script>
     <script src="banco-personagens.js?v=20260619-db2"></script>
-    <script src="musica-fundo.js?v=20260619-game6"></script>
-    <script src="rpg-sistemas.js?v=20260619-rpg9"></script>
+    <script src="musica-fundo.js?v=20260619-game7"></script>
+    <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
 

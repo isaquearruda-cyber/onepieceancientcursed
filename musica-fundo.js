@@ -912,7 +912,7 @@
 	}
 
 	function instalarPatchNotes(forcar) {
-		var versao = "20260619-pro6";
+		var versao = "20260619-pro7";
 		var chave = "rpg_patch_notes_" + versao;
 		if (!forcar && localStorage.getItem(chave) === "visto") return;
 		var existente = document.getElementById("rpg-patch-notes");
@@ -982,7 +982,7 @@
 					'<section class="rpg-sistema-bloco"><h3>Salvamento</h3>' +
 						'<div class="rpg-sistema-linha"><span>Status</span><strong>' + textoSalvamento() + '</strong></div>' +
 						'<div class="rpg-sistema-linha"><span>Rede</span><strong>' + (navigator.onLine ? "Online" : "Offline") + '</strong></div>' +
-							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v18</strong></div>' +
+							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v19</strong></div>' +
 						'<div class="rpg-sistema-acoes"><button type="button" data-sistema-atualizar>Atualizar app</button><button type="button" data-sistema-notes>Novidades</button></div>' +
 					'</section>' +
 					'<section class="rpg-sistema-bloco"><h3>CDN Premium</h3>' +

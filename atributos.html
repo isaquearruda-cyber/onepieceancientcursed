@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atributos - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game6">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game7">
     <style>
         html,
         body {
@@ -377,16 +377,36 @@
             stroke-width: 2;
         }
 
-        .radar-label {
-            fill: #fff7df;
-            font-size: 14px;
+	        .radar-label {
+	            fill: #fff7df;
+	            font-size: 14px;
             font-weight: 900;
             text-anchor: middle;
             paint-order: stroke;
             stroke: rgba(0, 0, 0, 0.76);
-            stroke-width: 4px;
-            stroke-linejoin: round;
-        }
+	            stroke-width: 4px;
+	            stroke-linejoin: round;
+	        }
+
+	        .radar-valor {
+	            fill: #ffe28a;
+	            font-size: 12px;
+	            font-weight: 1000;
+	            text-anchor: middle;
+	            paint-order: stroke;
+	            stroke: rgba(0, 0, 0, 0.78);
+	            stroke-width: 4px;
+	            stroke-linejoin: round;
+	        }
+
+	        .radar-escala {
+	            fill: rgba(255, 247, 223, 0.78);
+	            font-size: 12px;
+	            font-weight: 900;
+	            text-anchor: middle;
+	            letter-spacing: 0.08em;
+	            text-transform: uppercase;
+	        }
 
         .radar-aviso {
             padding: 12px;
@@ -631,8 +651,8 @@
         </footer>
     </main>
 
-    <script src="musica-fundo.js?v=20260619-game6"></script>
-    <script src="rpg-sistemas.js?v=20260619-rpg9"></script>
+    <script src="musica-fundo.js?v=20260619-game7"></script>
+    <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
         const limiteTotalAtributos = 15000;
@@ -819,25 +839,30 @@
             });
         }
 
-        function renderizarRadar(atributos) {
-            const centro = 260;
-            const raio = 166;
-            const aneis = [0.25, 0.5, 0.75, 1];
-            const pontos = atributosConfig.map((atributo, indice) => {
-	                const angulo = (-90 + (360 / atributosConfig.length) * indice) * Math.PI / 180;
-	                const valor = valorEfetivo(atributos, atributo.chave);
-                const distancia = Math.min(valor / limiteTotalAtributos, 1) * raio;
-                return {
-                    ...atributo,
-                    valor,
+	        function renderizarRadar(atributos) {
+	            const centro = 260;
+	            const raio = 166;
+	            const aneis = [0.25, 0.5, 0.75, 1];
+	            const valores = atributosConfig.map((atributo) => valorEfetivo(atributos, atributo.chave));
+	            const maiorValor = Math.max(...valores, 1);
+	            const escalaMaxima = Math.max(100, Math.ceil(maiorValor / 50) * 50);
+	            const pontos = atributosConfig.map((atributo, indice) => {
+		                const angulo = (-90 + (360 / atributosConfig.length) * indice) * Math.PI / 180;
+		                const valor = valores[indice];
+	                const distancia = Math.min(valor / escalaMaxima, 1) * raio;
+	                return {
+	                    ...atributo,
+	                    valor,
                     x: centro + Math.cos(angulo) * distancia,
                     y: centro + Math.sin(angulo) * distancia,
                     eixoX: centro + Math.cos(angulo) * raio,
-                    eixoY: centro + Math.sin(angulo) * raio,
-                    labelX: centro + Math.cos(angulo) * (raio + 55),
-                    labelY: centro + Math.sin(angulo) * (raio + 55)
-                };
-            });
+	                    eixoY: centro + Math.sin(angulo) * raio,
+	                    labelX: centro + Math.cos(angulo) * (raio + 55),
+	                    labelY: centro + Math.sin(angulo) * (raio + 55),
+	                    valorX: centro + Math.cos(angulo) * Math.min(distancia + 26, raio + 24),
+	                    valorY: centro + Math.sin(angulo) * Math.min(distancia + 26, raio + 24)
+	                };
+	            });
 
             function pontosAnel(escala) {
                 return atributosConfig.map((_, indice) => {
@@ -857,12 +882,14 @@
                     ${aneis.map((anel) => `<polygon class="radar-grade" points="${pontosAnel(anel)}"></polygon>`).join("")}
                     ${pontos.map((ponto) => `<line class="radar-eixo" x1="${centro}" y1="${centro}" x2="${ponto.eixoX}" y2="${ponto.eixoY}" stroke="${ponto.cor}"></line>`).join("")}
                     <polygon class="radar-area" points="${poligono}"></polygon>
-                    ${segmentos}
-                    ${pontos.map((ponto) => `<circle class="radar-ponto" cx="${ponto.x}" cy="${ponto.y}" r="7" fill="${ponto.cor}"></circle>`).join("")}
-                    ${pontos.map((ponto) => `<text class="radar-label" x="${ponto.labelX}" y="${ponto.labelY}">${escaparHtml(ponto.nome)}</text>`).join("")}
-                </svg>
-            `;
-        }
+	                    ${segmentos}
+	                    ${pontos.map((ponto) => `<circle class="radar-ponto" cx="${ponto.x}" cy="${ponto.y}" r="7" fill="${ponto.cor}"></circle>`).join("")}
+	                    ${pontos.map((ponto) => `<text class="radar-label" x="${ponto.labelX}" y="${ponto.labelY}">${escaparHtml(ponto.nome)}</text>`).join("")}
+	                    ${pontos.map((ponto) => `<text class="radar-valor" x="${ponto.valorX}" y="${ponto.valorY}">${ponto.valor}</text>`).join("")}
+	                    <text class="radar-escala" x="${centro}" y="506">Escala ativa: ${escalaMaxima.toLocaleString("pt-BR")}</text>
+	                </svg>
+	            `;
+	        }
 
         function renderizarDestaque(atributos) {
 	            const atributo = atributosConfig.find((item) => item.chave === atributoAtivo) || atributosConfig[0];
