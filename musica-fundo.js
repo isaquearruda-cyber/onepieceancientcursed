@@ -239,6 +239,13 @@
 			".rpg-toast.sumindo{animation:rpgToastOut .22s ease both}@keyframes rpgToastIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}@keyframes rpgToastOut{to{opacity:0;transform:translateY(8px) scale(.98)}}",
 			".rpg-pulso-premio{animation:rpgPulsoPremio .72s ease}@keyframes rpgPulsoPremio{0%{filter:brightness(1)}35%{filter:brightness(1.35);box-shadow:0 0 34px rgba(144,255,0,.38)}100%{filter:brightness(1)}}",
 			".rpg-objetivos{display:grid;gap:9px;margin-top:10px;padding:12px;border:1px solid rgba(255,226,138,.22);border-radius:8px;background:rgba(3,8,10,.64);box-shadow:inset 0 0 18px rgba(0,0,0,.22)}.rpg-objetivos h3{margin:0;color:#ffe28a;font:900 .78rem Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}.rpg-objetivo{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;color:#d9e8d4;font:800 .82rem Arial,sans-serif}.rpg-objetivo span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rpg-objetivo small{color:#90ff00;font-weight:1000}.rpg-objetivo-barra{grid-column:1/-1;height:7px;border-radius:999px;background:rgba(0,0,0,.46);overflow:hidden;border:1px solid rgba(144,255,0,.18)}.rpg-objetivo-barra i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#36e0ff,#90ff00)}",
+			".rpg-save-status{position:fixed;left:14px;bottom:14px;z-index:4300;display:flex;align-items:center;gap:7px;max-width:min(320px,calc(100vw - 92px));padding:8px 10px;border:1px solid rgba(255,226,138,.24);border-radius:8px;background:rgba(3,8,10,.78);color:#d9e8d4;font:900 .72rem Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em;backdrop-filter:blur(6px);box-shadow:0 12px 34px rgba(0,0,0,.36);pointer-events:none}.rpg-save-status i{width:8px;height:8px;border-radius:999px;background:#90ff00;box-shadow:0 0 12px rgba(144,255,0,.8)}.rpg-save-status.offline i{background:#ffcf3e}.rpg-save-status.erro i{background:#ff5c5c}",
+			".rpg-sistema-botao{position:fixed;right:14px;bottom:14px;z-index:4400;width:48px;height:48px;border:1px solid rgba(255,226,138,.44);border-radius:8px;background:linear-gradient(180deg,rgba(12,28,30,.94),rgba(3,8,10,.96));color:#ffe28a;font:1000 .78rem Arial,sans-serif;letter-spacing:.08em;box-shadow:0 16px 42px rgba(0,0,0,.46),0 0 18px rgba(247,200,75,.15);cursor:pointer}.rpg-sistema-botao:hover{filter:brightness(1.12);box-shadow:0 18px 48px rgba(0,0,0,.52),0 0 24px rgba(247,200,75,.24)}",
+			".rpg-modal-sistema{position:fixed;inset:0;z-index:5200;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.68);backdrop-filter:blur(6px)}.rpg-modal-sistema[hidden]{display:none}.rpg-sistema-card{width:min(760px,100%);max-height:min(760px,calc(100svh - 28px));overflow:auto;border:1px solid rgba(255,226,138,.36);border-radius:8px;background:radial-gradient(circle at 16% 8%,rgba(54,224,255,.16),transparent 34%),linear-gradient(180deg,rgba(6,16,18,.98),rgba(1,4,6,.98));box-shadow:0 28px 90px rgba(0,0,0,.72);color:#fff7df}.rpg-sistema-topo{display:flex;justify-content:space-between;gap:12px;align-items:start;padding:18px;border-bottom:1px solid rgba(255,226,138,.16)}.rpg-sistema-topo small,.rpg-sistema-bloco h3{color:#90ff00;font-weight:1000;letter-spacing:.12em;text-transform:uppercase}.rpg-sistema-topo h2{margin:4px 0 0;font-family:'Segoe UI Black','Arial Black',Impact,sans-serif;font-size:clamp(1.8rem,6vw,3rem);line-height:.92;text-transform:uppercase;text-shadow:0 5px 0 #210b08,0 16px 30px rgba(0,0,0,.65)}.rpg-sistema-fechar{min-width:38px;min-height:38px;border:1px solid rgba(255,226,138,.36);border-radius:8px;background:rgba(3,8,10,.78);color:#fff7df;font-weight:1000;cursor:pointer}",
+			".rpg-sistema-corpo{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px}.rpg-sistema-bloco{display:grid;gap:10px;padding:14px;border:1px solid rgba(255,226,138,.18);border-radius:8px;background:rgba(4,12,13,.56);box-shadow:inset 0 0 18px rgba(0,0,0,.22)}.rpg-sistema-bloco h3{margin:0;font-size:.78rem}.rpg-sistema-linha{display:flex;justify-content:space-between;gap:12px;align-items:center;color:#d9e8d4;font:800 .88rem Arial,sans-serif}.rpg-sistema-linha strong{color:#fff7df;text-align:right}.rpg-sistema-acoes{display:grid;grid-template-columns:1fr 1fr;gap:8px}.rpg-sistema-acoes button,.rpg-patch-acoes button{min-height:40px;border:1px solid rgba(255,226,138,.42);border-radius:8px;background:rgba(255,247,223,.07);color:#fff7df;font-weight:900;text-transform:uppercase;cursor:pointer}.rpg-sistema-acoes button.principal,.rpg-patch-acoes button.principal{border-color:rgba(144,255,0,.48);background:linear-gradient(90deg,rgba(144,255,0,.26),rgba(54,224,255,.12));color:#eaffd8}.rpg-sistema-range{display:grid;gap:7px}.rpg-sistema-range input{width:100%;accent-color:#90ff00}",
+			".rpg-passe-lobby{display:grid;gap:10px;margin-top:10px;padding:12px;border:1px solid rgba(54,224,255,.24);border-radius:8px;background:linear-gradient(180deg,rgba(54,224,255,.08),rgba(3,8,10,.66));box-shadow:inset 0 0 18px rgba(0,0,0,.22)}.rpg-passe-lobby h3{margin:0;color:#36e0ff;font:900 .78rem Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}.rpg-passe-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.rpg-passe-meta span{padding:8px;border:1px solid rgba(255,226,138,.16);border-radius:8px;background:rgba(0,0,0,.24);color:#d9e8d4;font:800 .76rem Arial,sans-serif}.rpg-passe-meta strong{display:block;color:#ffe28a;font-size:1rem}.rpg-passe-barra{height:8px;border:1px solid rgba(54,224,255,.22);border-radius:999px;background:rgba(0,0,0,.44);overflow:hidden}.rpg-passe-barra i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#36e0ff,#90ff00)}",
+			".rpg-patch-notes{position:fixed;inset:0;z-index:5300;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.7);backdrop-filter:blur(6px)}.rpg-patch-notes[hidden]{display:none}.rpg-patch-card{width:min(680px,100%);border:1px solid rgba(255,226,138,.36);border-radius:8px;background:linear-gradient(180deg,rgba(6,16,18,.98),rgba(1,4,6,.98));box-shadow:0 28px 90px rgba(0,0,0,.72);color:#fff7df;overflow:hidden}.rpg-patch-card header{padding:18px;border-bottom:1px solid rgba(255,226,138,.16)}.rpg-patch-card small{color:#90ff00;font-weight:1000;letter-spacing:.12em;text-transform:uppercase}.rpg-patch-card h2{margin:4px 0 0;font-family:'Segoe UI Black','Arial Black',Impact,sans-serif;font-size:clamp(1.8rem,6vw,3rem);line-height:.92;text-transform:uppercase}.rpg-patch-lista{display:grid;gap:10px;padding:16px}.rpg-patch-item{padding:12px;border:1px solid rgba(255,226,138,.16);border-radius:8px;background:rgba(255,247,223,.05)}.rpg-patch-item strong{display:block;color:#ffe28a;text-transform:uppercase}.rpg-patch-item span{display:block;margin-top:4px;color:#d9e8d4;line-height:1.35}.rpg-patch-acoes{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 16px}",
+			"@media(max-width:740px){.rpg-sistema-corpo{grid-template-columns:1fr}.rpg-sistema-acoes,.rpg-patch-acoes{grid-template-columns:1fr}.rpg-passe-meta{grid-template-columns:1fr}.rpg-save-status{left:10px;bottom:10px}.rpg-sistema-botao{right:10px;bottom:10px}}",
 			"@media(max-width:620px){.login-beta-premio{grid-template-columns:1fr;text-align:center}.login-beta-arte{margin:auto}.login-beta-acoes{grid-template-columns:1fr}}",
 			"@media(max-width:1180px) and (hover:none),(max-width:1180px) and (pointer:coarse){body.pagina-formulario{overflow-y:auto!important}.container-lobby{grid-template-columns:1fr!important;width:min(100%,680px)!important;max-width:680px!important;margin:0 auto!important;padding:12px!important;gap:12px!important}.painel-personagem{order:1!important}.painel-comandos{order:2!important}.personagem-palco{order:3!important;min-height:340px!important}.cabecalho-lobby{text-align:center!important}.cabecalho-lobby h1{font-size:clamp(1.75rem,7vw,2.3rem)!important}.battle-hud-lobby{grid-template-columns:1fr minmax(92px,.38fr)!important;grid-template-areas:'perfil berris' 'xp xp'!important}.painel-proxima-acao h2{font-size:1.12rem!important}.botao-lobby,.botao-menu-lobby{grid-template-columns:58px 1fr auto!important;min-height:64px!important;padding:8px 12px!important}.botao-lobby img,.botao-menu-lobby img,.atalho-menu-lobby img{width:52px!important;height:52px!important}.grade-menu-lobby{grid-template-columns:1fr!important}.atalho-menu-lobby{min-height:74px!important;grid-template-columns:56px 1fr!important;justify-items:start!important;text-align:left!important}}",
 			"@media(max-width:700px){.battle-hud-lobby{width:100%;margin:8px 0 12px;grid-template-columns:1fr;grid-template-areas:'perfil' 'berris' 'xp'}.battle-berris{min-width:0}.grade-menu-lobby{grid-template-columns:1fr!important;padding:10px!important;gap:10px!important}.atalho-menu-lobby{grid-template-columns:54px 1fr!important;justify-items:start!important;min-height:76px!important;padding:10px 12px!important}.atalho-menu-lobby img{width:46px!important;height:46px!important}.atalho-menu-lobby span{text-align:left!important;font-size:.8rem!important;line-height:1.15!important}}",
@@ -430,6 +437,12 @@
 		setTimeout(function () { toast.remove(); }, 3920);
 	}
 
+	function volumeSfx() {
+		var salvo = localStorage.getItem("onePieceRpgVolumeSfx");
+		var volume = salvo === null ? 70 : Number(salvo);
+		return Math.max(0, Math.min(100, Number.isFinite(volume) ? volume : 70)) / 100;
+	}
+
 	var contextoAudioUi = null;
 	var audioUiLiberado = false;
 	function liberarAudioUi() {
@@ -450,13 +463,15 @@
 				recompensa: [880, 0.09, 0.055],
 				erro: [180, 0.08, 0.04]
 			}[tipo] || [420, 0.035, 0.035];
+			var volume = volumeSfx();
+			if (volume <= 0) return;
 			var osc = contextoAudioUi.createOscillator();
 			var ganho = contextoAudioUi.createGain();
 			osc.type = tipo === "erro" ? "sawtooth" : "triangle";
 			osc.frequency.setValueAtTime(config[0], contextoAudioUi.currentTime);
 			if (tipo === "recompensa") osc.frequency.exponentialRampToValueAtTime(config[0] * 1.45, contextoAudioUi.currentTime + config[1]);
 			ganho.gain.setValueAtTime(0.0001, contextoAudioUi.currentTime);
-			ganho.gain.exponentialRampToValueAtTime(config[2], contextoAudioUi.currentTime + 0.008);
+			ganho.gain.exponentialRampToValueAtTime(config[2] * volume, contextoAudioUi.currentTime + 0.008);
 			ganho.gain.exponentialRampToValueAtTime(0.0001, contextoAudioUi.currentTime + config[1]);
 			osc.connect(ganho);
 			ganho.connect(contextoAudioUi.destination);
@@ -590,6 +605,7 @@
 		if (!personagem || !personagem.nome || !window.RpgSistemas?.concluirAtividade) return;
 		var chave = "rpg_recompensa_diaria_" + window.RpgSistemas.normalizar(personagem.nome);
 		if (localStorage.getItem(chave) === hojeChave()) return;
+		atualizarSequenciaDiaria(personagem, true);
 		localStorage.setItem(chave, hojeChave());
 		window.RpgSistemas.concluirAtividade(personagem, {
 			tipo: "login-diario",
@@ -603,6 +619,194 @@
 		}).catch(function (erro) {
 			console.warn("Falha na recompensa diaria:", erro);
 		});
+	}
+
+	function dataAnterior(chaveData) {
+		var partes = String(chaveData || "").split("-").map(Number);
+		if (partes.length !== 3 || partes.some(function (n) { return !n; })) return "";
+		var data = new Date(partes[0], partes[1] - 1, partes[2]);
+		data.setDate(data.getDate() + 1);
+		return data.getFullYear() + "-" + String(data.getMonth() + 1).padStart(2, "0") + "-" + String(data.getDate()).padStart(2, "0");
+	}
+
+	function chaveSequencia(personagem) {
+		var nome = window.RpgSistemas?.normalizar ? window.RpgSistemas.normalizar(personagem && personagem.nome) : String(personagem && personagem.nome || "").toLowerCase();
+		return "rpg_streak_" + nome;
+	}
+
+	function atualizarSequenciaDiaria(personagem, registrarHoje) {
+		if (!personagem || !personagem.nome) return { sequencia: 0, melhor: 0, ultimo: "" };
+		var chave = chaveSequencia(personagem);
+		var dados = lerJson(chave, { sequencia: 0, melhor: 0, ultimo: "" });
+		var hoje = hojeChave();
+		if (registrarHoje && dados.ultimo !== hoje) {
+			dados.sequencia = dataAnterior(dados.ultimo) === hoje ? Number(dados.sequencia || 0) + 1 : 1;
+			dados.melhor = Math.max(Number(dados.melhor || 0), dados.sequencia);
+			dados.ultimo = hoje;
+			salvarJson(chave, dados);
+		}
+		return dados;
+	}
+
+	function instalarPasseLobby() {
+		if (!document.body.classList.contains("pagina-formulario") || !document.querySelector(".container-lobby")) return;
+		if (document.getElementById("rpg-passe-lobby")) return;
+		var painel = document.getElementById("painel-proxima-acao") || document.querySelector(".painel-proxima-acao");
+		if (!painel) return;
+		var personagem = obterPersonagem();
+		var progresso = progressoDo(personagem);
+		var sequencia = atualizarSequenciaDiaria(personagem, false);
+		var nivel = Math.max(1, Math.min(20, Math.floor(Number(progresso.expTotal || progresso.exp || progresso.expDisponivel || 0) / 250) + 1));
+		var pct = Math.max(0, Math.min(100, Math.round((nivel / 20) * 100)));
+		var bloco = document.createElement("div");
+		bloco.id = "rpg-passe-lobby";
+		bloco.className = "rpg-passe-lobby";
+		bloco.innerHTML =
+			"<h3>Passe de temporada</h3>" +
+			'<div class="rpg-passe-meta">' +
+				"<span><strong>" + nivel + "/20</strong>Progresso</span>" +
+				"<span><strong>" + formatar(sequencia.sequencia) + " dia(s)</strong>Sequência</span>" +
+				"<span><strong>" + formatar(sequencia.melhor) + " dia(s)</strong>Melhor marca</span>" +
+			"</div>" +
+			'<div class="rpg-passe-barra"><i style="width:' + pct + '%"></i></div>';
+		painel.appendChild(bloco);
+	}
+
+	function textoSalvamento() {
+		var personagem = obterPersonagem();
+		var temBackup = Boolean(localStorage.getItem("personagensCriadosBackup"));
+		if (!personagem || !personagem.nome) return "Sem personagem ativo";
+		if (!navigator.onLine) return "Offline / salvo local";
+		return temBackup ? "Online / backup protegido" : "Online / salvo local";
+	}
+
+	function instalarStatusSalvamento() {
+		if (document.getElementById("rpg-save-status")) return;
+		var status = document.createElement("div");
+		status.id = "rpg-save-status";
+		status.className = "rpg-save-status";
+		status.innerHTML = "<i></i><span>Salvamento</span>";
+		document.body.appendChild(status);
+
+		function atualizar() {
+			status.classList.toggle("offline", !navigator.onLine);
+			status.querySelector("span").textContent = textoSalvamento();
+		}
+
+		window.addEventListener("online", atualizar);
+		window.addEventListener("offline", atualizar);
+		window.addEventListener("storage", atualizar);
+		setInterval(atualizar, 4000);
+		atualizar();
+	}
+
+	function instalarPatchNotes(forcar) {
+		var versao = "20260619-pro3";
+		var chave = "rpg_patch_notes_" + versao;
+		if (!forcar && localStorage.getItem(chave) === "visto") return;
+		var existente = document.getElementById("rpg-patch-notes");
+		if (existente) existente.remove();
+		var modal = document.createElement("div");
+		modal.id = "rpg-patch-notes";
+		modal.className = "rpg-patch-notes";
+		modal.innerHTML =
+			'<section class="rpg-patch-card" role="dialog" aria-modal="true" aria-label="Novidades da versão">' +
+				"<header><small>Atualização instalada</small><h2>Versão Pro</h2></header>" +
+				'<div class="rpg-patch-lista">' +
+					'<div class="rpg-patch-item"><strong>Menu SYS</strong><span>Configurações, tela cheia, instalação do app e atualização manual em qualquer página.</span></div>' +
+					'<div class="rpg-patch-item"><strong>Salvamento visível</strong><span>Status online/offline e proteção de backup para personagens cadastrados.</span></div>' +
+					'<div class="rpg-patch-item"><strong>Passe e sequência</strong><span>Lobby mostra progresso de temporada e sequência diária para parecer jogo vivo.</span></div>' +
+					'<div class="rpg-patch-item"><strong>Polimento de áudio</strong><span>SFX de interface agora tem volume próprio no sistema.</span></div>' +
+				"</div>" +
+				'<div class="rpg-patch-acoes"><button type="button" data-patch-fechar>Fechar</button><button class="principal" type="button" data-patch-sistema>Abrir SYS</button></div>' +
+			"</section>";
+		document.body.appendChild(modal);
+		localStorage.setItem(chave, "visto");
+		modal.querySelector("[data-patch-fechar]").onclick = function () { modal.remove(); };
+		modal.querySelector("[data-patch-sistema]").onclick = function () {
+			modal.remove();
+			abrirMenuSistema();
+		};
+	}
+
+	function instalarMenuSistema() {
+		if (document.getElementById("rpg-sistema-botao")) return;
+		var botao = document.createElement("button");
+		botao.id = "rpg-sistema-botao";
+		botao.className = "rpg-sistema-botao";
+		botao.type = "button";
+		botao.title = "Sistema";
+		botao.textContent = "SYS";
+		botao.addEventListener("click", abrirMenuSistema);
+		document.body.appendChild(botao);
+	}
+
+	function abrirMenuSistema() {
+		var modal = document.getElementById("rpg-modal-sistema");
+		if (modal) modal.remove();
+		var personagem = obterPersonagem();
+		var progresso = progressoDo(personagem);
+		var sequencia = atualizarSequenciaDiaria(personagem, false);
+		var volumeMusica = localStorage.getItem("onePieceRpgVolumeMusica");
+		var volumeSons = Math.round(volumeSfx() * 100);
+		modal = document.createElement("div");
+		modal.id = "rpg-modal-sistema";
+		modal.className = "rpg-modal-sistema";
+		modal.innerHTML =
+			'<section class="rpg-sistema-card" role="dialog" aria-modal="true" aria-label="Sistema do jogo">' +
+				'<header class="rpg-sistema-topo"><div><small>Central do jogo</small><h2>Sistema</h2></div><button class="rpg-sistema-fechar" type="button" aria-label="Fechar">x</button></header>' +
+				'<div class="rpg-sistema-corpo">' +
+					'<section class="rpg-sistema-bloco"><h3>Perfil ativo</h3>' +
+						'<div class="rpg-sistema-linha"><span>Personagem</span><strong>' + (personagem?.nome || "Nenhum") + '</strong></div>' +
+						'<div class="rpg-sistema-linha"><span>Nível</span><strong>' + formatar(progresso.nivel || 1) + '</strong></div>' +
+						'<div class="rpg-sistema-linha"><span>Berris</span><strong>' + formatar(progresso.berris || 0) + '</strong></div>' +
+						'<div class="rpg-sistema-linha"><span>Sequência</span><strong>' + formatar(sequencia.sequencia) + ' dia(s)</strong></div>' +
+					'</section>' +
+					'<section class="rpg-sistema-bloco"><h3>Salvamento</h3>' +
+						'<div class="rpg-sistema-linha"><span>Status</span><strong>' + textoSalvamento() + '</strong></div>' +
+						'<div class="rpg-sistema-linha"><span>Rede</span><strong>' + (navigator.onLine ? "Online" : "Offline") + '</strong></div>' +
+						'<div class="rpg-sistema-linha"><span>Cache</span><strong>v15</strong></div>' +
+						'<div class="rpg-sistema-acoes"><button type="button" data-sistema-atualizar>Atualizar app</button><button type="button" data-sistema-notes>Novidades</button></div>' +
+					'</section>' +
+					'<section class="rpg-sistema-bloco"><h3>Áudio</h3>' +
+						'<label class="rpg-sistema-range">Música <input type="range" min="0" max="100" value="' + (volumeMusica === null ? 50 : Number(volumeMusica)) + '" data-sistema-musica></label>' +
+						'<label class="rpg-sistema-range">SFX <input type="range" min="0" max="100" value="' + volumeSons + '" data-sistema-sfx></label>' +
+					'</section>' +
+					'<section class="rpg-sistema-bloco"><h3>Ações rápidas</h3>' +
+						'<div class="rpg-sistema-acoes"><button class="principal" type="button" data-sistema-fullscreen>Tela cheia</button><button type="button" data-sistema-instalar>Instalar app</button><button type="button" data-sistema-lobby>Lobby</button><button type="button" data-sistema-perfil>Perfil</button></div>' +
+					'</section>' +
+				'</div>' +
+			'</section>';
+		document.body.appendChild(modal);
+		modal.querySelector(".rpg-sistema-fechar").onclick = function () { modal.remove(); };
+		modal.addEventListener("click", function (evento) { if (evento.target === modal) modal.remove(); });
+		modal.querySelector("[data-sistema-musica]").oninput = function (evento) {
+			localStorage.setItem("onePieceRpgVolumeMusica", String(evento.target.value));
+			var audio = document.getElementById("musica-fundo");
+			if (audio) {
+				audio.volume = Number(evento.target.value) / 100;
+				audio.muted = Number(evento.target.value) <= 0;
+			}
+		};
+		modal.querySelector("[data-sistema-sfx]").oninput = function (evento) {
+			localStorage.setItem("onePieceRpgVolumeSfx", String(evento.target.value));
+			tocarUi("confirmar");
+		};
+		modal.querySelector("[data-sistema-fullscreen]").onclick = function () {
+			if (document.fullscreenElement) document.exitFullscreen();
+			else document.documentElement.requestFullscreen?.();
+		};
+		modal.querySelector("[data-sistema-instalar]").onclick = function () {
+			if (window.OnePieceAppInstall?.install) window.OnePieceAppInstall.install();
+			else mostrarToast("Instalação", "Use o botão de download do app.", "#ffe28a", "!");
+		};
+		modal.querySelector("[data-sistema-atualizar]").onclick = function () {
+			if ("serviceWorker" in navigator) navigator.serviceWorker.getRegistration().then(function (reg) { if (reg) reg.update(); });
+			location.reload();
+		};
+		modal.querySelector("[data-sistema-notes]").onclick = function () { instalarPatchNotes(true); };
+		modal.querySelector("[data-sistema-lobby]").onclick = function () { transicionarPagina("lobby.html"); };
+		modal.querySelector("[data-sistema-perfil]").onclick = function () { transicionarPagina("perfil.html"); };
 	}
 
 	function premioBetaDisponivel() {
@@ -736,9 +940,13 @@
 		habilitarScroll();
 		decorarBiblioteca();
 		instalarFeedback();
+		instalarStatusSalvamento();
+		instalarMenuSistema();
 		atualizarHudBattle();
 		setTimeout(recompensaDiariaGame, 650);
 		setTimeout(abrirLoginDiarioBeta, 450);
+		setTimeout(instalarPasseLobby, 820);
+		setTimeout(instalarPatchNotes, 1100);
 		iniciarAudio();
 		setTimeout(instalarObjetivosLobby, 900);
 		setTimeout(corrigirDownloadNoMenu, 300);
