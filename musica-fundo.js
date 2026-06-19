@@ -187,11 +187,12 @@
 		style.id = "rpg-hotfix-css";
 		style.textContent = [
 			".rpg-pagina-scroll{overflow-y:auto!important;scrollbar-gutter:stable}",
-			".rpg-loading{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;padding:18px;background:radial-gradient(circle at 50% 22%,rgba(247,200,75,.18),transparent 34%),linear-gradient(180deg,#020707,#061011);color:#fff7df;transition:opacity .28s ease,visibility .28s ease}",
-			".rpg-loading.saindo{opacity:0;visibility:hidden}.rpg-loading-card{width:min(520px,100%);display:grid;gap:14px;text-align:center}.rpg-loading-logo{width:92px;height:92px;margin:auto;border:2px solid rgba(255,226,138,.58);border-radius:18px;background:url('assets/img/app-logo-192.png') center/cover,#061011;box-shadow:0 0 28px rgba(247,200,75,.28);animation:rpgLoadPulse 1.1s ease-in-out infinite}.rpg-loading h2{margin:0;font-family:'Segoe UI Black','Arial Black',Impact,sans-serif;font-size:clamp(1.8rem,8vw,3.3rem);line-height:.92;text-transform:uppercase;text-shadow:0 5px 0 #210b08,0 18px 34px rgba(0,0,0,.72)}",
-			".rpg-loading small{color:#ffe28a;font-weight:900;letter-spacing:.14em;text-transform:uppercase}.rpg-loading-barra{height:10px;border:1px solid rgba(255,226,138,.34);border-radius:999px;background:rgba(0,0,0,.46);overflow:hidden}.rpg-loading-barra i{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#90ff00,#ffe28a);box-shadow:0 0 18px rgba(144,255,0,.46);animation:rpgLoadBar 1.05s ease forwards}.rpg-loading-dica{min-height:38px;color:#d9e8d4;font:800 .92rem/1.35 Arial,sans-serif}",
+			".rpg-loading{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;padding:18px;background:radial-gradient(circle at 50% 30%,rgba(255,226,138,.18),transparent 34%),radial-gradient(circle at 18% 72%,rgba(255,65,40,.18),transparent 26%),linear-gradient(180deg,#020707,#071314 58%,#160806);color:#fff7df;transition:opacity .36s ease,visibility .36s ease;overflow:hidden}",
+			".rpg-loading::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(0deg,rgba(255,255,255,.028) 1px,transparent 1px);background-size:48px 48px,48px 48px;mask-image:radial-gradient(circle at 50% 50%,#000 0,transparent 72%);animation:rpgGridMove 6s linear infinite}.rpg-loading::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.045) 0 1px,transparent 1px 6px);mix-blend-mode:screen;opacity:.24;pointer-events:none}",
+			".rpg-loading.saindo{opacity:0;visibility:hidden}.rpg-loading-card{position:relative;z-index:1;width:min(760px,100%);display:grid;grid-template-columns:minmax(160px,.75fr) minmax(260px,1fr);gap:clamp(16px,4vw,34px);align-items:center;padding:clamp(16px,3vw,26px);border:1px solid rgba(255,226,138,.28);border-radius:8px;background:linear-gradient(135deg,rgba(5,15,18,.78),rgba(2,6,8,.56));box-shadow:0 30px 100px rgba(0,0,0,.72),inset 0 0 34px rgba(255,247,223,.06);backdrop-filter:blur(8px)}.rpg-loading-logo{position:relative;width:min(220px,44vw);aspect-ratio:443/498;margin:auto;background:url('assets/img/loading/luffy-loader.gif') center/contain no-repeat;filter:drop-shadow(0 24px 24px rgba(0,0,0,.58)) drop-shadow(0 0 20px rgba(255,226,138,.18));image-rendering:auto;animation:rpgLuffyRun 1.15s ease-in-out infinite}.rpg-loading-logo::after{content:'';position:absolute;inset:auto 8% -6% 8%;height:28px;border-radius:999px;background:radial-gradient(ellipse at center,rgba(0,0,0,.62),transparent 68%);filter:blur(2px)}",
+			".rpg-loading-info{display:grid;gap:12px;text-align:left}.rpg-loading h2{margin:0;font-family:'Segoe UI Black','Arial Black',Impact,sans-serif;font-size:clamp(2rem,7vw,4.6rem);line-height:.86;text-transform:uppercase;text-shadow:0 5px 0 #210b08,0 18px 34px rgba(0,0,0,.72)}.rpg-loading small{color:#ffe28a;font-weight:1000;letter-spacing:.16em;text-transform:uppercase}.rpg-loading-barra{height:14px;border:1px solid rgba(255,226,138,.44);border-radius:999px;background:rgba(0,0,0,.52);overflow:hidden;box-shadow:inset 0 0 14px rgba(0,0,0,.5)}.rpg-loading-barra i{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ff4128,#ffe28a,#90ff00,#36e0ff);box-shadow:0 0 24px rgba(255,226,138,.5);animation:rpgLoadBar 1.65s cubic-bezier(.19,1,.22,1) forwards}.rpg-loading-dica{min-height:42px;color:#d9e8d4;font:900 .95rem/1.35 Arial,sans-serif}.rpg-loading-etapas{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.rpg-loading-etapas span{padding:8px;border:1px solid rgba(255,247,223,.12);border-radius:8px;background:rgba(255,247,223,.045);color:#c9f7ff;font:1000 .64rem Arial,sans-serif;text-transform:uppercase;letter-spacing:.08em;text-align:center}.rpg-loading-etapas span:nth-child(1){animation:rpgEtapa .7s ease .18s both}.rpg-loading-etapas span:nth-child(2){animation:rpgEtapa .7s ease .52s both}.rpg-loading-etapas span:nth-child(3){animation:rpgEtapa .7s ease .86s both}",
 			".rpg-transicao{position:fixed;inset:0;z-index:99998;display:grid;place-items:center;background:radial-gradient(circle at 50% 50%,rgba(247,200,75,.22),rgba(1,5,6,.94) 56%);color:#ffe28a;font-family:'Segoe UI Black','Arial Black',Impact,sans-serif;text-transform:uppercase;letter-spacing:.08em;animation:rpgTransicaoIn .24s ease both}.rpg-transicao span{padding:12px 16px;border:1px solid rgba(255,226,138,.42);border-radius:8px;background:rgba(3,8,10,.78);box-shadow:0 0 26px rgba(247,200,75,.22)}",
-			"@keyframes rpgLoadPulse{50%{transform:translateY(-3px);box-shadow:0 0 38px rgba(247,200,75,.44)}}@keyframes rpgLoadBar{to{width:100%}}@keyframes rpgTransicaoIn{from{opacity:0}to{opacity:1}}",
+			"@keyframes rpgLuffyRun{50%{transform:translateY(-9px) rotate(-1deg)}}@keyframes rpgGridMove{to{transform:translate3d(-48px,-48px,0)}}@keyframes rpgEtapa{from{opacity:.35;transform:translateY(8px)}to{opacity:1;transform:none;border-color:rgba(144,255,0,.34);color:#eaffd8}}@keyframes rpgLoadPulse{50%{transform:translateY(-3px);box-shadow:0 0 38px rgba(247,200,75,.44)}}@keyframes rpgLoadBar{to{width:100%}}@keyframes rpgTransicaoIn{from{opacity:0}to{opacity:1}}",
 			".battle-hud-lobby{position:relative;z-index:1;display:grid;grid-template-columns:minmax(180px,1.2fr) minmax(96px,.7fr);grid-template-areas:'perfil berris' 'xp xp';gap:8px;width:100%;margin:8px 0 12px;pointer-events:auto}",
 			".battle-perfil{grid-area:perfil;display:grid;grid-template-columns:40px 1fr;gap:9px;align-items:center;min-height:52px;padding:6px 9px;border:1px solid rgba(144,255,0,.42);border-radius:8px;color:#90ff00;background:linear-gradient(90deg,rgba(4,18,10,.88),rgba(8,28,18,.72));box-shadow:0 0 16px rgba(144,255,0,.12),inset 0 0 18px rgba(0,0,0,.25);cursor:pointer;text-align:left}",
 			".battle-avatar{width:38px;height:38px;border-radius:8px;border:1px solid rgba(144,255,0,.45);background:radial-gradient(circle,#eaffd8,#36e0ff 42%,#07100d 72%);box-shadow:0 0 14px rgba(144,255,0,.22);overflow:hidden}",
@@ -249,7 +250,7 @@
 				"#nprogress .bar{height:3px!important;background:linear-gradient(90deg,#36e0ff,#90ff00,#ffe28a)!important;box-shadow:0 0 18px rgba(144,255,0,.65)!important}#nprogress .peg{box-shadow:0 0 14px #90ff00,0 0 8px #36e0ff!important}",
 				"#rpg-cdn-particles{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.42;mix-blend-mode:screen}.rpg-cdn-banner{position:fixed;left:50%;top:14px;z-index:4550;width:min(720px,calc(100vw - 28px));transform:translateX(-50%);display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid rgba(255,226,138,.34);border-radius:8px;background:linear-gradient(90deg,rgba(8,18,20,.92),rgba(24,10,8,.88));box-shadow:0 18px 54px rgba(0,0,0,.54),0 0 28px rgba(255,207,62,.16);color:#fff7df;backdrop-filter:blur(8px);animation:rpgCdnBanner .38s ease both}.rpg-cdn-banner i{display:grid;place-items:center;width:42px;height:42px;border-radius:8px;background:radial-gradient(circle,#ffe28a,#ff6b35 62%,#170a05);color:#170a05;font:1000 1.1rem Arial,sans-serif;font-style:normal}.rpg-cdn-banner strong{display:block;text-transform:uppercase;letter-spacing:.06em}.rpg-cdn-banner span{display:block;color:#d9e8d4;font:800 .82rem/1.25 Arial,sans-serif}.rpg-cdn-banner button{min-height:34px;border:1px solid rgba(255,226,138,.34);border-radius:8px;background:rgba(255,247,223,.08);color:#fff7df;font-weight:1000;cursor:pointer}@keyframes rpgCdnBanner{from{opacity:0;transform:translate(-50%,-16px)}to{opacity:1;transform:translate(-50%,0)}}.rpg-cdn-status{display:inline-grid;place-items:center;min-width:72px;padding:3px 7px;border:1px solid rgba(144,255,0,.28);border-radius:999px;background:rgba(144,255,0,.08);color:#b8ff55;font-size:.72rem;text-transform:uppercase}.rpg-cdn-status.off{border-color:rgba(255,92,92,.32);background:rgba(255,92,92,.08);color:#ffb0a8}.tippy-box[data-theme~='rpg']{border:1px solid rgba(255,226,138,.42);border-radius:8px;background:rgba(3,8,10,.96);color:#fff7df;box-shadow:0 16px 42px rgba(0,0,0,.5),0 0 18px rgba(247,200,75,.16);font-weight:900}.tippy-box[data-theme~='rpg'] .tippy-arrow{color:rgba(3,8,10,.96)}.swal2-popup.rpg-swal{border:1px solid rgba(255,226,138,.4)!important;border-radius:8px!important;background:radial-gradient(circle at 20% 0,rgba(144,255,0,.16),transparent 34%),linear-gradient(180deg,rgba(6,16,18,.98),rgba(1,4,6,.98))!important;color:#fff7df!important;box-shadow:0 28px 90px rgba(0,0,0,.72),0 0 34px rgba(144,255,0,.14)!important}.swal2-popup.rpg-swal .swal2-title{color:#ffe28a!important;text-transform:uppercase!important;font-family:'Segoe UI Black','Arial Black',Impact,sans-serif!important;letter-spacing:0!important}.swal2-popup.rpg-swal .swal2-html-container{color:#d9e8d4!important;font-weight:800!important}.swal2-popup.rpg-swal .swal2-confirm{border-radius:8px!important;background:linear-gradient(90deg,#487d1c,#176476)!important;color:#eaffd8!important;font-weight:1000!important;text-transform:uppercase!important}.swal2-toast.rpg-swal-toast{border:1px solid rgba(255,226,138,.34)!important;border-radius:8px!important;background:rgba(3,8,10,.94)!important;color:#fff7df!important;box-shadow:0 16px 46px rgba(0,0,0,.5)!important}",
 				".rpg-ambiente-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.44;mix-blend-mode:screen}.rpg-comando-overlay{position:fixed;inset:0;z-index:5400;display:grid;place-items:start center;padding:clamp(16px,7vh,74px) 16px 16px;background:rgba(0,0,0,.62);backdrop-filter:blur(8px)}.rpg-comando-overlay[hidden]{display:none}.rpg-comando-card{width:min(760px,100%);border:1px solid rgba(255,226,138,.38);border-radius:8px;background:radial-gradient(circle at 15% 0,rgba(54,224,255,.15),transparent 34%),linear-gradient(180deg,rgba(6,16,18,.98),rgba(1,4,6,.98));box-shadow:0 28px 90px rgba(0,0,0,.72);overflow:hidden;color:#fff7df}.rpg-comando-busca{display:grid;grid-template-columns:42px 1fr 42px;align-items:center;gap:8px;padding:12px;border-bottom:1px solid rgba(255,226,138,.16)}.rpg-comando-busca span{display:grid;place-items:center;color:#90ff00;font-weight:1000}.rpg-comando-busca input{width:100%;min-height:44px;border:0;outline:0;background:transparent;color:#fff7df;font:900 1rem Arial,sans-serif}.rpg-comando-busca button{min-height:38px;border:1px solid rgba(255,226,138,.34);border-radius:8px;background:rgba(255,247,223,.06);color:#fff7df;font-weight:1000;cursor:pointer}.rpg-comando-lista{display:grid;gap:8px;max-height:min(520px,62svh);overflow:auto;padding:12px}.rpg-comando-item{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;min-height:58px;padding:8px;border:1px solid rgba(255,226,138,.13);border-radius:8px;background:rgba(255,247,223,.045);color:#fff7df;text-align:left;cursor:pointer}.rpg-comando-item:hover,.rpg-comando-item.ativo{border-color:rgba(144,255,0,.48);background:rgba(144,255,0,.1);box-shadow:0 0 18px rgba(144,255,0,.12)}.rpg-comando-item img{width:40px;height:40px;border-radius:8px;object-fit:cover}.rpg-comando-item strong{display:block;text-transform:uppercase;letter-spacing:.04em}.rpg-comando-item small{color:#d9e8d4;font-weight:800}.rpg-comando-item kbd{padding:4px 7px;border:1px solid rgba(255,226,138,.22);border-radius:6px;background:rgba(0,0,0,.28);color:#ffe28a;font:900 .68rem Arial,sans-serif}.rpg-hotkeys{position:fixed;right:72px;bottom:16px;z-index:4300;display:flex;gap:6px;pointer-events:none}.rpg-hotkeys span{padding:7px 9px;border:1px solid rgba(255,226,138,.2);border-radius:8px;background:rgba(3,8,10,.74);color:#d9e8d4;font:900 .68rem Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em;backdrop-filter:blur(6px)}",
-				"@media(max-width:740px){.rpg-sistema-corpo{grid-template-columns:1fr}.rpg-sistema-acoes,.rpg-patch-acoes{grid-template-columns:1fr}.rpg-passe-meta{grid-template-columns:1fr}.rpg-save-status{left:10px;bottom:10px}.rpg-sistema-botao{right:10px;bottom:10px}.rpg-page-rail{position:fixed;left:10px;right:10px;top:10px;max-width:none}}",
+			"@media(max-width:740px){.rpg-loading-card{grid-template-columns:1fr;text-align:center}.rpg-loading-info{text-align:center}.rpg-loading-logo{width:min(190px,58vw)}.rpg-sistema-corpo{grid-template-columns:1fr}.rpg-sistema-acoes,.rpg-patch-acoes{grid-template-columns:1fr}.rpg-passe-meta{grid-template-columns:1fr}.rpg-save-status{left:10px;bottom:10px}.rpg-sistema-botao{right:10px;bottom:10px}.rpg-page-rail{position:fixed;left:10px;right:10px;top:10px;max-width:none}}",
 			"@media(max-width:620px){.login-beta-premio{grid-template-columns:1fr;text-align:center}.login-beta-arte{margin:auto}.login-beta-acoes{grid-template-columns:1fr}}",
 			"@media(max-width:1180px) and (hover:none),(max-width:1180px) and (pointer:coarse){body.pagina-formulario{overflow-y:auto!important}.container-lobby{grid-template-columns:1fr!important;width:min(100%,680px)!important;max-width:680px!important;margin:0 auto!important;padding:12px!important;gap:12px!important}.painel-personagem{order:1!important}.painel-comandos{order:2!important}.personagem-palco{order:3!important;min-height:340px!important}.cabecalho-lobby{text-align:center!important}.cabecalho-lobby h1{font-size:clamp(1.75rem,7vw,2.3rem)!important}.battle-hud-lobby{grid-template-columns:1fr minmax(92px,.38fr)!important;grid-template-areas:'perfil berris' 'xp xp'!important}.painel-proxima-acao h2{font-size:1.12rem!important}.botao-lobby,.botao-menu-lobby{grid-template-columns:58px 1fr auto!important;min-height:64px!important;padding:8px 12px!important}.botao-lobby img,.botao-menu-lobby img,.atalho-menu-lobby img{width:52px!important;height:52px!important}.grade-menu-lobby{grid-template-columns:1fr!important}.atalho-menu-lobby{min-height:74px!important;grid-template-columns:56px 1fr!important;justify-items:start!important;text-align:left!important}}",
 			"@media(max-width:700px){.battle-hud-lobby{width:100%;margin:8px 0 12px;grid-template-columns:1fr;grid-template-areas:'perfil' 'berris' 'xp'}.battle-berris{min-width:0}.grade-menu-lobby{grid-template-columns:1fr!important;padding:10px!important;gap:10px!important}.atalho-menu-lobby{grid-template-columns:54px 1fr!important;justify-items:start!important;min-height:76px!important;padding:10px 12px!important}.atalho-menu-lobby img{width:46px!important;height:46px!important}.atalho-menu-lobby span{text-align:left!important;font-size:.8rem!important;line-height:1.15!important}}",
@@ -454,7 +455,7 @@
 		});
 	}
 
-	var cdnPremium = { gsap: false, particles: false, sweetalert: false, howler: false, animate: false, tippy: false, tilt: false };
+	var cdnPremium = { gsap: false, particles: false, sweetalert: false, howler: false, animate: false, tippy: false, tilt: false, three: false };
 
 	function carregarBibliotecasCdn() {
 		carregarCssUmaVez("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css", "rpg-animate-css");
@@ -465,22 +466,25 @@
 			carregarScriptUmaVez("https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js", "rpg-particles-cdn"),
 			carregarScriptUmaVez("https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js", "rpg-sweetalert-cdn"),
 			carregarScriptUmaVez("https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js", "rpg-howler-cdn"),
-			carregarScriptUmaVez("https://unpkg.com/@popperjs/core@2", "rpg-popper-cdn").then(function () {
-				return carregarScriptUmaVez("https://unpkg.com/tippy.js@6", "rpg-tippy-cdn");
-			}),
-			carregarScriptUmaVez("https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js", "rpg-tilt-cdn")
-		]).then(function () {
+				carregarScriptUmaVez("https://unpkg.com/@popperjs/core@2", "rpg-popper-cdn").then(function () {
+					return carregarScriptUmaVez("https://unpkg.com/tippy.js@6", "rpg-tippy-cdn");
+				}),
+				carregarScriptUmaVez("https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js", "rpg-tilt-cdn"),
+				carregarScriptUmaVez("https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js", "rpg-three-cdn")
+			]).then(function () {
 			cdnPremium.gsap = Boolean(window.gsap);
 			cdnPremium.particles = typeof window.particlesJS === "function";
 			cdnPremium.sweetalert = Boolean(window.Swal);
 			cdnPremium.howler = Boolean(window.Howl);
-			cdnPremium.tippy = typeof window.tippy === "function";
-			cdnPremium.tilt = Boolean(window.VanillaTilt);
-			cdnPremium.animate = true;
-				ativarParticlesCdn();
-				ativarGsapPremium();
-				ativarHowlerPremium();
-				window.dispatchEvent(new CustomEvent("rpg:cdn-ready", { detail: cdnPremium }));
+				cdnPremium.tippy = typeof window.tippy === "function";
+				cdnPremium.tilt = Boolean(window.VanillaTilt);
+				cdnPremium.three = Boolean(window.THREE);
+				cdnPremium.animate = true;
+					ativarParticlesCdn();
+					ativarGsapPremium();
+					ativarHowlerPremium();
+					instalarModelo3DLobby();
+					window.dispatchEvent(new CustomEvent("rpg:cdn-ready", { detail: cdnPremium }));
 				setTimeout(abrirBoasVindasCdn, 650);
 			}).catch(function (erro) {
 			console.info("Camada CDN premium indisponivel.", erro);
@@ -686,20 +690,23 @@
 		];
 		var overlay = document.createElement("div");
 		overlay.className = "rpg-loading";
-		overlay.innerHTML =
-			'<section class="rpg-loading-card" aria-label="Carregando jogo">' +
-				'<div class="rpg-loading-logo" aria-hidden="true"></div>' +
-				'<small>Carregando aventura</small>' +
-				'<h2>One Piece RPG</h2>' +
-				'<div class="rpg-loading-barra"><i></i></div>' +
-				'<p class="rpg-loading-dica">' + dicas[Math.floor(Math.random() * dicas.length)] + '</p>' +
-			'</section>';
-		document.body.appendChild(overlay);
+			overlay.innerHTML =
+				'<section class="rpg-loading-card" aria-label="Carregando jogo">' +
+					'<div class="rpg-loading-logo" aria-hidden="true"></div>' +
+					'<div class="rpg-loading-info">' +
+						'<small>Inicializando servidor RPG</small>' +
+						'<h2>One Piece RPG</h2>' +
+						'<div class="rpg-loading-barra"><i></i></div>' +
+						'<div class="rpg-loading-etapas"><span>Assets</span><span>Ficha</span><span>Mundo</span></div>' +
+						'<p class="rpg-loading-dica">' + dicas[Math.floor(Math.random() * dicas.length)] + '</p>' +
+					'</div>' +
+				'</section>';
+			document.body.appendChild(overlay);
 		setTimeout(function () {
 			overlay.classList.add("saindo");
 			setTimeout(function () { overlay.remove(); }, 320);
-		}, 1050);
-	}
+			}, 1750);
+		}
 
 	function transicionarPagina(destino) {
 		if (!destino) return;
@@ -912,7 +919,7 @@
 	}
 
 	function instalarPatchNotes(forcar) {
-		var versao = "20260619-pro7";
+		var versao = "20260619-pro8";
 		var chave = "rpg_patch_notes_" + versao;
 		if (!forcar && localStorage.getItem(chave) === "visto") return;
 		var existente = document.getElementById("rpg-patch-notes");
@@ -923,8 +930,10 @@
 		modal.innerHTML =
 			'<section class="rpg-patch-card" role="dialog" aria-modal="true" aria-label="Novidades da versão">' +
 				"<header><small>Atualização instalada</small><h2>Versão Pro</h2></header>" +
-				'<div class="rpg-patch-lista">' +
-					'<div class="rpg-patch-item"><strong>Launcher profissional</strong><span>Ctrl+K ou / abre comandos rápidos igual jogo online moderno.</span></div>' +
+					'<div class="rpg-patch-lista">' +
+						'<div class="rpg-patch-item"><strong>Loading Gear Pixel</strong><span>Tela de carregamento nova com Luffy animado, scanlines, etapas de boot e barra cinematográfica.</span></div>' +
+						'<div class="rpg-patch-item"><strong>Modelo 3D no lobby</strong><span>Three.js via CDN renderiza um personagem procedural com aura, luzes e anéis de energia.</span></div>' +
+						'<div class="rpg-patch-item"><strong>Launcher profissional</strong><span>Ctrl+K ou / abre comandos rápidos igual jogo online moderno.</span></div>' +
 					'<div class="rpg-patch-item"><strong>CDN de jogo profissional</strong><span>GSAP, particles.js, SweetAlert2, Animate.css e Howler carregam pela internet para animações e cenas mais fortes.</span></div>' +
 					'<div class="rpg-patch-item"><strong>Inventário premium</strong><span>Busca, raridade, capacidade, ordenação, tooltips e efeito 3D nos slots.</span></div>' +
 					'<div class="rpg-patch-item"><strong>Raças nos atributos</strong><span>Cada atributo mostra base, bônus racial e total efetivo conforme a raça cadastrada.</span></div>' +
@@ -982,7 +991,7 @@
 					'<section class="rpg-sistema-bloco"><h3>Salvamento</h3>' +
 						'<div class="rpg-sistema-linha"><span>Status</span><strong>' + textoSalvamento() + '</strong></div>' +
 						'<div class="rpg-sistema-linha"><span>Rede</span><strong>' + (navigator.onLine ? "Online" : "Offline") + '</strong></div>' +
-							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v19</strong></div>' +
+							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v20</strong></div>' +
 						'<div class="rpg-sistema-acoes"><button type="button" data-sistema-atualizar>Atualizar app</button><button type="button" data-sistema-notes>Novidades</button></div>' +
 					'</section>' +
 					'<section class="rpg-sistema-bloco"><h3>CDN Premium</h3>' +
@@ -992,7 +1001,8 @@
 							'<div class="rpg-sistema-linha"><span>Howler</span><strong><span class="rpg-cdn-status ' + (cdnPremium.howler ? "" : "off") + '">' + (cdnPremium.howler ? "ativo" : "off") + '</span></strong></div>' +
 							'<div class="rpg-sistema-linha"><span>Tippy</span><strong><span class="rpg-cdn-status ' + (cdnPremium.tippy ? "" : "off") + '">' + (cdnPremium.tippy ? "ativo" : "off") + '</span></strong></div>' +
 							'<div class="rpg-sistema-linha"><span>Tilt 3D</span><strong><span class="rpg-cdn-status ' + (cdnPremium.tilt ? "" : "off") + '">' + (cdnPremium.tilt ? "ativo" : "off") + '</span></strong></div>' +
-						'<div class="rpg-sistema-acoes"><button class="principal" type="button" data-sistema-cinematico>Cena lendária</button><button type="button" data-sistema-cdn-reload>Recarregar CDN</button></div>' +
+							'<div class="rpg-sistema-linha"><span>Three.js</span><strong><span class="rpg-cdn-status ' + (cdnPremium.three ? "" : "off") + '">' + (cdnPremium.three ? "ativo" : "off") + '</span></strong></div>' +
+							'<div class="rpg-sistema-acoes"><button class="principal" type="button" data-sistema-cinematico>Cena lendária</button><button type="button" data-sistema-cdn-reload>Recarregar CDN</button></div>' +
 					'</section>' +
 					'<section class="rpg-sistema-bloco"><h3>Áudio</h3>' +
 						'<label class="rpg-sistema-range">Música <input type="range" min="0" max="100" value="' + (volumeMusica === null ? 50 : Number(volumeMusica)) + '" data-sistema-musica></label>' +
@@ -1194,6 +1204,158 @@
 		animar();
 	}
 
+	function instalarModelo3DLobby() {
+		var palco = document.getElementById("modelo-3d-lobby");
+		if (!palco || palco.dataset.modeloAtivo === "sim") return;
+		if (!window.THREE) {
+			if (!palco.dataset.modeloAguardando) {
+				palco.dataset.modeloAguardando = "sim";
+				setTimeout(function () {
+					if (window.THREE) instalarModelo3DLobby();
+					else instalarModelo3DFallback(palco);
+				}, 2200);
+			}
+			return;
+		}
+
+		var personagemAtual = ultimoPersonagem() || {};
+		var raca = String(personagemAtual.raca || "").toLowerCase();
+		var corEnergia = raca.includes("lunarian") ? 0xff4128 : raca.includes("mink") ? 0x90ff00 : raca.includes("peixe") ? 0x36e0ff : 0xffe28a;
+		var THREE = window.THREE;
+		var cena = new THREE.Scene();
+		var camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+		camera.position.set(0, 1.35, 6.2);
+
+		var renderer;
+		try {
+			renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+		} catch (erro) {
+			console.info("Modelo 3D indisponivel.", erro);
+			instalarModelo3DFallback(palco);
+			return;
+		}
+		palco.dataset.modeloAtivo = "sim";
+		palco.closest(".personagem-palco")?.classList.add("modelo-ativo");
+		renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.8));
+		renderer.setClearColor(0x000000, 0);
+		palco.innerHTML = "";
+		palco.appendChild(renderer.domElement);
+
+		cena.add(new THREE.AmbientLight(0x86e8ff, 1.2));
+		var luzPrincipal = new THREE.DirectionalLight(0xffe28a, 2.8);
+		luzPrincipal.position.set(3, 5, 4);
+		cena.add(luzPrincipal);
+		var luzRim = new THREE.PointLight(corEnergia, 3.6, 9);
+		luzRim.position.set(-2.8, 1.4, 2.2);
+		cena.add(luzRim);
+
+		var grupo = new THREE.Group();
+		grupo.position.y = -0.28;
+		cena.add(grupo);
+
+		function material(cor, emissivo, brilho) {
+			return new THREE.MeshStandardMaterial({
+				color: cor,
+				emissive: emissivo || 0x000000,
+				emissiveIntensity: brilho || 0,
+				metalness: 0.28,
+				roughness: 0.42
+			});
+		}
+
+		var pele = material(0xf2a36b, 0x2a0b04, 0.12);
+		var roupa = material(0xb71918, 0x420606, 0.18);
+		var calca = material(0x226a9a, 0x06182a, 0.12);
+		var dourado = material(0xffd35d, 0x5a3400, 0.2);
+		var energia = material(corEnergia, corEnergia, 0.55);
+
+		var corpo = new THREE.Mesh(new THREE.CapsuleGeometry(0.55, 1.2, 8, 18), roupa);
+		corpo.position.y = 0.7;
+		corpo.rotation.z = -0.08;
+		grupo.add(corpo);
+
+		var cabeca = new THREE.Mesh(new THREE.SphereGeometry(0.42, 26, 18), pele);
+		cabeca.position.y = 1.75;
+		grupo.add(cabeca);
+
+		var chapeu = new THREE.Group();
+		var aba = new THREE.Mesh(new THREE.CylinderGeometry(0.72, 0.72, 0.06, 36), dourado);
+		aba.position.y = 2.08;
+		var copa = new THREE.Mesh(new THREE.CylinderGeometry(0.39, 0.43, 0.24, 28), dourado);
+		copa.position.y = 2.22;
+		chapeu.add(aba, copa);
+		chapeu.rotation.z = -0.08;
+		grupo.add(chapeu);
+
+		[
+			[-0.72, 0.82, 0.18],
+			[0.72, 0.82, -0.18],
+			[-0.28, -0.22, -0.16],
+			[0.28, -0.22, 0.16]
+		].forEach(function (dados, indice) {
+			var membro = new THREE.Mesh(new THREE.CapsuleGeometry(0.13, indice < 2 ? 0.92 : 1.08, 6, 14), indice < 2 ? pele : calca);
+			membro.position.set(dados[0], dados[1], dados[2]);
+			membro.rotation.z = indice % 2 ? -0.62 : 0.62;
+			grupo.add(membro);
+		});
+
+		var aura = new THREE.Mesh(new THREE.TorusGeometry(1.42, 0.015, 8, 90), energia);
+		aura.position.y = 0.86;
+		aura.rotation.x = Math.PI / 2.35;
+		grupo.add(aura);
+
+		var aro = new THREE.Mesh(new THREE.TorusGeometry(2.08, 0.01, 8, 110), energia);
+		aro.rotation.x = Math.PI / 2;
+		aro.position.y = 0.02;
+		grupo.add(aro);
+
+		var particulas = new THREE.Group();
+		for (var i = 0; i < 34; i += 1) {
+			var p = new THREE.Mesh(new THREE.SphereGeometry(0.025 + Math.random() * 0.035, 10, 8), energia);
+			var angulo = Math.random() * Math.PI * 2;
+			var raio = 1.1 + Math.random() * 1.6;
+			p.position.set(Math.cos(angulo) * raio, -0.3 + Math.random() * 2.7, Math.sin(angulo) * raio * 0.4);
+			particulas.add(p);
+		}
+		grupo.add(particulas);
+
+		function redimensionar() {
+			var caixa = palco.getBoundingClientRect();
+			var largura = Math.max(240, caixa.width || 480);
+			var altura = Math.max(260, caixa.height || 520);
+			renderer.setSize(largura, altura, false);
+			camera.aspect = largura / altura;
+			camera.updateProjectionMatrix();
+		}
+
+		function animar() {
+			var t = performance.now() * 0.001;
+			grupo.rotation.y = Math.sin(t * 0.58) * 0.22;
+			grupo.position.y = -0.26 + Math.sin(t * 1.4) * 0.05;
+			aura.rotation.z = t * 0.85;
+			aro.rotation.z = -t * 0.45;
+			particulas.rotation.y = t * 0.38;
+			renderer.render(cena, camera);
+			requestAnimationFrame(animar);
+		}
+
+		window.addEventListener("resize", redimensionar);
+		redimensionar();
+		animar();
+	}
+
+	function instalarModelo3DFallback(palco) {
+		if (!palco || palco.dataset.modeloAtivo === "sim") return;
+		palco.dataset.modeloAtivo = "sim";
+		palco.closest(".personagem-palco")?.classList.add("modelo-ativo");
+		palco.innerHTML =
+			'<div class="modelo-3d-fallback" aria-hidden="true">' +
+				'<div class="modelo-3d-fallback-persona">' +
+					'<span class="aura"></span><span class="chapeu"></span><span class="cabeca"></span><span class="corpo"></span><span class="pernas"></span>' +
+				'</div>' +
+			'</div>';
+	}
+
 	function premioBetaDisponivel() {
 		var umDia = 24 * 60 * 60 * 1000;
 		var inicioChave = "rpg_beta_inicio";
@@ -1337,6 +1499,7 @@
 		setTimeout(abrirLoginDiarioBeta, 450);
 		setTimeout(instalarPasseLobby, 820);
 		setTimeout(instalarPatchNotes, 1100);
+		setTimeout(instalarModelo3DLobby, 1400);
 		iniciarAudio();
 		setTimeout(instalarObjetivosLobby, 900);
 		setTimeout(corrigirDownloadNoMenu, 300);

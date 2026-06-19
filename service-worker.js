@@ -1,4 +1,4 @@
-const CACHE_NAME = "one-piece-rpg-app-v19";
+const CACHE_NAME = "one-piece-rpg-app-v20";
 const CACHE_PREFIX = "one-piece-rpg-app-";
 
 const APP_SHELL = [
@@ -40,6 +40,7 @@ const APP_SHELL = [
   "./assets/img/app-logo-source.jpeg",
   "./assets/img/app-logo-192.png",
   "./assets/img/app-logo-512.png",
+  "./assets/img/loading/luffy-loader.gif",
   "./favicon.ico",
   "./assets/img/menu-lobby.jpeg",
   "./assets/img/botao-entrar-aventura.jpeg",
