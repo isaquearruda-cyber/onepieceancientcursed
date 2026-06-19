@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lobby - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game5">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game6">
     <style>
         html,
         body {
@@ -18,16 +18,20 @@
             overflow-x: hidden;
         }
 
-        .container-lobby {
-            min-height: 100vh;
-            display: grid;
-            grid-template-columns: minmax(270px, 0.9fr) minmax(320px, 1.2fr) minmax(280px, 0.95fr);
-            gap: 20px;
-            align-items: stretch;
-            padding: clamp(18px, 3vw, 42px);
-            position: relative;
-            z-index: 2;
-        }
+	        .container-lobby {
+	            height: 100svh;
+	            display: grid;
+	            grid-template-columns: minmax(270px, 0.9fr) minmax(320px, 1.2fr) minmax(280px, 0.95fr);
+	            gap: 20px;
+	            align-items: stretch;
+	            padding: clamp(18px, 3vw, 42px);
+	            padding-bottom: 92px;
+	            position: relative;
+	            z-index: 2;
+	            overflow-y: auto;
+	            overflow-x: hidden;
+	            scrollbar-color: rgba(255, 226, 138, 0.72) rgba(0, 0, 0, 0.32);
+	        }
 
         .painel-lobby {
             display: flex;
@@ -505,10 +509,14 @@
             font-size: 2rem;
         }
 
-        .menu-lobby-recolhivel {
-            display: grid;
-            gap: 10px;
-        }
+	        .menu-lobby-recolhivel {
+	            display: grid;
+	            gap: 10px;
+	        }
+
+	        .menu-lobby-recolhivel.recolhido .grade-menu-lobby {
+	            display: none !important;
+	        }
 
         .botao-menu-lobby {
             display: grid;
@@ -557,8 +565,8 @@
             transform: rotate(180deg);
         }
 
-        .grade-menu-lobby {
-            display: none;
+	        .grade-menu-lobby {
+	            display: none;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
             padding: 10px;
@@ -571,9 +579,41 @@
             overflow: hidden;
         }
 
-        .menu-lobby-recolhivel.aberto .grade-menu-lobby {
-            display: grid;
-        }
+	        .menu-lobby-recolhivel.aberto .grade-menu-lobby {
+	            display: grid;
+	        }
+
+	        .lobby-scroll-dock {
+	            position: fixed;
+	            right: 72px;
+	            bottom: 16px;
+	            z-index: 4450;
+	            display: grid;
+	            grid-template-columns: 36px 36px;
+	            gap: 6px;
+	            padding: 6px;
+	            border: 1px solid rgba(255, 226, 138, 0.24);
+	            border-radius: 8px;
+	            background: rgba(3, 8, 10, 0.78);
+	            box-shadow: 0 16px 42px rgba(0, 0, 0, 0.42);
+	            backdrop-filter: blur(8px);
+	        }
+
+	        .lobby-scroll-dock button {
+	            width: 36px;
+	            height: 36px;
+	            border: 1px solid rgba(255, 226, 138, 0.28);
+	            border-radius: 8px;
+	            background: rgba(255, 247, 223, 0.06);
+	            color: #ffe28a;
+	            font-weight: 1000;
+	            cursor: pointer;
+	        }
+
+	        .lobby-scroll-dock button:hover {
+	            border-color: #ffe28a;
+	            background: rgba(247, 200, 75, 0.16);
+	        }
 
         .atalho-menu-lobby {
             display: grid;
@@ -3465,7 +3505,7 @@
                     </button>
                 </div>
 
-                <div class="menu-lobby-recolhivel" id="menu-ajustes-recolhivel">
+	                <div class="menu-lobby-recolhivel recolhido" id="menu-ajustes-recolhivel">
                     <button class="botao-menu-lobby" id="botao-menu-ajustes" type="button" aria-expanded="false">
                         <img src="assets/img/menu-game/ajustes.webp" alt="">
                         <span>Ajustes</span>
@@ -3489,7 +3529,7 @@
                 </div>
                 <input class="input-imagem-personagem" id="input-imagem-personagem" type="file" accept="image/*">
 
-                <div class="menu-lobby-recolhivel" id="menu-lobby-recolhivel">
+	                <div class="menu-lobby-recolhivel recolhido" id="menu-lobby-recolhivel">
                     <button class="botao-menu-lobby" id="botao-menu-lobby" type="button" aria-expanded="false">
                         <img src="assets/img/menu-lobby.jpeg" alt="">
                         <span>Menu</span>
@@ -3554,10 +3594,15 @@
             <div class="grupo-comandos">
                 <button class="botao-lobby botao-voltar-inicio" id="botao-sair-lobby" type="button">← Voltar ao Início</button>
             </div>
-        </section>
-    </main>
+	        </section>
+	    </main>
 
-    <!-- ==================== MODAIS ====================-->
+	    <div class="lobby-scroll-dock" aria-label="Rolagem do lobby">
+	        <button id="lobby-scroll-up" type="button" title="Subir">↑</button>
+	        <button id="lobby-scroll-down" type="button" title="Descer">↓</button>
+	    </div>
+
+	    <!-- ==================== MODAIS ====================-->
     <div class="modal-overlay" id="modal-registros">
         <div class="modal-conteudo">
             <div class="modal-cabecalho">
@@ -3769,8 +3814,8 @@
 
     <script src="supabase-config.js"></script>
     <script src="banco-personagens.js?v=20260619-db2"></script>
-    <script src="musica-fundo.js?v=20260619-game5"></script>
-    <script src="rpg-sistemas.js?v=20260619-rpg8"></script>
+    <script src="musica-fundo.js?v=20260619-game6"></script>
+    <script src="rpg-sistemas.js?v=20260619-rpg9"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
 
@@ -4452,11 +4497,18 @@
             }
         }
 
-        function alternarMenuRecolhivel(menu, botao) {
-            const abriu = !menu.classList.contains("aberto");
-            menu.classList.toggle("aberto", abriu);
-            botao.setAttribute("aria-expanded", String(abriu));
-        }
+	        function alternarMenuRecolhivel(menu, botao) {
+	            const abriu = !menu.classList.contains("aberto");
+	            menu.classList.toggle("aberto", abriu);
+	            menu.classList.toggle("recolhido", !abriu);
+	            botao.setAttribute("aria-expanded", String(abriu));
+	        }
+
+	        function rolarLobby(direcao) {
+	            const alvo = document.querySelector(".container-lobby");
+	            if (!alvo) return;
+	            alvo.scrollBy({ top: direcao * Math.max(260, window.innerHeight * 0.58), behavior: "smooth" });
+	        }
 
         function precisaModoHorizontal() {
             return window.matchMedia("(max-width: 900px)").matches && window.matchMedia("(orientation: portrait)").matches;
@@ -4540,8 +4592,10 @@
             const arquivo = inputImagemPersonagem.files?.[0];
             if (arquivo) salvarImagemPersonagem(arquivo);
         });
-        botaoRegistros.addEventListener("click", () => abrirModal("modal-registros"));
-        botaoOrientacao.addEventListener("click", () => ativarModoHorizontal(true));
+	        botaoRegistros.addEventListener("click", () => abrirModal("modal-registros"));
+	        botaoOrientacao.addEventListener("click", () => ativarModoHorizontal(true));
+	        document.getElementById("lobby-scroll-up").addEventListener("click", () => rolarLobby(-1));
+	        document.getElementById("lobby-scroll-down").addEventListener("click", () => rolarLobby(1));
 
         botaoMenuAjustes.addEventListener("click", () => alternarMenuRecolhivel(menuAjustesRecolhivel, botaoMenuAjustes));
         botaoMenuLobby.addEventListener("click", () => alternarMenuRecolhivel(menuLobbyRecolhivel, botaoMenuLobby));

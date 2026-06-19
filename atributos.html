@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atributos - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game5">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game6">
     <style>
         html,
         body {
@@ -238,15 +238,40 @@
             box-shadow: 0 0 14px var(--cor-atributo);
         }
 
-        .atributo-info small {
-            color: #d9e8d4;
-            font-size: 0.76rem;
-            line-height: 1.25;
-            overflow: hidden;
+	        .atributo-info small {
+	            color: #d9e8d4;
+	            font-size: 0.76rem;
+	            line-height: 1.25;
+	            overflow: hidden;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-        }
+	            -webkit-line-clamp: 2;
+	            -webkit-box-orient: vertical;
+	        }
+
+	        .atributo-numeros {
+	            display: grid;
+	            grid-template-columns: repeat(3, minmax(0, 1fr));
+	            gap: 6px;
+	        }
+
+	        .atributo-numeros span {
+	            min-width: 0;
+	            padding: 6px;
+	            border: 1px solid rgba(255, 247, 223, 0.1);
+	            border-radius: 8px;
+	            background: rgba(0, 0, 0, 0.26);
+	            color: #d9e8d4;
+	            font-size: 0.68rem;
+	            font-weight: 900;
+	            text-transform: uppercase;
+	        }
+
+	        .atributo-numeros b {
+	            display: block;
+	            margin-top: 2px;
+	            color: var(--cor-atributo);
+	            font-size: 0.82rem;
+	        }
 
         .radar-card {
             position: relative;
@@ -446,10 +471,57 @@
             font-size: 0.86rem;
         }
 
-        .status-personagem-atributos b {
-            color: #fff7df;
-            text-align: right;
-        }
+	        .status-personagem-atributos b {
+	            color: #fff7df;
+	            text-align: right;
+	        }
+
+	        .painel-raca-atributos {
+	            display: grid;
+	            gap: 10px;
+	            padding: 12px;
+	            border: 1px solid rgba(255, 226, 138, 0.18);
+	            border-radius: 8px;
+	            background:
+	                radial-gradient(circle at 12% 0%, rgba(255, 226, 138, 0.12), transparent 34%),
+	                rgba(0, 0, 0, 0.34);
+	        }
+
+	        .painel-raca-atributos strong {
+	            color: #ffe28a;
+	            text-transform: uppercase;
+	        }
+
+	        .painel-raca-grid {
+	            display: grid;
+	            grid-template-columns: repeat(2, minmax(0, 1fr));
+	            gap: 7px;
+	        }
+
+	        .painel-raca-grid span {
+	            padding: 7px;
+	            border: 1px solid rgba(255, 247, 223, 0.1);
+	            border-radius: 8px;
+	            background: rgba(255, 247, 223, 0.04);
+	            color: #d9e8d4;
+	            font-size: 0.72rem;
+	            font-weight: 900;
+	            text-transform: uppercase;
+	        }
+
+	        .painel-raca-grid b {
+	            display: block;
+	            margin-top: 2px;
+	            color: #fff7df;
+	            font-size: 0.9rem;
+	        }
+
+	        .painel-raca-atributos p {
+	            margin: 0;
+	            color: #d9e8d4;
+	            font-size: 0.82rem;
+	            line-height: 1.35;
+	        }
 
         @media (max-width: 1100px) {
             .atributos-shell {
@@ -541,13 +613,16 @@
 
                 <div class="atributo-destaque" id="atributo-destaque"></div>
 
-                <div class="status-personagem-atributos">
-                    <div><span>Classe</span><b id="classe-personagem">---</b></div>
-                    <div><span>Especialidade</span><b id="profissao-personagem">---</b></div>
-                    <div><span>Organização</span><b id="organizacao-personagem">---</b></div>
-                    <div><span>Saldo livre</span><b id="saldo-atributos">0</b></div>
-                </div>
-            </aside>
+	                <div class="status-personagem-atributos">
+	                    <div><span>Classe</span><b id="classe-personagem">---</b></div>
+	                    <div><span>Especialidade</span><b id="profissao-personagem">---</b></div>
+	                    <div><span>Raça</span><b id="raca-personagem">---</b></div>
+	                    <div><span>Organização</span><b id="organizacao-personagem">---</b></div>
+	                    <div><span>Saldo livre</span><b id="saldo-atributos">0</b></div>
+	                </div>
+
+	                <div class="painel-raca-atributos" id="painel-raca-atributos"></div>
+	            </aside>
         </section>
 
         <footer class="atributos-rodape">
@@ -556,8 +631,8 @@
         </footer>
     </main>
 
-    <script src="musica-fundo.js?v=20260619-game5"></script>
-    <script src="rpg-sistemas.js?v=20260619-rpg8"></script>
+    <script src="musica-fundo.js?v=20260619-game6"></script>
+    <script src="rpg-sistemas.js?v=20260619-rpg9"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
         const limiteTotalAtributos = 15000;
@@ -613,14 +688,16 @@
         const destaque = document.getElementById("atributo-destaque");
         const totalEl = document.getElementById("atributos-total");
         const avisoEl = document.getElementById("atributos-aviso");
-        const saldoEl = document.getElementById("saldo-atributos");
-        const statusEl = document.getElementById("atributos-personagem-status");
-        const nomePersonagem = document.getElementById("nome-personagem");
-        const classePersonagem = document.getElementById("classe-personagem");
-        const profissaoPersonagem = document.getElementById("profissao-personagem");
-        const organizacaoPersonagem = document.getElementById("organizacao-personagem");
-        const botaoDistribuir = document.getElementById("botao-distribuir-atributos");
-        let modoDistribuir = false;
+	        const saldoEl = document.getElementById("saldo-atributos");
+	        const statusEl = document.getElementById("atributos-personagem-status");
+	        const nomePersonagem = document.getElementById("nome-personagem");
+	        const classePersonagem = document.getElementById("classe-personagem");
+	        const profissaoPersonagem = document.getElementById("profissao-personagem");
+	        const racaPersonagem = document.getElementById("raca-personagem");
+	        const organizacaoPersonagem = document.getElementById("organizacao-personagem");
+	        const painelRaca = document.getElementById("painel-raca-atributos");
+	        const botaoDistribuir = document.getElementById("botao-distribuir-atributos");
+	        let modoDistribuir = false;
 
         function escaparHtml(texto) {
             return String(texto || "").replace(/[&<>"']/g, (caractere) => ({
@@ -658,9 +735,36 @@
             return Number(valor || 0).toLocaleString("pt-BR");
         }
 
-        function valorAtributo(atributos, chave) {
-            return Math.max(0, Number(atributos[chave] || 0));
-        }
+	        function valorAtributo(atributos, chave) {
+	            return Math.max(0, Number(atributos[chave] || 0));
+	        }
+
+	        function bonusRacialAtual() {
+	            return window.RpgSistemas?.obterBonusRacial?.(personagem?.raca) || null;
+	        }
+
+	        function bonusPorAtributo(chave) {
+	            const raca = bonusRacialAtual();
+	            if (!raca) return 0;
+	            return {
+	                forca: raca.vital,
+	                velocidade: raca.agilidade,
+	                resistencia: raca.resistencia,
+	                inteligencia: raca.mental,
+	                vontade: raca.determinacao,
+	                sorte: raca.forca
+	            }[chave] || 0;
+	        }
+
+	        function valorEfetivo(atributos, chave) {
+	            const base = valorAtributo(atributos, chave);
+	            const bonus = bonusPorAtributo(chave);
+	            return Math.max(0, Math.round(base + (base * bonus / 100)));
+	        }
+
+	        function textoPercentual(valor) {
+	            return `${valor > 0 ? "+" : ""}${formatarNumero(valor)}%`;
+	        }
 
         function selecionarAtributo(chave) {
             atributoAtivo = chave;
@@ -668,19 +772,26 @@
         }
 
         function renderizarLista(atributos) {
-            const progresso = RpgSistemas.obterProgresso(personagem);
-            listaAtributos.innerHTML = atributosConfig.map((atributo) => {
-                const valor = valorAtributo(atributos, atributo.chave);
-                const porcentagem = Math.min(100, (valor / limiteTotalAtributos) * 100);
-                return `
-                    <div class="atributo-card ${atributoAtivo === atributo.chave ? "ativo" : ""}" role="button" tabindex="0" data-atributo="${atributo.chave}" style="--cor-atributo: ${atributo.cor}; --porcentagem: ${porcentagem}%">
-                        <img src="${atributo.imagem}" alt="">
-                        <span class="atributo-info">
-                            <span class="atributo-linha">
-                                <strong>${escaparHtml(atributo.nome)}</strong>
-                                <b>${formatarNumero(valor)}</b>
-                            </span>
-                            <span class="barra-atributo"><i></i></span>
+	            const progresso = RpgSistemas.obterProgresso(personagem);
+	            listaAtributos.innerHTML = atributosConfig.map((atributo) => {
+	                const valor = valorAtributo(atributos, atributo.chave);
+	                const bonus = bonusPorAtributo(atributo.chave);
+	                const total = valorEfetivo(atributos, atributo.chave);
+	                const porcentagem = Math.min(100, (total / limiteTotalAtributos) * 100);
+	                return `
+	                    <div class="atributo-card ${atributoAtivo === atributo.chave ? "ativo" : ""}" role="button" tabindex="0" data-atributo="${atributo.chave}" style="--cor-atributo: ${atributo.cor}; --porcentagem: ${porcentagem}%">
+	                        <img src="${atributo.imagem}" alt="">
+	                        <span class="atributo-info">
+	                            <span class="atributo-linha">
+	                                <strong>${escaparHtml(atributo.nome)}</strong>
+	                                <b>${formatarNumero(total)}</b>
+	                            </span>
+	                            <span class="atributo-numeros">
+	                                <span>Base<b>${formatarNumero(valor)}</b></span>
+	                                <span>Raça<b>${textoPercentual(bonus)}</b></span>
+	                                <span>Total<b>${formatarNumero(total)}</b></span>
+	                            </span>
+	                            <span class="barra-atributo"><i></i></span>
                             <small>${escaparHtml(atributo.descricao)}</small>
                             <span class="atributo-upgrade">
                                 <small>+10 custa 1 ponto</small>
@@ -713,8 +824,8 @@
             const raio = 166;
             const aneis = [0.25, 0.5, 0.75, 1];
             const pontos = atributosConfig.map((atributo, indice) => {
-                const angulo = (-90 + (360 / atributosConfig.length) * indice) * Math.PI / 180;
-                const valor = valorAtributo(atributos, atributo.chave);
+	                const angulo = (-90 + (360 / atributosConfig.length) * indice) * Math.PI / 180;
+	                const valor = valorEfetivo(atributos, atributo.chave);
                 const distancia = Math.min(valor / limiteTotalAtributos, 1) * raio;
                 return {
                     ...atributo,
@@ -754,18 +865,21 @@
         }
 
         function renderizarDestaque(atributos) {
-            const atributo = atributosConfig.find((item) => item.chave === atributoAtivo) || atributosConfig[0];
-            const valor = valorAtributo(atributos, atributo.chave);
-            destaque.style.setProperty("--cor-ativo", atributo.cor);
-            destaque.innerHTML = `
-                <img src="${atributo.imagem}" alt="">
-                <h2>${escaparHtml(atributo.nome)}</h2>
-                <p><strong style="color: ${atributo.cor}">${formatarNumero(valor)} pontos</strong></p>
-                <p>${escaparHtml(atributo.descricao)}</p>
-            `;
-        }
+	            const atributo = atributosConfig.find((item) => item.chave === atributoAtivo) || atributosConfig[0];
+	            const valor = valorAtributo(atributos, atributo.chave);
+	            const bonus = bonusPorAtributo(atributo.chave);
+	            const total = valorEfetivo(atributos, atributo.chave);
+	            destaque.style.setProperty("--cor-ativo", atributo.cor);
+	            destaque.innerHTML = `
+	                <img src="${atributo.imagem}" alt="">
+	                <h2>${escaparHtml(atributo.nome)}</h2>
+	                <p><strong style="color: ${atributo.cor}">${formatarNumero(total)} efetivo</strong></p>
+	                <p>Base ${formatarNumero(valor)} + bônus racial ${textoPercentual(bonus)}</p>
+	                <p>${escaparHtml(atributo.descricao)}</p>
+	            `;
+	        }
 
-        function renderizarPerfil(total) {
+	        function renderizarPerfil(total) {
             if (!personagem) {
                 statusEl.textContent = "Nenhum personagem ativo";
                 nomePersonagem.textContent = "Sem personagem";
@@ -773,20 +887,38 @@
             }
 
             statusEl.textContent = `${personagem.classe || "Classe"} / ${personagem.profissao || "Especialidade"}`;
-            nomePersonagem.textContent = personagem.nome || "Personagem";
-            classePersonagem.textContent = personagem.classe || "---";
-            profissaoPersonagem.textContent = personagem.profissao || "---";
-            organizacaoPersonagem.textContent = obterOrganizacao();
-            const progresso = RpgSistemas.obterProgresso(personagem);
-            saldoEl.textContent = `${formatarNumero(progresso.pontosAtributo)} pts livres`;
-        }
+	            nomePersonagem.textContent = personagem.nome || "Personagem";
+	            classePersonagem.textContent = personagem.classe || "---";
+	            profissaoPersonagem.textContent = personagem.profissao || "---";
+	            racaPersonagem.textContent = personagem.raca || "---";
+	            organizacaoPersonagem.textContent = obterOrganizacao();
+	            const progresso = RpgSistemas.obterProgresso(personagem);
+	            saldoEl.textContent = `${formatarNumero(progresso.pontosAtributo)} pts livres`;
+	            const raca = bonusRacialAtual();
+	            if (!raca) {
+	                painelRaca.innerHTML = `<strong>Raça sem ficha</strong><p>Cadastre a raça igual ao sistema para exibir porcentagens e bônus raciais.</p>`;
+	                return;
+	            }
+	            painelRaca.innerHTML = `
+	                <strong>${escaparHtml(raca.nome)}</strong>
+	                <div class="painel-raca-grid">
+	                    <span>Força Vital<b>${textoPercentual(raca.vital)}</b></span>
+	                    <span>Força Mental<b>${textoPercentual(raca.mental)}</b></span>
+	                    <span>Agilidade<b>${textoPercentual(raca.agilidade)}</b></span>
+	                    <span>Resistência<b>${textoPercentual(raca.resistencia)}</b></span>
+	                    <span>Força<b>${textoPercentual(raca.forca)}</b></span>
+	                    <span>Determinação<b>${textoPercentual(raca.determinacao)}</b></span>
+	                </div>
+	                <p><b>Q.I:</b> ${escaparHtml(raca.qi)}. ${escaparHtml(raca.bonus)}</p>
+	            `;
+	        }
 
         function adicionarPontoAtributo(chave) {
             if (!personagem) return;
             const progresso = RpgSistemas.obterProgresso(personagem);
             if (progresso.pontosAtributo <= 0) return;
             const atributos = obterAtributos();
-            const total = atributosConfig.reduce((soma, atributo) => soma + valorAtributo(atributos, atributo.chave), 0);
+	            const total = atributosConfig.reduce((soma, atributo) => soma + valorEfetivo(atributos, atributo.chave), 0);
             if (total + 10 > limiteTotalAtributos) return;
             atributos[chave] = valorAtributo(atributos, chave) + 10;
             progresso.pontosAtributo -= 1;

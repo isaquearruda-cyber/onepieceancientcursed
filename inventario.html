@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventário - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game5">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game6">
     <style>
         html,
         body {
@@ -156,12 +156,59 @@
             outline: none;
         }
 
-        .inventario-status {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 14px;
-            align-items: center;
-        }
+	        .inventario-status {
+	            display: grid;
+	            grid-template-columns: 1fr auto;
+	            gap: 14px;
+	            align-items: center;
+	        }
+
+	        .inventario-metricas {
+	            display: grid;
+	            grid-template-columns: repeat(4, minmax(0, 1fr));
+	            gap: 8px;
+	        }
+
+	        .inventario-metrica {
+	            min-width: 0;
+	            padding: 9px;
+	            border: 1px solid rgba(255, 247, 223, 0.1);
+	            border-radius: 8px;
+	            background: rgba(0, 0, 0, 0.28);
+	        }
+
+	        .inventario-metrica span {
+	            display: block;
+	            color: #d9e8d4;
+	            font-size: 0.68rem;
+	            font-weight: 900;
+	            text-transform: uppercase;
+	        }
+
+	        .inventario-metrica b {
+	            display: block;
+	            margin-top: 3px;
+	            color: #fff7df;
+	            font-size: 1rem;
+	        }
+
+	        .inventario-capacidade {
+	            grid-column: 1 / -1;
+	            height: 9px;
+	            border: 1px solid rgba(255, 247, 223, 0.12);
+	            border-radius: 999px;
+	            background: rgba(0, 0, 0, 0.42);
+	            overflow: hidden;
+	        }
+
+	        .inventario-capacidade i {
+	            display: block;
+	            width: var(--capacidade, 0%);
+	            height: 100%;
+	            border-radius: inherit;
+	            background: linear-gradient(90deg, #36e0ff, #90ff00, #ffe28a);
+	            box-shadow: 0 0 16px rgba(144, 255, 0, 0.42);
+	        }
 
         .inventario-status strong {
             display: block;
@@ -176,10 +223,27 @@
             font-size: 0.92rem;
         }
 
-        .inventario-acoes {
-            display: flex;
-            gap: 8px;
-        }
+	        .inventario-acoes {
+	            display: flex;
+	            gap: 8px;
+	        }
+
+	        .inventario-filtros {
+	            display: grid;
+	            grid-template-columns: minmax(180px, 1fr) 150px 150px;
+	            gap: 9px;
+	        }
+
+	        .inventario-filtros input,
+	        .inventario-filtros select {
+	            min-height: 40px;
+	            border: 1px solid rgba(255, 247, 223, 0.12);
+	            border-radius: 8px;
+	            padding: 9px 11px;
+	            color: #fff7df;
+	            background: rgba(2, 5, 5, 0.72);
+	            font-weight: 800;
+	        }
 
         .inventario-acao {
             min-height: 40px;
@@ -359,10 +423,34 @@
             pointer-events: none;
         }
 
-        .slot-jogo:hover {
-            border-color: var(--cor-item, #ffe28a);
-            box-shadow: inset 0 1px 0 rgba(255, 247, 223, 0.08), 0 0 0 2px color-mix(in srgb, var(--cor-item, #f7c84b) 26%, transparent);
-        }
+	        .slot-jogo:hover {
+	            border-color: var(--cor-item, #ffe28a);
+	            box-shadow: inset 0 1px 0 rgba(255, 247, 223, 0.08), 0 0 0 2px color-mix(in srgb, var(--cor-item, #f7c84b) 26%, transparent);
+	        }
+
+	        .slot-jogo[data-raridade="Raro"],
+	        .slot-jogo[data-raridade="Épico"],
+	        .slot-jogo[data-raridade="Lendário"] {
+	            box-shadow: inset 0 1px 0 rgba(255, 247, 223, 0.08), 0 0 24px color-mix(in srgb, var(--cor-raridade, #ffe28a) 22%, transparent);
+	        }
+
+	        .slot-raridade {
+	            position: absolute;
+	            left: 7px;
+	            top: 7px;
+	            max-width: calc(100% - 42px);
+	            padding: 3px 6px;
+	            border: 1px solid color-mix(in srgb, var(--cor-raridade, #ffe28a) 55%, transparent);
+	            border-radius: 999px;
+	            background: rgba(0, 0, 0, 0.38);
+	            color: var(--cor-raridade, #ffe28a);
+	            font-size: 0.58rem;
+	            font-weight: 1000;
+	            text-transform: uppercase;
+	            overflow: hidden;
+	            text-overflow: ellipsis;
+	            white-space: nowrap;
+	        }
 
         .slot-qtd {
             position: absolute;
@@ -543,12 +631,30 @@
             margin-bottom: 7px;
         }
 
-        .detalhe-item p {
-            margin: 0;
-            color: #d9e8d4;
-            font-size: 0.88rem;
-            line-height: 1.38;
-        }
+	        .detalhe-item p {
+	            margin: 0;
+	            color: #d9e8d4;
+	            font-size: 0.88rem;
+	            line-height: 1.38;
+	        }
+
+	        .detalhe-meta {
+	            display: flex;
+	            flex-wrap: wrap;
+	            gap: 7px;
+	            margin: 10px 0;
+	        }
+
+	        .detalhe-meta span {
+	            padding: 5px 8px;
+	            border: 1px solid rgba(255, 247, 223, 0.12);
+	            border-radius: 999px;
+	            background: rgba(0, 0, 0, 0.28);
+	            color: #d9e8d4;
+	            font-size: 0.72rem;
+	            font-weight: 900;
+	            text-transform: uppercase;
+	        }
 
         .detalhe-item-cabecalho {
             display: grid;
@@ -591,12 +697,12 @@
             display: grid;
         }
 
-        .form-adicionar-inventario {
-            display: grid;
-            grid-template-columns: minmax(150px, 1fr) minmax(150px, 0.9fr) 100px minmax(220px, 1.4fr) auto auto;
-            gap: 10px;
-            align-items: end;
-        }
+	        .form-adicionar-inventario {
+	            display: grid;
+	            grid-template-columns: minmax(150px, 1fr) minmax(150px, 0.9fr) minmax(130px, 0.7fr) 100px minmax(220px, 1.4fr) auto auto;
+	            gap: 10px;
+	            align-items: end;
+	        }
 
         .form-adicionar-inventario label {
             display: grid;
@@ -677,10 +783,15 @@
                 grid-template-columns: 1fr;
             }
 
-            .inventario-status {
-                grid-template-columns: 1fr;
-            }
-        }
+	            .inventario-status {
+	                grid-template-columns: 1fr;
+	            }
+
+	            .inventario-filtros,
+	            .inventario-metricas {
+	                grid-template-columns: 1fr;
+	            }
+	        }
 
         @media (max-width: 560px) {
             .inventario-topo,
@@ -723,13 +834,23 @@
                     Item
                     <input id="input-item-nome" type="text" placeholder="Espada, fruta, mapa...">
                 </label>
-                <label>
-                    Categoria
-                    <select id="input-item-tipo"></select>
-                </label>
-                <label>
-                    Qtd.
-                    <input id="input-item-quantidade" type="number" min="1" value="1">
+	                <label>
+	                    Categoria
+	                    <select id="input-item-tipo"></select>
+	                </label>
+	                <label>
+	                    Raridade
+	                    <select id="input-item-raridade">
+	                        <option>Comum</option>
+	                        <option>Incomum</option>
+	                        <option>Raro</option>
+	                        <option>Épico</option>
+	                        <option>Lendário</option>
+	                    </select>
+	                </label>
+	                <label>
+	                    Qtd.
+	                    <input id="input-item-quantidade" type="number" min="1" value="1">
                 </label>
                 <label>
                     Descrição
@@ -753,16 +874,36 @@
                     <button type="button" data-categoria="documentos" title="Documentos"><span class="icone-sprite" style="--icone-tamanho:30px;--sprite-x:100%;--sprite-y:50%"></span></button>
                 </nav>
 
-                <div class="inventario-status">
-                    <div>
-                        <strong id="inventario-titulo">Todos os itens</strong>
-                        <span id="inventario-resumo">0 itens no inventário</span>
-                    </div>
+	                <div class="inventario-status">
+	                    <div>
+	                        <strong id="inventario-titulo">Todos os itens</strong>
+	                        <span id="inventario-resumo">0 itens no inventário</span>
+	                    </div>
                     <div class="inventario-acoes">
                         <button class="inventario-acao" id="alternar-adicionar" type="button">Adicionar</button>
-                        <button class="inventario-acao" id="alternar-historico" type="button">Histórico</button>
-                    </div>
-                </div>
+	                        <button class="inventario-acao" id="alternar-historico" type="button">Histórico</button>
+	                    </div>
+	                </div>
+
+	                <div class="inventario-metricas" id="inventario-metricas" aria-label="Resumo do inventário"></div>
+
+	                <div class="inventario-filtros" aria-label="Filtros do inventário">
+	                    <input id="inventario-busca" type="search" placeholder="Buscar item, descrição ou categoria">
+	                    <select id="inventario-raridade">
+	                        <option value="todas">Todas raridades</option>
+	                        <option value="Comum">Comum</option>
+	                        <option value="Incomum">Incomum</option>
+	                        <option value="Raro">Raro</option>
+	                        <option value="Épico">Épico</option>
+	                        <option value="Lendário">Lendário</option>
+	                    </select>
+	                    <select id="inventario-ordem">
+	                        <option value="raridade">Raridade</option>
+	                        <option value="nome">Nome</option>
+	                        <option value="quantidade">Quantidade</option>
+	                        <option value="recente">Mais recente</option>
+	                    </select>
+	                </div>
 
                 <div class="inventario-corpo">
                     <div class="categorias-recolhiveis" id="categorias-recolhiveis">
@@ -803,14 +944,25 @@
         </footer>
     </main>
 
-    <script src="musica-fundo.js?v=20260619-game5"></script>
-    <script src="rpg-sistemas.js?v=20260619-rpg8"></script>
+    <script src="musica-fundo.js?v=20260619-game6"></script>
+    <script src="rpg-sistemas.js?v=20260619-rpg9"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
         const categoriaInicial = new URLSearchParams(window.location.search).get("categoria") || "todos";
-        let categoriaAtiva = categoriaInicial;
-        let categoriasRecolhidas = false;
-        const slotsMinimos = 36;
+	        let categoriaAtiva = categoriaInicial;
+	        let categoriasRecolhidas = false;
+	        let termoBusca = "";
+	        let raridadeAtiva = "todas";
+	        let ordemInventario = "raridade";
+	        const slotsMinimos = 36;
+	        const capacidadeMaxima = 120;
+	        const raridadesInventario = {
+	            "Comum": { peso: 1, cor: "#d9e8d4" },
+	            "Incomum": { peso: 2, cor: "#64d6a4" },
+	            "Raro": { peso: 3, cor: "#49d2ff" },
+	            "Épico": { peso: 4, cor: "#b27cff" },
+	            "Lendário": { peso: 5, cor: "#ffcf3e" }
+	        };
 
         const categoriasInventario = [
             { chave: "todos", nome: "Todos", sprite: [0, 0], cor: "#f7c84b" },
@@ -843,13 +995,18 @@
         const tituloEl = document.getElementById("inventario-titulo");
         const resumoEl = document.getElementById("inventario-resumo");
         const rodapeResumo = document.getElementById("inventario-rodape-resumo");
-        const detalheItem = document.getElementById("detalhe-item");
-        const painelAdicionar = document.getElementById("painel-adicionar");
-        const historicoInventario = document.getElementById("historico-inventario");
-        const formAdicionar = document.getElementById("form-adicionar-inventario");
-        const inputNome = document.getElementById("input-item-nome");
-        const inputTipo = document.getElementById("input-item-tipo");
-        const inputQuantidade = document.getElementById("input-item-quantidade");
+	        const detalheItem = document.getElementById("detalhe-item");
+	        const metricasInventario = document.getElementById("inventario-metricas");
+	        const buscaInventario = document.getElementById("inventario-busca");
+	        const filtroRaridade = document.getElementById("inventario-raridade");
+	        const ordemSelect = document.getElementById("inventario-ordem");
+	        const painelAdicionar = document.getElementById("painel-adicionar");
+	        const historicoInventario = document.getElementById("historico-inventario");
+	        const formAdicionar = document.getElementById("form-adicionar-inventario");
+	        const inputNome = document.getElementById("input-item-nome");
+	        const inputTipo = document.getElementById("input-item-tipo");
+	        const inputRaridade = document.getElementById("input-item-raridade");
+	        const inputQuantidade = document.getElementById("input-item-quantidade");
         const inputDescricao = document.getElementById("input-item-descricao");
         const categoriasRecolhiveis = document.getElementById("categorias-recolhiveis");
         const alternarCategorias = document.getElementById("alternar-categorias");
@@ -880,9 +1037,21 @@
             localStorage.setItem(chaveInventario(), JSON.stringify(itens));
         }
 
-        function obterCategoria(chave) {
-            return categoriasInventario.find((categoria) => categoria.chave === chave) || categoriasInventario[0];
-        }
+	        function obterCategoria(chave) {
+	            return categoriasInventario.find((categoria) => categoria.chave === chave) || categoriasInventario[0];
+	        }
+
+	        function raridadeDe(item) {
+	            return raridadesInventario[item?.raridade] ? item.raridade : "Comum";
+	        }
+
+	        function corRaridade(item) {
+	            return raridadesInventario[raridadeDe(item)].cor;
+	        }
+
+	        function pesoRaridade(item) {
+	            return raridadesInventario[raridadeDe(item)].peso;
+	        }
 
         function obterSprite(itemOuCategoria) {
             const sprite = itemOuCategoria?.sprite || obterCategoria(itemOuCategoria?.tipo || itemOuCategoria?.chave).sprite || [0, 0];
@@ -948,7 +1117,7 @@
             renderizarInventario();
         }
 
-        function mostrarDetalhe(item) {
+	        function mostrarDetalhe(item) {
             if (!item) {
                 detalheItem.innerHTML = `
                     <strong>Selecione um item</strong>
@@ -957,18 +1126,58 @@
                 return;
             }
 
-            const categoria = obterCategoria(item.tipo);
-            detalheItem.innerHTML = `
-                <div class="detalhe-item-cabecalho">
-                    ${iconeSprite(item, "52px")}
-                    <div>
-                        <strong>${escaparHtml(item.nome)}</strong>
-                        <span>${escaparHtml(categoria.nome)} / x${escaparHtml(item.quantidade)}</span>
-                    </div>
-                </div>
-                <p>${escaparHtml(item.descricao || "Sem descrição registrada.")}</p>
-            `;
-        }
+	            const categoria = obterCategoria(item.tipo);
+	            const raridade = raridadeDe(item);
+	            detalheItem.innerHTML = `
+	                <div class="detalhe-item-cabecalho">
+	                    ${iconeSprite(item, "52px")}
+	                    <div>
+	                        <strong>${escaparHtml(item.nome)}</strong>
+	                        <span>${escaparHtml(categoria.nome)} / x${escaparHtml(item.quantidade)}</span>
+	                    </div>
+	                </div>
+	                <div class="detalhe-meta">
+	                    <span style="color:${corRaridade(item)}">${escaparHtml(raridade)}</span>
+	                    <span>${escaparHtml(categoria.nome)}</span>
+	                    <span>${escaparHtml(item.adicionadoEm || "Sem data")}</span>
+	                </div>
+	                <p>${escaparHtml(item.descricao || "Sem descrição registrada.")}</p>
+	            `;
+	        }
+
+	        function filtrarOrdenar(inventario) {
+	            const termo = termoBusca.trim().toLowerCase();
+	            return inventario
+	                .filter((item) => categoriaAtiva === "todos" || item.tipo === categoriaAtiva)
+	                .filter((item) => raridadeAtiva === "todas" || raridadeDe(item) === raridadeAtiva)
+	                .filter((item) => {
+	                    if (!termo) return true;
+	                    const categoria = obterCategoria(item.tipo).nome;
+	                    return [item.nome, item.descricao, categoria, raridadeDe(item)].join(" ").toLowerCase().includes(termo);
+	                })
+	                .sort((a, b) => {
+	                    if (ordemInventario === "nome") return String(a.nome || "").localeCompare(String(b.nome || ""), "pt-BR");
+	                    if (ordemInventario === "quantidade") return Number(b.quantidade || 0) - Number(a.quantidade || 0);
+	                    if (ordemInventario === "recente") return Number(b.id || 0) - Number(a.id || 0);
+	                    return pesoRaridade(b) - pesoRaridade(a) || String(a.nome || "").localeCompare(String(b.nome || ""), "pt-BR");
+	                });
+	        }
+
+	        function renderizarMetricas(inventario) {
+	            const totalItens = inventario.reduce((soma, item) => soma + Math.max(1, Number(item.quantidade || 1)), 0);
+	            const lendarios = inventario.filter((item) => raridadeDe(item) === "Lendário").length;
+	            const epicos = inventario.filter((item) => raridadeDe(item) === "Épico").length;
+	            const categoriasUsadas = new Set(inventario.map((item) => item.tipo)).size;
+	            const capacidade = Math.min(100, Math.round((inventario.length / capacidadeMaxima) * 100));
+	            metricasInventario.style.setProperty("--capacidade", `${capacidade}%`);
+	            metricasInventario.innerHTML = `
+	                <div class="inventario-metrica"><span>Slots</span><b>${inventario.length}/${capacidadeMaxima}</b></div>
+	                <div class="inventario-metrica"><span>Qtd. total</span><b>${totalItens.toLocaleString("pt-BR")}</b></div>
+	                <div class="inventario-metrica"><span>Épicos+</span><b>${(epicos + lendarios).toLocaleString("pt-BR")}</b></div>
+	                <div class="inventario-metrica"><span>Categorias</span><b>${categoriasUsadas.toLocaleString("pt-BR")}</b></div>
+	                <div class="inventario-capacidade"><i></i></div>
+	            `;
+	        }
 
         function renderizarCategorias(inventario) {
             const contadores = contarPorCategoria(inventario);
@@ -996,14 +1205,13 @@
         function renderizarInventario() {
             const inventario = obterInventario();
             const categoria = obterCategoria(categoriaAtiva);
-            const filtrados = categoriaAtiva === "todos"
-                ? inventario
-                : inventario.filter((item) => item.tipo === categoriaAtiva);
+	            const filtrados = filtrarOrdenar(inventario);
 
-            renderizarCategorias(inventario);
-            tituloEl.textContent = categoriaAtiva === "todos" ? "Todos os itens" : categoria.nome;
-            resumoEl.textContent = `${filtrados.length} ${filtrados.length === 1 ? "item" : "itens"} ${categoriaAtiva === "todos" ? "no inventário" : "nesta categoria"}`;
-            rodapeResumo.textContent = `Sort: ${categoria.nome}`;
+	            renderizarCategorias(inventario);
+	            renderizarMetricas(inventario);
+	            tituloEl.textContent = categoriaAtiva === "todos" ? "Todos os itens" : categoria.nome;
+	            resumoEl.textContent = `${filtrados.length} ${filtrados.length === 1 ? "item encontrado" : "itens encontrados"} / ${inventario.length} no inventário`;
+	            rodapeResumo.textContent = `Sort: ${categoria.nome} / ${ordemSelect.options[ordemSelect.selectedIndex]?.text || "Raridade"}`;
 
             if (!personagem) {
                 gridEl.innerHTML = renderizarSlotsVazios(slotsMinimos);
@@ -1023,13 +1231,15 @@
                 return;
             }
 
-            const slotsOcupados = filtrados.map((item) => {
-                const itemCategoria = obterCategoria(item.tipo);
-                return `
-                    <article class="slot-jogo" data-id="${Number(item.id)}" tabindex="0" style="--cor-item:${itemCategoria.cor}">
-                        <button class="slot-remover" type="button" data-remover="${Number(item.id)}" title="Remover">x</button>
-                        <div class="slot-icone">${iconeSprite(item, "58px")}</div>
-                        <strong class="slot-nome">${escaparHtml(item.nome)}</strong>
+	            const slotsOcupados = filtrados.map((item) => {
+	                const itemCategoria = obterCategoria(item.tipo);
+	                const raridade = raridadeDe(item);
+	                return `
+	                    <article class="slot-jogo" data-id="${Number(item.id)}" tabindex="0" data-raridade="${escaparHtml(raridade)}" data-tippy-content="${escaparHtml(item.nome)} / ${escaparHtml(raridade)}" style="--cor-item:${itemCategoria.cor};--cor-raridade:${corRaridade(item)}">
+	                        <button class="slot-remover" type="button" data-remover="${Number(item.id)}" title="Remover">x</button>
+	                        <span class="slot-raridade">${escaparHtml(raridade)}</span>
+	                        <div class="slot-icone">${iconeSprite(item, "58px")}</div>
+	                        <strong class="slot-nome">${escaparHtml(item.nome)}</strong>
                         <span class="slot-qtd">x${escaparHtml(item.quantidade)}</span>
                     </article>
                 `;
@@ -1045,13 +1255,19 @@
                 });
             });
 
-            gridEl.querySelectorAll("[data-remover]").forEach((botao) => {
+	            gridEl.querySelectorAll("[data-remover]").forEach((botao) => {
                 botao.addEventListener("click", (evento) => {
                     evento.stopPropagation();
                     removerItem(Number(botao.dataset.remover));
                 });
-            });
-        }
+	            });
+	            if (window.VanillaTilt) {
+	                window.VanillaTilt.init(Array.from(gridEl.querySelectorAll(".slot-jogo")), { max: 7, speed: 320, glare: true, "max-glare": 0.18 });
+	            }
+	            if (window.tippy) {
+	                window.tippy(gridEl.querySelectorAll(".slot-jogo"), { theme: "rpg", placement: "top", delay: [120, 0] });
+	            }
+	        }
 
         function renderizarHistorico() {
             const historico = obterBackupPersonagem().historico.filter((item) => item.tipo === "inventario").reverse();
@@ -1092,9 +1308,10 @@
             const novoItem = {
                 id: Date.now(),
                 nome,
-                tipo: inputTipo.value,
-                sprite: categoria.sprite,
-                quantidade: Math.max(1, Number.parseInt(inputQuantidade.value, 10) || 1),
+	                tipo: inputTipo.value,
+	                sprite: categoria.sprite,
+	                raridade: inputRaridade.value,
+	                quantidade: Math.max(1, Number.parseInt(inputQuantidade.value, 10) || 1),
                 descricao: inputDescricao.value.trim(),
                 adicionadoEm: new Date().toLocaleString("pt-BR")
             };
@@ -1103,9 +1320,10 @@
             salvarInventario(inventario);
             registrarHistorico(antes, inventario);
             formAdicionar.reset();
-            inputQuantidade.value = "1";
-            inputTipo.value = "alimentacao";
-            renderizarInventario();
+	            inputQuantidade.value = "1";
+	            inputTipo.value = "alimentacao";
+	            inputRaridade.value = "Comum";
+	            renderizarInventario();
             renderizarHistorico();
             mostrarDetalhe(novoItem);
         }
@@ -1161,23 +1379,40 @@
 
         document.getElementById("limpar-formulario").addEventListener("click", () => {
             formAdicionar.reset();
-            inputQuantidade.value = "1";
-            inputTipo.value = "alimentacao";
-            inputNome.focus();
-        });
+	            inputQuantidade.value = "1";
+	            inputTipo.value = "alimentacao";
+	            inputRaridade.value = "Comum";
+	            inputNome.focus();
+	        });
+
+	        buscaInventario.addEventListener("input", () => {
+	            termoBusca = buscaInventario.value;
+	            renderizarInventario();
+	        });
+
+	        filtroRaridade.addEventListener("change", () => {
+	            raridadeAtiva = filtroRaridade.value;
+	            renderizarInventario();
+	        });
+
+	        ordemSelect.addEventListener("change", () => {
+	            ordemInventario = ordemSelect.value;
+	            renderizarInventario();
+	        });
 
         document.querySelectorAll(".inventario-abas [data-categoria]").forEach((botao) => {
             botao.addEventListener("click", () => selecionarCategoria(botao.dataset.categoria));
         });
 
         formAdicionar.addEventListener("submit", adicionarItem);
-        window.addEventListener("storage", (evento) => {
-            if (evento.key === chaveInventario() || evento.key === "ultimoPersonagem") {
-                window.location.reload();
-            }
-        });
+	        window.addEventListener("storage", (evento) => {
+	            if (evento.key === chaveInventario() || evento.key === "ultimoPersonagem") {
+	                window.location.reload();
+	            }
+	        });
+	        window.addEventListener("rpg:cdn-ready", renderizarInventario);
 
-        inicializarPersonagem();
+	        inicializarPersonagem();
         renderizarInventario();
         renderizarHistorico();
     </script>
