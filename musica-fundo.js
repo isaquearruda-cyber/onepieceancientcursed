@@ -245,6 +245,8 @@
 			".rpg-sistema-corpo{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px}.rpg-sistema-bloco{display:grid;gap:10px;padding:14px;border:1px solid rgba(255,226,138,.18);border-radius:8px;background:rgba(4,12,13,.56);box-shadow:inset 0 0 18px rgba(0,0,0,.22)}.rpg-sistema-bloco h3{margin:0;font-size:.78rem}.rpg-sistema-linha{display:flex;justify-content:space-between;gap:12px;align-items:center;color:#d9e8d4;font:800 .88rem Arial,sans-serif}.rpg-sistema-linha strong{color:#fff7df;text-align:right}.rpg-sistema-acoes{display:grid;grid-template-columns:1fr 1fr;gap:8px}.rpg-sistema-acoes button,.rpg-patch-acoes button{min-height:40px;border:1px solid rgba(255,226,138,.42);border-radius:8px;background:rgba(255,247,223,.07);color:#fff7df;font-weight:900;text-transform:uppercase;cursor:pointer}.rpg-sistema-acoes button.principal,.rpg-patch-acoes button.principal{border-color:rgba(144,255,0,.48);background:linear-gradient(90deg,rgba(144,255,0,.26),rgba(54,224,255,.12));color:#eaffd8}.rpg-sistema-range{display:grid;gap:7px}.rpg-sistema-range input{width:100%;accent-color:#90ff00}",
 			".rpg-passe-lobby{display:grid;gap:10px;margin-top:10px;padding:12px;border:1px solid rgba(54,224,255,.24);border-radius:8px;background:linear-gradient(180deg,rgba(54,224,255,.08),rgba(3,8,10,.66));box-shadow:inset 0 0 18px rgba(0,0,0,.22)}.rpg-passe-lobby h3{margin:0;color:#36e0ff;font:900 .78rem Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}.rpg-passe-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.rpg-passe-meta span{padding:8px;border:1px solid rgba(255,226,138,.16);border-radius:8px;background:rgba(0,0,0,.24);color:#d9e8d4;font:800 .76rem Arial,sans-serif}.rpg-passe-meta strong{display:block;color:#ffe28a;font-size:1rem}.rpg-passe-barra{height:8px;border:1px solid rgba(54,224,255,.22);border-radius:999px;background:rgba(0,0,0,.44);overflow:hidden}.rpg-passe-barra i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#36e0ff,#90ff00)}",
 			".rpg-patch-notes{position:fixed;inset:0;z-index:5300;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.7);backdrop-filter:blur(6px)}.rpg-patch-notes[hidden]{display:none}.rpg-patch-card{width:min(680px,100%);border:1px solid rgba(255,226,138,.36);border-radius:8px;background:linear-gradient(180deg,rgba(6,16,18,.98),rgba(1,4,6,.98));box-shadow:0 28px 90px rgba(0,0,0,.72);color:#fff7df;overflow:hidden}.rpg-patch-card header{padding:18px;border-bottom:1px solid rgba(255,226,138,.16)}.rpg-patch-card small{color:#90ff00;font-weight:1000;letter-spacing:.12em;text-transform:uppercase}.rpg-patch-card h2{margin:4px 0 0;font-family:'Segoe UI Black','Arial Black',Impact,sans-serif;font-size:clamp(1.8rem,6vw,3rem);line-height:.92;text-transform:uppercase}.rpg-patch-lista{display:grid;gap:10px;padding:16px}.rpg-patch-item{padding:12px;border:1px solid rgba(255,226,138,.16);border-radius:8px;background:rgba(255,247,223,.05)}.rpg-patch-item strong{display:block;color:#ffe28a;text-transform:uppercase}.rpg-patch-item span{display:block;margin-top:4px;color:#d9e8d4;line-height:1.35}.rpg-patch-acoes{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 16px}",
+			"#nprogress .bar{height:3px!important;background:linear-gradient(90deg,#36e0ff,#90ff00,#ffe28a)!important;box-shadow:0 0 18px rgba(144,255,0,.65)!important}#nprogress .peg{box-shadow:0 0 14px #90ff00,0 0 8px #36e0ff!important}",
+			".rpg-ambiente-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.44;mix-blend-mode:screen}.rpg-comando-overlay{position:fixed;inset:0;z-index:5400;display:grid;place-items:start center;padding:clamp(16px,7vh,74px) 16px 16px;background:rgba(0,0,0,.62);backdrop-filter:blur(8px)}.rpg-comando-overlay[hidden]{display:none}.rpg-comando-card{width:min(760px,100%);border:1px solid rgba(255,226,138,.38);border-radius:8px;background:radial-gradient(circle at 15% 0,rgba(54,224,255,.15),transparent 34%),linear-gradient(180deg,rgba(6,16,18,.98),rgba(1,4,6,.98));box-shadow:0 28px 90px rgba(0,0,0,.72);overflow:hidden;color:#fff7df}.rpg-comando-busca{display:grid;grid-template-columns:42px 1fr 42px;align-items:center;gap:8px;padding:12px;border-bottom:1px solid rgba(255,226,138,.16)}.rpg-comando-busca span{display:grid;place-items:center;color:#90ff00;font-weight:1000}.rpg-comando-busca input{width:100%;min-height:44px;border:0;outline:0;background:transparent;color:#fff7df;font:900 1rem Arial,sans-serif}.rpg-comando-busca button{min-height:38px;border:1px solid rgba(255,226,138,.34);border-radius:8px;background:rgba(255,247,223,.06);color:#fff7df;font-weight:1000;cursor:pointer}.rpg-comando-lista{display:grid;gap:8px;max-height:min(520px,62svh);overflow:auto;padding:12px}.rpg-comando-item{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;min-height:58px;padding:8px;border:1px solid rgba(255,226,138,.13);border-radius:8px;background:rgba(255,247,223,.045);color:#fff7df;text-align:left;cursor:pointer}.rpg-comando-item:hover,.rpg-comando-item.ativo{border-color:rgba(144,255,0,.48);background:rgba(144,255,0,.1);box-shadow:0 0 18px rgba(144,255,0,.12)}.rpg-comando-item img{width:40px;height:40px;border-radius:8px;object-fit:cover}.rpg-comando-item strong{display:block;text-transform:uppercase;letter-spacing:.04em}.rpg-comando-item small{color:#d9e8d4;font-weight:800}.rpg-comando-item kbd{padding:4px 7px;border:1px solid rgba(255,226,138,.22);border-radius:6px;background:rgba(0,0,0,.28);color:#ffe28a;font:900 .68rem Arial,sans-serif}.rpg-hotkeys{position:fixed;right:72px;bottom:16px;z-index:4300;display:flex;gap:6px;pointer-events:none}.rpg-hotkeys span{padding:7px 9px;border:1px solid rgba(255,226,138,.2);border-radius:8px;background:rgba(3,8,10,.74);color:#d9e8d4;font:900 .68rem Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em;backdrop-filter:blur(6px)}",
 			"@media(max-width:740px){.rpg-sistema-corpo{grid-template-columns:1fr}.rpg-sistema-acoes,.rpg-patch-acoes{grid-template-columns:1fr}.rpg-passe-meta{grid-template-columns:1fr}.rpg-save-status{left:10px;bottom:10px}.rpg-sistema-botao{right:10px;bottom:10px}}",
 			"@media(max-width:620px){.login-beta-premio{grid-template-columns:1fr;text-align:center}.login-beta-arte{margin:auto}.login-beta-acoes{grid-template-columns:1fr}}",
 			"@media(max-width:1180px) and (hover:none),(max-width:1180px) and (pointer:coarse){body.pagina-formulario{overflow-y:auto!important}.container-lobby{grid-template-columns:1fr!important;width:min(100%,680px)!important;max-width:680px!important;margin:0 auto!important;padding:12px!important;gap:12px!important}.painel-personagem{order:1!important}.painel-comandos{order:2!important}.personagem-palco{order:3!important;min-height:340px!important}.cabecalho-lobby{text-align:center!important}.cabecalho-lobby h1{font-size:clamp(1.75rem,7vw,2.3rem)!important}.battle-hud-lobby{grid-template-columns:1fr minmax(92px,.38fr)!important;grid-template-areas:'perfil berris' 'xp xp'!important}.painel-proxima-acao h2{font-size:1.12rem!important}.botao-lobby,.botao-menu-lobby{grid-template-columns:58px 1fr auto!important;min-height:64px!important;padding:8px 12px!important}.botao-lobby img,.botao-menu-lobby img,.atalho-menu-lobby img{width:52px!important;height:52px!important}.grade-menu-lobby{grid-template-columns:1fr!important}.atalho-menu-lobby{min-height:74px!important;grid-template-columns:56px 1fr!important;justify-items:start!important;text-align:left!important}}",
@@ -414,6 +416,51 @@
 		localStorage.setItem(chave, JSON.stringify(valor));
 	}
 
+	function carregarScriptUmaVez(src, id) {
+		return new Promise(function (resolve, reject) {
+			if (id && document.getElementById(id)) { resolve(); return; }
+			var script = document.createElement("script");
+			if (id) script.id = id;
+			script.src = src;
+			script.defer = true;
+			script.onload = function () { resolve(); };
+			script.onerror = function () { reject(new Error("Falha ao carregar " + src)); };
+			document.head.appendChild(script);
+		});
+	}
+
+	function carregarCssUmaVez(href, id) {
+		if (id && document.getElementById(id)) return;
+		var link = document.createElement("link");
+		if (id) link.id = id;
+		link.rel = "stylesheet";
+		link.href = href;
+		document.head.appendChild(link);
+	}
+
+	function carregarBibliotecasPremium() {
+		carregarCssUmaVez("assets/vendor/nprogress/nprogress.css", "rpg-nprogress-css");
+		carregarScriptUmaVez("assets/vendor/nprogress/nprogress.js", "rpg-nprogress-js").then(function () {
+			if (window.NProgress) {
+				window.NProgress.configure({ showSpinner: false, trickleSpeed: 90, minimum: 0.12 });
+				window.NProgress.start();
+				setTimeout(function () { window.NProgress.done(); }, 520);
+			}
+		}).catch(function (erro) { console.info("NProgress indisponivel.", erro); });
+		carregarScriptUmaVez("assets/vendor/canvas-confetti/confetti.browser.js", "rpg-confetti-js").catch(function (erro) {
+			console.info("Confetti indisponivel.", erro);
+		});
+	}
+
+	function soltarConfetti(tipo) {
+		if (typeof window.confetti !== "function") return;
+		var base = { particleCount: tipo === "conquista" ? 90 : 56, spread: tipo === "conquista" ? 74 : 54, ticks: 150, scalar: 0.9, disableForReducedMotion: true };
+		window.confetti({ ...base, origin: { x: 0.18, y: 0.72 }, colors: ["#90ff00", "#36e0ff", "#ffe28a"] });
+		if (tipo === "conquista") {
+			setTimeout(function () { window.confetti({ ...base, particleCount: 70, origin: { x: 0.82, y: 0.72 }, colors: ["#ffe28a", "#fff7df", "#8f7bff"] }); }, 120);
+		}
+	}
+
 	function registrarNotificacao(titulo, texto, cor) {
 		var lista = lerJson("rpg_notificacoes", []);
 		lista.unshift({ titulo: titulo, texto: Array.isArray(texto) ? texto.join(" / ") : String(texto || ""), data: new Date().toLocaleString("pt-BR"), cor: cor || "#ffe28a" });
@@ -522,6 +569,7 @@
 
 	function transicionarPagina(destino) {
 		if (!destino) return;
+		if (window.NProgress) window.NProgress.start();
 		var overlay = document.createElement("div");
 		overlay.className = "rpg-transicao";
 		overlay.innerHTML = "<span>Carregando rota</span>";
@@ -547,6 +595,7 @@
 			salvas.unshift({ id: c.id, titulo: c.titulo, texto: c.texto, cor: c.cor, quando: new Date().toLocaleString("pt-BR") });
 			registrarNotificacao("Conquista desbloqueada", c.titulo, c.cor);
 			mostrarToast("Conquista", [c.titulo, c.texto], c.cor, "◆");
+			soltarConfetti("conquista");
 		});
 		salvarJson("rpg_conquistas_" + personagem.nome, salvas);
 	}
@@ -558,6 +607,7 @@
 				var r = dados && dados.recompensas ? dados.recompensas : {};
 				tocarUi("recompensa");
 				mostrarToast(dados && dados.titulo ? dados.titulo : "Recompensa", ["+" + formatar(r.exp) + " EXP", "+" + formatar(r.berris) + " berris"], "#90ff00", "+");
+				soltarConfetti("recompensa");
 				registrarNotificacao("Recompensa recebida", dados && dados.titulo ? dados.titulo : "Atividade concluida", "#90ff00");
 				document.querySelectorAll(".battle-hud-lobby,.painel-proxima-acao").forEach(function (el) { el.classList.remove("rpg-pulso-premio"); void el.offsetWidth; el.classList.add("rpg-pulso-premio"); });
 				setTimeout(verificarConquistas, 220);
@@ -701,7 +751,7 @@
 	}
 
 	function instalarPatchNotes(forcar) {
-		var versao = "20260619-pro3";
+		var versao = "20260619-pro4";
 		var chave = "rpg_patch_notes_" + versao;
 		if (!forcar && localStorage.getItem(chave) === "visto") return;
 		var existente = document.getElementById("rpg-patch-notes");
@@ -713,6 +763,8 @@
 			'<section class="rpg-patch-card" role="dialog" aria-modal="true" aria-label="Novidades da versão">' +
 				"<header><small>Atualização instalada</small><h2>Versão Pro</h2></header>" +
 				'<div class="rpg-patch-lista">' +
+					'<div class="rpg-patch-item"><strong>Launcher profissional</strong><span>Ctrl+K ou / abre comandos rápidos igual jogo online moderno.</span></div>' +
+					'<div class="rpg-patch-item"><strong>Efeitos premium</strong><span>Confete em recompensa/conquista, barra NProgress e partículas de atmosfera instaladas localmente.</span></div>' +
 					'<div class="rpg-patch-item"><strong>Menu SYS</strong><span>Configurações, tela cheia, instalação do app e atualização manual em qualquer página.</span></div>' +
 					'<div class="rpg-patch-item"><strong>Salvamento visível</strong><span>Status online/offline e proteção de backup para personagens cadastrados.</span></div>' +
 					'<div class="rpg-patch-item"><strong>Passe e sequência</strong><span>Lobby mostra progresso de temporada e sequência diária para parecer jogo vivo.</span></div>' +
@@ -773,7 +825,7 @@
 						'<label class="rpg-sistema-range">SFX <input type="range" min="0" max="100" value="' + volumeSons + '" data-sistema-sfx></label>' +
 					'</section>' +
 					'<section class="rpg-sistema-bloco"><h3>Ações rápidas</h3>' +
-						'<div class="rpg-sistema-acoes"><button class="principal" type="button" data-sistema-fullscreen>Tela cheia</button><button type="button" data-sistema-instalar>Instalar app</button><button type="button" data-sistema-lobby>Lobby</button><button type="button" data-sistema-perfil>Perfil</button></div>' +
+						'<div class="rpg-sistema-acoes"><button class="principal" type="button" data-sistema-comandos>Comandos</button><button type="button" data-sistema-fullscreen>Tela cheia</button><button type="button" data-sistema-instalar>Instalar app</button><button type="button" data-sistema-lobby>Lobby</button><button type="button" data-sistema-perfil>Perfil</button></div>' +
 					'</section>' +
 				'</div>' +
 			'</section>';
@@ -805,8 +857,162 @@
 			location.reload();
 		};
 		modal.querySelector("[data-sistema-notes]").onclick = function () { instalarPatchNotes(true); };
+		modal.querySelector("[data-sistema-comandos]").onclick = function () { modal.remove(); abrirComandos(); };
 		modal.querySelector("[data-sistema-lobby]").onclick = function () { transicionarPagina("lobby.html"); };
 		modal.querySelector("[data-sistema-perfil]").onclick = function () { transicionarPagina("perfil.html"); };
+	}
+
+	function comandosPremium() {
+		return [
+			{ id: "lobby", titulo: "Lobby", desc: "Voltar para a central do personagem", destino: "lobby.html", acao: "aventura", tecla: "L" },
+			{ id: "aventura", titulo: "Mapa dos mares", desc: "Abrir seleção de rotas e viagem", destino: "aventura.html", acao: "aventura", tecla: "M" },
+			{ id: "perfil", titulo: "Perfil completo", desc: "Ver ficha e progresso do jogador", destino: "perfil.html", acao: "perfil", tecla: "P" },
+			{ id: "inventario", titulo: "Inventário", desc: "Itens, categorias e histórico", destino: "inventario.html", acao: "inventario", tecla: "I" },
+			{ id: "missoes", titulo: "Missões", desc: "Concluir tarefas e receber recompensa", destino: "missoes.html", acao: "missoes", tecla: "Q" },
+			{ id: "treinos", titulo: "Treinos", desc: "Evoluir EXP, berris e atributos", destino: "treinos.html", acao: "treinos", tecla: "T" },
+			{ id: "habilidades", titulo: "Habilidades", desc: "Abrir árvore de progressão", destino: "habilidades.html", acao: "habilidades", tecla: "H" },
+			{ id: "correio", titulo: "Correio", desc: "Coletar mensagens e anexos", destino: "correio.html", acao: "correio", tecla: "C" },
+			{ id: "sistema", titulo: "Sistema", desc: "Configurações, áudio e instalação", fn: abrirMenuSistema, acao: "ajustes", tecla: "S" }
+		];
+	}
+
+	function executarComando(comando) {
+		if (!comando) return;
+		tocarUi("confirmar");
+		if (typeof comando.fn === "function") comando.fn();
+		else transicionarPagina(comando.destino);
+	}
+
+	function abrirComandos() {
+		var modal = document.getElementById("rpg-comando-overlay");
+		if (modal) {
+			modal.hidden = false;
+			var entrada = modal.querySelector("input");
+			if (entrada) { entrada.value = ""; entrada.focus(); renderizarComandos(""); }
+			return;
+		}
+		modal = document.createElement("div");
+		modal.id = "rpg-comando-overlay";
+		modal.className = "rpg-comando-overlay";
+		modal.innerHTML =
+			'<section class="rpg-comando-card" role="dialog" aria-modal="true" aria-label="Comandos rápidos">' +
+				'<div class="rpg-comando-busca"><span>⌘</span><input type="search" placeholder="Buscar ação, página ou sistema..." autocomplete="off"><button type="button" aria-label="Fechar">x</button></div>' +
+				'<div class="rpg-comando-lista" id="rpg-comando-lista"></div>' +
+			"</section>";
+		document.body.appendChild(modal);
+		var entrada = modal.querySelector("input");
+		var fechar = modal.querySelector("button");
+		fechar.onclick = function () { modal.hidden = true; };
+		modal.addEventListener("click", function (evento) { if (evento.target === modal) modal.hidden = true; });
+		entrada.addEventListener("input", function () { renderizarComandos(entrada.value); });
+		entrada.addEventListener("keydown", function (evento) {
+			var atual = modal.querySelector(".rpg-comando-item.ativo") || modal.querySelector(".rpg-comando-item");
+			if (evento.key === "Enter" && atual) {
+				evento.preventDefault();
+				var comando = comandosPremium().find(function (item) { return item.id === atual.dataset.comando; });
+				modal.hidden = true;
+				executarComando(comando);
+			}
+			if (evento.key === "Escape") modal.hidden = true;
+		});
+		renderizarComandos("");
+		entrada.focus();
+	}
+
+	function renderizarComandos(filtro) {
+		var lista = document.getElementById("rpg-comando-lista");
+		if (!lista) return;
+		var termo = String(filtro || "").trim().toLowerCase();
+		var comandos = comandosPremium().filter(function (cmd) {
+			return !termo || (cmd.titulo + " " + cmd.desc + " " + cmd.tecla).toLowerCase().includes(termo);
+		});
+		lista.innerHTML = comandos.map(function (cmd, indice) {
+			return '<button type="button" class="rpg-comando-item' + (indice === 0 ? " ativo" : "") + '" data-comando="' + cmd.id + '">' +
+				'<img src="' + icone(cmd.acao) + '" alt="">' +
+				"<span><strong>" + cmd.titulo + "</strong><small>" + cmd.desc + "</small></span>" +
+			"<kbd>Alt+" + cmd.tecla + "</kbd>" +
+			"</button>";
+		}).join("") || '<div class="rpg-comando-item"><span></span><span><strong>Nada encontrado</strong><small>Tente outro termo.</small></span></div>';
+		lista.querySelectorAll("[data-comando]").forEach(function (botao) {
+			botao.onclick = function () {
+				var comando = comandosPremium().find(function (item) { return item.id === botao.dataset.comando; });
+				document.getElementById("rpg-comando-overlay").hidden = true;
+				executarComando(comando);
+			};
+		});
+	}
+
+	function instalarHotkeys() {
+		if (document.getElementById("rpg-hotkeys")) return;
+		var dicas = document.createElement("div");
+		dicas.id = "rpg-hotkeys";
+		dicas.className = "rpg-hotkeys";
+		dicas.innerHTML = "<span>Ctrl+K comandos</span><span>Alt+M mapa</span>";
+		document.body.appendChild(dicas);
+		document.addEventListener("keydown", function (evento) {
+			var tag = String(evento.target && evento.target.tagName || "").toLowerCase();
+			if (tag === "input" || tag === "textarea" || tag === "select") return;
+			if ((evento.ctrlKey || evento.metaKey) && evento.key.toLowerCase() === "k") {
+				evento.preventDefault();
+				abrirComandos();
+				return;
+			}
+			if (evento.key === "/") {
+				evento.preventDefault();
+				abrirComandos();
+				return;
+			}
+			if (evento.altKey && evento.key.toLowerCase() === "f") {
+				if (document.fullscreenElement) document.exitFullscreen();
+				else document.documentElement.requestFullscreen?.();
+			}
+			var comando = comandosPremium().find(function (cmd) { return cmd.tecla.toLowerCase() === evento.key.toLowerCase(); });
+			if (comando && evento.altKey && !evento.ctrlKey && !evento.metaKey) {
+				evento.preventDefault();
+				executarComando(comando);
+			}
+		});
+	}
+
+	function instalarAmbientePremium() {
+		if (document.getElementById("rpg-ambiente-canvas")) return;
+		var canvas = document.createElement("canvas");
+		canvas.id = "rpg-ambiente-canvas";
+		canvas.className = "rpg-ambiente-canvas";
+		document.body.prepend(canvas);
+		var ctx = canvas.getContext("2d");
+		var particulas = [];
+		var reduzir = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+		function redimensionar() {
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+			particulas = Array.from({ length: Math.min(72, Math.max(24, Math.round(canvas.width / 28))) }, function (_, i) {
+				return {
+					x: Math.random() * canvas.width,
+					y: Math.random() * canvas.height,
+					r: 0.8 + Math.random() * 2.4,
+					v: 0.12 + Math.random() * 0.34,
+					c: i % 3 === 0 ? "rgba(144,255,0,.54)" : i % 3 === 1 ? "rgba(54,224,255,.42)" : "rgba(255,226,138,.38)"
+				};
+			});
+		}
+		function animar() {
+			if (!ctx) return;
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			particulas.forEach(function (p) {
+				p.y -= p.v;
+				p.x += Math.sin((Date.now() * 0.001) + p.y * 0.01) * 0.08;
+				if (p.y < -8) { p.y = canvas.height + 8; p.x = Math.random() * canvas.width; }
+				ctx.beginPath();
+				ctx.fillStyle = p.c;
+				ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+				ctx.fill();
+			});
+			if (!reduzir) requestAnimationFrame(animar);
+		}
+		window.addEventListener("resize", redimensionar);
+		redimensionar();
+		animar();
 	}
 
 	function premioBetaDisponivel() {
@@ -930,6 +1136,8 @@
 		instalarPwa();
 		corrigirDownloadNoMenu();
 		instalarCss();
+		carregarBibliotecasPremium();
+		instalarAmbientePremium();
 		instalarLoadingInicial();
 		instalarSonsUi();
 		carregarRpgSistemas();
@@ -942,6 +1150,7 @@
 		instalarFeedback();
 		instalarStatusSalvamento();
 		instalarMenuSistema();
+		instalarHotkeys();
 		atualizarHudBattle();
 		setTimeout(recompensaDiariaGame, 650);
 		setTimeout(abrirLoginDiarioBeta, 450);
