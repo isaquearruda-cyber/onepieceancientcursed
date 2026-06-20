@@ -221,6 +221,7 @@
 			".chip-rota{padding:7px 9px;border:1px solid rgba(255,226,138,.24);border-radius:999px;background:rgba(255,247,223,.05);color:#ffe28a;font-size:.78rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase}",
 			".acoes-rapidas-lobby{display:grid;grid-template-columns:1fr 1fr;gap:10px}",
 			".botao-acao-rapida{min-height:54px;border:1px solid rgba(255,226,138,.5);border-radius:8px;color:#fff7df;background:linear-gradient(90deg,rgba(255,247,223,.07),rgba(54,224,255,.08));font-weight:900;text-transform:uppercase;cursor:pointer}",
+			".portal-mundo-lobby{position:relative;display:grid;gap:10px;margin-bottom:12px;padding:12px;border:1px solid rgba(255,226,138,.28);border-radius:8px;background:radial-gradient(circle at 18% 20%,rgba(144,255,0,.15),transparent 34%),linear-gradient(90deg,rgba(3,8,10,.72),rgba(18,34,26,.62));box-shadow:inset 0 0 22px rgba(0,0,0,.22),0 0 24px rgba(144,255,0,.08);overflow:hidden}.portal-mundo-lobby::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(255,226,138,.16),transparent);transform:translateX(-120%);animation:rpgPortalSweep 3.8s ease-in-out infinite}.portal-mundo-lobby small{position:relative;color:#90ff00;font:1000 .68rem Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase}.portal-mundo-lobby strong{position:relative;color:#fff7df;font:1000 1.05rem Arial,sans-serif;text-transform:uppercase}.portal-mundo-lobby span{position:relative;color:#d9e8d4;font:800 .78rem/1.35 Arial,sans-serif}.portal-mundo-motores{position:relative;display:flex;flex-wrap:wrap;gap:6px}.portal-mundo-motores i{padding:5px 7px;border:1px solid rgba(255,247,223,.12);border-radius:999px;background:rgba(0,0,0,.26);color:#ffe28a;font:900 .62rem Arial,sans-serif;font-style:normal;text-transform:uppercase}.botao-entrar-jogo{position:relative!important;min-height:96px!important;border-color:rgba(255,226,138,.7)!important;background:radial-gradient(circle at 18% 45%,rgba(255,226,138,.32),transparent 30%),linear-gradient(135deg,#ffe28a 0%,#ff9f1c 48%,#b33412 100%)!important;color:#151006!important;box-shadow:0 18px 46px rgba(0,0,0,.42),0 0 30px rgba(255,159,28,.28),inset 0 1px 0 rgba(255,255,255,.38)!important}.botao-entrar-jogo span{font-size:1.02rem!important;letter-spacing:.06em!important}.botao-entrar-jogo::after{content:'ONLINE';position:absolute;right:12px;top:10px;padding:4px 7px;border:1px solid rgba(20,16,6,.2);border-radius:999px;background:rgba(255,247,223,.58);font:1000 .58rem Arial,sans-serif;color:#1b170c}",
 			".item-imagem{flex:0 0 auto;width:56px;height:56px;border:1px solid rgba(255,226,138,.52);border-radius:8px;overflow:hidden;background:#061011;box-shadow:0 0 18px rgba(255,226,138,.25)}",
 			".item-imagem img{width:100%;height:100%;object-fit:cover;display:block}",
 			".login-beta-overlay{position:fixed;inset:0;z-index:4500;display:grid;place-items:center;padding:18px;background:rgba(0,0,0,.66);backdrop-filter:blur(6px)}",
@@ -240,7 +241,7 @@
 			".rpg-toast i{display:grid;place-items:center;width:42px;height:42px;border-radius:8px;background:radial-gradient(circle,color-mix(in srgb,var(--cor) 68%,#fff7df),rgba(3,8,10,.86) 70%);font-style:normal;font-weight:1000;color:#11170c}",
 			".rpg-toast strong{display:block;color:#fff7df;text-transform:uppercase;letter-spacing:.04em}.rpg-toast span{display:block;color:#d9e8d4;font-size:.82rem;line-height:1.25}",
 			".rpg-toast.sumindo{animation:rpgToastOut .22s ease both}@keyframes rpgToastIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}@keyframes rpgToastOut{to{opacity:0;transform:translateY(8px) scale(.98)}}",
-			".rpg-pulso-premio{animation:rpgPulsoPremio .72s ease}@keyframes rpgPulsoPremio{0%{filter:brightness(1)}35%{filter:brightness(1.35);box-shadow:0 0 34px rgba(144,255,0,.38)}100%{filter:brightness(1)}}",
+			".rpg-pulso-premio{animation:rpgPulsoPremio .72s ease}@keyframes rpgPulsoPremio{0%{filter:brightness(1)}35%{filter:brightness(1.35);box-shadow:0 0 34px rgba(144,255,0,.38)}100%{filter:brightness(1)}}@keyframes rpgPortalSweep{0%,45%{transform:translateX(-120%)}70%,100%{transform:translateX(120%)}}",
 			".rpg-objetivos{display:grid;gap:9px;margin-top:10px;padding:12px;border:1px solid rgba(255,226,138,.22);border-radius:8px;background:rgba(3,8,10,.64);box-shadow:inset 0 0 18px rgba(0,0,0,.22)}.rpg-objetivos h3{margin:0;color:#ffe28a;font:900 .78rem Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}.rpg-objetivo{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;color:#d9e8d4;font:800 .82rem Arial,sans-serif}.rpg-objetivo span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rpg-objetivo small{color:#90ff00;font-weight:1000}.rpg-objetivo-barra{grid-column:1/-1;height:7px;border-radius:999px;background:rgba(0,0,0,.46);overflow:hidden;border:1px solid rgba(144,255,0,.18)}.rpg-objetivo-barra i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#36e0ff,#90ff00)}",
 			".rpg-save-status{position:fixed;left:14px;bottom:14px;z-index:4300;display:flex;align-items:center;gap:7px;max-width:min(320px,calc(100vw - 92px));padding:8px 10px;border:1px solid rgba(255,226,138,.24);border-radius:8px;background:rgba(3,8,10,.78);color:#d9e8d4;font:900 .72rem Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em;backdrop-filter:blur(6px);box-shadow:0 12px 34px rgba(0,0,0,.36);pointer-events:none}.rpg-save-status i{width:8px;height:8px;border-radius:999px;background:#90ff00;box-shadow:0 0 12px rgba(144,255,0,.8)}.rpg-save-status.offline i{background:#ffcf3e}.rpg-save-status.erro i{background:#ff5c5c}",
 			".rpg-sistema-botao{position:fixed;right:14px;bottom:14px;z-index:4400;width:48px;height:48px;border:1px solid rgba(255,226,138,.44);border-radius:8px;background:linear-gradient(180deg,rgba(12,28,30,.94),rgba(3,8,10,.96));color:#ffe28a;font:1000 .78rem Arial,sans-serif;letter-spacing:.08em;box-shadow:0 16px 42px rgba(0,0,0,.46),0 0 18px rgba(247,200,75,.15);cursor:pointer}.rpg-sistema-botao:hover{filter:brightness(1.12);box-shadow:0 18px 48px rgba(0,0,0,.52),0 0 24px rgba(247,200,75,.24)}",
@@ -336,6 +337,25 @@
 			'<div class="chips-rota"><span class="chip-rota">4 Blues livres</span><span class="chip-rota">Rotas bloqueadas por campanha</span><span class="chip-rota">Viagem salva</span></div>' +
 			'<div class="acoes-rapidas-lobby"><button class="botao-acao-rapida" type="button" data-menu-acao="aventura">Mapa</button><button class="botao-acao-rapida" type="button" data-menu-acao="perfil">Perfil</button><button class="botao-acao-rapida" type="button" data-menu-acao="missoes">Missões</button><button class="botao-acao-rapida" type="button" data-menu-acao="biblioteca">Biblioteca</button></div>';
 		status.parentNode.insertBefore(painel, status);
+	}
+
+	function instalarPortalMundoLobby() {
+		if (!document.body.classList.contains("pagina-formulario") || !document.querySelector(".container-lobby")) return;
+		if (document.getElementById("portal-mundo-lobby")) return;
+		var botao = document.getElementById("botao-iniciar") || document.querySelector('[data-menu-acao="aventura"]');
+		if (!botao || !botao.parentNode) return;
+		var portal = document.createElement("div");
+		portal.id = "portal-mundo-lobby";
+		portal.className = "portal-mundo-lobby";
+		portal.innerHTML =
+			"<small>Servidor pronto</small>" +
+			"<strong>Entrar no mundo RPG</strong>" +
+			"<span>Mapa vivo, batalha animada, missões, inventário, conquistas e progresso persistente.</span>" +
+			'<div class="portal-mundo-motores"><i>PixiJS</i><i>Phaser</i><i>GSAP</i><i>Rive</i><i>Lottie</i></div>';
+		botao.parentNode.insertBefore(portal, botao);
+		if (window.gsap) {
+			window.gsap.fromTo(portal, { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: .55, ease: "power3.out" });
+		}
 	}
 
 	function criarHudBattle() {
@@ -459,7 +479,7 @@
 		});
 	}
 
-	var cdnPremium = { gsap: false, particles: false, sweetalert: false, howler: false, animate: false, tippy: false, tilt: false, pixi: false, phaser: false, rive: false };
+	var cdnPremium = { gsap: false, particles: false, sweetalert: false, howler: false, animate: false, tippy: false, tilt: false, pixi: false, phaser: false, rive: false, lottie: false, anime: false, lenis: false };
 
 	function carregarBibliotecasCdn() {
 		carregarCssUmaVez("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css", "rpg-animate-css");
@@ -473,6 +493,9 @@
 			carregarScriptUmaVez("https://cdn.jsdelivr.net/npm/pixi.js@8.9.2/dist/pixi.min.js", "rpg-pixi-cdn"),
 			carregarScriptUmaVez("https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js", "rpg-phaser-cdn"),
 			carregarScriptUmaVez("https://unpkg.com/@rive-app/canvas@2.31.2/rive.js", "rpg-rive-cdn"),
+			carregarScriptUmaVez("https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js", "rpg-lottie-cdn"),
+			carregarScriptUmaVez("https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js", "rpg-anime-cdn"),
+			carregarScriptUmaVez("https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js", "rpg-lenis-cdn"),
 				carregarScriptUmaVez("https://unpkg.com/@popperjs/core@2", "rpg-popper-cdn").then(function () {
 					return carregarScriptUmaVez("https://unpkg.com/tippy.js@6", "rpg-tippy-cdn");
 				}),
@@ -487,10 +510,15 @@
 				cdnPremium.pixi = Boolean(window.PIXI);
 				cdnPremium.phaser = Boolean(window.Phaser);
 				cdnPremium.rive = Boolean(window.rive);
+				cdnPremium.lottie = Boolean(window.lottie);
+				cdnPremium.anime = Boolean(window.anime);
+				cdnPremium.lenis = Boolean(window.Lenis);
 				cdnPremium.animate = true;
 					ativarParticlesCdn();
 					ativarGsapPremium();
 					ativarHowlerPremium();
+					ativarLenisPremium();
+					ativarAnimePremium();
 					window.dispatchEvent(new CustomEvent("rpg:cdn-ready", { detail: cdnPremium }));
 				setTimeout(abrirBoasVindasCdn, 650);
 			}).catch(function (erro) {
@@ -546,6 +574,36 @@
 		};
 	}
 
+	function ativarLenisPremium() {
+		if (!cdnPremium.lenis || window.RpgLenis || document.body.classList.contains("pagina-formulario")) return;
+		try {
+			var lenis = new window.Lenis({ duration: 0.9, smoothWheel: true, wheelMultiplier: 0.9 });
+			window.RpgLenis = lenis;
+			function raf(time) {
+				lenis.raf(time);
+				requestAnimationFrame(raf);
+			}
+			requestAnimationFrame(raf);
+		} catch (erro) {
+			console.info("Lenis indisponivel.", erro);
+		}
+	}
+
+	function ativarAnimePremium() {
+		if (!cdnPremium.anime || document.body.dataset.animePremium === "1") return;
+		document.body.dataset.animePremium = "1";
+		document.querySelectorAll(".botao-entrar-jogo,.botao-lobby,.atalho-menu-lobby,.missao-card,.item,.card").forEach(function (el, indice) {
+			window.anime({
+				targets: el,
+				translateY: [8, 0],
+				opacity: [0.86, 1],
+				delay: Math.min(420, indice * 24),
+				duration: 520,
+				easing: "easeOutExpo"
+			});
+		});
+	}
+
 	function mostrarBannerCdn(titulo, texto) {
 		var antigo = document.getElementById("rpg-cdn-banner");
 		if (antigo) antigo.remove();
@@ -565,7 +623,7 @@
 		if (cdnPremium.sweetalert) {
 			window.Swal.fire({
 				title: "Modo RPG Premium",
-				html: "CDN ativada com GSAP, PixiJS, Phaser, Rive, particles.js, SweetAlert2, Animate.css e Howler. O site agora abre com camada visual de jogo online.",
+				html: "CDN ativada com GSAP, PixiJS, Phaser, Rive, Lottie, Anime.js, Lenis, particles.js, SweetAlert2, Animate.css e Howler. O site agora abre com camada visual de jogo online.",
 				icon: "success",
 				confirmButtonText: "Entrar no modo jogo",
 				customClass: { popup: "rpg-swal" },
@@ -920,7 +978,7 @@
 
 	function instalarHudGlobal() {
 		var atual = paginaAtual();
-		if (["index.html", "cadastro.html", "download.html"].includes(atual)) return;
+		if (["index.html", "cadastro.html", "download.html", "lobby.html", "batalha.html"].includes(atual)) return;
 		if (document.getElementById("rpg-hud-global")) return;
 		var hud = document.createElement("aside");
 		hud.id = "rpg-hud-global";
@@ -1043,7 +1101,7 @@
 	}
 
 	function instalarPatchNotes(forcar) {
-		var versao = "20260619-pro11";
+		var versao = "20260619-pro12";
 		var chave = "rpg_patch_notes_" + versao;
 		if (!forcar && localStorage.getItem(chave) === "visto") return;
 		var existente = document.getElementById("rpg-patch-notes");
@@ -1064,6 +1122,8 @@
 					'<div class="rpg-patch-item"><strong>PixiJS no mapa</strong><span>A aventura ganhou mesa de navegação WebGL com rotas, nós de mares e navio animado.</span></div>' +
 					'<div class="rpg-patch-item"><strong>Phaser na batalha</strong><span>O combate ganhou cena animada com projéteis, impacto, defesa, cura e vitória visual.</span></div>' +
 					'<div class="rpg-patch-item"><strong>Rive instalado</strong><span>Runtime Rive carregado pela CDN e monitorado no SYS para futuras animações interativas .riv.</span></div>' +
+					'<div class="rpg-patch-item"><strong>Lobby sem bloqueio</strong><span>O HUD global não cobre mais o lobby; o botão Entrar no Mundo ganhou portal próprio dentro do painel.</span></div>' +
+					'<div class="rpg-patch-item"><strong>Mais motores profissionais</strong><span>Lottie, Anime.js e Lenis foram conectados para loading, microanimações e rolagem premium.</span></div>' +
 					'<div class="rpg-patch-item"><strong>CDN de jogo profissional</strong><span>GSAP, particles.js, SweetAlert2, Animate.css e Howler carregam pela internet para animações e cenas mais fortes.</span></div>' +
 					'<div class="rpg-patch-item"><strong>Inventário premium</strong><span>Busca, raridade, capacidade, ordenação, tooltips e efeito 3D nos slots.</span></div>' +
 					'<div class="rpg-patch-item"><strong>Raças nos atributos</strong><span>Cada atributo mostra base, bônus racial e total efetivo conforme a raça cadastrada.</span></div>' +
@@ -1126,7 +1186,7 @@
 					'<section class="rpg-sistema-bloco"><h3>Salvamento</h3>' +
 						'<div class="rpg-sistema-linha"><span>Status</span><strong>' + textoSalvamento() + '</strong></div>' +
 						'<div class="rpg-sistema-linha"><span>Rede</span><strong>' + (navigator.onLine ? "Online" : "Offline") + '</strong></div>' +
-							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v23</strong></div>' +
+							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v24</strong></div>' +
 						'<div class="rpg-sistema-acoes"><button type="button" data-sistema-atualizar>Atualizar app</button><button type="button" data-sistema-notes>Novidades</button></div>' +
 					'</section>' +
 					'<section class="rpg-sistema-bloco"><h3>CDN Premium</h3>' +
@@ -1139,6 +1199,9 @@
 							'<div class="rpg-sistema-linha"><span>PixiJS</span><strong><span class="rpg-cdn-status ' + (cdnPremium.pixi ? "" : "off") + '">' + (cdnPremium.pixi ? "ativo" : "off") + '</span></strong></div>' +
 							'<div class="rpg-sistema-linha"><span>Phaser</span><strong><span class="rpg-cdn-status ' + (cdnPremium.phaser ? "" : "off") + '">' + (cdnPremium.phaser ? "ativo" : "off") + '</span></strong></div>' +
 							'<div class="rpg-sistema-linha"><span>Rive</span><strong><span class="rpg-cdn-status ' + (cdnPremium.rive ? "" : "off") + '">' + (cdnPremium.rive ? "ativo" : "off") + '</span></strong></div>' +
+							'<div class="rpg-sistema-linha"><span>Lottie</span><strong><span class="rpg-cdn-status ' + (cdnPremium.lottie ? "" : "off") + '">' + (cdnPremium.lottie ? "ativo" : "off") + '</span></strong></div>' +
+							'<div class="rpg-sistema-linha"><span>Anime.js</span><strong><span class="rpg-cdn-status ' + (cdnPremium.anime ? "" : "off") + '">' + (cdnPremium.anime ? "ativo" : "off") + '</span></strong></div>' +
+							'<div class="rpg-sistema-linha"><span>Lenis</span><strong><span class="rpg-cdn-status ' + (cdnPremium.lenis ? "" : "off") + '">' + (cdnPremium.lenis ? "ativo" : "off") + '</span></strong></div>' +
 							'<div class="rpg-sistema-acoes"><button class="principal" type="button" data-sistema-cinematico>Cena lendária</button><button type="button" data-sistema-cdn-reload>Recarregar CDN</button></div>' +
 					'</section>' +
 					'<section class="rpg-sistema-bloco"><h3>Áudio</h3>' +
@@ -1471,6 +1534,7 @@
 		carregarRpgSistemas();
 		injetarAtalhos();
 		substituirFichaLobby();
+		instalarPortalMundoLobby();
 		instalarObjetivosLobby();
 		atualizarIcones();
 		habilitarScroll();
@@ -1486,6 +1550,7 @@
 		setTimeout(abrirLoginDiarioBeta, 450);
 		setTimeout(instalarPasseLobby, 820);
 		setTimeout(instalarPatchNotes, 1100);
+		setTimeout(instalarPortalMundoLobby, 500);
 		iniciarAudio();
 		setTimeout(instalarObjetivosLobby, 900);
 		setTimeout(corrigirDownloadNoMenu, 300);

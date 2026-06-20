@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lobby - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game11">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game12">
     <style>
         html,
         body {
@@ -3857,10 +3857,24 @@
 
     <script src="supabase-config.js"></script>
     <script src="banco-personagens.js?v=20260619-db2"></script>
-    <script src="musica-fundo.js?v=20260619-game11"></script>
+    <script src="musica-fundo.js?v=20260619-game12"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
-        const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+        function carregarPersonagemLobby() {
+            try {
+                const direto = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+                if (direto?.nome) return direto;
+                const lista = JSON.parse(localStorage.getItem("personagensCriados") || "[]");
+                return Array.isArray(lista) ? lista.slice().reverse().find((item) => item?.nome) || null : null;
+            } catch {
+                return null;
+            }
+        }
+
+        const personagem = carregarPersonagemLobby();
+        if (personagem?.nome) {
+            localStorage.setItem("ultimoPersonagem", JSON.stringify(personagem));
+        }
 
         // Elementos de texto
         const nomePers = document.getElementById("nome-pers");

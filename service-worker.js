@@ -1,4 +1,4 @@
-const CACHE_NAME = "one-piece-rpg-app-v23";
+const CACHE_NAME = "one-piece-rpg-app-v24";
 const CACHE_PREFIX = "one-piece-rpg-app-";
 
 const APP_SHELL = [

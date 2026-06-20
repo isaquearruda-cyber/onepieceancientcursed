@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Batalha - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game11">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game12">
     <style>
         html, body { min-height: 100%; margin: 0; background: #030708; color: #fff7df; overflow-x: hidden; }
         body { font-family: Georgia, "Times New Roman", serif; }
@@ -49,6 +49,11 @@
         .battle-footer { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
         .battle-footer article { padding: 12px; }
         .battle-footer strong { display: block; margin-top: 4px; color: #fff7df; font-size: 1.1rem; }
+        .battle-empty { position: fixed; inset: 0; z-index: 6000; display: grid; place-items: center; padding: 18px; background: rgba(0,0,0,.72); backdrop-filter: blur(8px); }
+        .battle-empty-card { width: min(520px, 100%); padding: 18px; border: 1px solid rgba(255,226,138,.34); border-radius: 8px; background: linear-gradient(180deg, rgba(7,20,22,.98), rgba(3,8,10,.98)); box-shadow: 0 28px 90px rgba(0,0,0,.72); color: #fff7df; }
+        .battle-empty-card h2 { margin: 4px 0 10px; font-family: "Segoe UI Black","Arial Black",Impact,sans-serif; text-transform: uppercase; }
+        .battle-empty-card p { color: #d9e8d4; line-height: 1.45; }
+        .battle-empty-card a { display: inline-grid; place-items: center; min-height: 42px; margin-top: 12px; padding: 0 14px; border: 1px solid rgba(255,226,138,.52); border-radius: 8px; color: #07100d; background: linear-gradient(90deg,#ffe28a,#f7c84b); font-weight: 1000; text-transform: uppercase; text-decoration: none; }
         @media (max-width: 980px) { .battle-arena { grid-template-columns: 1fr; } .battle-center { order: 3; } .fighter-portrait { min-height: 230px; } .battle-footer, .battle-top { grid-template-columns: 1fr; } }
         @media (max-width: 560px) { .battle-app { width: min(100%, calc(100% - 18px)); padding-top: 76px; } .battle-actions, .turn-card, .battle-footer { grid-template-columns: 1fr; } .video-fundo { display: none; } .phaser-canvas{min-height:180px} }
     </style>
@@ -114,14 +119,18 @@
         </section>
     </main>
     <script src="banco-personagens.js?v=20260619-db2"></script>
-    <script src="musica-fundo.js?v=20260619-game11"></script>
+    <script src="musica-fundo.js?v=20260619-game12"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
-        const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+        function ler(chave, padrao) { try { return JSON.parse(localStorage.getItem(chave) || "null") || padrao; } catch { return padrao; } }
+        const personagem = ler("ultimoPersonagem", null);
+        if (!personagem?.nome) {
+            document.body.insertAdjacentHTML("beforeend", `<div class="battle-empty"><section class="battle-empty-card"><small class="battle-meta">Personagem não encontrado</small><h2>Batalha precisa de personagem ativo</h2><p>Entre no lobby com seu personagem cadastrado e abra a batalha pelo botão BT ou por uma missão aceita.</p><a href="index.html">Voltar ao login</a></section></div>`);
+        }
         const params = new URLSearchParams(location.search);
         const rankAtual = (params.get("rank") || "E").toUpperCase();
         const missaoId = params.get("missao") || "";
-        const missaoAtual = JSON.parse(localStorage.getItem("rpg_missao_batalha_atual") || "null");
+        const missaoAtual = ler("rpg_missao_batalha_atual", null);
         const inimigos = {
             E: { nome: "Batedor de Porto", desc: "Ameaça baixa", hp: 160, forca: 18, furia: 80, simbolo: "E" },
             D: { nome: "Contrabandista Armado", desc: "Ameaça moderada", hp: 230, forca: 28, furia: 95, simbolo: "D" },
@@ -131,7 +140,13 @@
         };
         const rankPeso = { E: 1, D: 1.25, C: 1.55, B: 1.9, A: 2.35 };
         const inimigoBase = inimigos[rankAtual] || inimigos.E;
-        const progresso = personagem ? RpgSistemas.obterProgresso(personagem) : {};
+        const sistemas = window.RpgSistemas || {
+            obterProgresso: (p) => p?.progressoRpg || { nivel: 1, berris: 0 },
+            recompensasAtividade: () => ({ exp: 90, berris: 850, pontosAtributo: 1, pontosMissao: 2 }),
+            concluirAtividade: async (p) => ({ personagem: p, recompensas: { exp: 90, berris: 850, pontosAtributo: 1, pontosMissao: 2 } }),
+            normalizar: (texto) => String(texto || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        };
+        const progresso = personagem ? sistemas.obterProgresso(personagem) : {};
         const atributos = personagem?.atributosDistribuidos || personagem?.atributos || {};
         const vital = Number(atributos.forcaVital || atributos.vitalidade || atributos.hp || 80);
         const mental = Number(atributos.forcaMental || atributos.mental || 60);
@@ -155,9 +170,8 @@
         state.playerHp = state.playerMaxHp;
         state.playerEne = state.playerMaxEne;
 
-        function ler(chave, padrao) { try { return JSON.parse(localStorage.getItem(chave) || "null") || padrao; } catch { return padrao; } }
         function salvar(chave, valor) { localStorage.setItem(chave, JSON.stringify(valor)); }
-        function normalizar(texto) { return RpgSistemas.normalizar ? RpgSistemas.normalizar(texto) : String(texto || "").toLowerCase(); }
+        function normalizar(texto) { return sistemas.normalizar ? sistemas.normalizar(texto) : String(texto || "").toLowerCase(); }
         function carregarScript(src, id) {
             return new Promise((resolve, reject) => {
                 if (document.getElementById(id)) { resolve(); return; }
@@ -294,7 +308,7 @@
             return true;
         }
         function usarAcao(acao) {
-            if (!personagem?.nome) { location.href = "index.html"; return; }
+            if (!personagem?.nome) { return; }
             if (acao === "reset") { location.reload(); return; }
             if (acao === "finish") { finalizarVitoria(); return; }
             if (state.venceu || state.playerHp <= 0) return;
@@ -342,7 +356,7 @@
                 log("Esta batalha de missão já foi registrada.");
                 return;
             }
-            const resultado = await RpgSistemas.concluirAtividade(personagem, {
+            const resultado = await sistemas.concluirAtividade(personagem, {
                 tipo: "batalha",
                 titulo: missaoAtual?.titulo || `Vitória contra ${inimigoBase.nome}`,
                 rank: rankAtual,
@@ -380,7 +394,7 @@
             document.querySelector('[data-action="finish"]').disabled = true;
         }
         function iniciar() {
-            if (!personagem?.nome) { location.href = "index.html"; return; }
+            if (!personagem?.nome) { return; }
             document.getElementById("battle-brief").textContent = missaoAtual?.titulo ? `Encontro aberto pela missão: ${missaoAtual.titulo}. Derrote o inimigo e finalize a vitória para salvar recompensa.` : "Encontro livre para treinar combate, ganhar recompensa e gerar histórico.";
             document.getElementById("player-name").textContent = personagem.nome;
             document.getElementById("player-race").textContent = `${personagem.raca || personagem.raça || "Raça"} / ${personagem.classe || "Classe"}`;
@@ -388,7 +402,7 @@
             document.getElementById("enemy-desc").textContent = inimigoBase.desc;
             document.getElementById("enemy-symbol").textContent = inimigoBase.simbolo;
             document.getElementById("mission-text").textContent = missaoAtual?.titulo ? missaoAtual.titulo : "Batalha livre";
-            const recompensa = RpgSistemas.recompensasAtividade("batalha", rankAtual, missaoAtual?.periodo || "diarias");
+            const recompensa = sistemas.recompensasAtividade("batalha", rankAtual, missaoAtual?.periodo || "diarias");
             document.getElementById("reward-text").textContent = `+${recompensa.exp} EXP / +${recompensa.berris} berris`;
             const inv = ler(`inventario_${personagem.nome}`, []);
             document.getElementById("item-text").textContent = `${inv.length} item(ns)`;
