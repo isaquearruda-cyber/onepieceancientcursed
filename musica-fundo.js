@@ -459,7 +459,7 @@
 		});
 	}
 
-	var cdnPremium = { gsap: false, particles: false, sweetalert: false, howler: false, animate: false, tippy: false, tilt: false };
+	var cdnPremium = { gsap: false, particles: false, sweetalert: false, howler: false, animate: false, tippy: false, tilt: false, pixi: false, phaser: false, rive: false };
 
 	function carregarBibliotecasCdn() {
 		carregarCssUmaVez("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css", "rpg-animate-css");
@@ -470,6 +470,9 @@
 			carregarScriptUmaVez("https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js", "rpg-particles-cdn"),
 			carregarScriptUmaVez("https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js", "rpg-sweetalert-cdn"),
 			carregarScriptUmaVez("https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js", "rpg-howler-cdn"),
+			carregarScriptUmaVez("https://cdn.jsdelivr.net/npm/pixi.js@8.9.2/dist/pixi.min.js", "rpg-pixi-cdn"),
+			carregarScriptUmaVez("https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js", "rpg-phaser-cdn"),
+			carregarScriptUmaVez("https://unpkg.com/@rive-app/canvas@2.31.2/rive.js", "rpg-rive-cdn"),
 				carregarScriptUmaVez("https://unpkg.com/@popperjs/core@2", "rpg-popper-cdn").then(function () {
 					return carregarScriptUmaVez("https://unpkg.com/tippy.js@6", "rpg-tippy-cdn");
 				}),
@@ -481,6 +484,9 @@
 			cdnPremium.howler = Boolean(window.Howl);
 				cdnPremium.tippy = typeof window.tippy === "function";
 				cdnPremium.tilt = Boolean(window.VanillaTilt);
+				cdnPremium.pixi = Boolean(window.PIXI);
+				cdnPremium.phaser = Boolean(window.Phaser);
+				cdnPremium.rive = Boolean(window.rive);
 				cdnPremium.animate = true;
 					ativarParticlesCdn();
 					ativarGsapPremium();
@@ -559,7 +565,7 @@
 		if (cdnPremium.sweetalert) {
 			window.Swal.fire({
 				title: "Modo RPG Premium",
-				html: "CDN ativada com GSAP, particles.js, SweetAlert2, Animate.css e Howler. O site agora abre com camada visual de jogo online.",
+				html: "CDN ativada com GSAP, PixiJS, Phaser, Rive, particles.js, SweetAlert2, Animate.css e Howler. O site agora abre com camada visual de jogo online.",
 				icon: "success",
 				confirmButtonText: "Entrar no modo jogo",
 				customClass: { popup: "rpg-swal" },
@@ -1037,7 +1043,7 @@
 	}
 
 	function instalarPatchNotes(forcar) {
-		var versao = "20260619-pro10";
+		var versao = "20260619-pro11";
 		var chave = "rpg_patch_notes_" + versao;
 		if (!forcar && localStorage.getItem(chave) === "visto") return;
 		var existente = document.getElementById("rpg-patch-notes");
@@ -1055,6 +1061,9 @@
 					'<div class="rpg-patch-item"><strong>Modo batalha</strong><span>Nova arena com turnos, HP, energia, inimigos por rank, drop no inventário e recompensa salva no personagem.</span></div>' +
 					'<div class="rpg-patch-item"><strong>Missões jogáveis</strong><span>Agora dá para aceitar missão, abrir batalha direto do card e acompanhar missões aceitas no topo.</span></div>' +
 					'<div class="rpg-patch-item"><strong>HUD global</strong><span>Personagem ativo, EXP, berris, atalhos e troca rápida de personagem aparecem nas abas principais.</span></div>' +
+					'<div class="rpg-patch-item"><strong>PixiJS no mapa</strong><span>A aventura ganhou mesa de navegação WebGL com rotas, nós de mares e navio animado.</span></div>' +
+					'<div class="rpg-patch-item"><strong>Phaser na batalha</strong><span>O combate ganhou cena animada com projéteis, impacto, defesa, cura e vitória visual.</span></div>' +
+					'<div class="rpg-patch-item"><strong>Rive instalado</strong><span>Runtime Rive carregado pela CDN e monitorado no SYS para futuras animações interativas .riv.</span></div>' +
 					'<div class="rpg-patch-item"><strong>CDN de jogo profissional</strong><span>GSAP, particles.js, SweetAlert2, Animate.css e Howler carregam pela internet para animações e cenas mais fortes.</span></div>' +
 					'<div class="rpg-patch-item"><strong>Inventário premium</strong><span>Busca, raridade, capacidade, ordenação, tooltips e efeito 3D nos slots.</span></div>' +
 					'<div class="rpg-patch-item"><strong>Raças nos atributos</strong><span>Cada atributo mostra base, bônus racial e total efetivo conforme a raça cadastrada.</span></div>' +
@@ -1117,7 +1126,7 @@
 					'<section class="rpg-sistema-bloco"><h3>Salvamento</h3>' +
 						'<div class="rpg-sistema-linha"><span>Status</span><strong>' + textoSalvamento() + '</strong></div>' +
 						'<div class="rpg-sistema-linha"><span>Rede</span><strong>' + (navigator.onLine ? "Online" : "Offline") + '</strong></div>' +
-							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v22</strong></div>' +
+							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v23</strong></div>' +
 						'<div class="rpg-sistema-acoes"><button type="button" data-sistema-atualizar>Atualizar app</button><button type="button" data-sistema-notes>Novidades</button></div>' +
 					'</section>' +
 					'<section class="rpg-sistema-bloco"><h3>CDN Premium</h3>' +
@@ -1127,6 +1136,9 @@
 							'<div class="rpg-sistema-linha"><span>Howler</span><strong><span class="rpg-cdn-status ' + (cdnPremium.howler ? "" : "off") + '">' + (cdnPremium.howler ? "ativo" : "off") + '</span></strong></div>' +
 							'<div class="rpg-sistema-linha"><span>Tippy</span><strong><span class="rpg-cdn-status ' + (cdnPremium.tippy ? "" : "off") + '">' + (cdnPremium.tippy ? "ativo" : "off") + '</span></strong></div>' +
 							'<div class="rpg-sistema-linha"><span>Tilt 3D</span><strong><span class="rpg-cdn-status ' + (cdnPremium.tilt ? "" : "off") + '">' + (cdnPremium.tilt ? "ativo" : "off") + '</span></strong></div>' +
+							'<div class="rpg-sistema-linha"><span>PixiJS</span><strong><span class="rpg-cdn-status ' + (cdnPremium.pixi ? "" : "off") + '">' + (cdnPremium.pixi ? "ativo" : "off") + '</span></strong></div>' +
+							'<div class="rpg-sistema-linha"><span>Phaser</span><strong><span class="rpg-cdn-status ' + (cdnPremium.phaser ? "" : "off") + '">' + (cdnPremium.phaser ? "ativo" : "off") + '</span></strong></div>' +
+							'<div class="rpg-sistema-linha"><span>Rive</span><strong><span class="rpg-cdn-status ' + (cdnPremium.rive ? "" : "off") + '">' + (cdnPremium.rive ? "ativo" : "off") + '</span></strong></div>' +
 							'<div class="rpg-sistema-acoes"><button class="principal" type="button" data-sistema-cinematico>Cena lendária</button><button type="button" data-sistema-cdn-reload>Recarregar CDN</button></div>' +
 					'</section>' +
 					'<section class="rpg-sistema-bloco"><h3>Áudio</h3>' +

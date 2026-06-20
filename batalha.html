@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Batalha - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game10">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game11">
     <style>
         html, body { min-height: 100%; margin: 0; background: #030708; color: #fff7df; overflow-x: hidden; }
         body { font-family: Georgia, "Times New Roman", serif; }
@@ -17,6 +17,12 @@
         .battle-top p { margin: 0; max-width: 760px; color: #d9e8d4; line-height: 1.45; }
         .battle-link, .battle-actions button { min-height: 42px; padding: 0 14px; border: 1px solid rgba(255, 226, 138, .52); border-radius: 8px; color: #fff7df; background: rgba(4, 12, 13, .72); font-weight: 1000; text-transform: uppercase; text-decoration: none; cursor: pointer; }
         .battle-link:hover, .battle-actions button:hover { border-color: #ffe28a; background: rgba(247, 200, 75, .16); }
+        .phaser-stage { display: grid; gap: 10px; padding: 12px; overflow: hidden; }
+        .phaser-stage header { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+        .phaser-stage h2 { margin: 4px 0 0; color: #fff7df; font-size: 1.1rem; text-transform: uppercase; }
+        .phaser-status { padding: 6px 9px; border: 1px solid rgba(144,255,0,.28); border-radius: 999px; color: #b8ff55; background: rgba(144,255,0,.08); font: 1000 .7rem Arial,sans-serif; text-transform: uppercase; }
+        .phaser-canvas { min-height: 220px; border: 1px solid rgba(255,226,138,.18); border-radius: 8px; background: radial-gradient(circle at 50% 50%, rgba(255,226,138,.12), transparent 42%), rgba(0,0,0,.28); overflow: hidden; }
+        .phaser-canvas canvas { display: block; width: 100% !important; height: 100% !important; }
         .battle-arena { display: grid; grid-template-columns: minmax(260px, .9fr) minmax(320px, 1.2fr) minmax(260px, .9fr); gap: 14px; min-height: 560px; padding: 14px; background: radial-gradient(circle at 50% 28%, rgba(255, 226, 138, .12), transparent 34%), linear-gradient(180deg, rgba(1,7,9,.82), rgba(8,18,15,.74)); }
         .fighter { --cor: #36e0ff; display: grid; grid-template-rows: auto 1fr auto; gap: 12px; min-height: 0; padding: 14px; border: 1px solid color-mix(in srgb, var(--cor) 42%, transparent); border-radius: 8px; background: radial-gradient(circle at 50% 22%, color-mix(in srgb, var(--cor) 18%, transparent), transparent 38%), rgba(0,0,0,.24); box-shadow: inset 0 0 28px rgba(0,0,0,.28), 0 0 28px color-mix(in srgb, var(--cor) 14%, transparent); }
         .fighter-head { display: grid; gap: 6px; }
@@ -44,7 +50,7 @@
         .battle-footer article { padding: 12px; }
         .battle-footer strong { display: block; margin-top: 4px; color: #fff7df; font-size: 1.1rem; }
         @media (max-width: 980px) { .battle-arena { grid-template-columns: 1fr; } .battle-center { order: 3; } .fighter-portrait { min-height: 230px; } .battle-footer, .battle-top { grid-template-columns: 1fr; } }
-        @media (max-width: 560px) { .battle-app { width: min(100%, calc(100% - 18px)); padding-top: 76px; } .battle-actions, .turn-card, .battle-footer { grid-template-columns: 1fr; } .video-fundo { display: none; } }
+        @media (max-width: 560px) { .battle-app { width: min(100%, calc(100% - 18px)); padding-top: 76px; } .battle-actions, .turn-card, .battle-footer { grid-template-columns: 1fr; } .video-fundo { display: none; } .phaser-canvas{min-height:180px} }
     </style>
 </head>
 <body>
@@ -59,6 +65,13 @@
             </div>
             <a class="battle-link" href="missoes.html">Voltar às Missões</a>
         </header>
+        <section class="phaser-stage battle-panel">
+            <header>
+                <div><small>Phaser 3</small><h2>Cena de combate animada</h2></div>
+                <span class="phaser-status" id="phaser-status">Carregando motor</span>
+            </header>
+            <div class="phaser-canvas" id="phaser-canvas"></div>
+        </section>
         <section class="battle-arena battle-panel">
             <article class="fighter" id="player-card" style="--cor:#36e0ff">
                 <div class="fighter-head"><span class="battle-meta">Jogador</span><h2 id="player-name">Personagem</h2><span id="player-race">Classe</span></div>
@@ -101,7 +114,7 @@
         </section>
     </main>
     <script src="banco-personagens.js?v=20260619-db2"></script>
-    <script src="musica-fundo.js?v=20260619-game10"></script>
+    <script src="musica-fundo.js?v=20260619-game11"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
@@ -145,6 +158,91 @@
         function ler(chave, padrao) { try { return JSON.parse(localStorage.getItem(chave) || "null") || padrao; } catch { return padrao; } }
         function salvar(chave, valor) { localStorage.setItem(chave, JSON.stringify(valor)); }
         function normalizar(texto) { return RpgSistemas.normalizar ? RpgSistemas.normalizar(texto) : String(texto || "").toLowerCase(); }
+        function carregarScript(src, id) {
+            return new Promise((resolve, reject) => {
+                if (document.getElementById(id)) { resolve(); return; }
+                const script = document.createElement("script");
+                script.id = id;
+                script.src = src;
+                script.onload = resolve;
+                script.onerror = () => reject(new Error("Falha ao carregar " + src));
+                document.head.appendChild(script);
+            });
+        }
+        async function iniciarPhaser() {
+            const status = document.getElementById("phaser-status");
+            const alvo = document.getElementById("phaser-canvas");
+            try {
+                await carregarScript("https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js", "phaser-batalha");
+                if (!window.Phaser) throw new Error("Phaser indisponível");
+                status.textContent = "Phaser ativo";
+                const config = {
+                    type: Phaser.AUTO,
+                    parent: alvo,
+                    width: Math.max(320, alvo.clientWidth),
+                    height: Math.max(180, alvo.clientHeight),
+                    backgroundColor: "rgba(0,0,0,0)",
+                    transparent: true,
+                    scene: {
+                        create: function () {
+                            const w = this.scale.width;
+                            const h = this.scale.height;
+                            const grid = this.add.graphics();
+                            grid.lineStyle(1, 0x36e0ff, 0.12);
+                            for (let x = 0; x < w; x += 42) grid.lineBetween(x, 0, x, h);
+                            for (let y = 0; y < h; y += 42) grid.lineBetween(0, y, w, y);
+                            this.add.ellipse(w * .5, h * .72, w * .7, 42, 0xffe28a, 0.14);
+                            this.playerAura = this.add.circle(w * .22, h * .56, 54, 0x36e0ff, 0.14).setStrokeStyle(2, 0x36e0ff, .55);
+                            this.enemyAura = this.add.circle(w * .78, h * .56, 54, 0xff4128, 0.14).setStrokeStyle(2, 0xff4128, .55);
+                            this.player = this.add.text(w * .22, h * .52, "OP", { fontFamily: "Arial Black", fontSize: "42px", color: "#fff7df", stroke: "#061011", strokeThickness: 6 }).setOrigin(.5);
+                            this.enemy = this.add.text(w * .78, h * .52, inimigoBase.simbolo, { fontFamily: "Arial Black", fontSize: "48px", color: "#ffdf9a", stroke: "#210b08", strokeThickness: 6 }).setOrigin(.5);
+                            this.tweens.add({ targets: [this.playerAura, this.enemyAura], scale: 1.12, alpha: .26, yoyo: true, repeat: -1, duration: 900, ease: "sine.inOut" });
+                            window.battleFx = {
+                                playerAttack: () => this.fxProjectile(this.player.x + 32, this.player.y, this.enemy.x - 28, this.enemy.y, 0xffe28a),
+                                skill: () => this.fxProjectile(this.player.x + 32, this.player.y - 10, this.enemy.x - 22, this.enemy.y, 0x90ff00, true),
+                                enemyAttack: () => this.fxProjectile(this.enemy.x - 32, this.enemy.y, this.player.x + 28, this.player.y, 0xff4128),
+                                defend: () => this.fxShield(this.playerAura, 0x36e0ff),
+                                item: () => this.fxShield(this.playerAura, 0x90ff00),
+                                victory: () => this.fxVictory()
+                            };
+                        },
+                        fxProjectile: function (x1, y1, x2, y2, color, heavy) {
+                            const ball = this.add.circle(x1, y1, heavy ? 12 : 8, color, 1);
+                            this.tweens.add({
+                                targets: ball,
+                                x: x2,
+                                y: y2,
+                                scale: heavy ? 2.4 : 1.7,
+                                alpha: .18,
+                                duration: heavy ? 320 : 240,
+                                ease: "quad.out",
+                                onComplete: () => {
+                                    const hit = this.add.circle(x2, y2, heavy ? 36 : 24, color, .38);
+                                    ball.destroy();
+                                    this.cameras.main.shake(heavy ? 180 : 100, heavy ? .012 : .006);
+                                    this.tweens.add({ targets: hit, scale: 1.8, alpha: 0, duration: 220, onComplete: () => hit.destroy() });
+                                }
+                            });
+                        },
+                        fxShield: function (target, color) {
+                            const shield = this.add.circle(target.x, target.y, 64, color, .08).setStrokeStyle(3, color, .75);
+                            this.tweens.add({ targets: shield, scale: 1.35, alpha: 0, duration: 460, ease: "sine.out", onComplete: () => shield.destroy() });
+                        },
+                        fxVictory: function () {
+                            for (let i = 0; i < 28; i += 1) {
+                                const star = this.add.circle(this.scale.width * .5, this.scale.height * .52, 4 + Math.random() * 5, 0xffe28a, 1);
+                                this.tweens.add({ targets: star, x: star.x + (Math.random() - .5) * 360, y: star.y + (Math.random() - .5) * 180, alpha: 0, scale: 2, duration: 620 + Math.random() * 420, ease: "quad.out", onComplete: () => star.destroy() });
+                            }
+                        }
+                    }
+                };
+                const game = new Phaser.Game(config);
+                window.addEventListener("resize", () => game.scale.resize(Math.max(320, alvo.clientWidth), Math.max(180, alvo.clientHeight)));
+            } catch (erro) {
+                status.textContent = "Phaser fallback";
+                console.warn("Phaser indisponível:", erro);
+            }
+        }
         function danoBase(mult) {
             const variacao = .86 + Math.random() * .28;
             return Math.max(12, Math.round(((forca * .55) + (agilidade * .22) + Number(progresso.nivel || 1) * 7) * (mult || 1) * variacao));
@@ -179,6 +277,7 @@
             state.playerHp = Math.max(0, state.playerHp - dano);
             state.enemyEne = Math.max(0, state.enemyEne - 8);
             state.defendendo = false;
+            window.battleFx?.enemyAttack?.();
             log(`${inimigoBase.nome} contra-atacou causando ${dano} de dano.`);
             if (state.playerHp <= 0) log("Você caiu no combate. Reinicie, use itens ou volte mais forte.");
             state.turno += 1;
@@ -188,6 +287,7 @@
             if (state.enemyHp > 0) return false;
             state.venceu = true;
             state.vitorias += 1;
+            window.battleFx?.victory?.();
             document.getElementById("vitorias").textContent = state.vitorias;
             log("Vitória alcançada. Finalize para gravar recompensas e conquistas.");
             atualizar();
@@ -202,6 +302,7 @@
                 const dano = danoBase(1);
                 state.enemyHp = Math.max(0, state.enemyHp - dano);
                 state.playerEne = Math.min(state.playerMaxEne, state.playerEne + 8);
+                window.battleFx?.playerAttack?.();
                 log(`${personagem.nome} acertou um ataque e causou ${dano} de dano.`);
             }
             if (acao === "skill") {
@@ -209,11 +310,13 @@
                 const dano = danoBase(1.82);
                 state.playerEne -= 32;
                 state.enemyHp = Math.max(0, state.enemyHp - dano);
+                window.battleFx?.skill?.();
                 log(`${personagem.nome} liberou uma habilidade e causou ${dano} de dano.`);
             }
             if (acao === "defend") {
                 state.defendendo = true;
                 state.playerEne = Math.min(state.playerMaxEne, state.playerEne + 18);
+                window.battleFx?.defend?.();
                 log(`${personagem.nome} assumiu postura defensiva e recuperou energia.`);
             }
             if (acao === "item") {
@@ -224,6 +327,7 @@
                 state.playerHp = Math.min(state.playerMaxHp, state.playerHp + cura);
                 item.quantidade = Math.max(0, Number(item.quantidade || 1) - 1);
                 salvar(`inventario_${personagem.nome}`, inv.filter((entrada) => Number(entrada.quantidade || 0) > 0));
+                window.battleFx?.item?.();
                 log(`${item.nome} usado: +${cura} HP.`);
             }
             atualizar();
@@ -293,6 +397,7 @@
             }
             log(`Combate iniciado contra ${inimigoBase.nome}.`);
             document.querySelectorAll("[data-action]").forEach((btn) => btn.addEventListener("click", () => usarAcao(btn.dataset.action)));
+            iniciarPhaser();
             atualizar();
         }
         iniciar();
