@@ -221,7 +221,8 @@
 			".chip-rota{padding:7px 9px;border:1px solid rgba(255,226,138,.24);border-radius:999px;background:rgba(255,247,223,.05);color:#ffe28a;font-size:.78rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase}",
 			".acoes-rapidas-lobby{display:grid;grid-template-columns:1fr 1fr;gap:10px}",
 			".botao-acao-rapida{min-height:54px;border:1px solid rgba(255,226,138,.5);border-radius:8px;color:#fff7df;background:linear-gradient(90deg,rgba(255,247,223,.07),rgba(54,224,255,.08));font-weight:900;text-transform:uppercase;cursor:pointer}",
-			".portal-mundo-lobby{position:relative;display:grid;gap:10px;margin-bottom:12px;padding:12px;border:1px solid rgba(255,226,138,.28);border-radius:8px;background:radial-gradient(circle at 18% 20%,rgba(144,255,0,.15),transparent 34%),linear-gradient(90deg,rgba(3,8,10,.72),rgba(18,34,26,.62));box-shadow:inset 0 0 22px rgba(0,0,0,.22),0 0 24px rgba(144,255,0,.08);overflow:hidden}.portal-mundo-lobby::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(255,226,138,.16),transparent);transform:translateX(-120%);animation:rpgPortalSweep 3.8s ease-in-out infinite}.portal-mundo-lobby small{position:relative;color:#90ff00;font:1000 .68rem Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase}.portal-mundo-lobby strong{position:relative;color:#fff7df;font:1000 1.05rem Arial,sans-serif;text-transform:uppercase}.portal-mundo-lobby span{position:relative;color:#d9e8d4;font:800 .78rem/1.35 Arial,sans-serif}.portal-mundo-motores{position:relative;display:flex;flex-wrap:wrap;gap:6px}.portal-mundo-motores i{padding:5px 7px;border:1px solid rgba(255,247,223,.12);border-radius:999px;background:rgba(0,0,0,.26);color:#ffe28a;font:900 .62rem Arial,sans-serif;font-style:normal;text-transform:uppercase}.botao-entrar-jogo{position:relative!important;min-height:96px!important;border-color:rgba(255,226,138,.7)!important;background:radial-gradient(circle at 18% 45%,rgba(255,226,138,.32),transparent 30%),linear-gradient(135deg,#ffe28a 0%,#ff9f1c 48%,#b33412 100%)!important;color:#151006!important;box-shadow:0 18px 46px rgba(0,0,0,.42),0 0 30px rgba(255,159,28,.28),inset 0 1px 0 rgba(255,255,255,.38)!important}.botao-entrar-jogo span{font-size:1.02rem!important;letter-spacing:.06em!important}.botao-entrar-jogo::after{content:'ONLINE';position:absolute;right:12px;top:10px;padding:4px 7px;border:1px solid rgba(20,16,6,.2);border-radius:999px;background:rgba(255,247,223,.58);font:1000 .58rem Arial,sans-serif;color:#1b170c}",
+			".portal-mundo-lobby{position:relative;display:grid;gap:12px;margin:4px 0 14px;padding:16px;border:1px solid rgba(255,226,138,.44);border-radius:8px;background:radial-gradient(circle at 15% 12%,rgba(144,255,0,.24),transparent 30%),radial-gradient(circle at 88% 70%,rgba(255,65,40,.28),transparent 34%),linear-gradient(135deg,rgba(3,8,10,.88),rgba(20,40,32,.74));box-shadow:inset 0 0 28px rgba(0,0,0,.28),0 0 38px rgba(144,255,0,.16),0 18px 46px rgba(0,0,0,.34);overflow:hidden}.portal-mundo-lobby::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(255,226,138,.22),transparent);transform:translateX(-120%);animation:rpgPortalSweep 3.8s ease-in-out infinite}.portal-mundo-lobby::after{content:'LOBBY V2 ONLINE';position:absolute;right:12px;top:10px;padding:5px 8px;border:1px solid rgba(144,255,0,.34);border-radius:999px;background:rgba(4,18,10,.78);color:#90ff00;font:1000 .58rem Arial,sans-serif;letter-spacing:.1em}.portal-mundo-lobby small{position:relative;color:#90ff00;font:1000 .72rem Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase}.portal-mundo-lobby strong{position:relative;color:#fff7df;font:1000 clamp(1.25rem,3vw,1.75rem)/1.02 'Segoe UI Black','Arial Black',Impact,sans-serif;text-transform:uppercase;text-shadow:0 4px 0 #210b08,0 14px 26px rgba(0,0,0,.64)}.portal-mundo-lobby span{position:relative;max-width:48ch;color:#d9e8d4;font:800 .84rem/1.38 Arial,sans-serif}.portal-mundo-motores{position:relative;display:flex;flex-wrap:wrap;gap:6px}.portal-mundo-motores i{padding:6px 8px;border:1px solid rgba(255,247,223,.16);border-radius:999px;background:rgba(0,0,0,.3);color:#ffe28a;font:900 .62rem Arial,sans-serif;font-style:normal;text-transform:uppercase}.botao-entrar-jogo{position:relative!important;min-height:116px!important;border:2px solid rgba(255,226,138,.82)!important;background:radial-gradient(circle at 18% 45%,rgba(255,255,255,.36),transparent 28%),linear-gradient(135deg,#fff0a8 0%,#ffbd2e 42%,#d34a13 100%)!important;color:#151006!important;box-shadow:0 22px 56px rgba(0,0,0,.5),0 0 38px rgba(255,159,28,.34),inset 0 1px 0 rgba(255,255,255,.48)!important}.botao-entrar-jogo span{font-size:1.16rem!important;letter-spacing:.08em!important}.botao-entrar-jogo::after{content:'MUNDO ONLINE';position:absolute;right:12px;top:10px;padding:5px 8px;border:1px solid rgba(20,16,6,.2);border-radius:999px;background:rgba(255,247,223,.68);font:1000 .58rem Arial,sans-serif;color:#1b170c}",
+			".rpg-versao-visivel{position:fixed;left:50%;top:12px;z-index:7000;transform:translateX(-50%);display:flex;align-items:center;gap:9px;max-width:calc(100vw - 24px);padding:8px 12px;border:1px solid rgba(144,255,0,.44);border-radius:999px;background:linear-gradient(90deg,rgba(3,12,8,.92),rgba(6,22,24,.86));box-shadow:0 16px 38px rgba(0,0,0,.42),0 0 28px rgba(144,255,0,.16);color:#eaffd8;font:1000 .68rem Arial,sans-serif;text-transform:uppercase;letter-spacing:.1em;pointer-events:none}.rpg-versao-visivel i{width:8px;height:8px;border-radius:999px;background:#90ff00;box-shadow:0 0 14px rgba(144,255,0,.9)}",
 			".item-imagem{flex:0 0 auto;width:56px;height:56px;border:1px solid rgba(255,226,138,.52);border-radius:8px;overflow:hidden;background:#061011;box-shadow:0 0 18px rgba(255,226,138,.25)}",
 			".item-imagem img{width:100%;height:100%;object-fit:cover;display:block}",
 			".login-beta-overlay{position:fixed;inset:0;z-index:4500;display:grid;place-items:center;padding:18px;background:rgba(0,0,0,.66);backdrop-filter:blur(6px)}",
@@ -356,6 +357,22 @@
 		if (window.gsap) {
 			window.gsap.fromTo(portal, { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: .55, ease: "power3.out" });
 		}
+	}
+
+	function instalarSeloVersaoNova() {
+		var paginas = ["lobby.html", "batalha.html", "aventura.html"];
+		var atual = location.pathname.split("/").pop() || "index.html";
+		if (!paginas.includes(atual) || document.getElementById("rpg-versao-visivel")) return;
+		var selo = document.createElement("div");
+		selo.id = "rpg-versao-visivel";
+		selo.className = "rpg-versao-visivel";
+		selo.innerHTML = "<i></i><span>Atualização V25 carregada</span>";
+		document.body.appendChild(selo);
+		setTimeout(function () {
+			selo.style.opacity = "0";
+			selo.style.transition = "opacity .35s ease";
+			setTimeout(function () { selo.remove(); }, 420);
+		}, 6500);
 	}
 
 	function criarHudBattle() {
@@ -1101,7 +1118,7 @@
 	}
 
 	function instalarPatchNotes(forcar) {
-		var versao = "20260619-pro12";
+		var versao = "20260619-pro13";
 		var chave = "rpg_patch_notes_" + versao;
 		if (!forcar && localStorage.getItem(chave) === "visto") return;
 		var existente = document.getElementById("rpg-patch-notes");
@@ -1186,7 +1203,7 @@
 					'<section class="rpg-sistema-bloco"><h3>Salvamento</h3>' +
 						'<div class="rpg-sistema-linha"><span>Status</span><strong>' + textoSalvamento() + '</strong></div>' +
 						'<div class="rpg-sistema-linha"><span>Rede</span><strong>' + (navigator.onLine ? "Online" : "Offline") + '</strong></div>' +
-							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v24</strong></div>' +
+							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v25</strong></div>' +
 						'<div class="rpg-sistema-acoes"><button type="button" data-sistema-atualizar>Atualizar app</button><button type="button" data-sistema-notes>Novidades</button></div>' +
 					'</section>' +
 					'<section class="rpg-sistema-bloco"><h3>CDN Premium</h3>' +
@@ -1535,6 +1552,7 @@
 		injetarAtalhos();
 		substituirFichaLobby();
 		instalarPortalMundoLobby();
+		instalarSeloVersaoNova();
 		instalarObjetivosLobby();
 		atualizarIcones();
 		habilitarScroll();
@@ -1551,6 +1569,7 @@
 		setTimeout(instalarPasseLobby, 820);
 		setTimeout(instalarPatchNotes, 1100);
 		setTimeout(instalarPortalMundoLobby, 500);
+		setTimeout(instalarSeloVersaoNova, 350);
 		iniciarAudio();
 		setTimeout(instalarObjetivosLobby, 900);
 		setTimeout(corrigirDownloadNoMenu, 300);
