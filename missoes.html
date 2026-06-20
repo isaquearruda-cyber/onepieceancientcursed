@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Missões de Organização - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game9">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game10">
     <style>
         html,
         body {
@@ -160,6 +160,11 @@
             box-shadow: 0 0 22px rgba(70, 255, 125, 0.12), inset 0 1px 0 rgba(255, 247, 223, 0.05);
         }
 
+        .missao-card.aceita {
+            border-color: rgba(54, 224, 255, 0.42);
+            box-shadow: 0 0 24px rgba(54, 224, 255, 0.13), inset 0 1px 0 rgba(255, 247, 223, 0.05);
+        }
+
         .missao-card h2 {
             color: #fff7df;
             font-size: 1.25rem;
@@ -181,6 +186,33 @@
 
         .missao-detalhes strong {
             color: #ffe28a;
+        }
+
+        .missao-recompensas,
+        .missao-acoes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .missao-recompensas span {
+            padding: 6px 9px;
+            border: 1px solid rgba(255, 226, 138, 0.22);
+            border-radius: 999px;
+            color: #d9e8d4;
+            background: rgba(0, 0, 0, 0.28);
+            font-size: 0.72rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .missao-recompensas b {
+            color: #90ff00;
+        }
+
+        .missao-acoes {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
         .missao-card button,
@@ -207,6 +239,17 @@
         .missao-card button:disabled {
             opacity: 0.56;
             cursor: not-allowed;
+        }
+
+        .missao-card button.secundario {
+            color: #fff7df;
+            background: rgba(4, 12, 13, 0.72);
+        }
+
+        .missao-card button.batalha {
+            color: #fff7df;
+            border-color: rgba(255, 92, 58, 0.55);
+            background: linear-gradient(90deg, rgba(255, 65, 40, 0.78), rgba(247, 200, 75, 0.3));
         }
 
         .botao-voltar {
@@ -303,6 +346,10 @@
             .missoes-grid {
                 grid-template-columns: 1fr;
             }
+
+            .missao-acoes {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -326,6 +373,7 @@
             <aside class="missoes-status">
                 <span>Personagem <b id="status-nome">---</b></span>
                 <span>Organização <b id="status-org">---</b></span>
+                <span>Aceitas <b id="status-aceitas">0</b></span>
                 <span>Concluídas <b id="status-total">0</b></span>
             </aside>
         </header>
@@ -381,7 +429,7 @@
 
     <script src="supabase-config.js"></script>
     <script src="banco-personagens.js?v=20260619-db2"></script>
-    <script src="musica-fundo.js?v=20260619-game9"></script>
+    <script src="musica-fundo.js?v=20260619-game10"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         const ranks = ["E", "D", "C", "B", "A"];
@@ -533,6 +581,7 @@
         const textoOrg = document.getElementById("texto-org");
         const statusNome = document.getElementById("status-nome");
         const statusOrg = document.getElementById("status-org");
+        const statusAceitas = document.getElementById("status-aceitas");
         const statusTotal = document.getElementById("status-total");
         const abasPeriodo = document.getElementById("abas-periodo");
         const abasRank = document.getElementById("abas-rank");
@@ -684,6 +733,52 @@
             return conclusoes().some((item) => item.id === id);
         }
 
+        function chaveAceitas() {
+            const nome = window.RpgSistemas?.normalizar ? RpgSistemas.normalizar(personagemAtual?.nome || "") : normalizar(personagemAtual?.nome || "");
+            return `rpg_missoes_aceitas_${nome}`;
+        }
+
+        function missoesAceitas() {
+            try {
+                const lista = JSON.parse(localStorage.getItem(chaveAceitas()) || "[]");
+                return Array.isArray(lista) ? lista : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function salvarAceitas(lista) {
+            localStorage.setItem(chaveAceitas(), JSON.stringify(lista));
+        }
+
+        function missaoAceita(id) {
+            return missoesAceitas().some((item) => item.id === id);
+        }
+
+        function aceitarMissao(missao) {
+            if (!missao || missaoConcluida(missao.id)) return;
+            const aceitas = missoesAceitas();
+            if (!aceitas.some((item) => item.id === missao.id)) {
+                aceitas.unshift({
+                    id: missao.id,
+                    titulo: missao.titulo,
+                    rank: missao.rank,
+                    periodo: missao.periodo,
+                    organizacao: missao.org,
+                    aceitaEm: new Date().toLocaleString("pt-BR")
+                });
+                salvarAceitas(aceitas.slice(0, 60));
+            }
+            RpgFeedback?.aviso?.("Missão aceita", [missao.titulo, "Batalha liberada no quadro."]);
+            renderizar();
+        }
+
+        function abrirBatalha(missao) {
+            if (!missao) return;
+            localStorage.setItem("rpg_missao_batalha_atual", JSON.stringify(missao));
+            window.location.href = `batalha.html?rank=${encodeURIComponent(missao.rank)}&missao=${encodeURIComponent(missao.id)}`;
+        }
+
         function renderizarAbas() {
             abasPeriodo.innerHTML = periodos.map((periodo) => `
                 <button class="aba-missao ${periodoAtual === periodo.chave ? "ativa" : ""}" type="button" data-periodo="${periodo.chave}" aria-pressed="${periodoAtual === periodo.chave ? "true" : "false"}">
@@ -722,9 +817,11 @@
             const org = organizacaoPersonagem(personagemAtual);
             const missoes = gerarMissoes(periodoAtual, rankAtual, org);
             const concluidas = conclusoes();
+            const aceitas = missoesAceitas();
 
             statusNome.textContent = personagemAtual?.nome || "---";
             statusOrg.textContent = org;
+            statusAceitas.textContent = aceitas.length;
             statusTotal.textContent = concluidas.length;
             textoOrg.textContent = `Operações disponíveis para ${org}. As listas mudam conforme o prazo de cada aba.`;
             resumoTitulo.textContent = `${periodos.find((item) => item.chave === periodoAtual).nome} - Rank ${rankAtual}`;
@@ -733,8 +830,10 @@
 
             gradeMissoes.innerHTML = missoes.map((missao) => {
                 const feita = missaoConcluida(missao.id);
+                const aceita = missaoAceita(missao.id);
+                const recompensa = RpgSistemas.recompensasAtividade("missao", missao.rank, missao.periodo);
                 return `
-                    <article class="missao-card ${feita ? "concluida" : ""}">
+                    <article class="missao-card ${feita ? "concluida" : aceita ? "aceita" : ""}">
                         <span class="missao-meta">${escaparHtml(missao.org)} / Rank ${escaparHtml(missao.rank)}</span>
                         <h2>${escaparHtml(missao.titulo)}</h2>
                         <p>${escaparHtml(missao.descricao)}</p>
@@ -743,12 +842,37 @@
                             <span><strong>Recompensa:</strong> ${escaparHtml(missao.recompensa)}</span>
                             <span><strong>Renova em:</strong> ${escaparHtml(missao.prazoTexto)}</span>
                         </div>
-                        <button type="button" data-missao="${escaparHtml(missao.id)}" ${feita ? "disabled" : ""}>
-                            ${feita ? "Concluída" : "Concluir missão"}
-                        </button>
+                        <div class="missao-recompensas">
+                            <span><b>+${recompensa.exp}</b> EXP</span>
+                            <span><b>+${recompensa.berris}</b> Berris</span>
+                            <span><b>+${recompensa.pontosAtributo}</b> Ponto</span>
+                        </div>
+                        <div class="missao-acoes">
+                            ${feita ? `<button type="button" disabled>Concluída</button>` : aceita ? `
+                                <button class="batalha" type="button" data-batalha="${escaparHtml(missao.id)}">Batalhar</button>
+                                <button type="button" data-missao="${escaparHtml(missao.id)}">Concluir</button>
+                            ` : `
+                                <button class="secundario" type="button" data-aceitar="${escaparHtml(missao.id)}">Aceitar</button>
+                                <button type="button" data-missao="${escaparHtml(missao.id)}">Concluir direto</button>
+                            `}
+                        </div>
                     </article>
                 `;
             }).join("");
+
+            gradeMissoes.querySelectorAll("[data-aceitar]").forEach((botao) => {
+                botao.addEventListener("click", () => {
+                    const missao = missoes.find((item) => item.id === botao.dataset.aceitar);
+                    aceitarMissao(missao);
+                });
+            });
+
+            gradeMissoes.querySelectorAll("[data-batalha]").forEach((botao) => {
+                botao.addEventListener("click", () => {
+                    const missao = missoes.find((item) => item.id === botao.dataset.batalha);
+                    abrirBatalha(missao);
+                });
+            });
 
             gradeMissoes.querySelectorAll("[data-missao]").forEach((botao) => {
                 botao.addEventListener("click", () => {

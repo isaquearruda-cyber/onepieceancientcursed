@@ -4,7 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Entrar na Aventura - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game9">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game10">
+    <style>
+        .campanha-rota { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr); gap: 14px; }
+        .campanha-rota .painel { padding: 14px; }
+        .campanha-barra { height: 12px; margin-top: 10px; border: 1px solid rgba(255,247,223,.14); border-radius: 999px; background: rgba(0,0,0,.42); overflow: hidden; }
+        .campanha-barra i { display: block; height: 100%; width: var(--progresso, 0%); background: linear-gradient(90deg,#36e0ff,#90ff00,#ffe28a); }
+        .requisitos-rota { display: grid; gap: 8px; }
+        .requisitos-rota span { display: flex; justify-content: space-between; gap: 10px; padding: 9px; border: 1px solid rgba(255,247,223,.1); border-radius: 8px; background: rgba(0,0,0,.22); color: #d9e8d4; font-weight: 900; }
+        .requisitos-rota b { color: #ffe28a; text-align: right; }
+        @media(max-width:820px){.campanha-rota{grid-template-columns:1fr}}
+    </style>
 </head>
 <body class="pagina-aventura">
     <audio id="musica-fundo" loop preload="auto"><source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg"></audio>
@@ -28,13 +38,22 @@
             <div class="mares-trilho" id="mares"></div>
             <p class="resultado" id="bloqueio" hidden></p>
         </article>
+        <section class="campanha-rota">
+            <article class="painel">
+                <small>Campanha dos mares</small>
+                <h2 id="campanha-titulo">Progresso de exploração</h2>
+                <p id="campanha-texto">Carregando rotas liberadas...</p>
+                <div class="campanha-barra" id="campanha-barra"><i></i></div>
+            </article>
+            <article class="painel requisitos-rota" id="requisitos-rota"></article>
+        </section>
         <section class="briefing">
             <article class="briefing-card painel"><small>Próximo passo</small><strong>Escolha um Blue</strong><p>Ao entrar num mar, você verá somente as ilhas daquele mar e poderá marcar origem e destino.</p></article>
             <article class="briefing-card painel"><small>Progresso</small><strong>Rotas bloqueadas</strong><p>Calm Belt, Grand Line, Mar do Céu, Novo Mundo e Red Line ficam para avanço de campanha.</p></article>
             <article class="briefing-card painel"><small>Registro</small><strong>Viagem salva</strong><p>O cálculo de rota salva tempo, custo, risco e última viagem no navegador do jogador.</p></article>
         </section>
     </main>
-    <script src="musica-fundo.js?v=20260619-game9"></script>
+    <script src="musica-fundo.js?v=20260619-game10"></script>
     <script src="mares-dados.js?v=20260619-rpg10"></script>
     <script>
         const maresEl = document.getElementById("mares");
@@ -42,6 +61,20 @@
         const mares = window.RpgMaresDados || [];
         const arteMar = () => "assets/mares/mar-sprite.webp";
         const posMar = { east: "0% 0%", north: "25% 0%", south: "50% 0%", west: "75% 0%", reverse: "100% 0%", calm: "0% 100%", paraiso: "25% 100%", skypiea: "50% 100%", novo: "75% 100%", red: "100% 100%" };
+        const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+        const progresso = personagem && window.RpgSistemas ? RpgSistemas.obterProgresso(personagem) : {};
+        const abertas = mares.filter((mar) => mar.aberto).length;
+        const total = mares.length || 1;
+        const percentual = Math.round((abertas / total) * 100);
+        document.getElementById("campanha-barra").style.setProperty("--progresso", percentual + "%");
+        document.getElementById("campanha-titulo").textContent = `${abertas}/${total} rotas liberadas`;
+        document.getElementById("campanha-texto").textContent = `Nível ${progresso.nivel || 1}, ${Number(progresso.berris || 0).toLocaleString("pt-BR")} berris e rotas salvas definem sua campanha de exploração.`;
+        document.getElementById("requisitos-rota").innerHTML = `
+            <span>Reverse Mountain <b>Concluir 3 missões C</b></span>
+            <span>Grand Line <b>Nível 8 + Log Pose</b></span>
+            <span>Skypiea <b>Mapa especial + Rank B</b></span>
+            <span>Novo Mundo <b>Nível 20 + Rank A</b></span>
+        `;
         maresEl.innerHTML = mares.map((mar) => `<button class="mar-card ${mar.aberto ? "" : "bloqueado"}" style="--cor:${mar.cor};--img:url('${arteMar()}');--pos:${posMar[mar.id] || "center"}" type="button" data-mar="${mar.id}"><span class="mar-status">${mar.aberto ? "Desbloqueado" : "Bloqueado"}</span><strong>${mar.nome}</strong><span class="mar-desc">${mar.desc}</span></button>`).join("");
         maresEl.querySelectorAll("[data-mar]").forEach((botao) => {
             botao.onclick = () => {

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loja Rotativa - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game9">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game10">
     <style>
         html, body { margin: 0; min-height: 100%; background: #030708; color: #fff7df; overflow-y: auto; }
         .video-fundo { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.3) saturate(1.15); z-index: 0; }
@@ -26,7 +26,13 @@
         .item p { position: relative; margin: 0; color: #d9e8d4; line-height: 1.42; }
         .tags { position: relative; display: flex; flex-wrap: wrap; gap: 7px; }
         .tags span { padding: 5px 8px; border: 1px solid color-mix(in srgb,var(--cor) 42%,transparent); border-radius: 999px; color: #ffe28a; background: rgba(0,0,0,.28); font-size: .68rem; font-weight: 900; text-transform: uppercase; }
+        .oferta-dia { --cor: #ffe28a; display: grid; grid-template-columns: 92px 1fr auto; gap: 16px; align-items: center; padding: 16px; border-color: rgba(144,255,0,.3); background: radial-gradient(circle at 8% 50%, color-mix(in srgb,var(--cor) 24%,transparent), transparent 30%), linear-gradient(90deg, rgba(7,20,22,.94), rgba(30,42,18,.74)); }
+        .oferta-dia .arte { height: 78px; font-size: 2.4rem; }
+        .oferta-dia h2 { margin: 4px 0; text-transform: uppercase; }
+        .preco-antigo { color: #ffb0a8; text-decoration: line-through; }
+        .selo-oferta { display: inline-grid; place-items: center; min-height: 28px; padding: 0 10px; border: 1px solid rgba(144,255,0,.38); border-radius: 999px; color: #eaffd8; background: rgba(144,255,0,.12); font: 1000 .72rem Arial,sans-serif; text-transform: uppercase; }
         @media(max-width:900px){.grid,.hud,.topo{grid-template-columns:1fr}.video-fundo{display:none}}
+        @media(max-width:700px){.oferta-dia{grid-template-columns:1fr}.oferta-dia .arte{width:100%}}
     </style>
 </head>
 <body>
@@ -42,9 +48,10 @@
             <article class="painel"><small>Troca em</small><h2 id="contador">--:--:--</h2></article>
             <article class="painel"><small>Compras</small><h2 id="compras">0/0</h2></article>
         </section>
+        <section class="oferta-dia painel" id="oferta-dia"></section>
         <section class="grid" id="grid"></section>
     </main>
-    <script src="musica-fundo.js?v=20260619-game9"></script>
+    <script src="musica-fundo.js?v=20260619-game10"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
@@ -67,6 +74,9 @@
             const seed = chaveDia().split("-").reduce((s, p) => s + Number(p), 0);
             return [0,1,2,3].map((_, i) => catalogo[(seed + i * 3) % catalogo.length]);
         }
+        function precoDoItem(item, indice) {
+            return indice === 0 ? Math.max(1, Math.round(item.preco * 0.75)) : item.preco;
+        }
         function comprasDoDia() { return ler("rpg_loja_compras_" + chaveDia() + "_" + personagem.nome, []); }
         function fimDoDia() { const d = new Date(); d.setHours(24,0,0,0); return d; }
         function comprar(indice) {
@@ -74,8 +84,9 @@
             const feitas = comprasDoDia();
             if (feitas.includes(indice)) return;
             const prog = progresso();
-            if (prog.berris < item.preco) { RpgFeedback?.aviso?.("Berris insuficientes", [item.nome]); return; }
-            prog.berris -= item.preco;
+            const preco = precoDoItem(item, indice);
+            if (prog.berris < preco) { RpgFeedback?.aviso?.("Berris insuficientes", [item.nome]); return; }
+            prog.berris -= preco;
             RpgSistemas.salvarProgresso(personagem, prog);
             const inv = inventario();
             inv.push({ id: Date.now(), nome: item.nome, tipo: item.tipo, quantidade: 1, raridade: item.raridade, descricao: item.desc, origem: "Loja rotativa", adicionadoEm: new Date().toLocaleString("pt-BR"), sprite: [0,2] });
@@ -91,11 +102,23 @@
             document.getElementById("berris").textContent = prog.berris.toLocaleString("pt-BR");
             document.getElementById("compras").textContent = `${feitas.length}/4`;
             document.getElementById("status").textContent = `${personagem.nome}, estoque raro troca diariamente e cada item pode ser comprado uma vez.`;
+            const destaque = estoqueDoDia()[0];
+            document.getElementById("oferta-dia").style.setProperty("--cor", destaque.cor);
+            document.getElementById("oferta-dia").innerHTML = `
+                <div class="arte">${destaque.icon}</div>
+                <div>
+                    <small>Oferta diária</small>
+                    <h2>${destaque.nome}</h2>
+                    <p>${destaque.desc}</p>
+                    <div class="tags"><span>${destaque.raridade}</span><span class="preco-antigo">${destaque.preco.toLocaleString("pt-BR")}</span><span>${precoDoItem(destaque, 0).toLocaleString("pt-BR")} berris</span></div>
+                </div>
+                <button class="compra" data-i="0" ${feitas.includes(0) ? "disabled" : ""}>${feitas.includes(0) ? "Comprado" : "Comprar oferta"}</button>
+            `;
             document.getElementById("grid").innerHTML = estoqueDoDia().map((item, i) => `
                 <article class="item" style="--cor:${item.cor}">
                     <div class="arte">${item.icon}</div>
                     <div><small>${item.raridade}</small><h2>${item.nome}</h2><p>${item.desc}</p></div>
-                    <div class="tags"><span>${item.tipo}</span><span>${item.preco.toLocaleString("pt-BR")} berris</span></div>
+                    <div class="tags"><span>${item.tipo}</span>${i === 0 ? `<span class="selo-oferta">-25%</span>` : ""}<span>${precoDoItem(item, i).toLocaleString("pt-BR")} berris</span></div>
                     <button class="compra" data-i="${i}" ${feitas.includes(i) ? "disabled" : ""}>${feitas.includes(i) ? "Comprado" : "Comprar"}</button>
                 </article>`).join("");
             document.querySelectorAll("[data-i]").forEach((b) => b.onclick = () => comprar(Number(b.dataset.i)));

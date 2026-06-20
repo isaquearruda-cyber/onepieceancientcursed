@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batalha - One Piece RPG</title>
+    <link rel="stylesheet" href="estilo.css?v=20260619-game10">
+    <style>
+        html, body { min-height: 100%; margin: 0; background: #030708; color: #fff7df; overflow-x: hidden; }
+        body { font-family: Georgia, "Times New Roman", serif; }
+        .video-fundo { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.28) saturate(1.22); z-index: 0; }
+        .battle-app { position: relative; z-index: 2; width: min(1280px, calc(100% - 28px)); min-height: 100vh; margin: 0 auto; padding: clamp(16px, 3vw, 38px) 0; display: grid; grid-template-rows: auto 1fr auto; gap: 14px; }
+        .battle-panel { border: 1px solid rgba(247, 200, 75, .28); border-radius: 8px; background: linear-gradient(180deg, rgba(7, 20, 22, .9), rgba(3, 8, 10, .94)); box-shadow: 0 22px 64px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,247,223,.06); backdrop-filter: blur(8px); }
+        .battle-top { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; padding: clamp(14px, 2.4vw, 22px); }
+        .battle-top small, .battle-meta { color: #ffe28a; font-weight: 1000; letter-spacing: .12em; text-transform: uppercase; }
+        .battle-top h1 { margin: 4px 0 8px; color: #fff7df; font-family: "Segoe UI Black", "Arial Black", Impact, sans-serif; font-size: clamp(2.1rem, 5vw, 4.2rem); line-height: .92; text-transform: uppercase; text-shadow: 0 5px 0 #210b08, 0 18px 30px rgba(0,0,0,.72); }
+        .battle-top p { margin: 0; max-width: 760px; color: #d9e8d4; line-height: 1.45; }
+        .battle-link, .battle-actions button { min-height: 42px; padding: 0 14px; border: 1px solid rgba(255, 226, 138, .52); border-radius: 8px; color: #fff7df; background: rgba(4, 12, 13, .72); font-weight: 1000; text-transform: uppercase; text-decoration: none; cursor: pointer; }
+        .battle-link:hover, .battle-actions button:hover { border-color: #ffe28a; background: rgba(247, 200, 75, .16); }
+        .battle-arena { display: grid; grid-template-columns: minmax(260px, .9fr) minmax(320px, 1.2fr) minmax(260px, .9fr); gap: 14px; min-height: 560px; padding: 14px; background: radial-gradient(circle at 50% 28%, rgba(255, 226, 138, .12), transparent 34%), linear-gradient(180deg, rgba(1,7,9,.82), rgba(8,18,15,.74)); }
+        .fighter { --cor: #36e0ff; display: grid; grid-template-rows: auto 1fr auto; gap: 12px; min-height: 0; padding: 14px; border: 1px solid color-mix(in srgb, var(--cor) 42%, transparent); border-radius: 8px; background: radial-gradient(circle at 50% 22%, color-mix(in srgb, var(--cor) 18%, transparent), transparent 38%), rgba(0,0,0,.24); box-shadow: inset 0 0 28px rgba(0,0,0,.28), 0 0 28px color-mix(in srgb, var(--cor) 14%, transparent); }
+        .fighter-head { display: grid; gap: 6px; }
+        .fighter-head h2 { margin: 0; font-size: clamp(1.25rem, 2.6vw, 2rem); line-height: 1.05; text-transform: uppercase; overflow-wrap: anywhere; }
+        .fighter-head span { color: #d9e8d4; font-weight: 900; }
+        .fighter-portrait { position: relative; display: grid; place-items: center; min-height: 280px; border: 1px solid rgba(255,247,223,.1); border-radius: 8px; background: radial-gradient(ellipse at 50% 78%, color-mix(in srgb, var(--cor) 28%, transparent), transparent 54%), repeating-linear-gradient(0deg, rgba(255,255,255,.025), rgba(255,255,255,.025) 1px, transparent 1px, transparent 8px); overflow: hidden; }
+        .fighter-portrait img { max-width: 90%; max-height: 360px; object-fit: contain; filter: drop-shadow(0 24px 24px rgba(0,0,0,.72)); }
+        .fighter-symbol { display: grid; place-items: center; width: min(190px, 55%); aspect-ratio: 1; border: 2px solid color-mix(in srgb, var(--cor) 52%, transparent); border-radius: 18px; background: radial-gradient(circle, color-mix(in srgb, var(--cor) 44%, #fff7df), rgba(3,8,10,.82) 66%); color: #06100d; font-family: "Segoe UI Black","Arial Black",Impact,sans-serif; font-size: clamp(3.6rem, 9vw, 6rem); box-shadow: 0 0 34px color-mix(in srgb, var(--cor) 32%, transparent); }
+        .bar-stack { display: grid; gap: 8px; }
+        .bar-row { display: grid; grid-template-columns: 58px 1fr auto; gap: 8px; align-items: center; color: #d9e8d4; font: 900 .82rem Arial, sans-serif; text-transform: uppercase; }
+        .bar { height: 12px; border: 1px solid rgba(255,247,223,.14); border-radius: 999px; background: rgba(0,0,0,.48); overflow: hidden; }
+        .bar i { display: block; width: 100%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #ff4128, #ffe28a); transition: width .28s ease; }
+        .bar.ene i { background: linear-gradient(90deg, #36e0ff, #90ff00); }
+        .battle-center { display: grid; grid-template-rows: auto 1fr auto; gap: 12px; min-height: 0; }
+        .turn-card { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; padding: 12px; }
+        .turn-card span { padding: 10px; border: 1px solid rgba(255,247,223,.12); border-radius: 8px; background: rgba(0,0,0,.22); color: #d9e8d4; font-weight: 900; text-align: center; }
+        .turn-card strong { display: block; margin-bottom: 4px; color: #ffe28a; font-size: 1.15rem; }
+        .battle-log { min-height: 0; max-height: 390px; overflow-y: auto; padding: 12px; display: grid; align-content: start; gap: 8px; }
+        .battle-log p { margin: 0; padding: 10px; border-left: 3px solid #36e0ff; background: rgba(255,247,223,.05); color: #d9e8d4; line-height: 1.34; }
+        .battle-actions { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; padding: 12px; }
+        .battle-actions .primary { color: #07100d; background: linear-gradient(90deg, #ffe28a, #f7c84b); }
+        .battle-actions .danger { border-color: rgba(255,92,92,.44); color: #ffd6cc; background: rgba(78,12,10,.64); }
+        .battle-actions button:disabled { opacity: .5; cursor: default; }
+        .battle-footer { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+        .battle-footer article { padding: 12px; }
+        .battle-footer strong { display: block; margin-top: 4px; color: #fff7df; font-size: 1.1rem; }
+        @media (max-width: 980px) { .battle-arena { grid-template-columns: 1fr; } .battle-center { order: 3; } .fighter-portrait { min-height: 230px; } .battle-footer, .battle-top { grid-template-columns: 1fr; } }
+        @media (max-width: 560px) { .battle-app { width: min(100%, calc(100% - 18px)); padding-top: 76px; } .battle-actions, .turn-card, .battle-footer { grid-template-columns: 1fr; } .video-fundo { display: none; } }
+    </style>
+</head>
+<body>
+    <audio id="musica-fundo" loop preload="auto"><source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg"></audio>
+    <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true"><source src="fundo-login.mp4" type="video/mp4"></video>
+    <main class="battle-app">
+        <header class="battle-top battle-panel">
+            <div>
+                <small>Modo combate</small>
+                <h1>Batalha</h1>
+                <p id="battle-brief">Carregando encontro...</p>
+            </div>
+            <a class="battle-link" href="missoes.html">Voltar às Missões</a>
+        </header>
+        <section class="battle-arena battle-panel">
+            <article class="fighter" id="player-card" style="--cor:#36e0ff">
+                <div class="fighter-head"><span class="battle-meta">Jogador</span><h2 id="player-name">Personagem</h2><span id="player-race">Classe</span></div>
+                <div class="fighter-portrait" id="player-portrait"><div class="fighter-symbol">OP</div></div>
+                <div class="bar-stack">
+                    <div class="bar-row"><span>HP</span><div class="bar"><i id="player-hp-bar"></i></div><b id="player-hp-text">0/0</b></div>
+                    <div class="bar-row"><span>ENE</span><div class="bar ene"><i id="player-ene-bar"></i></div><b id="player-ene-text">0/0</b></div>
+                </div>
+            </article>
+            <section class="battle-center">
+                <div class="turn-card battle-panel">
+                    <span><strong id="turno">1</strong>Turno</span>
+                    <span><strong id="rank">E</strong>Rank</span>
+                    <span><strong id="vitorias">0</strong>Vitórias</span>
+                </div>
+                <div class="battle-log battle-panel" id="battle-log"></div>
+                <div class="battle-actions battle-panel">
+                    <button class="primary" type="button" data-action="attack">Ataque</button>
+                    <button type="button" data-action="skill">Habilidade</button>
+                    <button type="button" data-action="defend">Defender</button>
+                    <button type="button" data-action="item">Item</button>
+                    <button class="primary" type="button" data-action="finish">Finalizar vitória</button>
+                    <button class="danger" type="button" data-action="reset">Reiniciar</button>
+                </div>
+            </section>
+            <article class="fighter" id="enemy-card" style="--cor:#ff4128">
+                <div class="fighter-head"><span class="battle-meta">Inimigo</span><h2 id="enemy-name">Inimigo</h2><span id="enemy-desc">Ameaça</span></div>
+                <div class="fighter-portrait"><div class="fighter-symbol" id="enemy-symbol">X</div></div>
+                <div class="bar-stack">
+                    <div class="bar-row"><span>HP</span><div class="bar"><i id="enemy-hp-bar"></i></div><b id="enemy-hp-text">0/0</b></div>
+                    <div class="bar-row"><span>FÚRIA</span><div class="bar ene"><i id="enemy-ene-bar"></i></div><b id="enemy-ene-text">0/0</b></div>
+                </div>
+            </article>
+        </section>
+        <section class="battle-footer">
+            <article class="battle-panel"><small>Recompensa</small><strong id="reward-text">--</strong></article>
+            <article class="battle-panel"><small>Inventário</small><strong id="item-text">--</strong></article>
+            <article class="battle-panel"><small>Missão</small><strong id="mission-text">Livre</strong></article>
+            <article class="battle-panel"><small>Status</small><strong id="status-text">Em combate</strong></article>
+        </section>
+    </main>
+    <script src="banco-personagens.js?v=20260619-db2"></script>
+    <script src="musica-fundo.js?v=20260619-game10"></script>
+    <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
+    <script>
+        const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+        const params = new URLSearchParams(location.search);
+        const rankAtual = (params.get("rank") || "E").toUpperCase();
+        const missaoId = params.get("missao") || "";
+        const missaoAtual = JSON.parse(localStorage.getItem("rpg_missao_batalha_atual") || "null");
+        const inimigos = {
+            E: { nome: "Batedor de Porto", desc: "Ameaça baixa", hp: 160, forca: 18, furia: 80, simbolo: "E" },
+            D: { nome: "Contrabandista Armado", desc: "Ameaça moderada", hp: 230, forca: 28, furia: 95, simbolo: "D" },
+            C: { nome: "Capitão de Rua", desc: "Ameaça alta", hp: 320, forca: 42, furia: 110, simbolo: "C" },
+            B: { nome: "Comandante Rival", desc: "Ameaça crítica", hp: 450, forca: 58, furia: 125, simbolo: "B" },
+            A: { nome: "Lenda Procurada", desc: "Ameaça extrema", hp: 620, forca: 76, furia: 145, simbolo: "A" }
+        };
+        const rankPeso = { E: 1, D: 1.25, C: 1.55, B: 1.9, A: 2.35 };
+        const inimigoBase = inimigos[rankAtual] || inimigos.E;
+        const progresso = personagem ? RpgSistemas.obterProgresso(personagem) : {};
+        const atributos = personagem?.atributosDistribuidos || personagem?.atributos || {};
+        const vital = Number(atributos.forcaVital || atributos.vitalidade || atributos.hp || 80);
+        const mental = Number(atributos.forcaMental || atributos.mental || 60);
+        const forca = Number(atributos.forca || 60);
+        const agilidade = Number(atributos.agilidade || 60);
+        const resistencia = Number(atributos.resistencia || 60);
+        let state = {
+            turno: 1,
+            defendendo: false,
+            venceu: false,
+            playerMaxHp: Math.round(260 + vital * 2.1 + Number(progresso.nivel || 1) * 16),
+            playerHp: 0,
+            playerMaxEne: Math.round(110 + mental * 1.2),
+            playerEne: 0,
+            enemyMaxHp: inimigoBase.hp,
+            enemyHp: inimigoBase.hp,
+            enemyMaxEne: inimigoBase.furia,
+            enemyEne: inimigoBase.furia,
+            vitorias: 0
+        };
+        state.playerHp = state.playerMaxHp;
+        state.playerEne = state.playerMaxEne;
+
+        function ler(chave, padrao) { try { return JSON.parse(localStorage.getItem(chave) || "null") || padrao; } catch { return padrao; } }
+        function salvar(chave, valor) { localStorage.setItem(chave, JSON.stringify(valor)); }
+        function normalizar(texto) { return RpgSistemas.normalizar ? RpgSistemas.normalizar(texto) : String(texto || "").toLowerCase(); }
+        function danoBase(mult) {
+            const variacao = .86 + Math.random() * .28;
+            return Math.max(12, Math.round(((forca * .55) + (agilidade * .22) + Number(progresso.nivel || 1) * 7) * (mult || 1) * variacao));
+        }
+        function log(texto) {
+            const el = document.getElementById("battle-log");
+            el.insertAdjacentHTML("afterbegin", `<p>${texto}</p>`);
+        }
+        function pct(valor, max) { return Math.max(0, Math.min(100, (valor / max) * 100)); }
+        function atualizar() {
+            document.getElementById("player-hp-bar").style.width = pct(state.playerHp, state.playerMaxHp) + "%";
+            document.getElementById("player-ene-bar").style.width = pct(state.playerEne, state.playerMaxEne) + "%";
+            document.getElementById("enemy-hp-bar").style.width = pct(state.enemyHp, state.enemyMaxHp) + "%";
+            document.getElementById("enemy-ene-bar").style.width = pct(state.enemyEne, state.enemyMaxEne) + "%";
+            document.getElementById("player-hp-text").textContent = `${Math.max(0, state.playerHp)}/${state.playerMaxHp}`;
+            document.getElementById("player-ene-text").textContent = `${Math.max(0, state.playerEne)}/${state.playerMaxEne}`;
+            document.getElementById("enemy-hp-text").textContent = `${Math.max(0, state.enemyHp)}/${state.enemyMaxHp}`;
+            document.getElementById("enemy-ene-text").textContent = `${Math.max(0, state.enemyEne)}/${state.enemyMaxEne}`;
+            document.getElementById("turno").textContent = state.turno;
+            document.getElementById("rank").textContent = rankAtual;
+            document.getElementById("status-text").textContent = state.venceu ? "Vitória pronta" : state.playerHp <= 0 ? "Derrotado" : "Em combate";
+            document.querySelector('[data-action="finish"]').disabled = !state.venceu;
+            document.querySelectorAll('[data-action="attack"],[data-action="skill"],[data-action="defend"],[data-action="item"]').forEach((btn) => {
+                btn.disabled = state.venceu || state.playerHp <= 0;
+            });
+        }
+        function turnoInimigo() {
+            if (state.venceu || state.enemyHp <= 0) return;
+            const bruto = Math.round((inimigoBase.forca + state.enemyEne * .08) * (.86 + Math.random() * .26));
+            const mitigado = Math.round(bruto * (100 / (100 + resistencia)));
+            const dano = state.defendendo ? Math.round(mitigado * .42) : mitigado;
+            state.playerHp = Math.max(0, state.playerHp - dano);
+            state.enemyEne = Math.max(0, state.enemyEne - 8);
+            state.defendendo = false;
+            log(`${inimigoBase.nome} contra-atacou causando ${dano} de dano.`);
+            if (state.playerHp <= 0) log("Você caiu no combate. Reinicie, use itens ou volte mais forte.");
+            state.turno += 1;
+            atualizar();
+        }
+        function verificarVitoria() {
+            if (state.enemyHp > 0) return false;
+            state.venceu = true;
+            state.vitorias += 1;
+            document.getElementById("vitorias").textContent = state.vitorias;
+            log("Vitória alcançada. Finalize para gravar recompensas e conquistas.");
+            atualizar();
+            return true;
+        }
+        function usarAcao(acao) {
+            if (!personagem?.nome) { location.href = "index.html"; return; }
+            if (acao === "reset") { location.reload(); return; }
+            if (acao === "finish") { finalizarVitoria(); return; }
+            if (state.venceu || state.playerHp <= 0) return;
+            if (acao === "attack") {
+                const dano = danoBase(1);
+                state.enemyHp = Math.max(0, state.enemyHp - dano);
+                state.playerEne = Math.min(state.playerMaxEne, state.playerEne + 8);
+                log(`${personagem.nome} acertou um ataque e causou ${dano} de dano.`);
+            }
+            if (acao === "skill") {
+                if (state.playerEne < 32) { log("Energia insuficiente para habilidade."); atualizar(); return; }
+                const dano = danoBase(1.82);
+                state.playerEne -= 32;
+                state.enemyHp = Math.max(0, state.enemyHp - dano);
+                log(`${personagem.nome} liberou uma habilidade e causou ${dano} de dano.`);
+            }
+            if (acao === "defend") {
+                state.defendendo = true;
+                state.playerEne = Math.min(state.playerMaxEne, state.playerEne + 18);
+                log(`${personagem.nome} assumiu postura defensiva e recuperou energia.`);
+            }
+            if (acao === "item") {
+                const inv = ler(`inventario_${personagem.nome}`, []);
+                const item = inv.find((entrada) => ["alimentacao", "medicinais", "consumiveis"].includes(entrada.tipo) && Number(entrada.quantidade || 1) > 0);
+                if (!item) { log("Nenhum item de cura encontrado no inventário."); atualizar(); return; }
+                const cura = Math.round(state.playerMaxHp * .28);
+                state.playerHp = Math.min(state.playerMaxHp, state.playerHp + cura);
+                item.quantidade = Math.max(0, Number(item.quantidade || 1) - 1);
+                salvar(`inventario_${personagem.nome}`, inv.filter((entrada) => Number(entrada.quantidade || 0) > 0));
+                log(`${item.nome} usado: +${cura} HP.`);
+            }
+            atualizar();
+            if (!verificarVitoria()) setTimeout(turnoInimigo, 360);
+        }
+        async function finalizarVitoria() {
+            if (!state.venceu || !personagem?.nome) return;
+            const registroChave = "rpg_batalhas_" + normalizar(personagem.nome);
+            const registros = ler(registroChave, []);
+            const jaRegistrada = registros.some((item) => item.missaoId && item.missaoId === missaoId);
+            if (jaRegistrada) {
+                log("Esta batalha de missão já foi registrada.");
+                return;
+            }
+            const resultado = await RpgSistemas.concluirAtividade(personagem, {
+                tipo: "batalha",
+                titulo: missaoAtual?.titulo || `Vitória contra ${inimigoBase.nome}`,
+                rank: rankAtual,
+                periodo: missaoAtual?.periodo || "diarias"
+            });
+            const inv = ler(`inventario_${personagem.nome}`, []);
+            const itemDrop = {
+                id: Date.now(),
+                nome: rankAtual === "A" ? "Troféu de Comandante" : rankAtual === "B" ? "Insígnia de Vitória" : "Fragmento de Recompensa",
+                tipo: rankAtual === "A" ? "tesouros" : "recursos",
+                quantidade: 1,
+                raridade: ["A", "B"].includes(rankAtual) ? "Épico" : "Incomum",
+                descricao: "Drop conquistado em batalha. Pode ser equipado ou guardado como prova de combate.",
+                origem: "Batalha",
+                adicionadoEm: new Date().toLocaleString("pt-BR"),
+                sprite: rankAtual === "A" ? [4, 1] : [2, 1]
+            };
+            salvar(`inventario_${personagem.nome}`, [itemDrop, ...inv]);
+            const novoRegistro = {
+                missaoId,
+                titulo: missaoAtual?.titulo || `Vitória contra ${inimigoBase.nome}`,
+                rank: rankAtual,
+                inimigo: inimigoBase.nome,
+                quando: new Date().toLocaleString("pt-BR"),
+                recompensa: resultado.recompensas
+            };
+            salvar(registroChave, [novoRegistro, ...registros].slice(0, 80));
+            localStorage.setItem("ultimoPersonagem", JSON.stringify(personagem));
+            if (window.BancoPersonagens?.salvarPersonagem) {
+                try { await BancoPersonagens.salvarPersonagem(personagem); } catch (erro) { console.warn("Batalha salva localmente.", erro); }
+            }
+            document.getElementById("status-text").textContent = "Recompensa salva";
+            log(`Recompensa salva: +${resultado.recompensas.exp} EXP, +${resultado.recompensas.berris} berris e drop no inventário.`);
+            window.RpgFeedback?.aviso?.("Batalha vencida", [`+${resultado.recompensas.exp} EXP`, `Drop: ${itemDrop.nome}`]);
+            document.querySelector('[data-action="finish"]').disabled = true;
+        }
+        function iniciar() {
+            if (!personagem?.nome) { location.href = "index.html"; return; }
+            document.getElementById("battle-brief").textContent = missaoAtual?.titulo ? `Encontro aberto pela missão: ${missaoAtual.titulo}. Derrote o inimigo e finalize a vitória para salvar recompensa.` : "Encontro livre para treinar combate, ganhar recompensa e gerar histórico.";
+            document.getElementById("player-name").textContent = personagem.nome;
+            document.getElementById("player-race").textContent = `${personagem.raca || personagem.raça || "Raça"} / ${personagem.classe || "Classe"}`;
+            document.getElementById("enemy-name").textContent = inimigoBase.nome;
+            document.getElementById("enemy-desc").textContent = inimigoBase.desc;
+            document.getElementById("enemy-symbol").textContent = inimigoBase.simbolo;
+            document.getElementById("mission-text").textContent = missaoAtual?.titulo ? missaoAtual.titulo : "Batalha livre";
+            const recompensa = RpgSistemas.recompensasAtividade("batalha", rankAtual, missaoAtual?.periodo || "diarias");
+            document.getElementById("reward-text").textContent = `+${recompensa.exp} EXP / +${recompensa.berris} berris`;
+            const inv = ler(`inventario_${personagem.nome}`, []);
+            document.getElementById("item-text").textContent = `${inv.length} item(ns)`;
+            if (personagem.imagemPersonagem || personagem.imagem) {
+                document.getElementById("player-portrait").innerHTML = `<img src="${personagem.imagemPersonagem || personagem.imagem}" alt="">`;
+            }
+            log(`Combate iniciado contra ${inimigoBase.nome}.`);
+            document.querySelectorAll("[data-action]").forEach((btn) => btn.addEventListener("click", () => usarAcao(btn.dataset.action)));
+            atualizar();
+        }
+        iniciar();
+    </script>
+</body>
+</html>

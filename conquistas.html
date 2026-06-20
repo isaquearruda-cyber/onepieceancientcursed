@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conquistas - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game9">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game10">
     <style>
         html, body { margin: 0; min-height: 100%; background: #030708; color: #fff7df; overflow-y: auto; }
         .video-fundo { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.31) saturate(1.14); z-index: 0; }
@@ -40,7 +40,7 @@
         </section>
         <section class="grid" id="grid"></section>
     </main>
-    <script src="musica-fundo.js?v=20260619-game9"></script>
+    <script src="musica-fundo.js?v=20260619-game10"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
@@ -50,6 +50,10 @@
             ["primeiro-item", "Bolsa Aberta", "Recebeu o primeiro item no inventário.", "#ffe28a", "★"],
             ["nivel-5", "Novato em Ascensão", "Alcançou nível 5.", "#90ff00", "+"],
             ["comprador", "Cliente do Mercado", "Comprou qualquer item da loja rotativa.", "#ffcf3e", "$"],
+            ["missao-aceita", "Contrato Assinado", "Aceitou uma missão no quadro de organização.", "#36e0ff", "M"],
+            ["primeira-batalha", "Primeiro Combate", "Entrou no modo batalha e registrou vitória.", "#ff7b7b", "B"],
+            ["equipamento", "Pronto Para Zarpar", "Equipou pelo menos um item no inventário.", "#90ff00", "E"],
+            ["rank-a", "Operação Rank A", "Concluiu uma missão de Rank A.", "#ffcf3e", "A"],
             ["viajante", "Rota Marcada", "Registrou uma viagem entre ilhas.", "#49d2ff", "⌖"],
             ["bando", "Tripulação Formada", "Criou ou entrou em um bando/organização.", "#64d6a4", "⚑"],
             ["evento", "Presença em Evento", "Concluiu ao menos um evento.", "#ff7b7b", "!"],
@@ -62,8 +66,15 @@
             const salvas = ler("rpg_conquistas_" + personagem.nome, []);
             const prog = RpgSistemas.obterProgresso(personagem);
             const inv = ler(`inventario_${personagem.nome}`, []);
+            const nomeNormalizado = RpgSistemas.normalizar ? RpgSistemas.normalizar(personagem.nome) : personagem.nome.toLowerCase();
+            const aceitas = ler("rpg_missoes_aceitas_" + nomeNormalizado, []);
+            const batalhas = ler("rpg_batalhas_" + nomeNormalizado, []);
             const checks = {
                 "comprador": Object.keys(localStorage).some((k) => k.startsWith("rpg_loja_compras_") && k.endsWith("_" + personagem.nome) && ler(k, []).length),
+                "missao-aceita": aceitas.length > 0,
+                "primeira-batalha": batalhas.length > 0,
+                "equipamento": inv.some((item) => item.equipado),
+                "rank-a": (personagem.missoesConcluidas || []).some((missao) => missao.rank === "A"),
                 "viajante": !!localStorage.getItem("rpg_viagem_atual"),
                 "bando": !!personagem.grupoSocial?.nome,
                 "evento": (personagem.eventosConcluidos || []).length > 0,

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventário - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game9">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game10">
     <style>
         html,
         body {
@@ -209,6 +209,69 @@
 	            background: linear-gradient(90deg, #36e0ff, #90ff00, #ffe28a);
 	            box-shadow: 0 0 16px rgba(144, 255, 0, 0.42);
 	        }
+
+        .equipamento-slots {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 8px;
+            padding: 10px;
+            border: 1px solid rgba(54, 224, 255, 0.18);
+            border-radius: 8px;
+            background: linear-gradient(90deg, rgba(54, 224, 255, 0.08), rgba(247, 200, 75, 0.06)), rgba(0, 0, 0, 0.2);
+        }
+
+        .equipamento-slot {
+            min-height: 94px;
+            display: grid;
+            place-items: center;
+            gap: 5px;
+            padding: 8px;
+            border: 1px solid rgba(255, 247, 223, 0.12);
+            border-radius: 8px;
+            background: rgba(3, 8, 10, 0.62);
+            color: #d9e8d4;
+            text-align: center;
+        }
+
+        .equipamento-slot strong {
+            color: #ffe28a;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .equipamento-slot span {
+            max-width: 100%;
+            color: #fff7df;
+            font-size: 0.76rem;
+            font-weight: 900;
+            overflow-wrap: anywhere;
+        }
+
+        .equipamento-slot.equipado {
+            border-color: rgba(144, 255, 0, 0.42);
+            box-shadow: 0 0 18px rgba(144, 255, 0, 0.12);
+        }
+
+        .slot-equipar {
+            position: absolute;
+            right: 7px;
+            bottom: 6px;
+            min-width: 58px;
+            min-height: 24px;
+            border: 1px solid rgba(144, 255, 0, 0.3);
+            border-radius: 999px;
+            color: #eaffd8;
+            background: rgba(28, 80, 14, 0.72);
+            font-size: 0.58rem;
+            font-weight: 1000;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .slot-jogo.equipado {
+            border-color: rgba(144, 255, 0, 0.62);
+        }
 
         .inventario-status strong {
             display: block;
@@ -788,7 +851,8 @@
 	            }
 
 	            .inventario-filtros,
-	            .inventario-metricas {
+	            .inventario-metricas,
+                .equipamento-slots {
 	                grid-template-columns: 1fr;
 	            }
 	        }
@@ -887,6 +951,8 @@
 
 	                <div class="inventario-metricas" id="inventario-metricas" aria-label="Resumo do inventário"></div>
 
+                    <section class="equipamento-slots" id="equipamento-slots" aria-label="Equipamentos do personagem"></section>
+
 	                <div class="inventario-filtros" aria-label="Filtros do inventário">
 	                    <input id="inventario-busca" type="search" placeholder="Buscar item, descrição ou categoria">
 	                    <select id="inventario-raridade">
@@ -944,7 +1010,7 @@
         </footer>
     </main>
 
-    <script src="musica-fundo.js?v=20260619-game9"></script>
+    <script src="musica-fundo.js?v=20260619-game10"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
@@ -956,6 +1022,13 @@
 	        let ordemInventario = "raridade";
 	        const slotsMinimos = 36;
 	        const capacidadeMaxima = 120;
+            const slotsEquipamento = [
+                { chave: "arma", nome: "Arma" },
+                { chave: "roupa", nome: "Roupa" },
+                { chave: "acessorio", nome: "Acessório" },
+                { chave: "reliquia", nome: "Relíquia" },
+                { chave: "naval", nome: "Naval" }
+            ];
 	        const raridadesInventario = {
 	            "Comum": { peso: 1, cor: "#d9e8d4" },
 	            "Incomum": { peso: 2, cor: "#64d6a4" },
@@ -997,6 +1070,7 @@
         const rodapeResumo = document.getElementById("inventario-rodape-resumo");
 	        const detalheItem = document.getElementById("detalhe-item");
 	        const metricasInventario = document.getElementById("inventario-metricas");
+            const equipamentoSlotsEl = document.getElementById("equipamento-slots");
 	        const buscaInventario = document.getElementById("inventario-busca");
 	        const filtroRaridade = document.getElementById("inventario-raridade");
 	        const ordemSelect = document.getElementById("inventario-ordem");
@@ -1103,6 +1177,45 @@
             }
         }
 
+        function slotEquipamentoDoItem(item) {
+            const tipo = String(item?.tipo || "");
+            const nome = String(item?.nome || "").toLowerCase();
+            if (tipo === "armamentos" || /espada|arma|pistola|rifle|katana|meito|canhao/.test(nome)) return "arma";
+            if (tipo === "vestimentas" || /capa|roupa|armadura|casaco|uniforme/.test(nome)) return "roupa";
+            if (tipo === "equipamentos" || tipo === "tecnologicos" || /anel|colar|den den|luva|bota|oculos/.test(nome)) return "acessorio";
+            if (tipo === "tesouros" || tipo === "especiais" || /trofeu|troféu|reliquia|relíquia|nucleo|núcleo/.test(nome)) return "reliquia";
+            if (tipo === "navegacao" || tipo === "nauticos" || /mapa|log pose|bussola|bússola|navio/.test(nome)) return "naval";
+            return "";
+        }
+
+        function alternarEquipamento(id) {
+            if (!personagem) return;
+            const inventario = obterInventario();
+            const item = inventario.find((entrada) => Number(entrada.id) === Number(id));
+            if (!item) return;
+            const slot = slotEquipamentoDoItem(item);
+            if (!slot) {
+                RpgFeedback?.aviso?.("Item não equipável", [item.nome]);
+                return;
+            }
+            const antes = JSON.parse(JSON.stringify(inventario));
+            if (item.equipado === slot) {
+                delete item.equipado;
+            } else {
+                inventario.forEach((entrada) => {
+                    if (entrada.equipado === slot) delete entrada.equipado;
+                });
+                item.equipado = slot;
+                item.equipadoEm = new Date().toLocaleString("pt-BR");
+            }
+            salvarInventario(inventario);
+            registrarHistorico(antes, inventario);
+            renderizarInventario();
+            renderizarHistorico();
+            mostrarDetalhe(item);
+            RpgFeedback?.aviso?.(item.equipado ? "Equipado" : "Retirado", [item.nome]);
+        }
+
         function contarPorCategoria(inventario) {
             return categoriasInventario.reduce((contadores, categoria) => {
                 contadores[categoria.chave] = categoria.chave === "todos"
@@ -1168,16 +1281,29 @@
 	            const lendarios = inventario.filter((item) => raridadeDe(item) === "Lendário").length;
 	            const epicos = inventario.filter((item) => raridadeDe(item) === "Épico").length;
 	            const categoriasUsadas = new Set(inventario.map((item) => item.tipo)).size;
+                const equipados = inventario.filter((item) => item.equipado).length;
 	            const capacidade = Math.min(100, Math.round((inventario.length / capacidadeMaxima) * 100));
 	            metricasInventario.style.setProperty("--capacidade", `${capacidade}%`);
 	            metricasInventario.innerHTML = `
 	                <div class="inventario-metrica"><span>Slots</span><b>${inventario.length}/${capacidadeMaxima}</b></div>
 	                <div class="inventario-metrica"><span>Qtd. total</span><b>${totalItens.toLocaleString("pt-BR")}</b></div>
 	                <div class="inventario-metrica"><span>Épicos+</span><b>${(epicos + lendarios).toLocaleString("pt-BR")}</b></div>
-	                <div class="inventario-metrica"><span>Categorias</span><b>${categoriasUsadas.toLocaleString("pt-BR")}</b></div>
+	                <div class="inventario-metrica"><span>Equipados</span><b>${equipados}/${slotsEquipamento.length}</b></div>
 	                <div class="inventario-capacidade"><i></i></div>
 	            `;
 	        }
+
+        function renderizarEquipamentos(inventario) {
+            equipamentoSlotsEl.innerHTML = slotsEquipamento.map((slot) => {
+                const item = inventario.find((entrada) => entrada.equipado === slot.chave);
+                return `
+                    <article class="equipamento-slot ${item ? "equipado" : ""}">
+                        <strong>${escaparHtml(slot.nome)}</strong>
+                        ${item ? `${iconeSprite(item, "34px")}<span>${escaparHtml(item.nome)}</span>` : `<span>Vazio</span>`}
+                    </article>
+                `;
+            }).join("");
+        }
 
         function renderizarCategorias(inventario) {
             const contadores = contarPorCategoria(inventario);
@@ -1209,6 +1335,7 @@
 
 	            renderizarCategorias(inventario);
 	            renderizarMetricas(inventario);
+                renderizarEquipamentos(inventario);
 	            tituloEl.textContent = categoriaAtiva === "todos" ? "Todos os itens" : categoria.nome;
 	            resumoEl.textContent = `${filtrados.length} ${filtrados.length === 1 ? "item encontrado" : "itens encontrados"} / ${inventario.length} no inventário`;
 	            rodapeResumo.textContent = `Sort: ${categoria.nome} / ${ordemSelect.options[ordemSelect.selectedIndex]?.text || "Raridade"}`;
@@ -1234,13 +1361,15 @@
 	            const slotsOcupados = filtrados.map((item) => {
 	                const itemCategoria = obterCategoria(item.tipo);
 	                const raridade = raridadeDe(item);
+                    const slotEquipavel = slotEquipamentoDoItem(item);
 	                return `
-	                    <article class="slot-jogo" data-id="${Number(item.id)}" tabindex="0" data-raridade="${escaparHtml(raridade)}" data-tippy-content="${escaparHtml(item.nome)} / ${escaparHtml(raridade)}" style="--cor-item:${itemCategoria.cor};--cor-raridade:${corRaridade(item)}">
+	                    <article class="slot-jogo ${item.equipado ? "equipado" : ""}" data-id="${Number(item.id)}" tabindex="0" data-raridade="${escaparHtml(raridade)}" data-tippy-content="${escaparHtml(item.nome)} / ${escaparHtml(raridade)}" style="--cor-item:${itemCategoria.cor};--cor-raridade:${corRaridade(item)}">
 	                        <button class="slot-remover" type="button" data-remover="${Number(item.id)}" title="Remover">x</button>
 	                        <span class="slot-raridade">${escaparHtml(raridade)}</span>
 	                        <div class="slot-icone">${iconeSprite(item, "58px")}</div>
 	                        <strong class="slot-nome">${escaparHtml(item.nome)}</strong>
                         <span class="slot-qtd">x${escaparHtml(item.quantidade)}</span>
+                        ${slotEquipavel ? `<button class="slot-equipar" type="button" data-equipar="${Number(item.id)}">${item.equipado ? "Retirar" : "Equipar"}</button>` : ""}
                     </article>
                 `;
             }).join("");
@@ -1251,7 +1380,7 @@
                 slot.addEventListener("mouseenter", () => mostrarDetalhe(item));
                 slot.addEventListener("focus", () => mostrarDetalhe(item));
                 slot.addEventListener("click", (evento) => {
-                    if (!evento.target.closest("[data-remover]")) mostrarDetalhe(item);
+                    if (!evento.target.closest("[data-remover],[data-equipar]")) mostrarDetalhe(item);
                 });
             });
 
@@ -1261,6 +1390,12 @@
                     removerItem(Number(botao.dataset.remover));
                 });
 	            });
+            gridEl.querySelectorAll("[data-equipar]").forEach((botao) => {
+                botao.addEventListener("click", (evento) => {
+                    evento.stopPropagation();
+                    alternarEquipamento(Number(botao.dataset.equipar));
+                });
+            });
 	            if (window.VanillaTilt) {
 	                window.VanillaTilt.init(Array.from(gridEl.querySelectorAll(".slot-jogo")), { max: 7, speed: 320, glare: true, "max-glare": 0.18 });
 	            }
