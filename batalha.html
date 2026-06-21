@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Batalha - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game15">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game16">
     <style>
         html, body { min-height: 100%; margin: 0; background: #030708; color: #fff7df; overflow-x: hidden; }
         body { font-family: Georgia, "Times New Roman", serif; }
@@ -126,7 +126,7 @@
         </section>
     </main>
     <script src="banco-personagens.js?v=20260619-db2"></script>
-    <script src="musica-fundo.js?v=20260619-game15"></script>
+    <script src="musica-fundo.js?v=20260619-game16"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         function ler(chave, padrao) { try { return JSON.parse(localStorage.getItem(chave) || "null") || padrao; } catch { return padrao; } }
@@ -337,17 +337,23 @@
         }
         function turnoInimigo() {
             if (state.venceu || state.enemyHp <= 0) return;
-            const bruto = Math.round((inimigoBase.forca + state.enemyEne * .08) * (.86 + Math.random() * .26));
-            const mitigado = Math.round(bruto * (100 / (100 + resistencia)));
-            const dano = state.defendendo ? Math.round(mitigado * .42) : mitigado;
-            state.playerHp = Math.max(0, state.playerHp - dano);
-            state.enemyEne = Math.max(0, state.enemyEne - 8);
-            state.defendendo = false;
-            window.battleFx?.enemyAttack?.();
-            log(`${inimigoBase.nome} contra-atacou causando ${dano} de dano.`);
-            if (state.playerHp <= 0) log("Você caiu no combate. Reinicie, use itens ou volte mais forte.");
-            state.turno += 1;
-            atualizar();
+            try {
+                const bruto = Math.round((inimigoBase.forca + state.enemyEne * .08) * (.86 + Math.random() * .26));
+                const mitigado = Math.round(bruto * (100 / (100 + resistencia)));
+                const dano = state.defendendo ? Math.round(mitigado * .42) : mitigado;
+                state.playerHp = Math.max(0, state.playerHp - dano);
+                state.enemyEne = Math.max(0, state.enemyEne - 8);
+                state.defendendo = false;
+                try { window.battleFx?.enemyAttack?.(); } catch (erroFx) { console.warn("FX inimigo falhou.", erroFx); }
+                log(`${inimigoBase.nome} contra-atacou causando ${dano} de dano.`);
+                if (state.playerHp <= 0) log("Você caiu no combate. Reinicie, use itens ou volte mais forte.");
+                state.turno += 1;
+                atualizar();
+            } catch (erro) {
+                console.warn("Turno do inimigo falhou sem travar a batalha.", erro);
+                state.defendendo = false;
+                atualizar();
+            }
         }
         function verificarVitoria() {
             if (state.enemyHp > 0) return false;
@@ -371,69 +377,74 @@
             }
             if (acao === "finish") { finalizarVitoria(); return; }
             if (state.venceu || state.playerHp <= 0) return;
-            if (acaoEmAndamento) return;
+            if (acaoEmAndamento) {
+                log("Aguarde a ação terminar.");
+                return;
+            }
             acaoEmAndamento = true;
             let passaTurno = true;
             const hpInimigoAntes = state.enemyHp;
 
-            switch (acao) {
-                case "attack": {
-                    const dano = danoBase(1);
-                    state.enemyHp = Math.max(0, state.enemyHp - dano);
-                    state.playerEne = Math.min(state.playerMaxEne, state.playerEne + 8);
-                    window.battleFx?.playerAttack?.();
-                    log(`${personagem.nome} acertou um ataque e causou ${dano} de dano.`);
-                    renderizarBarras();
-                    break;
-                }
-                case "skill": {
-                    if (state.playerEne < 32) {
-                        log("Energia insuficiente para habilidade.");
-                        passaTurno = false;
+            try {
+                switch (acao) {
+                    case "attack": {
+                        const dano = danoBase(1);
+                        state.enemyHp = Math.max(0, state.enemyHp - dano);
+                        state.playerEne = Math.min(state.playerMaxEne, state.playerEne + 8);
+                        try { window.battleFx?.playerAttack?.(); } catch (erroFx) { console.warn("FX ataque falhou.", erroFx); }
+                        log(`${personagem.nome} acertou um ataque e causou ${dano} de dano.`);
+                        renderizarBarras();
                         break;
                     }
-                    const dano = danoBase(1.82);
-                    state.playerEne -= 32;
-                    state.enemyHp = Math.max(0, state.enemyHp - dano);
-                    window.battleFx?.skill?.();
-                    log(`${personagem.nome} liberou uma habilidade e causou ${dano} de dano.`);
-                    renderizarBarras();
-                    break;
-                }
-                case "defend":
-                    state.defendendo = true;
-                    state.playerEne = Math.min(state.playerMaxEne, state.playerEne + 18);
-                    window.battleFx?.defend?.();
-                    log(`${personagem.nome} assumiu postura defensiva e recuperou energia.`);
-                    break;
-                case "item": {
-                    const inv = ler(`inventario_${personagem.nome}`, []);
-                    const item = inv.find((entrada) => ["alimentacao", "medicinais", "consumiveis"].includes(entrada.tipo) && Number(entrada.quantidade || 1) > 0);
-                    if (!item) {
+                    case "skill": {
+                        if (state.playerEne < 32) {
+                            log("Energia insuficiente para habilidade.");
+                            passaTurno = false;
+                            break;
+                        }
+                        const dano = danoBase(1.82);
+                        state.playerEne -= 32;
+                        state.enemyHp = Math.max(0, state.enemyHp - dano);
+                        try { window.battleFx?.skill?.(); } catch (erroFx) { console.warn("FX habilidade falhou.", erroFx); }
+                        log(`${personagem.nome} liberou uma habilidade e causou ${dano} de dano.`);
+                        renderizarBarras();
+                        break;
+                    }
+                    case "defend":
+                        state.defendendo = true;
+                        state.playerEne = Math.min(state.playerMaxEne, state.playerEne + 18);
+                        try { window.battleFx?.defend?.(); } catch (erroFx) { console.warn("FX defesa falhou.", erroFx); }
+                        log(`${personagem.nome} assumiu postura defensiva e recuperou energia.`);
+                        break;
+                    case "item": {
+                        const inv = ler(`inventario_${personagem.nome}`, []);
+                        const item = inv.find((entrada) => ["alimentacao", "medicinais", "consumiveis"].includes(entrada.tipo) && Number(entrada.quantidade || 1) > 0);
+                        if (!item) {
+                            state.enemyHp = hpInimigoAntes;
+                            passaTurno = false;
+                            log("Nenhum item de cura encontrado no inventário.");
+                            break;
+                        }
+                        const cura = Math.round(state.playerMaxHp * .28);
+                        state.playerHp = Math.min(state.playerMaxHp, state.playerHp + cura);
                         state.enemyHp = hpInimigoAntes;
-                        passaTurno = false;
-                        log("Nenhum item de cura encontrado no inventário.");
+                        item.quantidade = Math.max(0, Number(item.quantidade || 1) - 1);
+                        salvar(`inventario_${personagem.nome}`, inv.filter((entrada) => Number(entrada.quantidade || 0) > 0));
+                        try { window.battleFx?.item?.(); } catch (erroFx) { console.warn("FX item falhou.", erroFx); }
+                        log(`${item.nome} usado: +${cura} HP.`);
                         break;
                     }
-                    const cura = Math.round(state.playerMaxHp * .28);
-                    state.playerHp = Math.min(state.playerMaxHp, state.playerHp + cura);
-                    state.enemyHp = hpInimigoAntes;
-                    item.quantidade = Math.max(0, Number(item.quantidade || 1) - 1);
-                    salvar(`inventario_${personagem.nome}`, inv.filter((entrada) => Number(entrada.quantidade || 0) > 0));
-                    window.battleFx?.item?.();
-                    log(`${item.nome} usado: +${cura} HP.`);
-                    break;
+                    default:
+                        return;
                 }
-                default:
-                    acaoEmAndamento = false;
-                    return;
+            } catch (erro) {
+                console.warn("Ação falhou sem travar a batalha.", erro);
+                log("A ação falhou, mas a batalha continua.");
+            } finally {
+                acaoEmAndamento = false;
             }
             atualizar();
-            if (!verificarVitoria() && passaTurno) setTimeout(() => {
-                turnoInimigo();
-                acaoEmAndamento = false;
-            }, 360);
-            else acaoEmAndamento = false;
+            if (!verificarVitoria() && passaTurno) setTimeout(turnoInimigo, 360);
         }
         async function finalizarVitoria() {
             if (!state.venceu || !personagem?.nome) return;
