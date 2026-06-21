@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Batalha - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game13">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game15">
     <style>
         html, body { min-height: 100%; margin: 0; background: #030708; color: #fff7df; overflow-x: hidden; }
         body { font-family: Georgia, "Times New Roman", serif; }
@@ -126,7 +126,7 @@
         </section>
     </main>
     <script src="banco-personagens.js?v=20260619-db2"></script>
-    <script src="musica-fundo.js?v=20260619-game13"></script>
+    <script src="musica-fundo.js?v=20260619-game15"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         function ler(chave, padrao) { try { return JSON.parse(localStorage.getItem(chave) || "null") || padrao; } catch { return padrao; } }
@@ -287,20 +287,50 @@
             const el = document.getElementById("battle-log");
             el.insertAdjacentHTML("afterbegin", `<p>${texto}</p>`);
         }
-        function pct(valor, max) { return Math.max(0, Math.min(100, (valor / max) * 100)); }
+        function numeroSeguro(valor, padrao) {
+            const numero = Number(valor);
+            return Number.isFinite(numero) ? numero : padrao;
+        }
+        function pct(valor, max) {
+            const maximo = Math.max(1, numeroSeguro(max, 1));
+            return Math.max(0, Math.min(100, (numeroSeguro(valor, 0) / maximo) * 100));
+        }
+        function alvo(id) { return document.getElementById(id); }
+        function texto(id, valor) {
+            document.querySelectorAll("#" + id).forEach((el) => { el.textContent = valor; });
+        }
+        function largura(id, valor) {
+            document.querySelectorAll("#" + id).forEach((el) => { el.style.width = valor; });
+        }
+        function sanitizarEstado() {
+            state.playerMaxHp = Math.max(1, numeroSeguro(state.playerMaxHp, 1));
+            state.playerMaxEne = Math.max(1, numeroSeguro(state.playerMaxEne, 1));
+            state.enemyMaxHp = Math.max(1, numeroSeguro(state.enemyMaxHp, inimigoBase.hp || 160));
+            state.enemyMaxEne = Math.max(1, numeroSeguro(state.enemyMaxEne, inimigoBase.furia || 80));
+            state.playerHp = Math.max(0, Math.min(state.playerMaxHp, numeroSeguro(state.playerHp, state.playerMaxHp)));
+            state.playerEne = Math.max(0, Math.min(state.playerMaxEne, numeroSeguro(state.playerEne, state.playerMaxEne)));
+            state.enemyHp = Math.max(0, Math.min(state.enemyMaxHp, numeroSeguro(state.enemyHp, state.enemyMaxHp)));
+            state.enemyEne = Math.max(0, Math.min(state.enemyMaxEne, numeroSeguro(state.enemyEne, state.enemyMaxEne)));
+        }
+        function renderizarBarras() {
+            sanitizarEstado();
+            largura("player-hp-bar", pct(state.playerHp, state.playerMaxHp) + "%");
+            largura("player-ene-bar", pct(state.playerEne, state.playerMaxEne) + "%");
+            largura("enemy-hp-bar", pct(state.enemyHp, state.enemyMaxHp) + "%");
+            largura("enemy-ene-bar", pct(state.enemyEne, state.enemyMaxEne) + "%");
+            texto("player-hp-text", `${Math.max(0, state.playerHp)}/${state.playerMaxHp}`);
+            texto("player-ene-text", `${Math.max(0, state.playerEne)}/${state.playerMaxEne}`);
+            texto("enemy-hp-text", `${Math.max(0, state.enemyHp)}/${state.enemyMaxHp}`);
+            texto("enemy-ene-text", `${Math.max(0, state.enemyEne)}/${state.enemyMaxEne}`);
+            document.body.dataset.enemyHp = `${Math.max(0, state.enemyHp)}/${state.enemyMaxHp}`;
+        }
         function atualizar() {
-            document.getElementById("player-hp-bar").style.width = pct(state.playerHp, state.playerMaxHp) + "%";
-            document.getElementById("player-ene-bar").style.width = pct(state.playerEne, state.playerMaxEne) + "%";
-            document.getElementById("enemy-hp-bar").style.width = pct(state.enemyHp, state.enemyMaxHp) + "%";
-            document.getElementById("enemy-ene-bar").style.width = pct(state.enemyEne, state.enemyMaxEne) + "%";
-            document.getElementById("player-hp-text").textContent = `${Math.max(0, state.playerHp)}/${state.playerMaxHp}`;
-            document.getElementById("player-ene-text").textContent = `${Math.max(0, state.playerEne)}/${state.playerMaxEne}`;
-            document.getElementById("enemy-hp-text").textContent = `${Math.max(0, state.enemyHp)}/${state.enemyMaxHp}`;
-            document.getElementById("enemy-ene-text").textContent = `${Math.max(0, state.enemyEne)}/${state.enemyMaxEne}`;
-            document.getElementById("turno").textContent = state.turno;
-            document.getElementById("rank").textContent = rankAtual;
-            document.getElementById("status-text").textContent = state.venceu ? "Vitória pronta" : state.playerHp <= 0 ? "Derrotado" : "Em combate";
-            document.querySelector('[data-action="finish"]').disabled = !state.venceu;
+            renderizarBarras();
+            texto("turno", state.turno);
+            texto("rank", rankAtual);
+            texto("status-text", state.venceu ? "Vitória pronta" : state.playerHp <= 0 ? "Derrotado" : "Em combate");
+            const finalizar = document.querySelector('[data-action="finish"]');
+            if (finalizar) finalizar.disabled = !state.venceu;
             document.querySelectorAll('[data-action="attack"],[data-action="skill"],[data-action="defend"],[data-action="item"]').forEach((btn) => {
                 btn.disabled = state.venceu || state.playerHp <= 0;
             });
@@ -329,6 +359,7 @@
             atualizar();
             return true;
         }
+        let acaoEmAndamento = false;
         function usarAcao(acao) {
             if (!personagem?.nome) { return; }
             if (acao === "reset") {
@@ -340,40 +371,69 @@
             }
             if (acao === "finish") { finalizarVitoria(); return; }
             if (state.venceu || state.playerHp <= 0) return;
-            if (acao === "attack") {
-                const dano = danoBase(1);
-                state.enemyHp = Math.max(0, state.enemyHp - dano);
-                state.playerEne = Math.min(state.playerMaxEne, state.playerEne + 8);
-                window.battleFx?.playerAttack?.();
-                log(`${personagem.nome} acertou um ataque e causou ${dano} de dano.`);
-            }
-            if (acao === "skill") {
-                if (state.playerEne < 32) { log("Energia insuficiente para habilidade."); atualizar(); return; }
-                const dano = danoBase(1.82);
-                state.playerEne -= 32;
-                state.enemyHp = Math.max(0, state.enemyHp - dano);
-                window.battleFx?.skill?.();
-                log(`${personagem.nome} liberou uma habilidade e causou ${dano} de dano.`);
-            }
-            if (acao === "defend") {
-                state.defendendo = true;
-                state.playerEne = Math.min(state.playerMaxEne, state.playerEne + 18);
-                window.battleFx?.defend?.();
-                log(`${personagem.nome} assumiu postura defensiva e recuperou energia.`);
-            }
-            if (acao === "item") {
-                const inv = ler(`inventario_${personagem.nome}`, []);
-                const item = inv.find((entrada) => ["alimentacao", "medicinais", "consumiveis"].includes(entrada.tipo) && Number(entrada.quantidade || 1) > 0);
-                if (!item) { log("Nenhum item de cura encontrado no inventário."); atualizar(); return; }
-                const cura = Math.round(state.playerMaxHp * .28);
-                state.playerHp = Math.min(state.playerMaxHp, state.playerHp + cura);
-                item.quantidade = Math.max(0, Number(item.quantidade || 1) - 1);
-                salvar(`inventario_${personagem.nome}`, inv.filter((entrada) => Number(entrada.quantidade || 0) > 0));
-                window.battleFx?.item?.();
-                log(`${item.nome} usado: +${cura} HP.`);
+            if (acaoEmAndamento) return;
+            acaoEmAndamento = true;
+            let passaTurno = true;
+            const hpInimigoAntes = state.enemyHp;
+
+            switch (acao) {
+                case "attack": {
+                    const dano = danoBase(1);
+                    state.enemyHp = Math.max(0, state.enemyHp - dano);
+                    state.playerEne = Math.min(state.playerMaxEne, state.playerEne + 8);
+                    window.battleFx?.playerAttack?.();
+                    log(`${personagem.nome} acertou um ataque e causou ${dano} de dano.`);
+                    renderizarBarras();
+                    break;
+                }
+                case "skill": {
+                    if (state.playerEne < 32) {
+                        log("Energia insuficiente para habilidade.");
+                        passaTurno = false;
+                        break;
+                    }
+                    const dano = danoBase(1.82);
+                    state.playerEne -= 32;
+                    state.enemyHp = Math.max(0, state.enemyHp - dano);
+                    window.battleFx?.skill?.();
+                    log(`${personagem.nome} liberou uma habilidade e causou ${dano} de dano.`);
+                    renderizarBarras();
+                    break;
+                }
+                case "defend":
+                    state.defendendo = true;
+                    state.playerEne = Math.min(state.playerMaxEne, state.playerEne + 18);
+                    window.battleFx?.defend?.();
+                    log(`${personagem.nome} assumiu postura defensiva e recuperou energia.`);
+                    break;
+                case "item": {
+                    const inv = ler(`inventario_${personagem.nome}`, []);
+                    const item = inv.find((entrada) => ["alimentacao", "medicinais", "consumiveis"].includes(entrada.tipo) && Number(entrada.quantidade || 1) > 0);
+                    if (!item) {
+                        state.enemyHp = hpInimigoAntes;
+                        passaTurno = false;
+                        log("Nenhum item de cura encontrado no inventário.");
+                        break;
+                    }
+                    const cura = Math.round(state.playerMaxHp * .28);
+                    state.playerHp = Math.min(state.playerMaxHp, state.playerHp + cura);
+                    state.enemyHp = hpInimigoAntes;
+                    item.quantidade = Math.max(0, Number(item.quantidade || 1) - 1);
+                    salvar(`inventario_${personagem.nome}`, inv.filter((entrada) => Number(entrada.quantidade || 0) > 0));
+                    window.battleFx?.item?.();
+                    log(`${item.nome} usado: +${cura} HP.`);
+                    break;
+                }
+                default:
+                    acaoEmAndamento = false;
+                    return;
             }
             atualizar();
-            if (!verificarVitoria()) setTimeout(turnoInimigo, 360);
+            if (!verificarVitoria() && passaTurno) setTimeout(() => {
+                turnoInimigo();
+                acaoEmAndamento = false;
+            }, 360);
+            else acaoEmAndamento = false;
         }
         async function finalizarVitoria() {
             if (!state.venceu || !personagem?.nome) return;
@@ -421,6 +481,12 @@
             window.RpgFeedback?.aviso?.("Batalha vencida", [`+${resultado.recompensas.exp} EXP`, `Drop: ${itemDrop.nome}`]);
             document.querySelector('[data-action="finish"]').disabled = true;
         }
+        window.BatalhaRpg = {
+            acao: usarAcao,
+            estado: () => ({ ...state }),
+            atualizar,
+            resetar: resetarEstadoBatalha
+        };
         function iniciar() {
             if (!personagem?.nome) { return; }
             resetarEstadoBatalha();
@@ -440,9 +506,9 @@
             }
             log(`Combate iniciado contra ${inimigoBase.nome}.`);
             document.querySelectorAll("[data-action]").forEach((btn) => {
+                btn.onclick = () => usarAcao(btn.dataset.action);
                 if (btn.dataset.battleReady === "1") return;
                 btn.dataset.battleReady = "1";
-                btn.addEventListener("click", () => usarAcao(btn.dataset.action));
             });
             if (!document.getElementById("battle-hard-reset")) {
                 document.body.insertAdjacentHTML("beforeend", '<button class="battle-debug-reset" type="button" id="battle-hard-reset">Reset combate</button>');
