@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Batalha - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game16">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game17">
     <style>
         html, body { min-height: 100%; margin: 0; background: #030708; color: #fff7df; overflow-x: hidden; }
         body { font-family: Georgia, "Times New Roman", serif; }
@@ -50,12 +50,14 @@
         .battle-actions { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; padding: 12px; }
         .battle-actions::before { content: "Comandos de combate"; grid-column: 1 / -1; color: #36e0ff; font: 1000 .68rem Arial,sans-serif; letter-spacing: .16em; text-transform: uppercase; }
         .battle-actions .primary { color: #07100d; background: linear-gradient(90deg, #ffe28a, #f7c84b); }
+        .battle-actions .liberado { color: #07100d; border-color: rgba(144,255,0,.72); background: linear-gradient(90deg, #90ff00, #ffe28a); box-shadow: 0 0 24px rgba(144,255,0,.34); animation: battleWinPulse .9s ease-in-out infinite alternate; }
         .battle-actions .danger { border-color: rgba(255,92,92,.44); color: #ffd6cc; background: rgba(78,12,10,.64); }
         .battle-actions button:disabled { opacity: .5; cursor: default; }
         .battle-footer { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
         .battle-footer article { padding: 12px; }
         .battle-footer strong { display: block; margin-top: 4px; color: #fff7df; font-size: 1.1rem; }
         .battle-debug-reset { position: fixed; right: 14px; top: 82px; z-index: 5000; min-height: 36px; padding: 0 10px; border: 1px solid rgba(144,255,0,.38); border-radius: 8px; color: #eaffd8; background: rgba(3,12,8,.78); font: 1000 .66rem Arial,sans-serif; text-transform: uppercase; cursor: pointer; box-shadow: 0 12px 30px rgba(0,0,0,.38); }
+        @keyframes battleWinPulse { from { filter: brightness(1); } to { filter: brightness(1.18); } }
         .battle-empty { position: fixed; inset: 0; z-index: 6000; display: grid; place-items: center; padding: 18px; background: rgba(0,0,0,.72); backdrop-filter: blur(8px); }
         .battle-empty-card { width: min(520px, 100%); padding: 18px; border: 1px solid rgba(255,226,138,.34); border-radius: 8px; background: linear-gradient(180deg, rgba(7,20,22,.98), rgba(3,8,10,.98)); box-shadow: 0 28px 90px rgba(0,0,0,.72); color: #fff7df; }
         .battle-empty-card h2 { margin: 4px 0 10px; font-family: "Segoe UI Black","Arial Black",Impact,sans-serif; text-transform: uppercase; }
@@ -126,7 +128,7 @@
         </section>
     </main>
     <script src="banco-personagens.js?v=20260619-db2"></script>
-    <script src="musica-fundo.js?v=20260619-game16"></script>
+    <script src="musica-fundo.js?v=20260619-game17"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         function ler(chave, padrao) { try { return JSON.parse(localStorage.getItem(chave) || "null") || padrao; } catch { return padrao; } }
@@ -176,6 +178,7 @@
         };
         state.playerHp = state.playerMaxHp;
         state.playerEne = state.playerMaxEne;
+        let avisoVitoriaMostrado = false;
 
         function resetarEstadoBatalha() {
             state.turno = 1;
@@ -189,6 +192,7 @@
             state.playerEne = state.playerMaxEne;
             state.enemyHp = state.enemyMaxHp;
             state.enemyEne = state.enemyMaxEne;
+            avisoVitoriaMostrado = false;
             document.getElementById("vitorias").textContent = state.vitorias;
         }
 
@@ -326,11 +330,19 @@
         }
         function atualizar() {
             renderizarBarras();
+            if (state.enemyHp <= 0) {
+                state.enemyHp = 0;
+                state.venceu = true;
+            }
             texto("turno", state.turno);
             texto("rank", rankAtual);
             texto("status-text", state.venceu ? "Vitória pronta" : state.playerHp <= 0 ? "Derrotado" : "Em combate");
             const finalizar = document.querySelector('[data-action="finish"]');
-            if (finalizar) finalizar.disabled = !state.venceu;
+            if (finalizar) {
+                finalizar.disabled = !state.venceu;
+                finalizar.classList.toggle("liberado", state.venceu);
+                finalizar.textContent = state.venceu ? "Salvar vitória" : "Finalizar vitória";
+            }
             document.querySelectorAll('[data-action="attack"],[data-action="skill"],[data-action="defend"],[data-action="item"]').forEach((btn) => {
                 btn.disabled = state.venceu || state.playerHp <= 0;
             });
@@ -357,11 +369,18 @@
         }
         function verificarVitoria() {
             if (state.enemyHp > 0) return false;
+            if (state.venceu) {
+                atualizar();
+                return true;
+            }
             state.venceu = true;
             state.vitorias += 1;
-            window.battleFx?.victory?.();
+            try { window.battleFx?.victory?.(); } catch (erroFx) { console.warn("FX vitória falhou.", erroFx); }
             document.getElementById("vitorias").textContent = state.vitorias;
-            log("Vitória alcançada. Finalize para gravar recompensas e conquistas.");
+            if (!avisoVitoriaMostrado) {
+                avisoVitoriaMostrado = true;
+                log("Vitória alcançada. Clique em Salvar vitória para gravar recompensas e conquistas.");
+            }
             atualizar();
             return true;
         }
@@ -447,6 +466,8 @@
             if (!verificarVitoria() && passaTurno) setTimeout(turnoInimigo, 360);
         }
         async function finalizarVitoria() {
+            if (state.enemyHp <= 0) state.venceu = true;
+            atualizar();
             if (!state.venceu || !personagem?.nome) return;
             const registroChave = "rpg_batalhas_" + normalizar(personagem.nome);
             const registros = ler(registroChave, []);

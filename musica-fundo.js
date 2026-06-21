@@ -366,7 +366,7 @@
 		var selo = document.createElement("div");
 		selo.id = "rpg-versao-visivel";
 		selo.className = "rpg-versao-visivel";
-		selo.innerHTML = "<i></i><span>Atualização V28 carregada</span>";
+		selo.innerHTML = "<i></i><span>Atualização V29 carregada</span>";
 		document.body.appendChild(selo);
 		setTimeout(function () {
 			selo.style.opacity = "0";
@@ -1118,7 +1118,7 @@
 	}
 
 	function instalarPatchNotes(forcar) {
-		var versao = "20260619-pro16";
+		var versao = "20260619-pro17";
 		var chave = "rpg_patch_notes_" + versao;
 		if (!forcar && localStorage.getItem(chave) === "visto") return;
 		var existente = document.getElementById("rpg-patch-notes");
@@ -1203,7 +1203,7 @@
 					'<section class="rpg-sistema-bloco"><h3>Salvamento</h3>' +
 						'<div class="rpg-sistema-linha"><span>Status</span><strong>' + textoSalvamento() + '</strong></div>' +
 						'<div class="rpg-sistema-linha"><span>Rede</span><strong>' + (navigator.onLine ? "Online" : "Offline") + '</strong></div>' +
-							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v28</strong></div>' +
+							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v29</strong></div>' +
 						'<div class="rpg-sistema-acoes"><button type="button" data-sistema-atualizar>Atualizar app</button><button type="button" data-sistema-notes>Novidades</button></div>' +
 					'</section>' +
 					'<section class="rpg-sistema-bloco"><h3>CDN Premium</h3>' +
