@@ -368,7 +368,7 @@
 		var selo = document.createElement("div");
 		selo.id = "rpg-versao-visivel";
 		selo.className = "rpg-versao-visivel";
-		selo.innerHTML = "<i></i><span>Atualização V31 carregada</span>";
+		selo.innerHTML = "<i></i><span>Atualização V32 carregada</span>";
 		document.body.appendChild(selo);
 		setTimeout(function () {
 			selo.style.opacity = "0";
@@ -1121,7 +1121,7 @@
 	}
 
 	function instalarPatchNotes(forcar) {
-		var versao = "20260619-pro19";
+		var versao = "20260619-pro20";
 		var chave = "rpg_patch_notes_" + versao;
 		if (!forcar && localStorage.getItem(chave) === "visto") return;
 		var existente = document.getElementById("rpg-patch-notes");
@@ -1133,9 +1133,11 @@
 				'<section class="rpg-patch-card" role="dialog" aria-modal="true" aria-label="Novidades da versão">' +
 					'<header><div><small>Atualização instalada</small><h2>Versão Pro</h2></div><button class="rpg-patch-fechar-x" type="button" data-patch-fechar aria-label="Fechar">X</button></header>' +
 					'<div class="rpg-patch-lista">' +
+						'<div class="rpg-patch-item"><strong>Mundo corrigido</strong><span>Phaser agora roda local, o personagem não usa mais sprite quebrado e o mapa aceita clique para andar.</span></div>' +
+						'<div class="rpg-patch-item"><strong>Controle mais claro</strong><span>WASD/setas continuam ativos, o clique cria marcador no mapa e o jogador navega até o ponto escolhido.</span></div>' +
 						'<div class="rpg-patch-item"><strong>Mundo jogável</strong><span>Nova aba Phaser com movimento por WASD/setas, câmera seguindo o jogador, NPCs, baús, ameaças e entrada para batalha.</span></div>' +
 						'<div class="rpg-patch-item"><strong>Entrar no mundo virou jogo</strong><span>O botão principal do lobby agora abre uma cena controlável em tempo real, com save de posição e progressão local.</span></div>' +
-						'<div class="rpg-patch-item"><strong>Game client V31</strong><span>Nova moldura global, topbar online, radar visual, quest ativa e efeitos de clique em todas as abas.</span></div>' +
+						'<div class="rpg-patch-item"><strong>Game client V32</strong><span>Nova moldura global, topbar online, radar visual, quest ativa e efeitos de clique em todas as abas.</span></div>' +
 						'<div class="rpg-patch-item"><strong>Radar funcionando</strong><span>Minimapa animado com varredura, pontos de interesse e progresso visual sem bloquear os botões da tela.</span></div>' +
 						'<div class="rpg-patch-item"><strong>Interface mais viva</strong><span>Botões agora disparam brilho de ação, páginas entram com boot visual e o HUD mostra sensação de cliente de jogo.</span></div>' +
 						'<div class="rpg-patch-item"><strong>Janela corrigida</strong><span>Este painel agora tem rolagem interna e botão X fixo para fechar no celular e no PC.</span></div>' +
@@ -1211,7 +1213,7 @@
 					'<section class="rpg-sistema-bloco"><h3>Salvamento</h3>' +
 						'<div class="rpg-sistema-linha"><span>Status</span><strong>' + textoSalvamento() + '</strong></div>' +
 						'<div class="rpg-sistema-linha"><span>Rede</span><strong>' + (navigator.onLine ? "Online" : "Offline") + '</strong></div>' +
-							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v31</strong></div>' +
+							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v32</strong></div>' +
 						'<div class="rpg-sistema-acoes"><button type="button" data-sistema-atualizar>Atualizar app</button><button type="button" data-sistema-notes>Novidades</button></div>' +
 					'</section>' +
 					'<section class="rpg-sistema-bloco"><h3>CDN Premium</h3>' +

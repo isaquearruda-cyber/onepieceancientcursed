@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mundo - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game19">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game20">
     <style>
         html, body { min-height: 100%; margin: 0; background: #020708; color: #fff7df; overflow: hidden; }
         body { font-family: Arial, sans-serif; }
@@ -70,7 +70,7 @@
             <aside class="world-hud">
                 <div class="world-card">
                     <strong id="world-name">Personagem</strong>
-                    <span id="world-quest">Use WASD ou setas para navegar. Encoste em NPCs, baús e ameaças.</span>
+                    <span id="world-quest">Use WASD/setas ou clique no mapa para navegar. Encoste em NPCs, baús e ameaças.</span>
                 </div>
                 <div class="world-stats">
                     <div class="world-stat"><b id="world-level">1</b><small>Nível</small></div>
@@ -88,7 +88,7 @@
             <div class="world-log" id="world-log"></div>
         </section>
     </main>
-    <script src="musica-fundo.js?v=20260619-game19"></script>
+    <script src="musica-fundo.js?v=20260619-game20"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
@@ -168,7 +168,7 @@
 
         async function iniciarWorld() {
             try {
-                await carregarScript("https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js", "phaser-world");
+                await carregarScript("assets/vendor/phaser/phaser.min.js", "phaser-world").catch(() => carregarScript("https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js", "phaser-world-cdn"));
                 if (!window.Phaser) throw new Error("Phaser indisponível");
                 const parent = document.getElementById("world-canvas");
                 const config = {
@@ -188,23 +188,49 @@
             }
         }
 
-        let player, cursors, keys, npcs, chests, threats, cameraText, actionCooldown = 0;
+        let player, cursors, keys, npcs, chests, threats, cameraText, targetMarker, actionCooldown = 0;
+        let moveTarget = null;
         const worldSize = { w: 2200, h: 1600 };
 
         function preload() {
-            this.load.image("sea", "assets/mares/mar-east.webp");
-            this.load.image("ship", "assets/mares/mar-sprite.webp");
         }
 
         function create() {
             loadingEl.remove();
             this.physics.world.setBounds(0, 0, worldSize.w, worldSize.h);
-            const bg = this.add.tileSprite(0, 0, worldSize.w, worldSize.h, "sea").setOrigin(0).setAlpha(.55);
-            bg.setTileScale(1.8, 1.8);
+            const ocean = this.add.graphics();
+            ocean.fillGradientStyle(0x062e45, 0x062e45, 0x041827, 0x03101a, 1);
+            ocean.fillRect(0, 0, worldSize.w, worldSize.h);
+            for (let i = 0; i < 120; i += 1) {
+                const x = Math.random() * worldSize.w;
+                const y = Math.random() * worldSize.h;
+                ocean.lineStyle(1 + Math.random() * 2, i % 3 ? 0x36e0ff : 0xffe28a, i % 3 ? .08 : .05);
+                ocean.beginPath();
+                ocean.arc(x, y, 40 + Math.random() * 130, Math.random() * Math.PI, Math.random() * Math.PI + Math.PI);
+                ocean.strokePath();
+            }
             const grid = this.add.graphics();
             grid.lineStyle(1, 0x36e0ff, .09);
             for (let x = 0; x < worldSize.w; x += 96) grid.lineBetween(x, 0, x, worldSize.h);
             for (let y = 0; y < worldSize.h; y += 96) grid.lineBetween(0, y, worldSize.w, y);
+            const shipTexture = this.make.graphics({ x: 0, y: 0, add: false });
+            shipTexture.fillStyle(0xffe28a, 1);
+            shipTexture.fillTriangle(32, 2, 58, 58, 32, 46);
+            shipTexture.fillStyle(0x36e0ff, 1);
+            shipTexture.fillTriangle(32, 2, 6, 58, 32, 46);
+            shipTexture.fillStyle(0x061011, 1);
+            shipTexture.fillCircle(32, 35, 9);
+            shipTexture.lineStyle(3, 0x90ff00, 1);
+            shipTexture.strokeTriangle(32, 2, 58, 58, 6, 58);
+            shipTexture.generateTexture("playerShipPro", 64, 64);
+            shipTexture.destroy();
+            const targetTexture = this.make.graphics({ x: 0, y: 0, add: false });
+            targetTexture.lineStyle(3, 0x90ff00, .9);
+            targetTexture.strokeCircle(24, 24, 20);
+            targetTexture.lineBetween(24, 0, 24, 48);
+            targetTexture.lineBetween(0, 24, 48, 24);
+            targetTexture.generateTexture("targetMarker", 48, 48);
+            targetTexture.destroy();
             for (let i = 0; i < 18; i += 1) {
                 const x = 120 + Math.random() * (worldSize.w - 240);
                 const y = 120 + Math.random() * (worldSize.h - 240);
@@ -216,10 +242,11 @@
                 [540, 420], [1420, 520], [1780, 1160], [760, 1240], [1120, 880]
             ].forEach((pos, i) => {
                 if (estadoMundo.chests.includes(i)) return;
-                const chest = this.add.rectangle(pos[0], pos[1], 34, 28, 0xffc247, 1).setStrokeStyle(2, 0x2b1406, 1);
+                const chest = this.add.rectangle(pos[0], pos[1], 42, 34, 0xffc247, 1).setStrokeStyle(3, 0x2b1406, 1);
                 chest.idMundo = i;
                 this.physics.add.existing(chest, true);
                 chests.add(chest);
+                this.add.text(pos[0], pos[1], "◆", { fontFamily: "Arial Black", fontSize: "18px", color: "#2b1406" }).setOrigin(.5);
             });
             npcs = this.physics.add.staticGroup();
             [
@@ -244,16 +271,27 @@
                 threats.add(threat);
                 this.add.text(enemy[0], enemy[1], enemy[2], { fontFamily: "Arial Black", fontSize: "26px", color: "#fff7df", stroke: "#210b08", strokeThickness: 5 }).setOrigin(.5);
             });
-            player = this.physics.add.sprite(estadoMundo.x, estadoMundo.y, "ship");
-            player.setDisplaySize(72, 72);
+            targetMarker = this.add.image(estadoMundo.x, estadoMundo.y, "targetMarker").setDepth(8).setVisible(false).setAlpha(.82);
+            player = this.physics.add.sprite(estadoMundo.x, estadoMundo.y, "playerShipPro");
+            player.setDisplaySize(64, 64).setDepth(10);
             player.setCollideWorldBounds(true);
             player.body.setSize(42, 42);
-            player.aura = this.add.circle(player.x, player.y, 48, 0x90ff00, .13).setStrokeStyle(2, 0x90ff00, .55);
+            player.aura = this.add.circle(player.x, player.y, 48, 0x90ff00, .13).setStrokeStyle(2, 0x90ff00, .55).setDepth(9);
             this.tweens.add({ targets: player.aura, scale: 1.22, alpha: .22, yoyo: true, repeat: -1, duration: 760, ease: "sine.inOut" });
             cursors = this.input.keyboard.createCursorKeys();
             keys = this.input.keyboard.addKeys("W,A,S,D,E,SPACE");
             this.cameras.main.startFollow(player, true, .12, .12);
             this.cameras.main.setBounds(0, 0, worldSize.w, worldSize.h);
+            this.input.on("pointerdown", (pointer) => {
+                if (pointer.y < 120) return;
+                const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+                moveTarget = {
+                    x: Phaser.Math.Clamp(worldPoint.x, 20, worldSize.w - 20),
+                    y: Phaser.Math.Clamp(worldPoint.y, 20, worldSize.h - 20)
+                };
+                targetMarker.setPosition(moveTarget.x, moveTarget.y).setVisible(true);
+                this.tweens.add({ targets: targetMarker, scale: { from: 1.35, to: .8 }, alpha: { from: 1, to: .55 }, duration: 220, yoyo: true });
+            });
             this.physics.add.overlap(player, chests, (_p, chest) => {
                 if (actionCooldown > this.time.now) return;
                 actionCooldown = this.time.now + 700;
@@ -291,17 +329,30 @@
             const up = cursors.up.isDown || keys.W.isDown || teclasMobile.up;
             const down = cursors.down.isDown || keys.S.isDown || teclasMobile.down;
             player.setVelocity(0);
-            if (left) player.setVelocityX(-speed);
-            if (right) player.setVelocityX(speed);
-            if (up) player.setVelocityY(-speed);
-            if (down) player.setVelocityY(speed);
-            player.body.velocity.normalize().scale(speed);
+            const usandoDirecional = left || right || up || down;
+            if (usandoDirecional) {
+                moveTarget = null;
+                if (targetMarker) targetMarker.setVisible(false);
+                if (left) player.setVelocityX(-speed);
+                if (right) player.setVelocityX(speed);
+                if (up) player.setVelocityY(-speed);
+                if (down) player.setVelocityY(speed);
+                player.body.velocity.normalize().scale(speed);
+            } else if (moveTarget) {
+                const dist = Phaser.Math.Distance.Between(player.x, player.y, moveTarget.x, moveTarget.y);
+                if (dist < 14) {
+                    moveTarget = null;
+                    if (targetMarker) targetMarker.setVisible(false);
+                } else {
+                    this.physics.moveTo(player, moveTarget.x, moveTarget.y, speed);
+                }
+            }
             if (player.body.velocity.length() > 0) player.rotation = Phaser.Math.Angle.Between(0, 0, player.body.velocity.x, player.body.velocity.y) + Math.PI / 2;
             player.aura.setPosition(player.x, player.y);
             estadoMundo.x = Math.round(player.x);
             estadoMundo.y = Math.round(player.y);
             if (Math.random() < .01) salvarMundo();
-            cameraText.setText("WASD/setas: mover | Baús: inventário | Ameaças: batalha | X " + estadoMundo.x + " Y " + estadoMundo.y);
+            cameraText.setText("WASD/setas ou clique: mover | Baús: inventário | Ameaças: batalha | X " + estadoMundo.x + " Y " + estadoMundo.y);
         }
 
         document.querySelectorAll("[data-dir]").forEach((botao) => {
