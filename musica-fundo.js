@@ -2,19 +2,19 @@
 	"use strict";
 
 	var rotasPaginas = {
-		"botao-iniciar": "aventura.html",
+		"botao-iniciar": "mundo.html",
 		"botao-inventario": "inventario.html",
 		"botao-atributos": "atributos.html"
 	};
 	var rotasMenu = {
 		perfil: "perfil.html",
-		aventura: "aventura.html",
+		aventura: "mundo.html",
 		correio: "correio.html",
 		notificacoes: "notificacoes.html",
 		lojas: "loja.html",
 		missoes: "missoes.html",
 		batalha: "batalha.html",
-		viagem: "aventura.html",
+		viagem: "mundo.html",
 		treinos: "treinos.html",
 		conquistas: "conquistas.html",
 		habilidades: "habilidades.html",
@@ -302,7 +302,7 @@
 		if (!grade || grade.dataset.sistemasRpg === "ok") return;
 		grade.dataset.sistemasRpg = "ok";
 		[
-			["aventura", "Entrar na Aventura"],
+			["aventura", "Entrar no Mundo"],
 			["correio", "Correio"],
 			["notificacoes", "Notificações"],
 			["lojas", "Loja Rotativa"],
@@ -353,7 +353,7 @@
 		portal.innerHTML =
 			"<small>Servidor pronto</small>" +
 			"<strong>Entrar no mundo RPG</strong>" +
-			"<span>Mapa vivo, batalha animada, missões, inventário, conquistas e progresso persistente.</span>" +
+			"<span>Exploração jogável com movimento, câmera, NPCs, baús, ameaças, batalha animada e progresso persistente.</span>" +
 			'<div class="portal-mundo-motores"><i>PixiJS</i><i>Phaser</i><i>GSAP</i><i>Rive</i><i>Lottie</i></div>';
 		botao.parentNode.insertBefore(portal, botao);
 		if (window.gsap) {
@@ -368,7 +368,7 @@
 		var selo = document.createElement("div");
 		selo.id = "rpg-versao-visivel";
 		selo.className = "rpg-versao-visivel";
-		selo.innerHTML = "<i></i><span>Atualização V30 carregada</span>";
+		selo.innerHTML = "<i></i><span>Atualização V31 carregada</span>";
 		document.body.appendChild(selo);
 		setTimeout(function () {
 			selo.style.opacity = "0";
@@ -1100,6 +1100,7 @@
 			{ href: "missoes.html", sigla: "MS", nome: "Missoes" },
 			{ href: "batalha.html", sigla: "BT", nome: "Batalha" },
 			{ href: "habilidades.html", sigla: "SK", nome: "Skills" },
+			{ href: "mundo.html", sigla: "WRLD", nome: "Mundo" },
 			{ href: "aventura.html", sigla: "MAP", nome: "Mapa" }
 		];
 		var atual = location.pathname.split("/").pop() || "index.html";
@@ -1120,7 +1121,7 @@
 	}
 
 	function instalarPatchNotes(forcar) {
-		var versao = "20260619-pro18";
+		var versao = "20260619-pro19";
 		var chave = "rpg_patch_notes_" + versao;
 		if (!forcar && localStorage.getItem(chave) === "visto") return;
 		var existente = document.getElementById("rpg-patch-notes");
@@ -1132,7 +1133,9 @@
 				'<section class="rpg-patch-card" role="dialog" aria-modal="true" aria-label="Novidades da versão">' +
 					'<header><div><small>Atualização instalada</small><h2>Versão Pro</h2></div><button class="rpg-patch-fechar-x" type="button" data-patch-fechar aria-label="Fechar">X</button></header>' +
 					'<div class="rpg-patch-lista">' +
-						'<div class="rpg-patch-item"><strong>Game client V30</strong><span>Nova moldura global, topbar online, radar visual, quest ativa e efeitos de clique em todas as abas.</span></div>' +
+						'<div class="rpg-patch-item"><strong>Mundo jogável</strong><span>Nova aba Phaser com movimento por WASD/setas, câmera seguindo o jogador, NPCs, baús, ameaças e entrada para batalha.</span></div>' +
+						'<div class="rpg-patch-item"><strong>Entrar no mundo virou jogo</strong><span>O botão principal do lobby agora abre uma cena controlável em tempo real, com save de posição e progressão local.</span></div>' +
+						'<div class="rpg-patch-item"><strong>Game client V31</strong><span>Nova moldura global, topbar online, radar visual, quest ativa e efeitos de clique em todas as abas.</span></div>' +
 						'<div class="rpg-patch-item"><strong>Radar funcionando</strong><span>Minimapa animado com varredura, pontos de interesse e progresso visual sem bloquear os botões da tela.</span></div>' +
 						'<div class="rpg-patch-item"><strong>Interface mais viva</strong><span>Botões agora disparam brilho de ação, páginas entram com boot visual e o HUD mostra sensação de cliente de jogo.</span></div>' +
 						'<div class="rpg-patch-item"><strong>Janela corrigida</strong><span>Este painel agora tem rolagem interna e botão X fixo para fechar no celular e no PC.</span></div>' +
@@ -1208,7 +1211,7 @@
 					'<section class="rpg-sistema-bloco"><h3>Salvamento</h3>' +
 						'<div class="rpg-sistema-linha"><span>Status</span><strong>' + textoSalvamento() + '</strong></div>' +
 						'<div class="rpg-sistema-linha"><span>Rede</span><strong>' + (navigator.onLine ? "Online" : "Offline") + '</strong></div>' +
-							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v30</strong></div>' +
+							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v31</strong></div>' +
 						'<div class="rpg-sistema-acoes"><button type="button" data-sistema-atualizar>Atualizar app</button><button type="button" data-sistema-notes>Novidades</button></div>' +
 					'</section>' +
 					'<section class="rpg-sistema-bloco"><h3>CDN Premium</h3>' +
@@ -1276,7 +1279,8 @@
 	function comandosPremium() {
 		return [
 			{ id: "lobby", titulo: "Lobby", desc: "Voltar para a central do personagem", destino: "lobby.html", acao: "aventura", tecla: "L" },
-			{ id: "aventura", titulo: "Mapa dos mares", desc: "Abrir seleção de rotas e viagem", destino: "aventura.html", acao: "aventura", tecla: "M" },
+			{ id: "mundo", titulo: "Mundo jogável", desc: "Abrir exploração com movimento, baús, NPCs e ameaças", destino: "mundo.html", acao: "aventura", tecla: "W" },
+			{ id: "aventura", titulo: "Mapa dos mares", desc: "Abrir seleção clássica de rotas e viagem", destino: "aventura.html", acao: "aventura", tecla: "M" },
 			{ id: "perfil", titulo: "Perfil completo", desc: "Ver ficha e progresso do jogador", destino: "perfil.html", acao: "perfil", tecla: "P" },
 			{ id: "inventario", titulo: "Inventário", desc: "Itens, categorias e histórico", destino: "inventario.html", acao: "inventario", tecla: "I" },
 			{ id: "missoes", titulo: "Missões", desc: "Concluir tarefas e receber recompensa", destino: "missoes.html", acao: "missoes", tecla: "Q" },

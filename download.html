@@ -5,16 +5,16 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Download do App - One Piece RPG</title>
 	<meta name="theme-color" content="#f7c84b">
-	<link rel="manifest" href="manifest.webmanifest?v=20260619-game18">
-	<link rel="apple-touch-icon" href="assets/img/app-logo-192.png?v=20260619-game18">
-	<link rel="stylesheet" href="estilo.css?v=20260619-game18">
+	<link rel="manifest" href="manifest.webmanifest?v=20260619-game19">
+	<link rel="apple-touch-icon" href="assets/img/app-logo-192.png?v=20260619-game19">
+	<link rel="stylesheet" href="estilo.css?v=20260619-game19">
 	<style>
 		body {
 			overflow: auto;
 			min-height: 100svh;
 			background:
 				linear-gradient(90deg, rgba(3, 8, 10, .96), rgba(5, 18, 18, .76)),
-				url("assets/img/app-logo-source.jpeg?v=20260619-game18") center/cover fixed;
+				url("assets/img/app-logo-source.jpeg?v=20260619-game19") center/cover fixed;
 		}
 
 		.download-page {
@@ -204,7 +204,7 @@
 
 		<section class="download-shell" aria-label="Download do aplicativo">
 			<div class="download-hero">
-				<img class="download-logo" src="assets/img/app-logo-192.png?v=20260619-game18" alt="Logo do app One Piece RPG">
+				<img class="download-logo" src="assets/img/app-logo-192.png?v=20260619-game19" alt="Logo do app One Piece RPG">
 				<h1>Download do App</h1>
 				<p>Instale como aplicativo no aparelho. Quando instalado, ele abre em tela de app, com icone proprio, sem virar um arquivo HTML baixado.</p>
 				<button class="download-app-principal" id="instalar-app-principal" type="button">Instalar aplicativo</button>
@@ -306,7 +306,7 @@
 			});
 
 			if ("serviceWorker" in navigator && !protocoloLocal) {
-				navigator.serviceWorker.register("service-worker.js?v=20260619-game18").then(function (registro) {
+				navigator.serviceWorker.register("service-worker.js?v=20260619-game19").then(function (registro) {
 					if (registro.waiting) registro.waiting.postMessage({ type: "SKIP_WAITING" });
 					escreverStatus(mensagemPadrao());
 				}).catch(function () {
@@ -317,6 +317,6 @@
 			}
 		})();
 	</script>
-	<script src="musica-fundo.js?v=20260619-game18"></script>
+	<script src="musica-fundo.js?v=20260619-game19"></script>
 </body>
 </html>
