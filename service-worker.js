@@ -1,4 +1,4 @@
-const CACHE_NAME = "one-piece-rpg-app-v32";
+const CACHE_NAME = "one-piece-rpg-app-v33";
 const CACHE_PREFIX = "one-piece-rpg-app-";
 
 const APP_SHELL = [
@@ -60,6 +60,24 @@ const APP_SHELL = [
   "./assets/img/menu-game/aparencia.webp",
   "./assets/img/menu-game/ajustes.webp",
   "./assets/img/menu-game/viagem.webp",
+  "./assets/img/inventario/todos.webp",
+  "./assets/img/inventario/alimentacao.webp",
+  "./assets/img/inventario/armamentos.webp",
+  "./assets/img/inventario/equipamentos.webp",
+  "./assets/img/inventario/vestimentas.webp",
+  "./assets/img/inventario/medicinais.webp",
+  "./assets/img/inventario/ferramentas.webp",
+  "./assets/img/inventario/navegacao.webp",
+  "./assets/img/inventario/recursos.webp",
+  "./assets/img/inventario/nauticos.webp",
+  "./assets/img/inventario/tesouros.webp",
+  "./assets/img/inventario/documentos.webp",
+  "./assets/img/inventario/especiais.webp",
+  "./assets/img/inventario/consumiveis.webp",
+  "./assets/img/inventario/tecnologicos.webp",
+  "./assets/img/inventario/materiais.webp",
+  "./assets/img/inventario/berris.webp",
+  "./assets/img/inventario/cacaepesca.webp",
   "./assets/mares/mar-sprite.webp",
   "./assets/mares/mar-east.webp",
   "./assets/mares/mar-north.webp",

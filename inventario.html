@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventário - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game20">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game21">
     <style>
         html,
         body {
@@ -14,21 +14,35 @@
 
         body.pagina-inventario {
             position: relative;
-            min-height: 100vh;
+            height: 100vh;
+            height: 100dvh;
             margin: 0;
-            overflow-x: hidden;
+            overflow: hidden;
             color: #fff7df;
             background: #06100d;
+        }
+
+        body.pagina-inventario,
+        body.pagina-inventario * {
+            scrollbar-width: none;
+        }
+
+        body.pagina-inventario::-webkit-scrollbar,
+        body.pagina-inventario *::-webkit-scrollbar {
+            width: 0;
+            height: 0;
         }
 
         .inventario-jogo {
             position: relative;
             z-index: 2;
-            min-height: 100vh;
+            height: 100vh;
+            height: 100dvh;
             display: grid;
-            grid-template-rows: auto 1fr auto;
-            gap: 12px;
-            padding: clamp(14px, 2.6vw, 34px);
+            grid-template-rows: auto minmax(0, 1fr) auto;
+            gap: 10px;
+            padding: clamp(10px, 1.6vw, 22px);
+            overflow: hidden;
             background:
                 radial-gradient(circle at 78% 24%, rgba(247, 200, 75, 0.18), transparent 30%),
                 radial-gradient(circle at 18% 14%, rgba(36, 99, 74, 0.26), transparent 32%),
@@ -87,11 +101,14 @@
             width: min(1180px, 100%);
             margin: 0 auto;
             display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(250px, 330px);
-            gap: clamp(16px, 2.4vw, 28px);
+            grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+            gap: 0;
             align-items: stretch;
             min-height: 0;
+            max-height: 100%;
+            overflow: hidden;
             border: 1px solid rgba(255, 247, 223, 0.14);
+            border-radius: 10px;
             background:
                 linear-gradient(90deg, rgba(2, 7, 8, 0.88), rgba(14, 26, 20, 0.66)),
                 repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 5px);
@@ -101,10 +118,12 @@
 
         .inventario-painel {
             display: grid;
-            grid-template-rows: auto auto 1fr;
-            gap: 14px;
+            grid-template-rows: auto auto auto auto minmax(0, 1fr);
+            gap: 10px;
             min-width: 0;
-            padding: clamp(16px, 2.3vw, 26px);
+            min-height: 0;
+            padding: clamp(12px, 1.7vw, 20px);
+            overflow: hidden;
         }
 
         .inventario-abas {
@@ -141,10 +160,31 @@
             width: var(--icone-tamanho, 34px);
             height: var(--icone-tamanho, 34px);
             border-radius: var(--icone-raio, 7px);
-            background-image: url("assets/img/inventario/categorias-sprite.webp");
-            background-size: 600% 300%;
-            background-position: var(--sprite-x, 0%) var(--sprite-y, 0%);
-            box-shadow: 0 0 12px rgba(247, 200, 75, 0.24);
+            border: 1px solid color-mix(in srgb, var(--cor-icone, #ffe28a) 52%, rgba(255,255,255,.08));
+            background-image:
+                radial-gradient(circle at 34% 22%, rgba(255,255,255,.42), transparent 16%),
+                var(--icone-url),
+                radial-gradient(circle at 50% 52%, color-mix(in srgb, var(--cor-icone, #ffe28a) 78%, #ffffff), color-mix(in srgb, var(--cor-icone, #ffe28a) 24%, transparent) 42%, rgba(3,8,10,.92) 72%),
+                linear-gradient(135deg, rgba(255,255,255,.12), rgba(0,0,0,.45));
+            background-size: 100% 100%, cover, 100% 100%, 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            box-shadow: 0 0 12px color-mix(in srgb, var(--cor-icone, #ffe28a) 28%, transparent), inset 0 0 14px rgba(0,0,0,.42);
+            overflow: hidden;
+        }
+
+        .icone-sprite::before {
+            content: var(--icone-simbolo, "◆");
+            display: grid;
+            place-items: center;
+            width: 100%;
+            height: 100%;
+            color: #06100d;
+            font-family: "Segoe UI Black", "Arial Black", Impact, sans-serif;
+            font-size: calc(var(--icone-tamanho, 34px) * .46);
+            line-height: 1;
+            text-shadow: 0 1px 0 rgba(255,255,255,.38), 0 0 8px rgba(255,247,223,.7);
+            mix-blend-mode: soft-light;
         }
 
         .inventario-abas button.ativa,
@@ -214,18 +254,18 @@
             display: grid;
             grid-template-columns: repeat(5, minmax(0, 1fr));
             gap: 8px;
-            padding: 10px;
+            padding: 8px;
             border: 1px solid rgba(54, 224, 255, 0.18);
             border-radius: 8px;
             background: linear-gradient(90deg, rgba(54, 224, 255, 0.08), rgba(247, 200, 75, 0.06)), rgba(0, 0, 0, 0.2);
         }
 
         .equipamento-slot {
-            min-height: 94px;
+            min-height: 74px;
             display: grid;
             place-items: center;
-            gap: 5px;
-            padding: 8px;
+            gap: 4px;
+            padding: 7px;
             border: 1px solid rgba(255, 247, 223, 0.12);
             border-radius: 8px;
             background: rgba(3, 8, 10, 0.62);
@@ -331,6 +371,7 @@
             grid-template-columns: minmax(132px, 168px) 1fr;
             gap: 14px;
             min-height: 0;
+            overflow: hidden;
         }
 
         .categorias-recolhiveis {
@@ -393,9 +434,9 @@
             display: grid;
             align-content: start;
             gap: 8px;
-            max-height: clamp(180px, calc(100vh - 520px), 310px);
+            max-height: none;
             overflow-y: auto;
-            padding-right: 4px;
+            padding-right: 0;
         }
 
         .categoria-jogo {
@@ -444,19 +485,23 @@
 
         .inventario-grid-wrap {
             min-width: 0;
+            min-height: 0;
             border: 1px solid rgba(255, 247, 223, 0.08);
+            border-radius: 8px;
             background: rgba(2, 5, 5, 0.46);
             box-shadow: inset 0 0 32px rgba(0, 0, 0, 0.42);
+            overflow: hidden;
         }
 
         .inventario-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
-            gap: 9px;
+            grid-template-columns: repeat(auto-fill, minmax(82px, 1fr));
+            gap: 8px;
             align-content: start;
-            max-height: clamp(280px, calc(100vh - 450px), 420px);
-            overflow-y: auto;
-            padding: 12px;
+            height: 100%;
+            overflow: auto;
+            padding: 10px;
+            scroll-behavior: smooth;
         }
 
         .slot-jogo {
@@ -475,6 +520,7 @@
             box-shadow: inset 0 1px 0 rgba(255, 247, 223, 0.06), 0 12px 20px rgba(0, 0, 0, 0.24);
             overflow: hidden;
             color: #fff7df;
+            cursor: pointer;
         }
 
         .slot-jogo::before,
@@ -593,36 +639,41 @@
             text-align: center;
         }
 
-        .personagem-inventario {
+        .inspecao-inventario {
             position: relative;
             display: grid;
-            grid-template-rows: auto 1fr auto;
-            gap: 14px;
-            padding: clamp(16px, 2.2vw, 24px);
+            grid-template-rows: auto auto minmax(0, 1fr) auto;
+            gap: 12px;
+            min-height: 0;
+            padding: clamp(14px, 1.9vw, 22px);
             border-left: 1px solid rgba(255, 247, 223, 0.1);
-            background: linear-gradient(180deg, rgba(255, 247, 223, 0.05), rgba(3, 8, 10, 0.32));
+            background:
+                radial-gradient(circle at 50% 20%, color-mix(in srgb, var(--detalhe-cor, #ffe28a) 16%, transparent), transparent 34%),
+                linear-gradient(180deg, rgba(255, 247, 223, 0.05), rgba(3, 8, 10, 0.32));
             overflow: hidden;
         }
 
-        .personagem-inventario::after {
+        .inspecao-inventario::after {
             content: "";
             position: absolute;
             inset: auto 10% 7% 10%;
             height: 28%;
-            background: radial-gradient(ellipse, rgba(247, 200, 75, 0.28), transparent 64%);
+            background: radial-gradient(ellipse, color-mix(in srgb, var(--detalhe-cor, #ffe28a) 28%, transparent), transparent 64%);
             filter: blur(4px);
             pointer-events: none;
         }
 
-        .personagem-card-topo {
+        .inspecao-topo {
             position: relative;
             z-index: 1;
             display: grid;
-            gap: 4px;
-            text-align: center;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: start;
+            text-align: left;
         }
 
-        .personagem-card-topo span {
+        .inspecao-topo span {
             color: #ffe28a;
             font-size: 0.78rem;
             font-weight: 900;
@@ -630,60 +681,96 @@
             text-transform: uppercase;
         }
 
-        .personagem-card-topo strong {
+        .inspecao-topo strong {
+            display: block;
+            margin-top: 4px;
             color: #fff7df;
             font-size: clamp(1.25rem, 2.2vw, 1.8rem);
             line-height: 1.05;
             overflow-wrap: anywhere;
         }
 
-        .personagem-figura {
+        .inspecao-rank {
+            min-width: 58px;
+            padding: 7px 9px;
+            border: 1px solid color-mix(in srgb, var(--detalhe-cor, #ffe28a) 42%, transparent);
+            border-radius: 8px;
+            color: var(--detalhe-cor, #ffe28a);
+            background: rgba(0, 0, 0, 0.34);
+            font-size: 0.72rem;
+            font-weight: 1000;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .item-arte {
             position: relative;
             z-index: 1;
             display: grid;
-            place-items: end center;
-            min-height: clamp(230px, calc(100vh - 500px), 430px);
-        }
-
-        .personagem-figura img {
-            display: none;
-            max-width: min(100%, 280px);
-            max-height: clamp(280px, calc(100vh - 330px), 500px);
-            width: auto;
-            height: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.6));
-        }
-
-        .personagem-figura.tem-imagem img {
-            display: block;
-        }
-
-        .personagem-placeholder {
-            display: grid;
             place-items: center;
-            width: min(90%, 250px);
-            aspect-ratio: 3 / 4;
-            border: 1px solid rgba(255, 226, 138, 0.28);
-            border-radius: 8px;
-            color: rgba(255, 247, 223, 0.7);
+            min-height: 170px;
+            border: 1px solid rgba(255, 247, 223, 0.12);
+            border-radius: 10px;
             background:
-                linear-gradient(180deg, rgba(255, 247, 223, 0.08), rgba(3, 8, 10, 0.32)),
-                repeating-linear-gradient(0deg, rgba(255, 247, 223, 0.035), rgba(255, 247, 223, 0.035) 1px, transparent 1px, transparent 10px);
-            text-align: center;
-            padding: 16px;
+                radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--detalhe-cor, #ffe28a) 30%, transparent), transparent 48%),
+                repeating-linear-gradient(0deg, rgba(255, 247, 223, 0.035), rgba(255, 247, 223, 0.035) 1px, transparent 1px, transparent 9px),
+                rgba(3, 8, 10, 0.48);
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.45), 0 18px 42px rgba(0, 0, 0, 0.28);
         }
 
-        .personagem-figura.tem-imagem .personagem-placeholder {
-            display: none;
+        .item-arte .icone-sprite {
+            --icone-tamanho: min(42vw, 170px);
+            --icone-raio: 18px;
+            transform: perspective(640px) rotateX(7deg) rotateY(-11deg);
+            box-shadow: 0 26px 42px rgba(0, 0, 0, 0.52), 0 0 42px color-mix(in srgb, var(--detalhe-cor, #ffe28a) 34%, transparent), inset 0 0 34px rgba(0,0,0,.48);
+        }
+
+        .item-arte .icone-sprite::before {
+            font-size: calc(var(--icone-tamanho, 150px) * .44);
+        }
+
+        .item-stats {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .item-stat {
+            min-width: 0;
+            padding: 9px;
+            border: 1px solid rgba(255, 247, 223, 0.1);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.28);
+        }
+
+        .item-stat span {
+            display: block;
+            color: #d9e8d4;
+            font-size: 0.64rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .item-stat b {
+            display: block;
+            margin-top: 3px;
+            color: #fff7df;
+            font-size: 0.88rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .detalhe-item {
             position: relative;
             z-index: 1;
-            min-height: 110px;
+            min-height: 0;
+            overflow: auto;
             padding: 14px;
             border: 1px solid rgba(255, 247, 223, 0.16);
+            border-radius: 8px;
             background: rgba(3, 8, 10, 0.46);
         }
 
@@ -708,7 +795,7 @@
 	            margin: 10px 0;
 	        }
 
-	        .detalhe-meta span {
+        .detalhe-meta span {
 	            padding: 5px 8px;
 	            border: 1px solid rgba(255, 247, 223, 0.12);
 	            border-radius: 999px;
@@ -725,6 +812,31 @@
             gap: 10px;
             align-items: center;
             margin-bottom: 8px;
+        }
+
+        .detalhe-acoes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .detalhe-acoes button {
+            min-height: 38px;
+            border: 1px solid rgba(255, 226, 138, 0.34);
+            border-radius: 8px;
+            color: #fff7df;
+            background: rgba(247, 200, 75, 0.12);
+            cursor: pointer;
+            font-weight: 1000;
+            text-transform: uppercase;
+        }
+
+        .detalhe-acoes button:hover,
+        .detalhe-acoes button:focus-visible {
+            border-color: var(--detalhe-cor, #ffe28a);
+            outline: none;
+            box-shadow: 0 0 18px color-mix(in srgb, var(--detalhe-cor, #ffe28a) 22%, transparent);
         }
 
         .detalhe-item-cabecalho img,
@@ -832,13 +944,9 @@
                 grid-template-columns: 1fr;
             }
 
-            .personagem-inventario {
+            .inspecao-inventario {
                 border-left: 0;
                 border-top: 1px solid rgba(255, 247, 223, 0.1);
-            }
-
-            .personagem-figura {
-                min-height: 330px;
             }
 
             .inventario-corpo,
@@ -871,6 +979,10 @@
 
             .inventario-grid {
                 grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .inspecao-inventario {
+                max-height: 42vh;
             }
         }
     </style>
@@ -986,20 +1098,21 @@
                 </div>
             </div>
 
-            <aside class="personagem-inventario" aria-label="Personagem">
-                <div class="personagem-card-topo">
-                    <span>Personagem</span>
-                    <strong id="nome-personagem">Sem personagem</strong>
+            <aside class="inspecao-inventario" id="inspecao-inventario" aria-label="Inspeção do item">
+                <div class="inspecao-topo">
+                    <div>
+                        <span>Item selecionado</span>
+                        <strong id="nome-item-detalhe">Nenhum item</strong>
+                    </div>
+                    <b class="inspecao-rank" id="rank-item-detalhe">--</b>
                 </div>
 
-                <div class="personagem-figura" id="personagem-figura">
-                    <img id="imagem-personagem" alt="">
-                    <div class="personagem-placeholder">Imagem do personagem não enviada</div>
-                </div>
+                <div class="item-arte" id="item-arte"></div>
+                <div class="item-stats" id="item-stats"></div>
 
                 <div class="detalhe-item" id="detalhe-item">
                     <strong>Selecione um item</strong>
-                    <p>Passe o mouse ou toque em um slot para ver a descrição aqui.</p>
+                    <p>Clique em um slot para abrir a ficha do item neste painel.</p>
                 </div>
             </aside>
         </section>
@@ -1010,7 +1123,7 @@
         </footer>
     </main>
 
-    <script src="musica-fundo.js?v=20260619-game20"></script>
+    <script src="musica-fundo.js?v=20260619-game21"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
@@ -1060,9 +1173,11 @@
         ];
 
         const statusPersonagem = document.getElementById("inventario-personagem-status");
-        const nomePersonagem = document.getElementById("nome-personagem");
-        const imagemPersonagem = document.getElementById("imagem-personagem");
-        const personagemFigura = document.getElementById("personagem-figura");
+        const inspecaoInventario = document.getElementById("inspecao-inventario");
+        const nomeItemDetalhe = document.getElementById("nome-item-detalhe");
+        const rankItemDetalhe = document.getElementById("rank-item-detalhe");
+        const itemArte = document.getElementById("item-arte");
+        const itemStats = document.getElementById("item-stats");
         const categoriasEl = document.getElementById("inventario-categorias");
         const gridEl = document.getElementById("inventario-grid");
         const tituloEl = document.getElementById("inventario-titulo");
@@ -1132,11 +1247,40 @@
             return Array.isArray(sprite) ? sprite : [0, 0];
         }
 
+        function simboloCategoria(itemOuCategoria) {
+            const chave = itemOuCategoria?.tipo || itemOuCategoria?.chave || "todos";
+            const simbolos = {
+                todos: "◆",
+                alimentacao: "✦",
+                armamentos: "⚔",
+                equipamentos: "◈",
+                vestimentas: "◐",
+                medicinais: "+",
+                ferramentas: "⚙",
+                navegacao: "⌖",
+                recursos: "▣",
+                nauticos: "◒",
+                tesouros: "◇",
+                documentos: "≡",
+                especiais: "✹",
+                consumiveis: "●",
+                tecnologicos: "✧",
+                materiais: "▰",
+                berris: "$",
+                cacaepesca: "◌",
+                diversos: "◆"
+            };
+            return simbolos[chave] || "◆";
+        }
+
         function estiloSprite(itemOuCategoria, tamanho = "") {
             const [coluna, linha] = obterSprite(itemOuCategoria);
             const x = coluna <= 0 ? 0 : coluna >= 5 ? 100 : coluna * 20;
             const y = linha <= 0 ? 0 : linha >= 2 ? 100 : linha * 50;
-            return `--sprite-x:${x}%;--sprite-y:${y}%;${tamanho ? `--icone-tamanho:${tamanho};` : ""}`;
+            const chave = itemOuCategoria?.tipo || itemOuCategoria?.chave || "todos";
+            const cor = itemOuCategoria?.cor || obterCategoria(chave).cor || "#ffe28a";
+            const imagem = `assets/img/inventario/${chave === "diversos" ? "todos" : chave}.webp`;
+            return `--sprite-x:${x}%;--sprite-y:${y}%;--cor-icone:${cor};--icone-url:url("${imagem}");--icone-simbolo:"${simboloCategoria(itemOuCategoria)}";${tamanho ? `--icone-tamanho:${tamanho};` : ""}`;
         }
 
         function iconeSprite(itemOuCategoria, tamanho = "") {
@@ -1232,15 +1376,36 @@
 
 	        function mostrarDetalhe(item) {
             if (!item) {
+                inspecaoInventario.style.setProperty("--detalhe-cor", "#ffe28a");
+                nomeItemDetalhe.textContent = "Nenhum item";
+                rankItemDetalhe.textContent = "--";
+                itemArte.innerHTML = iconeSprite({ chave: "todos", cor: "#ffe28a" }, "150px");
+                itemStats.innerHTML = `
+                    <div class="item-stat"><span>Categoria</span><b>--</b></div>
+                    <div class="item-stat"><span>Quantidade</span><b>--</b></div>
+                    <div class="item-stat"><span>Estado</span><b>Selecione</b></div>
+                    <div class="item-stat"><span>Uso</span><b>--</b></div>
+                `;
                 detalheItem.innerHTML = `
                     <strong>Selecione um item</strong>
-                    <p>Passe o mouse ou toque em um slot para ver a descrição aqui.</p>
+                    <p>Clique em um slot para abrir a ficha do item neste painel.</p>
                 `;
                 return;
             }
 
 	            const categoria = obterCategoria(item.tipo);
 	            const raridade = raridadeDe(item);
+                const equipavel = slotEquipamentoDoItem(item);
+                inspecaoInventario.style.setProperty("--detalhe-cor", corRaridade(item));
+                nomeItemDetalhe.textContent = item.nome || "Item";
+                rankItemDetalhe.textContent = raridade;
+                itemArte.innerHTML = iconeSprite(item, "150px");
+                itemStats.innerHTML = `
+                    <div class="item-stat"><span>Categoria</span><b>${escaparHtml(categoria.nome)}</b></div>
+                    <div class="item-stat"><span>Quantidade</span><b>x${escaparHtml(item.quantidade)}</b></div>
+                    <div class="item-stat"><span>Estado</span><b>${item.equipado ? "Equipado" : "Guardado"}</b></div>
+                    <div class="item-stat"><span>Uso</span><b>${equipavel ? "Equipável" : "Carga"}</b></div>
+                `;
 	            detalheItem.innerHTML = `
 	                <div class="detalhe-item-cabecalho">
 	                    ${iconeSprite(item, "52px")}
@@ -1255,7 +1420,13 @@
 	                    <span>${escaparHtml(item.adicionadoEm || "Sem data")}</span>
 	                </div>
 	                <p>${escaparHtml(item.descricao || "Sem descrição registrada.")}</p>
+                    <div class="detalhe-acoes">
+                        ${equipavel ? `<button type="button" data-detalhe-equipar="${Number(item.id)}">${item.equipado ? "Retirar" : "Equipar"}</button>` : `<button type="button" disabled>Não equipável</button>`}
+                        <button type="button" data-detalhe-remover="${Number(item.id)}">Descartar</button>
+                    </div>
 	            `;
+                detalheItem.querySelector("[data-detalhe-equipar]")?.addEventListener("click", () => alternarEquipamento(Number(item.id)));
+                detalheItem.querySelector("[data-detalhe-remover]")?.addEventListener("click", () => removerItem(Number(item.id)));
 	        }
 
 	        function filtrarOrdenar(inventario) {
@@ -1377,7 +1548,6 @@
 
             gridEl.querySelectorAll(".slot-jogo").forEach((slot) => {
                 const item = filtrados.find((entrada) => Number(entrada.id) === Number(slot.dataset.id));
-                slot.addEventListener("mouseenter", () => mostrarDetalhe(item));
                 slot.addEventListener("focus", () => mostrarDetalhe(item));
                 slot.addEventListener("click", (evento) => {
                     if (!evento.target.closest("[data-remover],[data-equipar]")) mostrarDetalhe(item);
@@ -1483,17 +1653,10 @@
 
             if (!personagem) {
                 statusPersonagem.textContent = "Nenhum personagem ativo";
-                nomePersonagem.textContent = "Sem personagem";
                 return;
             }
 
             statusPersonagem.textContent = `${personagem.classe || "Classe"} / ${personagem.profissao || "Especialidade"}`;
-            nomePersonagem.textContent = personagem.nome || "Personagem";
-
-            if (personagem.imagemPersonagem) {
-                imagemPersonagem.src = personagem.imagemPersonagem;
-                personagemFigura.classList.add("tem-imagem");
-            }
         }
 
         document.getElementById("alternar-adicionar").addEventListener("click", () => {
