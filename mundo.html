@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mundo - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game24">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game25">
     <style>
         html, body { min-height: 100%; margin: 0; background: #020708; color: #fff7df; overflow: hidden; }
         body { font-family: Arial, sans-serif; }
@@ -112,7 +112,7 @@
                 <strong>Expedição</strong>
                 <span>Tesouros <b id="obj-chests">0/5</b></span>
                 <span>Rotas <b id="obj-routes">0/4</b></span>
-                <span>Ameaças <b id="obj-threats">0</b></span>
+                <span>Descobertas <b id="obj-threats">0</b></span>
             </aside>
             <div class="world-actionbar" aria-hidden="true">
                 <span data-hotkey="WASD">Mover</span>
@@ -131,7 +131,8 @@
             <div class="world-log" id="world-log"></div>
         </section>
     </main>
-    <script src="musica-fundo.js?v=20260619-game24"></script>
+    <script src="mares-dados.js?v=20260619-rpg10"></script>
+    <script src="musica-fundo.js?v=20260619-game25"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
@@ -148,7 +149,8 @@
             chests: [],
             npcs: [],
             battles: 0,
-            routes: []
+            routes: [],
+            locais: []
         };
         const teclasMobile = { up: false, down: false, left: false, right: false, action: false };
         const logEl = document.getElementById("world-log");
@@ -161,34 +163,82 @@
         const objRoutesEl = document.getElementById("obj-routes");
         const objThreatsEl = document.getElementById("obj-threats");
         const logState = { texto: "", vezes: 0 };
-        const ilhas = [
-            { id: "porto-aurora", nome: "Porto Aurora", subtitulo: "Docas seguras", x: 300, y: 380, w: 260, h: 118, cor: 0x2f8f5f },
-            { id: "ilha-coral", nome: "Ilha Coral", subtitulo: "Mercado raro", x: 760, y: 520, w: 330, h: 142, cor: 0x348b63 },
-            { id: "ruinas-lua", nome: "Ruínas da Lua", subtitulo: "Zona antiga", x: 1260, y: 300, w: 300, h: 126, cor: 0x59663b },
-            { id: "forte-rubro", nome: "Forte Rubro", subtitulo: "Perigo naval", x: 1720, y: 620, w: 330, h: 150, cor: 0x67382b },
-            { id: "baia-nevoa", nome: "Baía da Névoa", subtitulo: "Rota escondida", x: 1020, y: 1080, w: 360, h: 160, cor: 0x285c67 },
-            { id: "farol-sul", nome: "Farol Sul", subtitulo: "Checkpoint", x: 420, y: 1240, w: 310, h: 130, cor: 0x476b36 }
-        ];
-        const rotas = [
-            ["porto-aurora", "ilha-coral"],
-            ["ilha-coral", "ruinas-lua"],
-            ["ruinas-lua", "forte-rubro"],
-            ["ilha-coral", "baia-nevoa"],
-            ["baia-nevoa", "farol-sul"]
-        ];
-        const zonas = [
-            { nome: "Costa de Aurora", x: 0, y: 0, w: 650, h: 700 },
-            { nome: "Cinturão de Coral", x: 560, y: 250, w: 720, h: 560 },
-            { nome: "Mar das Ruínas", x: 1020, y: 0, w: 760, h: 620 },
-            { nome: "Águas Rubras", x: 1540, y: 420, w: 660, h: 650 },
-            { nome: "Baía da Névoa", x: 650, y: 780, w: 800, h: 820 },
-            { nome: "Rota Sul", x: 0, y: 840, w: 720, h: 760 }
-        ];
+        const maresCadastrados = (window.RpgMaresDados || []).filter((mar) => mar.aberto && Array.isArray(mar.ilhas) && mar.ilhas.length);
+
+        function corNumerica(hex, fallback) {
+            const limpo = String(hex || "").replace("#", "");
+            const numero = Number.parseInt(limpo, 16);
+            return Number.isFinite(numero) ? numero : fallback;
+        }
+
+        function criarMapaCadastrado() {
+            const regioes = {
+                east: { x: 520, y: 460, w: 720, h: 780 },
+                north: { x: 1560, y: 420, w: 760, h: 760 },
+                south: { x: 560, y: 1480, w: 780, h: 720 },
+                west: { x: 1600, y: 1500, w: 780, h: 720 },
+                reverse: { x: 2600, y: 950, w: 760, h: 1000 }
+            };
+            const fallbackRegioes = [
+                { x: 520, y: 460, w: 720, h: 780 },
+                { x: 1560, y: 420, w: 760, h: 760 },
+                { x: 560, y: 1480, w: 780, h: 720 },
+                { x: 1600, y: 1500, w: 780, h: 720 },
+                { x: 2600, y: 950, w: 760, h: 1000 }
+            ];
+            const ilhasGeradas = [];
+            const rotasGeradas = [];
+            const zonasGeradas = [];
+            maresCadastrados.forEach((mar, indiceMar) => {
+                const regiao = regioes[mar.id] || fallbackRegioes[indiceMar % fallbackRegioes.length];
+                const cor = corNumerica(mar.cor, 0x36e0ff);
+                zonasGeradas.push({ nome: mar.nome, x: regiao.x - regiao.w / 2, y: regiao.y - regiao.h / 2, w: regiao.w, h: regiao.h, cor });
+                const ordenadas = [...mar.ilhas].sort((a, b) => Number(a.ordem || 0) - Number(b.ordem || 0));
+                ordenadas.forEach((ilha, indiceIlha) => {
+                    const total = Math.max(ordenadas.length - 1, 1);
+                    const t = indiceIlha / total;
+                    const curva = Math.sin(t * Math.PI * 2 + indiceMar) * regiao.w * .18;
+                    const x = regiao.x - regiao.w * .38 + regiao.w * .76 * t + curva;
+                    const y = regiao.y - regiao.h * .34 + regiao.h * .68 * t + Math.cos(t * Math.PI * 2) * regiao.h * .12;
+                    ilhasGeradas.push({
+                        id: mar.id + "-" + ilha.id,
+                        ilhaId: ilha.id,
+                        marId: mar.id,
+                        marNome: mar.nome,
+                        nome: ilha.nome,
+                        subtitulo: ilha.tipo,
+                        locais: ilha.locais || [],
+                        x: Math.round(x),
+                        y: Math.round(y),
+                        w: 230 + Math.min(90, String(ilha.nome).length * 7),
+                        h: 96 + Math.min(40, (ilha.locais || []).length * 8),
+                        cor
+                    });
+                });
+                ordenadas.slice(0, -1).forEach((ilha, indiceIlha) => {
+                    rotasGeradas.push([mar.id + "-" + ilha.id, mar.id + "-" + ordenadas[indiceIlha + 1].id]);
+                });
+            });
+            ["east", "north", "south", "west"].forEach((marId) => {
+                const mar = maresCadastrados.find((item) => item.id === marId);
+                const reverse = maresCadastrados.find((item) => item.id === "reverse");
+                if (mar?.ilhas?.length && reverse?.ilhas?.length) {
+                    rotasGeradas.push([mar.id + "-" + mar.ilhas[mar.ilhas.length - 1].id, "reverse-" + reverse.ilhas[0].id]);
+                }
+            });
+            return { ilhas: ilhasGeradas, rotas: rotasGeradas, zonas: zonasGeradas };
+        }
+
+        const mapaCadastrado = criarMapaCadastrado();
+        const ilhas = mapaCadastrado.ilhas;
+        const rotas = mapaCadastrado.rotas;
+        const zonas = mapaCadastrado.zonas;
         document.getElementById("world-name").textContent = personagem?.nome || "Sem personagem";
         document.getElementById("world-level").textContent = progresso.nivel || 1;
         document.getElementById("world-berris").textContent = Number(progresso.berris || 0).toLocaleString("pt-BR");
         document.getElementById("world-fame").textContent = estadoMundo.fame || 0;
         if (!Array.isArray(estadoMundo.routes)) estadoMundo.routes = [];
+        if (!Array.isArray(estadoMundo.locais)) estadoMundo.locais = [];
 
         function salvarMundo() {
             localStorage.setItem("rpg_world_" + nomeNormalizado, JSON.stringify(estadoMundo));
@@ -238,7 +288,7 @@
         function atualizarObjetivosHud() {
             objChestsEl.textContent = Math.min(estadoMundo.chests.length, 5) + "/5";
             objRoutesEl.textContent = Math.min(estadoMundo.routes.length, 4) + "/4";
-            objThreatsEl.textContent = estadoMundo.battles || 0;
+            objThreatsEl.textContent = (estadoMundo.battles || 0) + " / locais " + estadoMundo.locais.length;
         }
 
         function recompensar(tipo, valor) {
@@ -288,9 +338,9 @@
             }
         }
 
-        let player, cursors, keys, npcs, chests, threats, ports, cameraText, targetMarker, routeLayer, nearestInteractable = null, actionCooldown = 0;
+        let player, cursors, keys, npcs, chests, threats, ports, locaisGrupo, cameraText, targetMarker, routeLayer, nearestInteractable = null, actionCooldown = 0;
         let moveTarget = null;
-        const worldSize = { w: 2200, h: 1600 };
+        const worldSize = { w: 3400, h: 2400 };
 
         function preload() {
         }
@@ -314,13 +364,11 @@
             for (let x = 0; x < worldSize.w; x += 96) grid.lineBetween(x, 0, x, worldSize.h);
             for (let y = 0; y < worldSize.h; y += 96) grid.lineBetween(0, y, worldSize.w, y);
             const fog = this.add.graphics();
-            [
-                [460, 260, 0x36e0ff], [960, 920, 0xffe28a], [1660, 560, 0xff4128], [1380, 1160, 0x90ff00]
-            ].forEach((zona, i) => {
-                fog.fillStyle(zona[2], i === 2 ? .045 : .035);
-                fog.fillEllipse(zona[0], zona[1], 460, 250);
-                fog.lineStyle(2, zona[2], .10);
-                fog.strokeEllipse(zona[0], zona[1], 460, 250);
+            zonas.forEach((zona, i) => {
+                fog.fillStyle(zona.cor || 0x36e0ff, i === 4 ? .055 : .038);
+                fog.fillEllipse(zona.x + zona.w / 2, zona.y + zona.h / 2, zona.w * 1.06, zona.h * .82);
+                fog.lineStyle(2, zona.cor || 0x36e0ff, .12);
+                fog.strokeEllipse(zona.x + zona.w / 2, zona.y + zona.h / 2, zona.w * 1.06, zona.h * .82);
             });
             routeLayer = this.add.graphics().setDepth(2);
             const shipTexture = this.make.graphics({ x: 0, y: 0, add: false });
@@ -391,12 +439,21 @@
             portTexture.strokeRoundedRect(5, 9, 54, 42, 8);
             portTexture.generateTexture("worldPort", 64, 58);
             portTexture.destroy();
+            const localTexture = this.make.graphics({ x: 0, y: 0, add: false });
+            localTexture.fillStyle(0x041011, 1);
+            localTexture.fillCircle(18, 18, 15);
+            localTexture.fillStyle(0xffe28a, .95);
+            localTexture.fillCircle(18, 18, 8);
+            localTexture.lineStyle(3, 0x36e0ff, .72);
+            localTexture.strokeCircle(18, 18, 14);
+            localTexture.generateTexture("worldLocal", 36, 36);
+            localTexture.destroy();
             ilhas.forEach((ilha) => {
                 const sombra = this.add.ellipse(ilha.x, ilha.y + 12, ilha.w * 1.04, ilha.h * 1.08, 0x061011, .30).setDepth(1);
                 const corpo = this.add.ellipse(ilha.x, ilha.y, ilha.w, ilha.h, ilha.cor, .66).setStrokeStyle(2, 0xffe28a, .18).setDepth(2);
                 this.add.ellipse(ilha.x - ilha.w * .1, ilha.y - ilha.h * .08, ilha.w * .52, ilha.h * .34, 0xf7c84b, .18).setDepth(3);
-                this.add.text(ilha.x, ilha.y - ilha.h * .62, ilha.nome, { fontFamily: "Arial Black", fontSize: "15px", color: "#fff7df", stroke: "#041011", strokeThickness: 5 }).setOrigin(.5).setDepth(7);
-                this.add.text(ilha.x, ilha.y - ilha.h * .43, ilha.subtitulo, { fontFamily: "Arial", fontSize: "11px", color: "#ffe28a", stroke: "#041011", strokeThickness: 4 }).setOrigin(.5).setDepth(7);
+                this.add.text(ilha.x, ilha.y - ilha.h * .66, ilha.nome, { fontFamily: "Arial Black", fontSize: "14px", color: "#fff7df", stroke: "#041011", strokeThickness: 5 }).setOrigin(.5).setDepth(7);
+                this.add.text(ilha.x, ilha.y - ilha.h * .46, ilha.marNome + " / " + ilha.subtitulo, { fontFamily: "Arial", fontSize: "10px", color: "#ffe28a", stroke: "#041011", strokeThickness: 4 }).setOrigin(.5).setDepth(7);
                 sombra.nomeIlha = corpo.nomeIlha = ilha.nome;
             });
             function desenharRotas() {
@@ -416,11 +473,9 @@
             this.desenharRotas = desenharRotas;
             desenharRotas();
             chests = this.physics.add.staticGroup();
-            [
-                [540, 420], [1420, 520], [1780, 1160], [760, 1240], [1120, 880]
-            ].forEach((pos, i) => {
+            ilhas.filter((_, indice) => indice % 4 === 1).slice(0, 8).forEach((ilha, i) => {
                 if (estadoMundo.chests.includes(i)) return;
-                const chest = this.add.image(pos[0], pos[1], "worldChest");
+                const chest = this.add.image(ilha.x - ilha.w * .24, ilha.y + ilha.h * .18, "worldChest");
                 chest.idMundo = i;
                 chest.tipoInteracao = "bau";
                 this.physics.add.existing(chest, true);
@@ -441,27 +496,43 @@
                 this.add.text(npc[0], npc[1] - 44, "NPC", { fontFamily: "Arial Black", fontSize: "13px", color: "#fff7df", stroke: "#041011", strokeThickness: 4 }).setOrigin(.5);
             });
             threats = this.physics.add.staticGroup();
-            [
-                [1840, 420, "E"], [1320, 1260, "D"], [420, 1180, "C"]
-            ].forEach((enemy) => {
-                const threat = this.add.image(enemy[0], enemy[1], "worldThreat");
-                threat.rank = enemy[2];
+            ilhas.filter((_, indice) => indice % 6 === 3).slice(0, 6).forEach((ilha, indice) => {
+                const ranks = ["E", "D", "C", "B", "A"];
+                const rank = ranks[Math.min(ranks.length - 1, indice)];
+                const x = ilha.x + ilha.w * .34;
+                const y = ilha.y + ilha.h * .36;
+                const threat = this.add.image(x, y, "worldThreat");
+                threat.rank = rank;
+                threat.nomeIlha = ilha.nome;
                 threat.tipoInteracao = "ameaca";
                 this.physics.add.existing(threat, true);
                 threats.add(threat);
-                const ring = this.add.circle(enemy[0], enemy[1], 48, 0xff4128, .10).setStrokeStyle(2, 0xff4128, .34).setDepth(3);
+                const ring = this.add.circle(x, y, 48, 0xff4128, .10).setStrokeStyle(2, 0xff4128, .34).setDepth(3);
                 this.tweens.add({ targets: ring, scale: 1.4, alpha: .03, duration: 980, repeat: -1, yoyo: true, ease: "sine.inOut" });
-                this.add.text(enemy[0], enemy[1], enemy[2], { fontFamily: "Arial Black", fontSize: "26px", color: "#fff7df", stroke: "#210b08", strokeThickness: 5 }).setOrigin(.5);
+                this.add.text(x, y, rank, { fontFamily: "Arial Black", fontSize: "26px", color: "#fff7df", stroke: "#210b08", strokeThickness: 5 }).setOrigin(.5);
             });
             ports = this.physics.add.staticGroup();
-            ilhas.slice(0, 5).forEach((ilha) => {
+            locaisGrupo = this.physics.add.staticGroup();
+            ilhas.forEach((ilha) => {
                 const port = this.add.image(ilha.x + ilha.w * .18, ilha.y - ilha.h * .08, "worldPort").setDepth(8);
                 port.tipoInteracao = "porto";
                 port.nomePorto = ilha.nome;
+                port.nomeMar = ilha.marNome;
                 port.idMundo = ilha.id;
                 this.physics.add.existing(port, true);
                 ports.add(port);
                 if (estadoMundo.routes.includes(ilha.id)) port.setTint(0x90ff00);
+                ilha.locais.slice(0, 3).forEach((local, indiceLocal) => {
+                    const angulo = (-80 + indiceLocal * 80) * Math.PI / 180;
+                    const localNode = this.add.image(ilha.x + Math.cos(angulo) * ilha.w * .38, ilha.y + Math.sin(angulo) * ilha.h * .42, "worldLocal").setDepth(8);
+                    localNode.tipoInteracao = "local";
+                    localNode.nomeLocal = local;
+                    localNode.nomeIlha = ilha.nome;
+                    localNode.nomeMar = ilha.marNome;
+                    localNode.idMundo = ilha.id + "-local-" + indiceLocal;
+                    this.physics.add.existing(localNode, true);
+                    locaisGrupo.add(localNode);
+                });
             });
             targetMarker = this.add.image(estadoMundo.x, estadoMundo.y, "targetMarker").setDepth(8).setVisible(false).setAlpha(.82);
             player = this.physics.add.sprite(estadoMundo.x, estadoMundo.y, "playerShipPro");
@@ -511,6 +582,9 @@
             this.physics.add.overlap(player, ports, (_p, port) => {
                 setPrompt("Registrar rota em " + port.nomePorto);
             });
+            this.physics.add.overlap(player, locaisGrupo, (_p, localNode) => {
+                setPrompt("Explorar " + localNode.nomeLocal);
+            });
             cameraText = this.add.text(16, 16, "", { fontFamily: "Arial", fontSize: "12px", color: "#d9e8d4", backgroundColor: "rgba(0,0,0,.24)", padding: { x: 8, y: 6 } }).setScrollFactor(0).setDepth(20).setVisible(false);
             log("Mundo carregado. Explore, colete e procure ameaças.");
             atualizarObjetivosHud();
@@ -519,7 +593,7 @@
         function procurarInteracao() {
             let escolhido = null;
             let menorDistancia = 88;
-            [chests, npcs, threats, ports].forEach((grupo) => {
+            [chests, npcs, threats, ports, locaisGrupo].forEach((grupo) => {
                 if (!grupo) return;
                 grupo.getChildren().forEach((item) => {
                     if (!item?.active) return;
@@ -558,13 +632,29 @@
                     document.getElementById("world-fame").textContent = estadoMundo.fame;
                     item.setTint(0x90ff00);
                     scene.desenharRotas?.();
-                    log("Nova rota descoberta: " + item.nomePorto + ".");
+                    log("Nova rota descoberta: " + item.nomePorto + " (" + item.nomeMar + ").");
                 } else {
                     log("Rota segura: " + item.nomePorto + " já está no mapa.");
                 }
                 atualizarObjetivosHud();
                 atualizarObjetivo("Rota registrada em " + item.nomePorto + ". Explore outro porto para expandir o mapa.");
                 scene.cameras.main.flash(120, 144, 255, 0);
+                salvarMundo();
+                return;
+            }
+            if (item.tipoInteracao === "local") {
+                if (!estadoMundo.locais.includes(item.idMundo)) {
+                    estadoMundo.locais.push(item.idMundo);
+                    estadoMundo.fame += 2;
+                    document.getElementById("world-fame").textContent = estadoMundo.fame;
+                    item.setTint(0x90ff00);
+                    log("Local explorado: " + item.nomeLocal + " em " + item.nomeIlha + ".");
+                    scene.cameras.main.flash(100, 255, 226, 138);
+                } else {
+                    log("Local já explorado: " + item.nomeLocal + ".");
+                }
+                atualizarObjetivosHud();
+                atualizarObjetivo(item.nomeLocal + " registrado em " + item.nomeIlha + ". Continue explorando locais cadastrados.");
                 salvarMundo();
                 return;
             }
@@ -615,7 +705,9 @@
                         ? "Conversar"
                         : nearestInteractable.tipoInteracao === "porto"
                             ? "Registrar rota"
-                            : "Marcar batalha rank " + nearestInteractable.rank;
+                            : nearestInteractable.tipoInteracao === "local"
+                                ? "Explorar local"
+                                : "Marcar batalha rank " + nearestInteractable.rank;
                 setPrompt(texto);
             } else {
                 setPrompt("");
