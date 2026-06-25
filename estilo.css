@@ -2281,3 +2281,305 @@ kbd {
     scrollbar-width: thin;
     scrollbar-color: #f7c84b rgba(7, 18, 14, 0.95);
 }
+
+/* ==================== CAMADA PRO GLOBAL ==================== */
+
+:root {
+	--rpg-bg: #03090b;
+	--rpg-panel: rgba(4, 14, 16, 0.72);
+	--rpg-panel-strong: rgba(6, 18, 20, 0.88);
+	--rpg-line: rgba(255, 226, 138, 0.22);
+	--rpg-line-cyan: rgba(54, 224, 255, 0.22);
+	--rpg-gold: #ffe28a;
+	--rpg-gold-2: #f7c84b;
+	--rpg-cyan: #36e0ff;
+	--rpg-green: #90ff00;
+	--rpg-text: #fff7df;
+	--rpg-muted: #cdd8c7;
+	--rpg-radius: 8px;
+	--rpg-shadow: 0 18px 48px rgba(0, 0, 0, 0.38);
+	--rpg-inset: inset 0 0 28px rgba(255, 226, 138, 0.035), inset 0 0 70px rgba(0, 0, 0, 0.24);
+}
+
+html {
+	background: var(--rpg-bg);
+}
+
+body:not(.mundo-jogavel) {
+	background:
+		radial-gradient(circle at 18% 12%, rgba(54, 224, 255, 0.10), transparent 28rem),
+		radial-gradient(circle at 86% 18%, rgba(255, 226, 138, 0.09), transparent 30rem),
+		linear-gradient(180deg, #061114 0%, #020607 100%);
+}
+
+body:not(.mundo-jogavel)::before {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	background:
+		linear-gradient(rgba(54, 224, 255, 0.04) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(54, 224, 255, 0.035) 1px, transparent 1px),
+		linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.38));
+	background-size: 96px 96px, 96px 96px, 100% 100%;
+	mask-image: linear-gradient(180deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+body:not(.mundo-jogavel)::after {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: 1;
+	pointer-events: none;
+	background:
+		linear-gradient(90deg, rgba(255, 226, 138, 0.10), transparent 18%, transparent 82%, rgba(54, 224, 255, 0.10)),
+		radial-gradient(circle at 50% 120%, rgba(144, 255, 0, 0.07), transparent 38rem);
+	mix-blend-mode: screen;
+	opacity: 0.72;
+}
+
+body > * {
+	position: relative;
+	z-index: 2;
+}
+
+.app,
+.conteudo-pagina,
+.container-lobby,
+.treinos-app,
+.eventos-app,
+.missoes-app,
+.social-app,
+.biblioteca-app,
+.perfil-app,
+.skill-app,
+.battle-app,
+.atributos-jogo,
+.inventario-jogo,
+.download-page {
+	isolation: isolate;
+}
+
+.painel,
+.topo,
+.topo-pagina,
+.treinos-topo,
+.eventos-topo,
+.missoes-topo,
+.social-topo,
+.biblioteca-topo,
+.perfil-app .topo,
+.skill-topo,
+.battle-panel,
+.atributos-topo,
+.inventario-topo,
+.download-topbar,
+.briefing-card,
+.hud-rota,
+.campo-bloco,
+.modal-conteudo {
+	position: relative;
+	border: 1px solid var(--rpg-line) !important;
+	border-radius: var(--rpg-radius) !important;
+	background:
+		linear-gradient(135deg, rgba(255, 247, 223, 0.045), transparent 26%),
+		linear-gradient(180deg, var(--rpg-panel-strong), rgba(2, 7, 8, 0.72)) !important;
+	box-shadow: var(--rpg-shadow), var(--rpg-inset) !important;
+	backdrop-filter: blur(10px) saturate(1.1);
+}
+
+.painel::before,
+.battle-panel::before,
+.briefing-card::before,
+.campo-bloco::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	pointer-events: none;
+	background:
+		linear-gradient(90deg, transparent, rgba(54, 224, 255, 0.16), transparent) top left / 100% 1px no-repeat,
+		linear-gradient(180deg, rgba(255, 226, 138, 0.08), transparent 40%);
+	opacity: 0.9;
+}
+
+.painel:hover,
+.briefing-card:hover,
+.hud-rota:hover {
+	border-color: rgba(255, 226, 138, 0.34) !important;
+	box-shadow:
+		0 22px 58px rgba(0, 0, 0, 0.44),
+		0 0 34px rgba(54, 224, 255, 0.055),
+		var(--rpg-inset) !important;
+}
+
+h1,
+h2,
+h3,
+.topo h1,
+.topo-pagina h1,
+.battle-top h1,
+.inventario-topo h1,
+.atributos-topo h1 {
+	letter-spacing: 0 !important;
+	text-wrap: balance;
+}
+
+.topo small,
+.rotulo,
+.battle-top small,
+.inventario-topo small,
+.atributos-topo small,
+.biblioteca-topo small,
+.skill-topo small,
+.download-eyebrow,
+label {
+	color: var(--rpg-gold) !important;
+	text-shadow: 0 0 18px rgba(255, 226, 138, 0.18);
+}
+
+a,
+button {
+	-webkit-tap-highlight-color: transparent;
+}
+
+button,
+.voltar,
+.botao-principal,
+.botao-secundario,
+.botao-cadastro,
+.botao-pequeno,
+.botao-sair,
+.download-button,
+.mar-card,
+.ilha,
+.local,
+[role="button"] {
+	transition:
+		transform 0.18s ease,
+		border-color 0.18s ease,
+		background 0.18s ease,
+		box-shadow 0.18s ease,
+		filter 0.18s ease !important;
+}
+
+button:not(:disabled):hover,
+.voltar:hover,
+.botao-principal:hover,
+.botao-secundario:hover,
+.botao-cadastro:hover,
+.botao-pequeno:hover,
+.download-button:hover,
+.ilha:hover,
+.local:hover {
+	transform: translateY(-1px);
+	filter: brightness(1.06) saturate(1.08);
+}
+
+.voltar,
+.botao-secundario,
+.botao-sair,
+.download-button,
+.topo-acoes a,
+.topo-acoes button {
+	border-radius: var(--rpg-radius) !important;
+	border-color: rgba(255, 226, 138, 0.32) !important;
+	background:
+		linear-gradient(180deg, rgba(255, 247, 223, 0.075), rgba(255, 247, 223, 0.02)),
+		rgba(4, 12, 13, 0.78) !important;
+	box-shadow: 0 12px 28px rgba(0, 0, 0, 0.26), inset 0 0 16px rgba(255, 226, 138, 0.035);
+}
+
+.botao-principal,
+.botao-cadastro,
+.botao-pequeno,
+.world-actions .primary,
+.mar-status {
+	background:
+		linear-gradient(180deg, rgba(255, 255, 255, 0.36), transparent 42%),
+		linear-gradient(135deg, #fff1a8, #f7c84b 48%, #b45a1f) !important;
+	color: #1b1309 !important;
+	text-shadow: 0 1px 0 rgba(255, 250, 210, 0.62);
+	box-shadow:
+		0 10px 24px rgba(0, 0, 0, 0.32),
+		0 0 24px rgba(247, 200, 75, 0.18),
+		inset 0 0 0 1px rgba(255, 250, 210, 0.45) !important;
+}
+
+input,
+select,
+textarea {
+	border-radius: var(--rpg-radius) !important;
+	border-color: rgba(255, 226, 138, 0.24) !important;
+	background:
+		linear-gradient(180deg, rgba(255, 247, 223, 0.035), rgba(255, 247, 223, 0.01)),
+		rgba(2, 8, 10, 0.76) !important;
+	color: var(--rpg-text) !important;
+	box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.40), 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+	border-color: rgba(54, 224, 255, 0.56) !important;
+	box-shadow:
+		0 0 0 2px rgba(54, 224, 255, 0.14),
+		0 0 24px rgba(54, 224, 255, 0.13),
+		inset 0 0 18px rgba(0, 0, 0, 0.40) !important;
+}
+
+.resultado,
+.descricao-classe,
+.local,
+.requisitos-rota span {
+	border-radius: var(--rpg-radius) !important;
+	background:
+		linear-gradient(90deg, rgba(54, 224, 255, 0.08), transparent 68%),
+		rgba(1, 7, 9, 0.52) !important;
+	border-color: rgba(54, 224, 255, 0.18) !important;
+}
+
+.briefing,
+.painel-jogo,
+.campanha-rota,
+.viagem-grid,
+.world-stats {
+	gap: 12px !important;
+}
+
+.mar-card,
+.ilha {
+	box-shadow: 0 18px 42px rgba(0, 0, 0, 0.38), inset 0 0 38px rgba(0, 0, 0, 0.24) !important;
+}
+
+.mar-card:hover,
+.ilha:hover {
+	box-shadow:
+		0 22px 54px rgba(0, 0, 0, 0.48),
+		0 0 32px color-mix(in srgb, var(--cor, #36e0ff), transparent 55%),
+		inset 0 0 38px rgba(0, 0, 0, 0.24) !important;
+}
+
+.app,
+.pagina-formulario .conteudo-pagina {
+	padding-bottom: 88px;
+}
+
+@media (max-width: 760px) {
+	body:not(.mundo-jogavel)::before {
+		background-size: 72px 72px, 72px 72px, 100% 100%;
+	}
+
+	.painel,
+	.battle-panel,
+	.briefing-card,
+	.campo-bloco {
+		backdrop-filter: blur(7px) saturate(1.05);
+	}
+
+	.app,
+	.pagina-formulario .conteudo-pagina {
+		padding-bottom: 112px;
+	}
+}
