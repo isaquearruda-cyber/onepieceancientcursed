@@ -2583,3 +2583,273 @@ textarea:focus {
 		padding-bottom: 112px;
 	}
 }
+
+/* ==================== RPG PRO SKIN V2 - VIRADA VISUAL ==================== */
+:root {
+	--pro2-black: rgba(1, 5, 7, 0.92);
+	--pro2-panel: rgba(3, 13, 16, 0.82);
+	--pro2-line: rgba(255, 226, 138, 0.34);
+	--pro2-line-blue: rgba(54, 224, 255, 0.28);
+	--pro2-glow: 0 0 28px rgba(54, 224, 255, 0.12), 0 0 42px rgba(247, 200, 75, 0.09);
+}
+
+body:not(.mundo-jogavel):not(.pagina-inventario) {
+	background:
+		radial-gradient(circle at 18% 12%, rgba(255, 226, 138, 0.14), transparent 28%),
+		radial-gradient(circle at 84% 20%, rgba(54, 224, 255, 0.15), transparent 30%),
+		linear-gradient(135deg, #04070a, #061318 46%, #030607) !important;
+}
+
+body:not(.mundo-jogavel):not(.pagina-inventario)::before {
+	opacity: 0.9 !important;
+	background-size: 96px 96px, 96px 96px, 100% 100%, 100% 100% !important;
+}
+
+.container-lobby,
+.app,
+.pagina-formulario .conteudo-pagina,
+.battle-app,
+.atributos-app,
+.skill-app,
+.perfil-app,
+.download-app {
+	filter: drop-shadow(0 28px 70px rgba(0, 0, 0, 0.42));
+}
+
+.container-lobby {
+	width: min(1480px, calc(100vw - 28px)) !important;
+	min-height: calc(100svh - 28px) !important;
+	margin: 14px auto !important;
+	grid-template-columns: minmax(300px, 390px) minmax(380px, 1fr) minmax(310px, 460px) !important;
+	gap: 16px !important;
+}
+
+.painel-lobby,
+.personagem-palco,
+.painel-comandos,
+.painel,
+.battle-panel,
+.atributos-card,
+.habilidade-card,
+.missao-card,
+.evento-card,
+.social-card,
+.perfil-card,
+.loja-card,
+.conquista-card,
+.correio-card {
+	border: 1px solid var(--pro2-line) !important;
+	border-radius: 12px !important;
+	background:
+		linear-gradient(180deg, rgba(255, 247, 223, 0.065), rgba(255, 247, 223, 0.012)),
+		linear-gradient(135deg, rgba(54, 224, 255, 0.10), transparent 34%, rgba(247, 200, 75, 0.07)),
+		var(--pro2-panel) !important;
+	box-shadow:
+		0 24px 66px rgba(0, 0, 0, 0.48),
+		var(--pro2-glow),
+		inset 0 1px 0 rgba(255, 247, 223, 0.10),
+		inset 0 0 34px rgba(0, 0, 0, 0.38) !important;
+	backdrop-filter: blur(14px) saturate(1.16) !important;
+}
+
+.painel-lobby::before,
+.personagem-palco::before,
+.painel-comandos::before,
+.painel::before,
+.battle-panel::before {
+	border-radius: inherit !important;
+	background:
+		linear-gradient(90deg, transparent, rgba(255, 226, 138, 0.44), transparent),
+		linear-gradient(180deg, rgba(54, 224, 255, 0.18), transparent 30%) !important;
+	opacity: 0.75 !important;
+}
+
+.cabecalho-lobby h1,
+.topo h1,
+.topo-pagina h1,
+.battle-top h1,
+.inventario-topo h1,
+.atributos-topo h1,
+.skill-topo h1,
+.download-title,
+.pagina-formulario h1 {
+	color: #fff7df !important;
+	text-shadow:
+		0 2px 0 rgba(35, 13, 6, 0.9),
+		0 12px 24px rgba(0, 0, 0, 0.58),
+		0 0 24px rgba(255, 226, 138, 0.22) !important;
+}
+
+.painel-titulo,
+.info-label,
+.rotulo,
+.inventario-metrica span,
+.world-card strong,
+.world-objectives strong {
+	letter-spacing: 0.14em !important;
+}
+
+.botao-lobby,
+.botao-entrar-jogo,
+.botao-menu-lobby,
+.atalho-menu-lobby,
+.botao-acao-rapida,
+.inventario-acao,
+.botao-principal,
+.botao-secundario,
+.voltar,
+.world-actions a,
+.world-actions button {
+	position: relative;
+	overflow: hidden;
+	border-radius: 10px !important;
+	border: 1px solid rgba(255, 226, 138, 0.36) !important;
+	background:
+		linear-gradient(180deg, rgba(255, 255, 255, 0.11), transparent 42%),
+		linear-gradient(135deg, rgba(10, 40, 48, 0.92), rgba(3, 9, 12, 0.88)) !important;
+	box-shadow:
+		0 14px 34px rgba(0, 0, 0, 0.32),
+		inset 0 1px 0 rgba(255, 247, 223, 0.11) !important;
+}
+
+.botao-lobby::after,
+.botao-menu-lobby::after,
+.atalho-menu-lobby::after,
+.botao-acao-rapida::after,
+.inventario-acao::after,
+.botao-principal::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background: linear-gradient(105deg, transparent 0 38%, rgba(255, 255, 255, 0.18) 48%, transparent 58% 100%);
+	transform: translateX(-120%);
+	transition: transform 0.38s ease;
+}
+
+.botao-lobby:hover::after,
+.botao-menu-lobby:hover::after,
+.atalho-menu-lobby:hover::after,
+.botao-acao-rapida:hover::after,
+.inventario-acao:hover::after,
+.botao-principal:hover::after {
+	transform: translateX(120%);
+}
+
+.botao-entrar-jogo,
+.botao-principal,
+.botao-cadastro,
+.world-actions .primary {
+	background:
+		linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.02) 42%),
+		linear-gradient(135deg, #ffe88f, #ffb52e 46%, #bc4c16) !important;
+	color: #160b05 !important;
+	box-shadow:
+		0 18px 42px rgba(0, 0, 0, 0.40),
+		0 0 34px rgba(255, 181, 46, 0.28),
+		inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+}
+
+.botao-entrar-jogo img,
+.botao-menu-lobby img,
+.atalho-menu-lobby img,
+.inventario-abas img,
+.categoria-jogo img,
+.slot-icone img {
+	border-radius: 8px !important;
+	border: 1px solid rgba(255, 226, 138, 0.30) !important;
+	box-shadow: 0 0 16px rgba(255, 226, 138, 0.16), inset 0 0 18px rgba(0, 0, 0, 0.34) !important;
+}
+
+.personagem-palco {
+	background:
+		radial-gradient(circle at 50% 34%, rgba(255, 226, 138, 0.18), transparent 28%),
+		radial-gradient(circle at 50% 62%, rgba(54, 224, 255, 0.12), transparent 34%),
+		linear-gradient(180deg, rgba(3, 10, 12, 0.55), rgba(1, 5, 7, 0.86)) !important;
+}
+
+.palco-moldura {
+	border-radius: 14px !important;
+	box-shadow:
+		0 22px 58px rgba(0, 0, 0, 0.52),
+		0 0 44px rgba(255, 226, 138, 0.13) !important;
+}
+
+.battle-hud-lobby,
+.rpg-exp-lobby,
+.painel-proxima-acao,
+.status-online,
+.world-stats,
+.inventario-metricas,
+.equipamento-slots {
+	border-color: rgba(54, 224, 255, 0.22) !important;
+	background:
+		linear-gradient(90deg, rgba(54, 224, 255, 0.08), transparent),
+		rgba(1, 6, 8, 0.62) !important;
+	box-shadow: inset 0 0 28px rgba(0, 0, 0, 0.30), 0 12px 32px rgba(0, 0, 0, 0.22) !important;
+}
+
+.inventario-shell {
+	width: min(1320px, calc(100vw - 28px)) !important;
+	border: 1px solid rgba(255, 226, 138, 0.30) !important;
+	border-radius: 14px !important;
+	background:
+		linear-gradient(90deg, rgba(54, 224, 255, 0.08), transparent 36%, rgba(247, 200, 75, 0.08)),
+		linear-gradient(180deg, rgba(3, 12, 15, 0.90), rgba(1, 5, 7, 0.92)) !important;
+	box-shadow: 0 30px 90px rgba(0, 0, 0, 0.62), var(--pro2-glow), inset 0 1px 0 rgba(255, 247, 223, 0.10) !important;
+}
+
+.slot-jogo {
+	border-radius: 8px !important;
+	background:
+		radial-gradient(circle at 50% 24%, color-mix(in srgb, var(--cor-item, #f7c84b) 34%, transparent), transparent 45%),
+		linear-gradient(180deg, rgba(37, 48, 34, 0.94), rgba(4, 8, 7, 0.94)) !important;
+	box-shadow:
+		inset 0 1px 0 rgba(255, 247, 223, 0.12),
+		inset 0 0 26px rgba(0, 0, 0, 0.44),
+		0 14px 30px rgba(0, 0, 0, 0.32) !important;
+}
+
+.slot-jogo:hover {
+	transform: translateY(-2px) scale(1.015) !important;
+}
+
+.inventario-detalhe {
+	border-left: 1px solid rgba(255, 226, 138, 0.24) !important;
+	background:
+		radial-gradient(circle at 50% 22%, rgba(247, 200, 75, 0.18), transparent 30%),
+		linear-gradient(180deg, rgba(5, 20, 22, 0.72), rgba(1, 5, 7, 0.84)) !important;
+}
+
+body.pagina-aventura #rpg-hud-global,
+body.pagina-aventura #rpg-minimap,
+body.pagina-aventura #rpg-quest-dock,
+body.pagina-aventura .rpg-game-topbar,
+body.pagina-inventario #rpg-hud-global,
+body.pagina-inventario #rpg-minimap,
+body.pagina-inventario #rpg-quest-dock,
+body.pagina-inventario .rpg-game-topbar,
+body.mundo-jogavel #rpg-hud-global,
+body.mundo-jogavel #rpg-minimap,
+body.mundo-jogavel #rpg-quest-dock,
+body.mundo-jogavel .rpg-game-topbar,
+body.mundo-jogavel .rpg-page-rail {
+	display: none !important;
+}
+
+body.pagina-aventura .app,
+body.pagina-inventario .inventario-jogo {
+	padding-top: clamp(12px, 1.6vw, 22px) !important;
+}
+
+@media (max-width: 980px) {
+	.container-lobby {
+		grid-template-columns: 1fr !important;
+		width: min(100% - 18px, 720px) !important;
+		overflow: auto !important;
+	}
+
+	.personagem-palco {
+		min-height: 420px !important;
+	}
+}

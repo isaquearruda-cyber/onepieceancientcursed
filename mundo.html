@@ -4,23 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mundo - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game27">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game28">
     <style>
         html, body { min-height: 100%; margin: 0; background: #020708; color: #fff7df; overflow: hidden; }
         body { font-family: Arial, sans-serif; }
         .video-fundo { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.22) saturate(1.25); z-index: 0; }
-        .world-app { position: relative; z-index: 2; width: 100vw; height: 100svh; display: grid; grid-template-rows: 1fr; padding: 10px; box-sizing: border-box; }
-        .world-top { display: none; }
+        .world-app { position: relative; z-index: 2; width: 100vw; height: 100svh; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 10px; padding: 10px; box-sizing: border-box; }
+        .world-top { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 16px; min-height: 74px; padding: 12px 16px; border: 1px solid rgba(255,226,138,.24); border-radius: 10px; background: linear-gradient(90deg, rgba(2, 8, 10, .90), rgba(7, 28, 32, .72), rgba(2, 8, 10, .88)); box-shadow: 0 18px 48px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,247,223,.08); backdrop-filter: blur(12px) saturate(1.2); }
         .world-top small { color: #90ff00; font-weight: 1000; letter-spacing: .14em; text-transform: uppercase; }
         .world-top h1 { margin: 2px 0 0; font: 1000 clamp(1rem, 2vw, 1.45rem)/.95 "Segoe UI Black","Arial Black",Impact,sans-serif; text-transform: uppercase; text-shadow: 0 3px 0 #210b08, 0 10px 20px rgba(0,0,0,.52); }
         .world-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: end; }
         .world-actions a, .world-actions button { min-height: 30px; padding: 0 10px; border: 1px solid rgba(255,226,138,.42); border-radius: 8px; color: #fff7df; background: rgba(4,12,13,.72); font-size: .68rem; font-weight: 1000; text-transform: uppercase; text-decoration: none; cursor: pointer; }
         .world-actions .primary { color: #07100d; background: linear-gradient(90deg,#90ff00,#ffe28a); }
-        .world-frame { position: relative; min-height: 0; border: 1px solid rgba(54,224,255,.20); border-radius: 8px; background: radial-gradient(circle at 50% 35%, rgba(54,224,255,.12), transparent 42%), rgba(1,5,7,.86); box-shadow: inset 0 0 70px rgba(0,0,0,.42), 0 24px 70px rgba(0,0,0,.5); overflow: hidden; }
+        .world-frame { position: relative; min-height: 0; border: 1px solid rgba(255,226,138,.26); border-radius: 12px; background: radial-gradient(circle at 50% 35%, rgba(54,224,255,.12), transparent 42%), rgba(1,5,7,.86); box-shadow: inset 0 0 90px rgba(0,0,0,.50), 0 26px 78px rgba(0,0,0,.56), 0 0 0 1px rgba(54,224,255,.10); overflow: hidden; }
+        .world-frame::before { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(90deg, rgba(255,226,138,.10), transparent 16%, transparent 84%, rgba(54,224,255,.10)), repeating-linear-gradient(0deg, rgba(255,255,255,.026), rgba(255,255,255,.026) 1px, transparent 1px, transparent 4px); mix-blend-mode: screen; opacity: .55; }
         #world-canvas { position: absolute; inset: 0; }
         #world-canvas canvas { display: block; width: 100% !important; height: 100% !important; }
-        .world-hud { position: absolute; left: 14px; top: 14px; z-index: 3; display: grid; gap: 8px; width: min(310px, calc(100% - 28px)); pointer-events: none; }
-        .world-card { padding: 9px 10px; border: 1px solid rgba(255,226,138,.22); border-radius: 8px; background: rgba(3,8,10,.68); box-shadow: 0 14px 34px rgba(0,0,0,.28); backdrop-filter: blur(8px); }
+        .world-hud { position: absolute; left: 18px; top: 18px; z-index: 5; display: grid; gap: 10px; width: min(330px, calc(100% - 36px)); pointer-events: none; }
+        .world-card { padding: 12px 13px; border: 1px solid rgba(255,226,138,.30); border-radius: 10px; background: linear-gradient(180deg, rgba(5,18,21,.82), rgba(2,7,9,.74)); box-shadow: 0 18px 44px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,247,223,.08); backdrop-filter: blur(12px) saturate(1.15); }
         .world-card strong { display: block; color: #ffe28a; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; }
         .world-card span { display: block; margin-top: 4px; color: #d9e8d4; font-size: .86rem; font-weight: 800; line-height: 1.35; }
         .world-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
@@ -39,10 +40,10 @@
         .world-log p { margin: 0; padding: 7px 9px; border-left: 3px solid #36e0ff; background: rgba(3,8,10,.66); color: #d9e8d4; font-size: .82rem; font-weight: 800; box-shadow: 0 10px 28px rgba(0,0,0,.22); }
         .world-prompt { position: absolute; left: 50%; bottom: 18px; z-index: 7; transform: translateX(-50%); min-width: min(440px, calc(100% - 28px)); padding: 10px 12px; border: 1px solid rgba(255,226,138,.42); border-radius: 8px; background: linear-gradient(90deg, rgba(5,12,12,.86), rgba(19,28,22,.82)); color: #fff7df; text-align: center; font-weight: 1000; text-transform: uppercase; letter-spacing: .06em; box-shadow: 0 18px 42px rgba(0,0,0,.38); backdrop-filter: blur(10px); pointer-events: none; }
         .world-prompt kbd { display: inline-grid; place-items: center; min-width: 28px; min-height: 24px; margin-right: 8px; border: 1px solid rgba(144,255,0,.48); border-radius: 6px; background: rgba(144,255,0,.12); color: #90ff00; font: 1000 .78rem Arial,sans-serif; }
-        .world-zone { position: absolute; left: 50%; top: 58px; z-index: 4; transform: translateX(-50%); min-width: min(420px, calc(100% - 360px)); padding: 9px 12px; border: 1px solid rgba(54,224,255,.24); border-radius: 8px; background: rgba(3,10,12,.62); box-shadow: 0 14px 34px rgba(0,0,0,.26); backdrop-filter: blur(8px); pointer-events: none; }
+        .world-zone { position: absolute; left: 50%; top: 18px; z-index: 5; transform: translateX(-50%); min-width: min(520px, calc(100% - 720px)); padding: 10px 14px; border: 1px solid rgba(54,224,255,.32); border-radius: 10px; background: linear-gradient(90deg, rgba(3,10,12,.72), rgba(9,28,32,.62)); box-shadow: 0 18px 44px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,247,223,.06); backdrop-filter: blur(12px); pointer-events: none; }
         .world-zone small { display: block; color: #36e0ff; font: 1000 .6rem Arial,sans-serif; letter-spacing: .14em; text-transform: uppercase; }
         .world-zone strong { display: block; margin-top: 2px; color: #fff7df; font: 1000 .95rem Arial,sans-serif; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .world-objectives { position: absolute; right: 14px; top: 58px; z-index: 4; width: min(260px, calc(100% - 28px)); display: grid; gap: 7px; padding: 10px; border: 1px solid rgba(255,226,138,.20); border-radius: 8px; background: rgba(3,8,10,.58); box-shadow: 0 14px 34px rgba(0,0,0,.26); backdrop-filter: blur(8px); pointer-events: none; }
+        .world-objectives { position: absolute; right: 18px; top: 18px; z-index: 5; width: min(278px, calc(100% - 36px)); display: grid; gap: 8px; padding: 12px; border: 1px solid rgba(255,226,138,.26); border-radius: 10px; background: linear-gradient(180deg, rgba(5,18,21,.78), rgba(2,7,9,.68)); box-shadow: 0 18px 44px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,247,223,.06); backdrop-filter: blur(12px); pointer-events: none; }
         .world-objectives strong { color: #ffe28a; font: 1000 .68rem Arial,sans-serif; letter-spacing: .12em; text-transform: uppercase; }
         .world-objectives span { display: flex; justify-content: space-between; gap: 10px; color: #d9e8d4; font: 900 .74rem Arial,sans-serif; }
         .world-objectives b { color: #90ff00; }
@@ -132,7 +133,7 @@
         </section>
     </main>
     <script src="mares-dados.js?v=20260625-rpg11"></script>
-    <script src="musica-fundo.js?v=20260619-game27"></script>
+    <script src="musica-fundo.js?v=20260619-game28"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
@@ -365,16 +366,40 @@
         let player, cursors, keys, npcs, chests, threats, ports, locaisGrupo, cameraText, targetMarker, routeLayer, nearestInteractable = null, actionCooldown = 0;
         let moveTarget = null;
         const worldSize = { w: 5200, h: 3400 };
+        const texturasMares = {
+            east: "assets/mares/mar-east.webp",
+            north: "assets/mares/mar-north.webp",
+            south: "assets/mares/mar-south.webp",
+            west: "assets/mares/mar-west.webp",
+            reverse: "assets/mares/mar-reverse.webp",
+            calm: "assets/mares/mar-calm.webp",
+            paraiso: "assets/mares/mar-paraiso.webp",
+            skypiea: "assets/mares/mar-skypiea.webp",
+            novo: "assets/mares/mar-novo.webp",
+            red: "assets/mares/mar-red.webp"
+        };
 
         function preload() {
+            Object.entries(texturasMares).forEach(([id, src]) => this.load.image("mar-" + id, src));
         }
 
         function create() {
             loadingEl.remove();
             this.physics.world.setBounds(0, 0, worldSize.w, worldSize.h);
             const ocean = this.add.graphics();
-            ocean.fillGradientStyle(0x062e45, 0x062e45, 0x041827, 0x03101a, 1);
+            ocean.fillGradientStyle(0x08334d, 0x062a3f, 0x041827, 0x020b12, 1);
             ocean.fillRect(0, 0, worldSize.w, worldSize.h);
+            zonas.forEach((zona, i) => {
+                const mar = maresCadastrados.find((entrada) => entrada.nome === zona.nome || entrada.cor && corNumerica(entrada.cor, 0) === zona.cor);
+                const key = mar?.id ? "mar-" + mar.id : "";
+                if (this.textures.exists(key)) {
+                    const imagem = this.add.image(zona.x + zona.w / 2, zona.y + zona.h / 2, key)
+                        .setDisplaySize(zona.w * 1.18, zona.h * 1.02)
+                        .setAlpha(.24)
+                        .setDepth(0);
+                    imagem.setBlendMode(Phaser.BlendModes.SCREEN);
+                }
+            });
             for (let i = 0; i < 120; i += 1) {
                 const x = Math.random() * worldSize.w;
                 const y = Math.random() * worldSize.h;
@@ -399,13 +424,23 @@
                     fog.lineStyle(3, 0xffe28a, .14);
                     fog.strokeRoundedRect(zona.x + zona.w * .34, zona.y - 120, zona.w * .32, zona.h + 240, 26);
                 }
-                this.add.text(zona.x + zona.w / 2, zona.y + 28, zona.nome, {
+                this.add.rectangle(zona.x + zona.w / 2, zona.y + 34, Math.min(zona.w * .62, 520), 58, 0x020708, .42)
+                    .setStrokeStyle(1, zona.cor || 0x36e0ff, .28)
+                    .setDepth(5);
+                this.add.text(zona.x + zona.w / 2, zona.y + 24, zona.nome, {
                     fontFamily: "Arial Black",
-                    fontSize: "28px",
+                    fontSize: "30px",
                     color: "#fff7df",
                     stroke: "#041011",
                     strokeThickness: 8
-                }).setOrigin(.5).setAlpha(.42).setDepth(1);
+                }).setOrigin(.5).setAlpha(.72).setDepth(6);
+                this.add.text(zona.x + zona.w / 2, zona.y + 52, "Regiao navegavel", {
+                    fontFamily: "Arial",
+                    fontSize: "11px",
+                    color: "#ffe28a",
+                    stroke: "#041011",
+                    strokeThickness: 4
+                }).setOrigin(.5).setAlpha(.72).setDepth(6);
             });
             routeLayer = this.add.graphics().setDepth(2);
             const shipTexture = this.make.graphics({ x: 0, y: 0, add: false });
@@ -486,15 +521,24 @@
             localTexture.generateTexture("worldLocal", 36, 36);
             localTexture.destroy();
             ilhas.forEach((ilha) => {
-                const sombra = this.add.ellipse(ilha.x, ilha.y + 16, ilha.w * 1.08, ilha.h * 1.12, 0x061011, .36).setDepth(1);
-                const praia = this.add.ellipse(ilha.x, ilha.y + 4, ilha.w * 1.02, ilha.h * 1.06, 0xffe28a, .18).setDepth(2);
-                const corpo = this.add.ellipse(ilha.x, ilha.y, ilha.w, ilha.h, ilha.cor, .68).setStrokeStyle(2, 0xffe28a, .20).setDepth(3);
-                this.add.ellipse(ilha.x - ilha.w * .16, ilha.y - ilha.h * .12, ilha.w * .46, ilha.h * .32, 0xf7c84b, .18).setDepth(4);
-                this.add.ellipse(ilha.x + ilha.w * .18, ilha.y + ilha.h * .10, ilha.w * .36, ilha.h * .26, 0x061011, .10).setDepth(4);
-                this.add.circle(ilha.x - ilha.w * .36, ilha.y + ilha.h * .16, 8, 0x90ff00, .45).setDepth(5);
-                this.add.circle(ilha.x + ilha.w * .30, ilha.y - ilha.h * .12, 7, 0x36e0ff, .36).setDepth(5);
-                this.add.text(ilha.x, ilha.y - ilha.h * .66, ilha.nome, { fontFamily: "Arial Black", fontSize: "14px", color: "#fff7df", stroke: "#041011", strokeThickness: 5 }).setOrigin(.5).setDepth(7);
-                this.add.text(ilha.x, ilha.y - ilha.h * .46, ilha.marNome + " / " + ilha.subtitulo, { fontFamily: "Arial", fontSize: "10px", color: "#ffe28a", stroke: "#041011", strokeThickness: 4 }).setOrigin(.5).setDepth(7);
+                const key = "mar-" + ilha.marId;
+                const sombra = this.add.ellipse(ilha.x, ilha.y + 22, ilha.w * 1.16, ilha.h * 1.18, 0x020708, .48).setDepth(1);
+                const praia = this.add.ellipse(ilha.x, ilha.y + 5, ilha.w * 1.08, ilha.h * 1.10, 0xffe28a, .25).setDepth(2);
+                const corpo = this.add.ellipse(ilha.x, ilha.y, ilha.w, ilha.h, ilha.cor, .72).setStrokeStyle(3, 0xffe28a, .32).setDepth(4);
+                if (this.textures.exists(key)) {
+                    const fotoIlha = this.add.image(ilha.x, ilha.y, key)
+                        .setDisplaySize(ilha.w * .92, ilha.h * .82)
+                        .setAlpha(.30)
+                        .setDepth(5);
+                    fotoIlha.setBlendMode(Phaser.BlendModes.SCREEN);
+                }
+                this.add.ellipse(ilha.x - ilha.w * .16, ilha.y - ilha.h * .12, ilha.w * .46, ilha.h * .32, 0xf7c84b, .24).setDepth(6);
+                this.add.ellipse(ilha.x + ilha.w * .18, ilha.y + ilha.h * .10, ilha.w * .36, ilha.h * .26, 0x061011, .18).setDepth(6);
+                this.add.circle(ilha.x - ilha.w * .36, ilha.y + ilha.h * .16, 9, 0x90ff00, .62).setDepth(7);
+                this.add.circle(ilha.x + ilha.w * .30, ilha.y - ilha.h * .12, 8, 0x36e0ff, .54).setDepth(7);
+                this.add.rectangle(ilha.x, ilha.y - ilha.h * .72, Math.max(190, ilha.nome.length * 9), 44, 0x020708, .56).setStrokeStyle(1, ilha.cor, .5).setDepth(8);
+                this.add.text(ilha.x, ilha.y - ilha.h * .80, ilha.nome, { fontFamily: "Arial Black", fontSize: "15px", color: "#fff7df", stroke: "#041011", strokeThickness: 5 }).setOrigin(.5).setDepth(9);
+                this.add.text(ilha.x, ilha.y - ilha.h * .62, ilha.marNome + " / " + ilha.subtitulo, { fontFamily: "Arial", fontSize: "10px", color: "#ffe28a", stroke: "#041011", strokeThickness: 4 }).setOrigin(.5).setDepth(9);
                 sombra.nomeIlha = praia.nomeIlha = corpo.nomeIlha = ilha.nome;
             });
             function desenharRotas() {
