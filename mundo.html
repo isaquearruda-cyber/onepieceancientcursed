@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mundo - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game25">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game26">
     <style>
         html, body { min-height: 100%; margin: 0; background: #020708; color: #fff7df; overflow: hidden; }
         body { font-family: Arial, sans-serif; }
@@ -131,8 +131,8 @@
             <div class="world-log" id="world-log"></div>
         </section>
     </main>
-    <script src="mares-dados.js?v=20260619-rpg10"></script>
-    <script src="musica-fundo.js?v=20260619-game25"></script>
+    <script src="mares-dados.js?v=20260625-rpg11"></script>
+    <script src="musica-fundo.js?v=20260619-game26"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
@@ -177,14 +177,24 @@
                 north: { x: 1560, y: 420, w: 760, h: 760 },
                 south: { x: 560, y: 1480, w: 780, h: 720 },
                 west: { x: 1600, y: 1500, w: 780, h: 720 },
-                reverse: { x: 2600, y: 950, w: 760, h: 1000 }
+                reverse: { x: 2600, y: 950, w: 760, h: 1000 },
+                calm: { x: 3700, y: 520, w: 680, h: 720 },
+                paraiso: { x: 3580, y: 1540, w: 1040, h: 880 },
+                skypiea: { x: 1760, y: 2500, w: 820, h: 620 },
+                novo: { x: 3240, y: 2680, w: 1120, h: 980 },
+                red: { x: 4620, y: 1560, w: 560, h: 1600 }
             };
             const fallbackRegioes = [
                 { x: 520, y: 460, w: 720, h: 780 },
                 { x: 1560, y: 420, w: 760, h: 760 },
                 { x: 560, y: 1480, w: 780, h: 720 },
                 { x: 1600, y: 1500, w: 780, h: 720 },
-                { x: 2600, y: 950, w: 760, h: 1000 }
+                { x: 2600, y: 950, w: 760, h: 1000 },
+                { x: 3700, y: 520, w: 680, h: 720 },
+                { x: 3580, y: 1540, w: 1040, h: 880 },
+                { x: 1760, y: 2500, w: 820, h: 620 },
+                { x: 3240, y: 2680, w: 1120, h: 980 },
+                { x: 4620, y: 1560, w: 560, h: 1600 }
             ];
             const ilhasGeradas = [];
             const rotasGeradas = [];
@@ -224,6 +234,20 @@
                 const reverse = maresCadastrados.find((item) => item.id === "reverse");
                 if (mar?.ilhas?.length && reverse?.ilhas?.length) {
                     rotasGeradas.push([mar.id + "-" + mar.ilhas[mar.ilhas.length - 1].id, "reverse-" + reverse.ilhas[0].id]);
+                }
+            });
+            [
+                ["reverse", "paraiso"],
+                ["reverse", "calm"],
+                ["paraiso", "skypiea"],
+                ["paraiso", "novo"],
+                ["novo", "red"],
+                ["red", "calm"]
+            ].forEach((ponte) => {
+                const origem = maresCadastrados.find((item) => item.id === ponte[0]);
+                const destino = maresCadastrados.find((item) => item.id === ponte[1]);
+                if (origem?.ilhas?.length && destino?.ilhas?.length) {
+                    rotasGeradas.push([origem.id + "-" + origem.ilhas[origem.ilhas.length - 1].id, destino.id + "-" + destino.ilhas[0].id]);
                 }
             });
             return { ilhas: ilhasGeradas, rotas: rotasGeradas, zonas: zonasGeradas };
@@ -340,7 +364,7 @@
 
         let player, cursors, keys, npcs, chests, threats, ports, locaisGrupo, cameraText, targetMarker, routeLayer, nearestInteractable = null, actionCooldown = 0;
         let moveTarget = null;
-        const worldSize = { w: 3400, h: 2400 };
+        const worldSize = { w: 5200, h: 3400 };
 
         function preload() {
         }
@@ -369,6 +393,19 @@
                 fog.fillEllipse(zona.x + zona.w / 2, zona.y + zona.h / 2, zona.w * 1.06, zona.h * .82);
                 fog.lineStyle(2, zona.cor || 0x36e0ff, .12);
                 fog.strokeEllipse(zona.x + zona.w / 2, zona.y + zona.h / 2, zona.w * 1.06, zona.h * .82);
+                if (zona.nome === "Red Line") {
+                    fog.fillStyle(0xe24b4b, .10);
+                    fog.fillRoundedRect(zona.x + zona.w * .34, zona.y - 120, zona.w * .32, zona.h + 240, 26);
+                    fog.lineStyle(3, 0xffe28a, .14);
+                    fog.strokeRoundedRect(zona.x + zona.w * .34, zona.y - 120, zona.w * .32, zona.h + 240, 26);
+                }
+                this.add.text(zona.x + zona.w / 2, zona.y + 28, zona.nome, {
+                    fontFamily: "Arial Black",
+                    fontSize: "28px",
+                    color: "#fff7df",
+                    stroke: "#041011",
+                    strokeThickness: 8
+                }).setOrigin(.5).setAlpha(.42).setDepth(1);
             });
             routeLayer = this.add.graphics().setDepth(2);
             const shipTexture = this.make.graphics({ x: 0, y: 0, add: false });
@@ -449,12 +486,16 @@
             localTexture.generateTexture("worldLocal", 36, 36);
             localTexture.destroy();
             ilhas.forEach((ilha) => {
-                const sombra = this.add.ellipse(ilha.x, ilha.y + 12, ilha.w * 1.04, ilha.h * 1.08, 0x061011, .30).setDepth(1);
-                const corpo = this.add.ellipse(ilha.x, ilha.y, ilha.w, ilha.h, ilha.cor, .66).setStrokeStyle(2, 0xffe28a, .18).setDepth(2);
-                this.add.ellipse(ilha.x - ilha.w * .1, ilha.y - ilha.h * .08, ilha.w * .52, ilha.h * .34, 0xf7c84b, .18).setDepth(3);
+                const sombra = this.add.ellipse(ilha.x, ilha.y + 16, ilha.w * 1.08, ilha.h * 1.12, 0x061011, .36).setDepth(1);
+                const praia = this.add.ellipse(ilha.x, ilha.y + 4, ilha.w * 1.02, ilha.h * 1.06, 0xffe28a, .18).setDepth(2);
+                const corpo = this.add.ellipse(ilha.x, ilha.y, ilha.w, ilha.h, ilha.cor, .68).setStrokeStyle(2, 0xffe28a, .20).setDepth(3);
+                this.add.ellipse(ilha.x - ilha.w * .16, ilha.y - ilha.h * .12, ilha.w * .46, ilha.h * .32, 0xf7c84b, .18).setDepth(4);
+                this.add.ellipse(ilha.x + ilha.w * .18, ilha.y + ilha.h * .10, ilha.w * .36, ilha.h * .26, 0x061011, .10).setDepth(4);
+                this.add.circle(ilha.x - ilha.w * .36, ilha.y + ilha.h * .16, 8, 0x90ff00, .45).setDepth(5);
+                this.add.circle(ilha.x + ilha.w * .30, ilha.y - ilha.h * .12, 7, 0x36e0ff, .36).setDepth(5);
                 this.add.text(ilha.x, ilha.y - ilha.h * .66, ilha.nome, { fontFamily: "Arial Black", fontSize: "14px", color: "#fff7df", stroke: "#041011", strokeThickness: 5 }).setOrigin(.5).setDepth(7);
                 this.add.text(ilha.x, ilha.y - ilha.h * .46, ilha.marNome + " / " + ilha.subtitulo, { fontFamily: "Arial", fontSize: "10px", color: "#ffe28a", stroke: "#041011", strokeThickness: 4 }).setOrigin(.5).setDepth(7);
-                sombra.nomeIlha = corpo.nomeIlha = ilha.nome;
+                sombra.nomeIlha = praia.nomeIlha = corpo.nomeIlha = ilha.nome;
             });
             function desenharRotas() {
                 routeLayer.clear();
@@ -462,7 +503,13 @@
                     const a = ilhas.find((ilha) => ilha.id === rota[0]);
                     const b = ilhas.find((ilha) => ilha.id === rota[1]);
                     const descoberta = estadoMundo.routes.includes(rota[0]) && estadoMundo.routes.includes(rota[1]);
-                    routeLayer.lineStyle(descoberta ? 4 : 2, descoberta ? 0x90ff00 : 0x36e0ff, descoberta ? .42 : .16);
+                    routeLayer.lineStyle(descoberta ? 8 : 5, descoberta ? 0x90ff00 : 0x36e0ff, descoberta ? .16 : .06);
+                    routeLayer.beginPath();
+                    routeLayer.moveTo(a.x, a.y);
+                    routeLayer.lineTo((a.x + b.x) / 2, (a.y + b.y) / 2 - 70 + (i % 2) * 120);
+                    routeLayer.lineTo(b.x, b.y);
+                    routeLayer.strokePath();
+                    routeLayer.lineStyle(descoberta ? 3 : 2, descoberta ? 0x90ff00 : 0x36e0ff, descoberta ? .54 : .22);
                     routeLayer.beginPath();
                     routeLayer.moveTo(a.x, a.y);
                     routeLayer.lineTo((a.x + b.x) / 2, (a.y + b.y) / 2 - 70 + (i % 2) * 120);
@@ -522,9 +569,10 @@
                 this.physics.add.existing(port, true);
                 ports.add(port);
                 if (estadoMundo.routes.includes(ilha.id)) port.setTint(0x90ff00);
-                ilha.locais.slice(0, 3).forEach((local, indiceLocal) => {
-                    const angulo = (-80 + indiceLocal * 80) * Math.PI / 180;
-                    const localNode = this.add.image(ilha.x + Math.cos(angulo) * ilha.w * .38, ilha.y + Math.sin(angulo) * ilha.h * .42, "worldLocal").setDepth(8);
+                ilha.locais.forEach((local, indiceLocal) => {
+                    const totalLocais = Math.max(ilha.locais.length, 1);
+                    const angulo = (-110 + indiceLocal * (220 / Math.max(totalLocais - 1, 1))) * Math.PI / 180;
+                    const localNode = this.add.image(ilha.x + Math.cos(angulo) * ilha.w * .43, ilha.y + Math.sin(angulo) * ilha.h * .48, "worldLocal").setDepth(8);
                     localNode.tipoInteracao = "local";
                     localNode.nomeLocal = local;
                     localNode.nomeIlha = ilha.nome;

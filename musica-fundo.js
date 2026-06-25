@@ -1126,7 +1126,7 @@
 
 	function instalarPatchNotes(forcar) {
 		if (!forcar) return;
-		var versao = "20260625-pro25";
+		var versao = "20260625-pro26";
 		var chave = "rpg_patch_notes_" + versao;
 		if (!forcar && localStorage.getItem(chave) === "visto") return;
 		var existente = document.getElementById("rpg-patch-notes");
@@ -1146,7 +1146,7 @@
 						'<div class="rpg-patch-item"><strong>Controle mais claro</strong><span>WASD/setas continuam ativos, o clique cria marcador no mapa e o jogador navega até o ponto escolhido.</span></div>' +
 						'<div class="rpg-patch-item"><strong>Mundo jogável</strong><span>Nova aba Phaser com movimento por WASD/setas, câmera seguindo o jogador, NPCs, baús, ameaças e entrada para batalha.</span></div>' +
 						'<div class="rpg-patch-item"><strong>Entrar no mundo virou jogo</strong><span>O botão principal do lobby agora abre uma cena controlável em tempo real, com save de posição e progressão local.</span></div>' +
-						'<div class="rpg-patch-item"><strong>Game client V37</strong><span>HUD global mais discreto, radar só em páginas jogáveis e inventário sem poluição visual.</span></div>' +
+						'<div class="rpg-patch-item"><strong>Game client V38</strong><span>HUD global mais discreto, radar só em páginas jogáveis e inventário sem poluição visual.</span></div>' +
 						'<div class="rpg-patch-item"><strong>Radar funcionando</strong><span>Minimapa animado com varredura, pontos de interesse e progresso visual sem bloquear os botões da tela.</span></div>' +
 						'<div class="rpg-patch-item"><strong>Interface mais viva</strong><span>Botões agora disparam brilho de ação, páginas entram com boot visual e o HUD mostra sensação de cliente de jogo.</span></div>' +
 						'<div class="rpg-patch-item"><strong>Janela corrigida</strong><span>Este painel agora tem rolagem interna e botão X fixo para fechar no celular e no PC.</span></div>' +
@@ -1222,7 +1222,7 @@
 					'<section class="rpg-sistema-bloco"><h3>Salvamento</h3>' +
 						'<div class="rpg-sistema-linha"><span>Status</span><strong>' + textoSalvamento() + '</strong></div>' +
 						'<div class="rpg-sistema-linha"><span>Rede</span><strong>' + (navigator.onLine ? "Online" : "Offline") + '</strong></div>' +
-							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v37</strong></div>' +
+							'<div class="rpg-sistema-linha"><span>Cache</span><strong>v38</strong></div>' +
 						'<div class="rpg-sistema-acoes"><button type="button" data-sistema-atualizar>Atualizar app</button><button type="button" data-sistema-notes>Novidades</button></div>' +
 					'</section>' +
 					'<section class="rpg-sistema-bloco"><h3>CDN Premium</h3>' +

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Entrar na Aventura - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game25">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game26">
     <style>
         .campanha-rota { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr); gap: 14px; }
         .campanha-rota .painel { padding: 14px; }
@@ -22,6 +22,10 @@
         .pixi-palco-fallback { position: absolute; inset: 0; display: grid; place-items: center; padding: 18px; color: #d9e8d4; text-align: center; }
         .rota-legenda { display: flex; flex-wrap: wrap; gap: 8px; }
         .rota-legenda span { padding: 6px 8px; border: 1px solid rgba(255,247,223,.12); border-radius: 999px; background: rgba(0,0,0,.22); color: #d9e8d4; font: 900 .72rem Arial,sans-serif; text-transform: uppercase; }
+        .pagina-aventura .mares-trilho { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; overflow: visible; padding: 2px; }
+        .pagina-aventura .mar-card { min-width: 0; min-height: 250px; }
+        body.pagina-aventura #rpg-quest-dock,
+        body.pagina-aventura #rpg-minimap { display: none !important; }
         @media(max-width:820px){.campanha-rota{grid-template-columns:1fr}}
         @media(max-width:620px){.pixi-palco{min-height:340px}.mapa-pixi-topo{align-items:flex-start;flex-direction:column}}
     </style>
@@ -34,7 +38,7 @@
             <div>
                 <small>Mapa / Navegação</small>
                 <h1>Entrar na Aventura</h1>
-                <p>Escolha o mar atual. Os quatro Blues estão liberados; cada mar abre uma tela própria de ilhas, locais e cálculo de viagem.</p>
+                <p>Escolha qualquer mar liberado. Todas as rotas principais agora abrem ilhas, locais e cálculo de viagem.</p>
             </div>
             <a class="voltar" href="lobby.html">Voltar ao Lobby</a>
         </header>
@@ -43,7 +47,7 @@
             <div class="painel-jogo">
                 <div class="hud-rota"><small>Bússola</small><b>Log Pose Inicial</b><span>Escolha uma rota desbloqueada para abrir o mapa de ilhas.</span></div>
                 <div class="hud-rota"><small>Navio</small><b>Rank E</b><span>Melhore o barco para reduzir o tempo de viagem.</span></div>
-                <div class="hud-rota"><small>Clima</small><b>Instável</b><span>Rotas bloqueadas exigem avanço de campanha.</span></div>
+                <div class="hud-rota"><small>Clima</small><b>Instável</b><span>Todas as rotas principais estão liberadas para navegação.</span></div>
             </div>
             <div class="mares-trilho" id="mares"></div>
             <p class="resultado" id="bloqueio" hidden></p>
@@ -58,7 +62,7 @@
             </div>
             <div class="rota-legenda">
                 <span>Linhas azuis: rotas abertas</span>
-                <span>Linhas vermelhas: campanha bloqueada</span>
+                <span>Todos os mares: liberados</span>
                 <span>Clique nos mares liberados</span>
             </div>
         </section>
@@ -72,13 +76,13 @@
             <article class="painel requisitos-rota" id="requisitos-rota"></article>
         </section>
         <section class="briefing">
-            <article class="briefing-card painel"><small>Próximo passo</small><strong>Escolha um Blue</strong><p>Ao entrar num mar, você verá somente as ilhas daquele mar e poderá marcar origem e destino.</p></article>
-            <article class="briefing-card painel"><small>Progresso</small><strong>Rotas bloqueadas</strong><p>Calm Belt, Grand Line, Mar do Céu, Novo Mundo e Red Line ficam para avanço de campanha.</p></article>
+            <article class="briefing-card painel"><small>Próximo passo</small><strong>Escolha um mar</strong><p>Ao entrar num mar, você verá somente as ilhas daquele mar e poderá marcar origem e destino.</p></article>
+            <article class="briefing-card painel"><small>Progresso</small><strong>Rotas liberadas</strong><p>Calm Belt, Grand Line, Mar do Céu, Novo Mundo e Red Line agora fazem parte da navegação.</p></article>
             <article class="briefing-card painel"><small>Registro</small><strong>Viagem salva</strong><p>O cálculo de rota salva tempo, custo, risco e última viagem no navegador do jogador.</p></article>
         </section>
     </main>
-    <script src="musica-fundo.js?v=20260619-game25"></script>
-    <script src="mares-dados.js?v=20260619-rpg10"></script>
+    <script src="musica-fundo.js?v=20260619-game26"></script>
+    <script src="mares-dados.js?v=20260625-rpg11"></script>
     <script>
         const maresEl = document.getElementById("mares");
         const bloqueioEl = document.getElementById("bloqueio");
@@ -94,10 +98,10 @@
         document.getElementById("campanha-titulo").textContent = `${abertas}/${total} rotas liberadas`;
         document.getElementById("campanha-texto").textContent = `Nível ${progresso.nivel || 1}, ${Number(progresso.berris || 0).toLocaleString("pt-BR")} berris e rotas salvas definem sua campanha de exploração.`;
         document.getElementById("requisitos-rota").innerHTML = `
-            <span>Reverse Mountain <b>Concluir 3 missões C</b></span>
-            <span>Grand Line <b>Nível 8 + Log Pose</b></span>
-            <span>Skypiea <b>Mapa especial + Rank B</b></span>
-            <span>Novo Mundo <b>Nível 20 + Rank A</b></span>
+            <span>Blues e Reverse Mountain <b>Liberados</b></span>
+            <span>Calm Belt e Paraíso <b>Liberados</b></span>
+            <span>Mar do Céu <b>Liberado</b></span>
+            <span>Novo Mundo e Red Line <b>Liberados</b></span>
         `;
         maresEl.innerHTML = mares.map((mar) => `<button class="mar-card ${mar.aberto ? "" : "bloqueado"}" style="--cor:${mar.cor};--img:url('${arteMar()}');--pos:${posMar[mar.id] || "center"}" type="button" data-mar="${mar.id}"><span class="mar-status">${mar.aberto ? "Desbloqueado" : "Bloqueado"}</span><strong>${mar.nome}</strong><span class="mar-desc">${mar.desc}</span></button>`).join("");
         maresEl.querySelectorAll("[data-mar]").forEach((botao) => {

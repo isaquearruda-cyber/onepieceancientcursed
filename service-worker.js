@@ -1,4 +1,4 @@
-const CACHE_NAME = "one-piece-rpg-app-v37";
+const CACHE_NAME = "one-piece-rpg-app-v38";
 const CACHE_PREFIX = "one-piece-rpg-app-";
 
 const APP_SHELL = [
@@ -22,6 +22,16 @@ const APP_SHELL = [
   "./loja.html",
   "./conquistas.html",
   "./bando.html",
+  "./mar-east.html",
+  "./mar-north.html",
+  "./mar-south.html",
+  "./mar-west.html",
+  "./mar-reverse.html",
+  "./mar-calm.html",
+  "./mar-paraiso.html",
+  "./mar-skypiea.html",
+  "./mar-novo.html",
+  "./mar-red.html",
   "./estilo.css",
   "./musica-fundo.js",
   "./rpg-sistemas.js",
