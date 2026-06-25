@@ -4,25 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mundo - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game22">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game23">
     <style>
         html, body { min-height: 100%; margin: 0; background: #020708; color: #fff7df; overflow: hidden; }
         body { font-family: Arial, sans-serif; }
         .video-fundo { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.22) saturate(1.25); z-index: 0; }
-        .world-app { position: relative; z-index: 2; width: 100vw; height: 100svh; display: grid; grid-template-rows: auto 1fr; gap: 10px; padding: 12px; box-sizing: border-box; }
-        .world-top { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 10px 12px; border: 1px solid rgba(255,226,138,.28); border-radius: 8px; background: linear-gradient(90deg, rgba(3,12,14,.86), rgba(14,32,26,.76)); box-shadow: 0 18px 48px rgba(0,0,0,.42), inset 0 0 24px rgba(255,226,138,.04); backdrop-filter: blur(8px); }
+        .world-app { position: relative; z-index: 2; width: 100vw; height: 100svh; display: grid; grid-template-rows: 1fr; padding: 10px; box-sizing: border-box; }
+        .world-top { display: none; }
         .world-top small { color: #90ff00; font-weight: 1000; letter-spacing: .14em; text-transform: uppercase; }
-        .world-top h1 { margin: 2px 0 0; font: 1000 clamp(1.4rem, 4vw, 2.6rem)/.95 "Segoe UI Black","Arial Black",Impact,sans-serif; text-transform: uppercase; text-shadow: 0 4px 0 #210b08, 0 14px 28px rgba(0,0,0,.65); }
+        .world-top h1 { margin: 2px 0 0; font: 1000 clamp(1rem, 2vw, 1.45rem)/.95 "Segoe UI Black","Arial Black",Impact,sans-serif; text-transform: uppercase; text-shadow: 0 3px 0 #210b08, 0 10px 20px rgba(0,0,0,.52); }
         .world-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: end; }
-        .world-actions a, .world-actions button { min-height: 38px; padding: 0 12px; border: 1px solid rgba(255,226,138,.42); border-radius: 8px; color: #fff7df; background: rgba(4,12,13,.72); font-weight: 1000; text-transform: uppercase; text-decoration: none; cursor: pointer; }
+        .world-actions a, .world-actions button { min-height: 30px; padding: 0 10px; border: 1px solid rgba(255,226,138,.42); border-radius: 8px; color: #fff7df; background: rgba(4,12,13,.72); font-size: .68rem; font-weight: 1000; text-transform: uppercase; text-decoration: none; cursor: pointer; }
         .world-actions .primary { color: #07100d; background: linear-gradient(90deg,#90ff00,#ffe28a); }
-        .world-frame { position: relative; min-height: 0; border: 1px solid rgba(54,224,255,.22); border-radius: 8px; background: radial-gradient(circle at 50% 35%, rgba(54,224,255,.14), transparent 42%), rgba(1,5,7,.82); box-shadow: inset 0 0 70px rgba(0,0,0,.42), 0 24px 70px rgba(0,0,0,.5); overflow: hidden; }
+        .world-frame { position: relative; min-height: 0; border: 1px solid rgba(54,224,255,.20); border-radius: 8px; background: radial-gradient(circle at 50% 35%, rgba(54,224,255,.12), transparent 42%), rgba(1,5,7,.86); box-shadow: inset 0 0 70px rgba(0,0,0,.42), 0 24px 70px rgba(0,0,0,.5); overflow: hidden; }
         #world-canvas { position: absolute; inset: 0; }
         #world-canvas canvas { display: block; width: 100% !important; height: 100% !important; }
-        .world-hud { position: absolute; left: 12px; top: 12px; z-index: 3; display: grid; gap: 8px; width: min(360px, calc(100% - 24px)); pointer-events: none; }
-        .world-card { padding: 10px; border: 1px solid rgba(255,226,138,.24); border-radius: 8px; background: rgba(3,8,10,.72); box-shadow: 0 14px 36px rgba(0,0,0,.34); backdrop-filter: blur(8px); }
+        .world-hud { position: absolute; left: 14px; top: 14px; z-index: 3; display: grid; gap: 8px; width: min(310px, calc(100% - 28px)); pointer-events: none; }
+        .world-card { padding: 9px 10px; border: 1px solid rgba(255,226,138,.22); border-radius: 8px; background: rgba(3,8,10,.68); box-shadow: 0 14px 34px rgba(0,0,0,.28); backdrop-filter: blur(8px); }
         .world-card strong { display: block; color: #ffe28a; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; }
-        .world-card span { display: block; margin-top: 4px; color: #d9e8d4; font-weight: 800; line-height: 1.35; }
+        .world-card span { display: block; margin-top: 4px; color: #d9e8d4; font-size: .86rem; font-weight: 800; line-height: 1.35; }
         .world-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
         .world-stat { padding: 8px; border: 1px solid rgba(144,255,0,.18); border-radius: 8px; background: rgba(144,255,0,.06); }
         .world-stat b { display: block; color: #90ff00; font-size: 1rem; }
@@ -34,21 +34,34 @@
         .world-touch [data-dir="action"] { grid-column: 2; grid-row: 2; color: #07100d; background: linear-gradient(90deg,#90ff00,#ffe28a); }
         .world-touch [data-dir="right"] { grid-column: 3; grid-row: 2; }
         .world-touch [data-dir="down"] { grid-column: 2; grid-row: 3; }
-        .world-log { position: absolute; right: 12px; bottom: 12px; z-index: 4; width: min(420px, calc(100% - 24px)); max-height: 150px; overflow: auto; display: grid; gap: 6px; pointer-events: none; }
-        .world-log p { margin: 0; padding: 8px 10px; border-left: 3px solid #36e0ff; background: rgba(3,8,10,.74); color: #d9e8d4; font-weight: 800; }
+        .world-log { position: absolute; right: 14px; bottom: 14px; z-index: 4; width: min(360px, calc(100% - 28px)); max-height: 118px; overflow: auto; display: grid; gap: 5px; pointer-events: none; scrollbar-width: none; }
+        .world-log::-webkit-scrollbar { width: 0; height: 0; }
+        .world-log p { margin: 0; padding: 7px 9px; border-left: 3px solid #36e0ff; background: rgba(3,8,10,.66); color: #d9e8d4; font-size: .82rem; font-weight: 800; box-shadow: 0 10px 28px rgba(0,0,0,.22); }
+        .world-prompt { position: absolute; left: 50%; bottom: 18px; z-index: 7; transform: translateX(-50%); min-width: min(440px, calc(100% - 28px)); padding: 10px 12px; border: 1px solid rgba(255,226,138,.42); border-radius: 8px; background: linear-gradient(90deg, rgba(5,12,12,.86), rgba(19,28,22,.82)); color: #fff7df; text-align: center; font-weight: 1000; text-transform: uppercase; letter-spacing: .06em; box-shadow: 0 18px 42px rgba(0,0,0,.38); backdrop-filter: blur(10px); pointer-events: none; }
+        .world-prompt kbd { display: inline-grid; place-items: center; min-width: 28px; min-height: 24px; margin-right: 8px; border: 1px solid rgba(144,255,0,.48); border-radius: 6px; background: rgba(144,255,0,.12); color: #90ff00; font: 1000 .78rem Arial,sans-serif; }
+        body.mundo-jogavel #rpg-hud-global,
+        body.mundo-jogavel #rpg-quest-dock { display: none !important; }
+        body.mundo-jogavel #rpg-minimap { top: 86px !important; right: 14px !important; width: 92px !important; height: 92px !important; opacity: .58 !important; }
+        body.mundo-jogavel #rpg-page-rail { display: none !important; }
+        body.mundo-jogavel #rpg-save-status { opacity: .70 !important; }
+        body.mundo-jogavel #rpg-sys-button { opacity: .72 !important; }
         .world-loading { position: absolute; inset: 0; z-index: 8; display: grid; place-items: center; background: radial-gradient(circle, rgba(255,226,138,.15), rgba(1,5,7,.92) 62%); color: #ffe28a; font: 1000 1rem Arial,sans-serif; letter-spacing: .12em; text-transform: uppercase; }
         @media(max-width: 760px) {
-            .world-app { padding: 8px; padding-top: 56px; }
-            .world-top { grid-template-columns: 1fr; }
+            .world-app { padding: 7px; padding-top: 52px; }
+            .world-top { left: 8px; right: 8px; top: 8px; grid-template-columns: 1fr auto; }
+            .world-top small { display: none; }
+            .world-top h1 { font-size: 1rem; }
             .world-actions { justify-content: start; }
+            .world-actions a:not(.primary), .world-actions button { display: none; }
             .world-touch { display: grid; }
-            .world-log { right: 8px; left: 8px; bottom: 8px; width: auto; max-height: 118px; }
-            .world-hud { left: 8px; top: 8px; width: min(330px, calc(100% - 16px)); }
+            .world-log { right: 8px; left: auto; bottom: 8px; width: min(280px, calc(100% - 116px)); max-height: 96px; }
+            .world-hud { left: 8px; top: 58px; width: min(330px, calc(100% - 16px)); }
             .world-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            body.mundo-jogavel #rpg-minimap { display: none !important; }
         }
     </style>
 </head>
-<body>
+<body class="mundo-jogavel">
     <audio id="musica-fundo" loop preload="auto"><source src="assets/audio/drums-of-liberation.mp3" type="audio/mpeg"></audio>
     <video class="video-fundo" autoplay muted loop playsinline aria-hidden="true"><source src="fundo-login.mp4" type="video/mp4"></video>
     <main class="world-app">
@@ -70,7 +83,7 @@
             <aside class="world-hud">
                 <div class="world-card">
                     <strong id="world-name">Personagem</strong>
-                    <span id="world-quest">Use WASD/setas ou clique no mapa para navegar. Encoste em NPCs, baús e ameaças.</span>
+                    <span id="world-quest">Explore o mar, chegue perto dos pontos e use E/A para interagir.</span>
                 </div>
                 <div class="world-stats">
                     <div class="world-stat"><b id="world-level">1</b><small>Nível</small></div>
@@ -85,10 +98,11 @@
                 <button type="button" data-dir="right">→</button>
                 <button type="button" data-dir="down">↓</button>
             </div>
+            <div class="world-prompt" id="world-prompt" hidden></div>
             <div class="world-log" id="world-log"></div>
         </section>
     </main>
-    <script src="musica-fundo.js?v=20260619-game22"></script>
+    <script src="musica-fundo.js?v=20260619-game23"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
@@ -110,7 +124,9 @@
         const logEl = document.getElementById("world-log");
         const loadingEl = document.getElementById("world-loading");
         const questEl = document.getElementById("world-quest");
+        const promptEl = document.getElementById("world-prompt");
         const battleLink = document.getElementById("battle-link");
+        const logState = { texto: "", vezes: 0 };
         document.getElementById("world-name").textContent = personagem?.nome || "Sem personagem";
         document.getElementById("world-level").textContent = progresso.nivel || 1;
         document.getElementById("world-berris").textContent = Number(progresso.berris || 0).toLocaleString("pt-BR");
@@ -121,8 +137,27 @@
         }
 
         function log(texto) {
-            logEl.insertAdjacentHTML("afterbegin", `<p>${texto}</p>`);
-            [...logEl.children].slice(6).forEach((item) => item.remove());
+            if (logState.texto === texto && logEl.firstElementChild) {
+                logState.vezes += 1;
+                logEl.firstElementChild.textContent = texto + " x" + logState.vezes;
+                return;
+            }
+            logState.texto = texto;
+            logState.vezes = 1;
+            const item = document.createElement("p");
+            item.textContent = texto;
+            logEl.prepend(item);
+            [...logEl.children].slice(4).forEach((child) => child.remove());
+        }
+
+        function setPrompt(texto) {
+            if (!texto) {
+                promptEl.hidden = true;
+                promptEl.innerHTML = "";
+                return;
+            }
+            promptEl.hidden = false;
+            promptEl.innerHTML = '<kbd>E</kbd>' + texto;
         }
 
         function carregarScript(src, id) {
@@ -188,7 +223,7 @@
             }
         }
 
-        let player, cursors, keys, npcs, chests, threats, cameraText, targetMarker, actionCooldown = 0;
+        let player, cursors, keys, npcs, chests, threats, cameraText, targetMarker, nearestInteractable = null, actionCooldown = 0;
         let moveTarget = null;
         const worldSize = { w: 2200, h: 1600 };
 
@@ -231,6 +266,45 @@
             targetTexture.lineBetween(0, 24, 48, 24);
             targetTexture.generateTexture("targetMarker", 48, 48);
             targetTexture.destroy();
+            const wakeTexture = this.make.graphics({ x: 0, y: 0, add: false });
+            wakeTexture.fillStyle(0x8cecff, .8);
+            wakeTexture.fillCircle(6, 6, 6);
+            wakeTexture.generateTexture("wakeParticle", 12, 12);
+            wakeTexture.destroy();
+            const chestTexture = this.make.graphics({ x: 0, y: 0, add: false });
+            chestTexture.fillStyle(0x2b1406, 1);
+            chestTexture.fillRoundedRect(3, 12, 46, 30, 6);
+            chestTexture.fillStyle(0xffc247, 1);
+            chestTexture.fillRoundedRect(6, 6, 40, 32, 5);
+            chestTexture.lineStyle(3, 0x120803, 1);
+            chestTexture.strokeRoundedRect(6, 6, 40, 32, 5);
+            chestTexture.lineStyle(2, 0xfff0a6, .7);
+            chestTexture.lineBetween(10, 19, 42, 19);
+            chestTexture.fillStyle(0x07100d, 1);
+            chestTexture.fillCircle(26, 24, 4);
+            chestTexture.generateTexture("worldChest", 52, 46);
+            chestTexture.destroy();
+            const npcTexture = this.make.graphics({ x: 0, y: 0, add: false });
+            npcTexture.fillStyle(0x08232c, 1);
+            npcTexture.fillCircle(28, 28, 25);
+            npcTexture.fillStyle(0x36e0ff, .9);
+            npcTexture.fillCircle(28, 26, 18);
+            npcTexture.lineStyle(3, 0xffffff, .54);
+            npcTexture.strokeCircle(28, 28, 24);
+            npcTexture.fillStyle(0xffe28a, .95);
+            npcTexture.fillCircle(21, 22, 3);
+            npcTexture.fillCircle(35, 22, 3);
+            npcTexture.generateTexture("worldNpc", 56, 56);
+            npcTexture.destroy();
+            const threatTexture = this.make.graphics({ x: 0, y: 0, add: false });
+            threatTexture.fillStyle(0x2b0907, .95);
+            threatTexture.fillRoundedRect(6, 6, 54, 54, 7);
+            threatTexture.lineStyle(3, 0xffe28a, .52);
+            threatTexture.strokeRoundedRect(6, 6, 54, 54, 7);
+            threatTexture.lineStyle(2, 0xff4128, .9);
+            threatTexture.strokeCircle(33, 33, 22);
+            threatTexture.generateTexture("worldThreat", 66, 66);
+            threatTexture.destroy();
             for (let i = 0; i < 18; i += 1) {
                 const x = 120 + Math.random() * (worldSize.w - 240);
                 const y = 120 + Math.random() * (worldSize.h - 240);
@@ -242,11 +316,11 @@
                 [540, 420], [1420, 520], [1780, 1160], [760, 1240], [1120, 880]
             ].forEach((pos, i) => {
                 if (estadoMundo.chests.includes(i)) return;
-                const chest = this.add.rectangle(pos[0], pos[1], 42, 34, 0xffc247, 1).setStrokeStyle(3, 0x2b1406, 1);
+                const chest = this.add.image(pos[0], pos[1], "worldChest");
                 chest.idMundo = i;
+                chest.tipoInteracao = "bau";
                 this.physics.add.existing(chest, true);
                 chests.add(chest);
-                this.add.text(pos[0], pos[1], "◆", { fontFamily: "Arial Black", fontSize: "18px", color: "#2b1406" }).setOrigin(.5);
             });
             npcs = this.physics.add.staticGroup();
             [
@@ -254,9 +328,10 @@
                 [1180, 300, "Ferreiro: treinos aumentam seu dano em batalha."],
                 [1660, 820, "Cartógrafa: siga os pontos dourados do radar."]
             ].forEach((npc, i) => {
-                const body = this.add.circle(npc[0], npc[1], 24, 0x36e0ff, .9).setStrokeStyle(3, 0xffffff, .45);
+                const body = this.add.image(npc[0], npc[1], "worldNpc");
                 body.fala = npc[2];
                 body.idMundo = i;
+                body.tipoInteracao = "npc";
                 this.physics.add.existing(body, true);
                 npcs.add(body);
                 this.add.text(npc[0], npc[1] - 44, "NPC", { fontFamily: "Arial Black", fontSize: "13px", color: "#fff7df", stroke: "#041011", strokeThickness: 4 }).setOrigin(.5);
@@ -265,10 +340,13 @@
             [
                 [1840, 420, "E"], [1320, 1260, "D"], [420, 1180, "C"]
             ].forEach((enemy) => {
-                const threat = this.add.rectangle(enemy[0], enemy[1], 54, 54, 0xff4128, .92).setStrokeStyle(3, 0xffe28a, .34);
+                const threat = this.add.image(enemy[0], enemy[1], "worldThreat");
                 threat.rank = enemy[2];
+                threat.tipoInteracao = "ameaca";
                 this.physics.add.existing(threat, true);
                 threats.add(threat);
+                const ring = this.add.circle(enemy[0], enemy[1], 48, 0xff4128, .10).setStrokeStyle(2, 0xff4128, .34).setDepth(3);
+                this.tweens.add({ targets: ring, scale: 1.4, alpha: .03, duration: 980, repeat: -1, yoyo: true, ease: "sine.inOut" });
                 this.add.text(enemy[0], enemy[1], enemy[2], { fontFamily: "Arial Black", fontSize: "26px", color: "#fff7df", stroke: "#210b08", strokeThickness: 5 }).setOrigin(.5);
             });
             targetMarker = this.add.image(estadoMundo.x, estadoMundo.y, "targetMarker").setDepth(8).setVisible(false).setAlpha(.82);
@@ -278,10 +356,25 @@
             player.body.setSize(42, 42);
             player.aura = this.add.circle(player.x, player.y, 48, 0x90ff00, .13).setStrokeStyle(2, 0x90ff00, .55).setDepth(9);
             this.tweens.add({ targets: player.aura, scale: 1.22, alpha: .22, yoyo: true, repeat: -1, duration: 760, ease: "sine.inOut" });
+            try {
+                player.wake = this.add.particles(0, 0, "wakeParticle", {
+                    lifespan: 520,
+                    speed: { min: 8, max: 28 },
+                    scale: { start: .55, end: 0 },
+                    alpha: { start: .30, end: 0 },
+                    frequency: 58,
+                    blendMode: "ADD",
+                    follow: player,
+                    followOffset: { x: 0, y: 24 }
+                }).setDepth(6);
+            } catch (erro) {
+                player.wake = null;
+            }
             cursors = this.input.keyboard.createCursorKeys();
-            keys = this.input.keyboard.addKeys("W,A,S,D,E,SPACE");
+            keys = this.input.keyboard.addKeys("W,A,S,D,E,SPACE,SHIFT");
             this.cameras.main.startFollow(player, true, .12, .12);
             this.cameras.main.setBounds(0, 0, worldSize.w, worldSize.h);
+            this.cameras.main.setZoom(1.04);
             this.input.on("pointerdown", (pointer) => {
                 if (pointer.y < 120) return;
                 const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
@@ -293,37 +386,67 @@
                 this.tweens.add({ targets: targetMarker, scale: { from: 1.35, to: .8 }, alpha: { from: 1, to: .55 }, duration: 220, yoyo: true });
             });
             this.physics.add.overlap(player, chests, (_p, chest) => {
-                if (actionCooldown > this.time.now) return;
-                actionCooldown = this.time.now + 700;
-                estadoMundo.chests.push(chest.idMundo);
-                chest.destroy();
-                recompensar("bau", 3);
-                this.cameras.main.flash(180, 255, 226, 138);
-                log("Baú coletado: item raro enviado para o inventário.");
+                setPrompt("Abrir tesouro de rota");
             });
             this.physics.add.overlap(player, npcs, (_p, npc) => {
-                if (actionCooldown > this.time.now) return;
-                actionCooldown = this.time.now + 1200;
-                atualizarObjetivo(npc.fala);
-                log(npc.fala);
+                setPrompt("Conversar com tripulante");
             });
             this.physics.add.overlap(player, threats, (_p, threat) => {
-                if (actionCooldown > this.time.now) return;
-                actionCooldown = this.time.now + 1200;
-                battleLink.href = "batalha.html?rank=" + threat.rank + "&origem=mundo";
+                setPrompt("Enfrentar ameaça rank " + threat.rank);
+            });
+            cameraText = this.add.text(16, 16, "", { fontFamily: "Arial", fontSize: "12px", color: "#d9e8d4", backgroundColor: "rgba(0,0,0,.24)", padding: { x: 8, y: 6 } }).setScrollFactor(0).setDepth(20).setVisible(false);
+            log("Mundo carregado. Explore, colete e procure ameaças.");
+        }
+
+        function procurarInteracao() {
+            let escolhido = null;
+            let menorDistancia = 88;
+            [chests, npcs, threats].forEach((grupo) => {
+                if (!grupo) return;
+                grupo.getChildren().forEach((item) => {
+                    if (!item?.active) return;
+                    const distancia = Phaser.Math.Distance.Between(player.x, player.y, item.x, item.y);
+                    if (distancia < menorDistancia) {
+                        menorDistancia = distancia;
+                        escolhido = item;
+                    }
+                });
+            });
+            return escolhido;
+        }
+
+        function usarInteracao(scene, item) {
+            if (!item || actionCooldown > scene.time.now) return;
+            actionCooldown = scene.time.now + 700;
+            if (item.tipoInteracao === "bau") {
+                estadoMundo.chests.push(item.idMundo);
+                item.destroy();
+                recompensar("bau", 3);
+                scene.cameras.main.flash(180, 255, 226, 138);
+                log("Tesouro coletado: item raro enviado ao inventário.");
+                setPrompt("");
+                return;
+            }
+            if (item.tipoInteracao === "npc") {
+                atualizarObjetivo(item.fala);
+                log(item.fala);
+                scene.cameras.main.flash(90, 54, 224, 255);
+                return;
+            }
+            if (item.tipoInteracao === "ameaca") {
+                battleLink.href = "batalha.html?rank=" + item.rank + "&origem=mundo";
                 estadoMundo.battles += 1;
                 salvarMundo();
-                atualizarObjetivo("Ameaça rank " + threat.rank + " encontrada. Clique em Batalha para entrar no combate.");
-                log("Ameaça rank " + threat.rank + " detectada. Batalha pronta.");
-                this.cameras.main.shake(180, .01);
-            });
-            cameraText = this.add.text(16, 16, "", { fontFamily: "Arial", fontSize: "13px", color: "#d9e8d4", backgroundColor: "rgba(0,0,0,.35)", padding: { x: 8, y: 6 } }).setScrollFactor(0).setDepth(20);
-            log("Mundo carregado. Explore, colete e procure ameaças.");
+                atualizarObjetivo("Ameaça rank " + item.rank + " encontrada. Entrando em batalha.");
+                log("Ameaça rank " + item.rank + " encontrada. Preparando combate.");
+                scene.cameras.main.shake(180, .01);
+                setTimeout(() => { location.href = battleLink.href; }, 260);
+            }
         }
 
         function update() {
             if (!player) return;
-            const speed = 235;
+            const speed = keys.SHIFT.isDown ? 335 : 235;
             const left = cursors.left.isDown || keys.A.isDown || teclasMobile.left;
             const right = cursors.right.isDown || keys.D.isDown || teclasMobile.right;
             const up = cursors.up.isDown || keys.W.isDown || teclasMobile.up;
@@ -348,11 +471,26 @@
                 }
             }
             if (player.body.velocity.length() > 0) player.rotation = Phaser.Math.Angle.Between(0, 0, player.body.velocity.x, player.body.velocity.y) + Math.PI / 2;
+            nearestInteractable = procurarInteracao();
+            if (nearestInteractable) {
+                const texto = nearestInteractable.tipoInteracao === "bau"
+                    ? "Abrir tesouro"
+                    : nearestInteractable.tipoInteracao === "npc"
+                        ? "Conversar"
+                        : "Marcar batalha rank " + nearestInteractable.rank;
+                setPrompt(texto);
+            } else {
+                setPrompt("");
+            }
+            if (Phaser.Input.Keyboard.JustDown(keys.E) || Phaser.Input.Keyboard.JustDown(keys.SPACE) || teclasMobile.action) {
+                usarInteracao(this, nearestInteractable);
+                teclasMobile.action = false;
+            }
             player.aura.setPosition(player.x, player.y);
             estadoMundo.x = Math.round(player.x);
             estadoMundo.y = Math.round(player.y);
             if (Math.random() < .01) salvarMundo();
-            cameraText.setText("WASD/setas ou clique: mover | Baús: inventário | Ameaças: batalha | X " + estadoMundo.x + " Y " + estadoMundo.y);
+            cameraText.setText("WASD/clique mover | Shift acelerar | E interagir");
         }
 
         document.querySelectorAll("[data-dir]").forEach((botao) => {
