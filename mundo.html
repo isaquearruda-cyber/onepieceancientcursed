@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mundo - One Piece RPG</title>
-    <link rel="stylesheet" href="estilo.css?v=20260619-game23">
+    <link rel="stylesheet" href="estilo.css?v=20260619-game24">
     <style>
         html, body { min-height: 100%; margin: 0; background: #020708; color: #fff7df; overflow: hidden; }
         body { font-family: Arial, sans-serif; }
@@ -39,9 +39,19 @@
         .world-log p { margin: 0; padding: 7px 9px; border-left: 3px solid #36e0ff; background: rgba(3,8,10,.66); color: #d9e8d4; font-size: .82rem; font-weight: 800; box-shadow: 0 10px 28px rgba(0,0,0,.22); }
         .world-prompt { position: absolute; left: 50%; bottom: 18px; z-index: 7; transform: translateX(-50%); min-width: min(440px, calc(100% - 28px)); padding: 10px 12px; border: 1px solid rgba(255,226,138,.42); border-radius: 8px; background: linear-gradient(90deg, rgba(5,12,12,.86), rgba(19,28,22,.82)); color: #fff7df; text-align: center; font-weight: 1000; text-transform: uppercase; letter-spacing: .06em; box-shadow: 0 18px 42px rgba(0,0,0,.38); backdrop-filter: blur(10px); pointer-events: none; }
         .world-prompt kbd { display: inline-grid; place-items: center; min-width: 28px; min-height: 24px; margin-right: 8px; border: 1px solid rgba(144,255,0,.48); border-radius: 6px; background: rgba(144,255,0,.12); color: #90ff00; font: 1000 .78rem Arial,sans-serif; }
+        .world-zone { position: absolute; left: 50%; top: 58px; z-index: 4; transform: translateX(-50%); min-width: min(420px, calc(100% - 360px)); padding: 9px 12px; border: 1px solid rgba(54,224,255,.24); border-radius: 8px; background: rgba(3,10,12,.62); box-shadow: 0 14px 34px rgba(0,0,0,.26); backdrop-filter: blur(8px); pointer-events: none; }
+        .world-zone small { display: block; color: #36e0ff; font: 1000 .6rem Arial,sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+        .world-zone strong { display: block; margin-top: 2px; color: #fff7df; font: 1000 .95rem Arial,sans-serif; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .world-objectives { position: absolute; right: 14px; top: 58px; z-index: 4; width: min(260px, calc(100% - 28px)); display: grid; gap: 7px; padding: 10px; border: 1px solid rgba(255,226,138,.20); border-radius: 8px; background: rgba(3,8,10,.58); box-shadow: 0 14px 34px rgba(0,0,0,.26); backdrop-filter: blur(8px); pointer-events: none; }
+        .world-objectives strong { color: #ffe28a; font: 1000 .68rem Arial,sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+        .world-objectives span { display: flex; justify-content: space-between; gap: 10px; color: #d9e8d4; font: 900 .74rem Arial,sans-serif; }
+        .world-objectives b { color: #90ff00; }
+        .world-actionbar { position: absolute; left: 50%; bottom: 14px; z-index: 5; transform: translateX(-50%); display: flex; gap: 7px; padding: 7px; border: 1px solid rgba(255,226,138,.18); border-radius: 8px; background: rgba(3,8,10,.56); box-shadow: 0 14px 34px rgba(0,0,0,.24); backdrop-filter: blur(8px); pointer-events: none; }
+        .world-actionbar span { min-width: 66px; padding: 7px 9px; border: 1px solid rgba(255,247,223,.12); border-radius: 7px; color: #fff7df; font: 1000 .64rem Arial,sans-serif; text-align: center; text-transform: uppercase; background: rgba(255,247,223,.045); }
+        .world-actionbar span[data-hotkey]::before { content: attr(data-hotkey); display: block; margin: -1px auto 3px; width: max-content; min-width: 20px; padding: 2px 5px; border-radius: 5px; background: rgba(144,255,0,.14); color: #90ff00; font-size: .58rem; }
         body.mundo-jogavel #rpg-hud-global,
         body.mundo-jogavel #rpg-quest-dock { display: none !important; }
-        body.mundo-jogavel #rpg-minimap { top: 86px !important; right: 14px !important; width: 92px !important; height: 92px !important; opacity: .58 !important; }
+        body.mundo-jogavel #rpg-minimap { display: none !important; }
         body.mundo-jogavel #rpg-page-rail { display: none !important; }
         body.mundo-jogavel #rpg-save-status { opacity: .70 !important; }
         body.mundo-jogavel #rpg-sys-button { opacity: .72 !important; }
@@ -57,6 +67,9 @@
             .world-log { right: 8px; left: auto; bottom: 8px; width: min(280px, calc(100% - 116px)); max-height: 96px; }
             .world-hud { left: 8px; top: 58px; width: min(330px, calc(100% - 16px)); }
             .world-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .world-zone { left: 8px; right: 8px; top: 8px; min-width: 0; transform: none; padding: 7px 9px; }
+            .world-objectives { display: none; }
+            .world-actionbar { display: none; }
             body.mundo-jogavel #rpg-minimap { display: none !important; }
         }
     </style>
@@ -91,6 +104,22 @@
                     <div class="world-stat"><b id="world-fame">0</b><small>Fama</small></div>
                 </div>
             </aside>
+            <div class="world-zone">
+                <small>Área atual</small>
+                <strong id="world-zone-name">Mar Aberto</strong>
+            </div>
+            <aside class="world-objectives" aria-label="Objetivos do mundo">
+                <strong>Expedição</strong>
+                <span>Tesouros <b id="obj-chests">0/5</b></span>
+                <span>Rotas <b id="obj-routes">0/4</b></span>
+                <span>Ameaças <b id="obj-threats">0</b></span>
+            </aside>
+            <div class="world-actionbar" aria-hidden="true">
+                <span data-hotkey="WASD">Mover</span>
+                <span data-hotkey="Shift">Sprint</span>
+                <span data-hotkey="E">Interagir</span>
+                <span data-hotkey="Click">Rota</span>
+            </div>
             <div class="world-touch" aria-label="Controles mobile">
                 <button type="button" data-dir="up">↑</button>
                 <button type="button" data-dir="left">←</button>
@@ -102,7 +131,7 @@
             <div class="world-log" id="world-log"></div>
         </section>
     </main>
-    <script src="musica-fundo.js?v=20260619-game23"></script>
+    <script src="musica-fundo.js?v=20260619-game24"></script>
     <script src="rpg-sistemas.js?v=20260619-rpg10"></script>
     <script>
         const personagem = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
@@ -118,7 +147,8 @@
             fame: 0,
             chests: [],
             npcs: [],
-            battles: 0
+            battles: 0,
+            routes: []
         };
         const teclasMobile = { up: false, down: false, left: false, right: false, action: false };
         const logEl = document.getElementById("world-log");
@@ -126,11 +156,39 @@
         const questEl = document.getElementById("world-quest");
         const promptEl = document.getElementById("world-prompt");
         const battleLink = document.getElementById("battle-link");
+        const zoneNameEl = document.getElementById("world-zone-name");
+        const objChestsEl = document.getElementById("obj-chests");
+        const objRoutesEl = document.getElementById("obj-routes");
+        const objThreatsEl = document.getElementById("obj-threats");
         const logState = { texto: "", vezes: 0 };
+        const ilhas = [
+            { id: "porto-aurora", nome: "Porto Aurora", subtitulo: "Docas seguras", x: 300, y: 380, w: 260, h: 118, cor: 0x2f8f5f },
+            { id: "ilha-coral", nome: "Ilha Coral", subtitulo: "Mercado raro", x: 760, y: 520, w: 330, h: 142, cor: 0x348b63 },
+            { id: "ruinas-lua", nome: "Ruínas da Lua", subtitulo: "Zona antiga", x: 1260, y: 300, w: 300, h: 126, cor: 0x59663b },
+            { id: "forte-rubro", nome: "Forte Rubro", subtitulo: "Perigo naval", x: 1720, y: 620, w: 330, h: 150, cor: 0x67382b },
+            { id: "baia-nevoa", nome: "Baía da Névoa", subtitulo: "Rota escondida", x: 1020, y: 1080, w: 360, h: 160, cor: 0x285c67 },
+            { id: "farol-sul", nome: "Farol Sul", subtitulo: "Checkpoint", x: 420, y: 1240, w: 310, h: 130, cor: 0x476b36 }
+        ];
+        const rotas = [
+            ["porto-aurora", "ilha-coral"],
+            ["ilha-coral", "ruinas-lua"],
+            ["ruinas-lua", "forte-rubro"],
+            ["ilha-coral", "baia-nevoa"],
+            ["baia-nevoa", "farol-sul"]
+        ];
+        const zonas = [
+            { nome: "Costa de Aurora", x: 0, y: 0, w: 650, h: 700 },
+            { nome: "Cinturão de Coral", x: 560, y: 250, w: 720, h: 560 },
+            { nome: "Mar das Ruínas", x: 1020, y: 0, w: 760, h: 620 },
+            { nome: "Águas Rubras", x: 1540, y: 420, w: 660, h: 650 },
+            { nome: "Baía da Névoa", x: 650, y: 780, w: 800, h: 820 },
+            { nome: "Rota Sul", x: 0, y: 840, w: 720, h: 760 }
+        ];
         document.getElementById("world-name").textContent = personagem?.nome || "Sem personagem";
         document.getElementById("world-level").textContent = progresso.nivel || 1;
         document.getElementById("world-berris").textContent = Number(progresso.berris || 0).toLocaleString("pt-BR");
         document.getElementById("world-fame").textContent = estadoMundo.fame || 0;
+        if (!Array.isArray(estadoMundo.routes)) estadoMundo.routes = [];
 
         function salvarMundo() {
             localStorage.setItem("rpg_world_" + nomeNormalizado, JSON.stringify(estadoMundo));
@@ -177,6 +235,12 @@
             if (window.RpgFeedback?.aviso) window.RpgFeedback.aviso("Mundo", texto);
         }
 
+        function atualizarObjetivosHud() {
+            objChestsEl.textContent = Math.min(estadoMundo.chests.length, 5) + "/5";
+            objRoutesEl.textContent = Math.min(estadoMundo.routes.length, 4) + "/4";
+            objThreatsEl.textContent = estadoMundo.battles || 0;
+        }
+
         function recompensar(tipo, valor) {
             if (!personagem?.nome) return;
             const chaveInv = `inventario_${personagem.nome}`;
@@ -198,6 +262,7 @@
             }
             estadoMundo.fame += valor;
             document.getElementById("world-fame").textContent = estadoMundo.fame;
+            atualizarObjetivosHud();
             salvarMundo();
         }
 
@@ -223,7 +288,7 @@
             }
         }
 
-        let player, cursors, keys, npcs, chests, threats, cameraText, targetMarker, nearestInteractable = null, actionCooldown = 0;
+        let player, cursors, keys, npcs, chests, threats, ports, cameraText, targetMarker, routeLayer, nearestInteractable = null, actionCooldown = 0;
         let moveTarget = null;
         const worldSize = { w: 2200, h: 1600 };
 
@@ -248,6 +313,16 @@
             grid.lineStyle(1, 0x36e0ff, .09);
             for (let x = 0; x < worldSize.w; x += 96) grid.lineBetween(x, 0, x, worldSize.h);
             for (let y = 0; y < worldSize.h; y += 96) grid.lineBetween(0, y, worldSize.w, y);
+            const fog = this.add.graphics();
+            [
+                [460, 260, 0x36e0ff], [960, 920, 0xffe28a], [1660, 560, 0xff4128], [1380, 1160, 0x90ff00]
+            ].forEach((zona, i) => {
+                fog.fillStyle(zona[2], i === 2 ? .045 : .035);
+                fog.fillEllipse(zona[0], zona[1], 460, 250);
+                fog.lineStyle(2, zona[2], .10);
+                fog.strokeEllipse(zona[0], zona[1], 460, 250);
+            });
+            routeLayer = this.add.graphics().setDepth(2);
             const shipTexture = this.make.graphics({ x: 0, y: 0, add: false });
             shipTexture.fillStyle(0xffe28a, 1);
             shipTexture.fillTriangle(32, 2, 58, 58, 32, 46);
@@ -305,12 +380,41 @@
             threatTexture.strokeCircle(33, 33, 22);
             threatTexture.generateTexture("worldThreat", 66, 66);
             threatTexture.destroy();
-            for (let i = 0; i < 18; i += 1) {
-                const x = 120 + Math.random() * (worldSize.w - 240);
-                const y = 120 + Math.random() * (worldSize.h - 240);
-                const island = this.add.ellipse(x, y, 120 + Math.random() * 180, 60 + Math.random() * 90, 0x2b6b45, .58).setStrokeStyle(2, 0xffe28a, .18);
-                this.add.ellipse(x - 10, y - 8, island.width * .55, island.height * .4, 0xf7c84b, .18);
+            const portTexture = this.make.graphics({ x: 0, y: 0, add: false });
+            portTexture.fillStyle(0x061011, 1);
+            portTexture.fillRoundedRect(5, 9, 54, 42, 8);
+            portTexture.fillStyle(0xffe28a, 1);
+            portTexture.fillTriangle(32, 4, 52, 46, 12, 46);
+            portTexture.fillStyle(0x36e0ff, .9);
+            portTexture.fillCircle(32, 30, 9);
+            portTexture.lineStyle(3, 0x90ff00, .75);
+            portTexture.strokeRoundedRect(5, 9, 54, 42, 8);
+            portTexture.generateTexture("worldPort", 64, 58);
+            portTexture.destroy();
+            ilhas.forEach((ilha) => {
+                const sombra = this.add.ellipse(ilha.x, ilha.y + 12, ilha.w * 1.04, ilha.h * 1.08, 0x061011, .30).setDepth(1);
+                const corpo = this.add.ellipse(ilha.x, ilha.y, ilha.w, ilha.h, ilha.cor, .66).setStrokeStyle(2, 0xffe28a, .18).setDepth(2);
+                this.add.ellipse(ilha.x - ilha.w * .1, ilha.y - ilha.h * .08, ilha.w * .52, ilha.h * .34, 0xf7c84b, .18).setDepth(3);
+                this.add.text(ilha.x, ilha.y - ilha.h * .62, ilha.nome, { fontFamily: "Arial Black", fontSize: "15px", color: "#fff7df", stroke: "#041011", strokeThickness: 5 }).setOrigin(.5).setDepth(7);
+                this.add.text(ilha.x, ilha.y - ilha.h * .43, ilha.subtitulo, { fontFamily: "Arial", fontSize: "11px", color: "#ffe28a", stroke: "#041011", strokeThickness: 4 }).setOrigin(.5).setDepth(7);
+                sombra.nomeIlha = corpo.nomeIlha = ilha.nome;
+            });
+            function desenharRotas() {
+                routeLayer.clear();
+                rotas.forEach((rota, i) => {
+                    const a = ilhas.find((ilha) => ilha.id === rota[0]);
+                    const b = ilhas.find((ilha) => ilha.id === rota[1]);
+                    const descoberta = estadoMundo.routes.includes(rota[0]) && estadoMundo.routes.includes(rota[1]);
+                    routeLayer.lineStyle(descoberta ? 4 : 2, descoberta ? 0x90ff00 : 0x36e0ff, descoberta ? .42 : .16);
+                    routeLayer.beginPath();
+                    routeLayer.moveTo(a.x, a.y);
+                    routeLayer.lineTo((a.x + b.x) / 2, (a.y + b.y) / 2 - 70 + (i % 2) * 120);
+                    routeLayer.lineTo(b.x, b.y);
+                    routeLayer.strokePath();
+                });
             }
+            this.desenharRotas = desenharRotas;
+            desenharRotas();
             chests = this.physics.add.staticGroup();
             [
                 [540, 420], [1420, 520], [1780, 1160], [760, 1240], [1120, 880]
@@ -348,6 +452,16 @@
                 const ring = this.add.circle(enemy[0], enemy[1], 48, 0xff4128, .10).setStrokeStyle(2, 0xff4128, .34).setDepth(3);
                 this.tweens.add({ targets: ring, scale: 1.4, alpha: .03, duration: 980, repeat: -1, yoyo: true, ease: "sine.inOut" });
                 this.add.text(enemy[0], enemy[1], enemy[2], { fontFamily: "Arial Black", fontSize: "26px", color: "#fff7df", stroke: "#210b08", strokeThickness: 5 }).setOrigin(.5);
+            });
+            ports = this.physics.add.staticGroup();
+            ilhas.slice(0, 5).forEach((ilha) => {
+                const port = this.add.image(ilha.x + ilha.w * .18, ilha.y - ilha.h * .08, "worldPort").setDepth(8);
+                port.tipoInteracao = "porto";
+                port.nomePorto = ilha.nome;
+                port.idMundo = ilha.id;
+                this.physics.add.existing(port, true);
+                ports.add(port);
+                if (estadoMundo.routes.includes(ilha.id)) port.setTint(0x90ff00);
             });
             targetMarker = this.add.image(estadoMundo.x, estadoMundo.y, "targetMarker").setDepth(8).setVisible(false).setAlpha(.82);
             player = this.physics.add.sprite(estadoMundo.x, estadoMundo.y, "playerShipPro");
@@ -394,14 +508,18 @@
             this.physics.add.overlap(player, threats, (_p, threat) => {
                 setPrompt("Enfrentar ameaça rank " + threat.rank);
             });
+            this.physics.add.overlap(player, ports, (_p, port) => {
+                setPrompt("Registrar rota em " + port.nomePorto);
+            });
             cameraText = this.add.text(16, 16, "", { fontFamily: "Arial", fontSize: "12px", color: "#d9e8d4", backgroundColor: "rgba(0,0,0,.24)", padding: { x: 8, y: 6 } }).setScrollFactor(0).setDepth(20).setVisible(false);
             log("Mundo carregado. Explore, colete e procure ameaças.");
+            atualizarObjetivosHud();
         }
 
         function procurarInteracao() {
             let escolhido = null;
             let menorDistancia = 88;
-            [chests, npcs, threats].forEach((grupo) => {
+            [chests, npcs, threats, ports].forEach((grupo) => {
                 if (!grupo) return;
                 grupo.getChildren().forEach((item) => {
                     if (!item?.active) return;
@@ -433,9 +551,27 @@
                 scene.cameras.main.flash(90, 54, 224, 255);
                 return;
             }
+            if (item.tipoInteracao === "porto") {
+                if (!estadoMundo.routes.includes(item.idMundo)) {
+                    estadoMundo.routes.push(item.idMundo);
+                    estadoMundo.fame += 4;
+                    document.getElementById("world-fame").textContent = estadoMundo.fame;
+                    item.setTint(0x90ff00);
+                    scene.desenharRotas?.();
+                    log("Nova rota descoberta: " + item.nomePorto + ".");
+                } else {
+                    log("Rota segura: " + item.nomePorto + " já está no mapa.");
+                }
+                atualizarObjetivosHud();
+                atualizarObjetivo("Rota registrada em " + item.nomePorto + ". Explore outro porto para expandir o mapa.");
+                scene.cameras.main.flash(120, 144, 255, 0);
+                salvarMundo();
+                return;
+            }
             if (item.tipoInteracao === "ameaca") {
                 battleLink.href = "batalha.html?rank=" + item.rank + "&origem=mundo";
                 estadoMundo.battles += 1;
+                atualizarObjetivosHud();
                 salvarMundo();
                 atualizarObjetivo("Ameaça rank " + item.rank + " encontrada. Entrando em batalha.");
                 log("Ameaça rank " + item.rank + " encontrada. Preparando combate.");
@@ -477,7 +613,9 @@
                     ? "Abrir tesouro"
                     : nearestInteractable.tipoInteracao === "npc"
                         ? "Conversar"
-                        : "Marcar batalha rank " + nearestInteractable.rank;
+                        : nearestInteractable.tipoInteracao === "porto"
+                            ? "Registrar rota"
+                            : "Marcar batalha rank " + nearestInteractable.rank;
                 setPrompt(texto);
             } else {
                 setPrompt("");
@@ -487,6 +625,8 @@
                 teclasMobile.action = false;
             }
             player.aura.setPosition(player.x, player.y);
+            const zonaAtual = zonas.find((zona) => player.x >= zona.x && player.x <= zona.x + zona.w && player.y >= zona.y && player.y <= zona.y + zona.h);
+            if (zonaAtual && zoneNameEl.textContent !== zonaAtual.nome) zoneNameEl.textContent = zonaAtual.nome;
             estadoMundo.x = Math.round(player.x);
             estadoMundo.y = Math.round(player.y);
             if (Math.random() < .01) salvarMundo();
