@@ -3,7 +3,7 @@ const BancoPersonagens = (() => {
 	const versao = 1;
 	const storePersonagens = "personagens";
 	const tabelaSupabase = "personagens";
-	const espelhoPublicoUrl = "personagens-publicos.json?v=20260626-db4";
+	const espelhoPublicoUrl = "personagens-publicos.json?v=20260626-db5";
 	const chaveTravasFamilia = "travasFamiliaDev";
 	const tipoTravaFamilia = "trava_familia_dev";
 	let ultimoDiagnostico = {
@@ -231,14 +231,19 @@ const BancoPersonagens = (() => {
 	async function obterTodosRemoto() {
 		const linhas = await chamarSupabase(`${tabelaSupabase}?select=id,dados&order=criado_em.asc`);
 		const personagens = linhas.map((linha) => linha.dados).filter((dados) => dados && !ehRegistroInterno(dados));
+		const espelho = await carregarEspelhoPublico().catch((erro) => {
+			console.warn("Espelho publico indisponivel para complementar banco online:", erro);
+			return [];
+		});
 		const cache = lerCacheLocal();
-		const mesclados = mesclarPersonagens(cache, personagens);
+		const mesclados = mesclarPersonagens(mesclarPersonagens(personagens, espelho), cache);
 		ultimoDiagnostico = {
 			fonte: "supabase",
 			online: true,
 			total: personagens.length,
+			totalEspelho: espelho.length,
 			totalComCache: mesclados.length,
-			mensagem: `Banco online conectado. ${personagens.length} personagem(ns) remoto(s).`
+			mensagem: `Banco online conectado. ${personagens.length} remoto(s), ${espelho.length} no espelho, ${mesclados.length} disponivel(is).`
 		};
 
 		if (personagens.length === 0 && cache.length > 0) {
@@ -250,7 +255,7 @@ const BancoPersonagens = (() => {
 		return mesclados;
 	}
 
-	async function obterTodosEspelhoPublico() {
+	async function carregarEspelhoPublico() {
 		const resposta = await fetch(espelhoPublicoUrl, {
 			cache: "no-store",
 			headers: {
@@ -263,8 +268,12 @@ const BancoPersonagens = (() => {
 		}
 
 		const dados = await resposta.json();
-		const personagens = (Array.isArray(dados) ? dados : dados.personagens || [])
+		return (Array.isArray(dados) ? dados : dados.personagens || [])
 			.filter((personagem) => personagem && !ehRegistroInterno(personagem));
+	}
+
+	async function obterTodosEspelhoPublico() {
+		const personagens = await carregarEspelhoPublico();
 		const cache = lerCacheLocal();
 		const mesclados = mesclarPersonagens(personagens, cache);
 

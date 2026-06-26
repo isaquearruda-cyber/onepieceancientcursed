@@ -1,4 +1,4 @@
-const CACHE_NAME = "one-piece-rpg-app-v42";
+const CACHE_NAME = "one-piece-rpg-app-v44";
 const CACHE_PREFIX = "one-piece-rpg-app-";
 
 const APP_SHELL = [
@@ -33,10 +33,10 @@ const APP_SHELL = [
   "./mar-novo.html",
   "./mar-red.html",
   "./estilo.css",
-  "./musica-fundo.js",
+  "./musica-fundo.js?v=20260626-mobile-db5",
   "./rpg-sistemas.js",
-  "./banco-personagens.js?v=20260626-db4",
-  "./personagens-publicos.json?v=20260626-db4",
+  "./banco-personagens.js?v=20260626-db5",
+  "./personagens-publicos.json?v=20260626-db5",
   "./assets/vendor/canvas-confetti/confetti.browser.js",
   "./assets/vendor/phaser/phaser.min.js",
   "./assets/vendor/nprogress/nprogress.css",
@@ -134,6 +134,7 @@ function deveBuscarSempreNaRede(request) {
     destino.pathname.endsWith(".html") ||
     destino.pathname.endsWith(".css") ||
     destino.pathname.endsWith(".js") ||
+    destino.pathname.endsWith(".json") ||
     destino.pathname.endsWith(".webmanifest");
 }
 

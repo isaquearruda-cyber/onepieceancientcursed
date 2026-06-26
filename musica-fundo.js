@@ -24,6 +24,7 @@
 		eventos: "eventos.html",
 		beta: "beta-recompensas.html"
 	};
+	var buildAtual = "20260626-mobile-db5";
 	var icones = {
 		atributos: "atributos.webp",
 		inventario: "inventario.webp",
@@ -52,6 +53,29 @@
 	function instalarPwa() {
 		var promptInstalacao = null;
 
+		function limparCacheAntigoDoApp() {
+			if (!("caches" in window) || location.protocol === "file:") return;
+			if (localStorage.getItem("onePieceRpgBuildAplicado") === buildAtual) return;
+
+			caches.keys().then(function (chaves) {
+				return Promise.all(chaves
+					.filter(function (chave) {
+						return chave.indexOf("one-piece") >= 0 || chave.indexOf("rpg-app") >= 0;
+					})
+					.map(function (chave) {
+						return caches.delete(chave);
+					}));
+			}).then(function () {
+				localStorage.setItem("onePieceRpgBuildAplicado", buildAtual);
+				if (navigator.serviceWorker && navigator.serviceWorker.controller && sessionStorage.getItem("onePieceRpgReloadForcado") !== buildAtual) {
+					sessionStorage.setItem("onePieceRpgReloadForcado", buildAtual);
+					window.location.reload();
+				}
+			}).catch(function (erro) {
+				console.info("Atualizacao automatica de cache indisponivel.", erro);
+			});
+		}
+
 		function adicionarLink(rel, href, extra) {
 			if (document.querySelector('link[rel="' + rel + '"][href="' + href + '"]')) return;
 			var link = document.createElement("link");
@@ -78,6 +102,7 @@
 		adicionarMeta("theme-color", "#f7c84b");
 		adicionarMeta("apple-mobile-web-app-capable", "yes");
 		adicionarMeta("apple-mobile-web-app-title", "One Piece RPG");
+		limparCacheAntigoDoApp();
 
 		window.addEventListener("beforeinstallprompt", function (evento) {
 			evento.preventDefault();
@@ -110,7 +135,7 @@
 		};
 
 		if ("serviceWorker" in navigator && location.protocol !== "file:") {
-			navigator.serviceWorker.register("service-worker.js").then(function (registro) {
+			navigator.serviceWorker.register("service-worker.js?v=20260626-mobile-db5", { updateViaCache: "none" }).then(function (registro) {
 				registro.update();
 				if (registro.waiting) registro.waiting.postMessage({ type: "SKIP_WAITING" });
 				registro.addEventListener("updatefound", function () {
