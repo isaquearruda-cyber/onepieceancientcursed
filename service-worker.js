@@ -1,4 +1,4 @@
-const CACHE_NAME = "one-piece-rpg-app-v45";
+const CACHE_NAME = "one-piece-rpg-app-v46";
 const CACHE_PREFIX = "one-piece-rpg-app-";
 
 const APP_SHELL = [
@@ -33,10 +33,10 @@ const APP_SHELL = [
   "./mar-novo.html",
   "./mar-red.html",
   "./estilo.css",
-  "./musica-fundo.js?v=20260626-mobile-db6",
-  "./rpg-sistemas.js",
-  "./banco-personagens.js?v=20260626-db6",
-  "./personagens-publicos.json?v=20260626-db6",
+  "./musica-fundo.js?v=20260626-sync1",
+  "./rpg-sistemas.js?v=20260626-sync1",
+  "./banco-personagens.js?v=20260626-sync1",
+  "./personagens-publicos.json?v=20260626-sync1",
   "./assets/vendor/canvas-confetti/confetti.browser.js",
   "./assets/vendor/phaser/phaser.min.js",
   "./assets/vendor/nprogress/nprogress.css",

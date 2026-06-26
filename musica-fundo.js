@@ -24,7 +24,7 @@
 		eventos: "eventos.html",
 		beta: "beta-recompensas.html"
 	};
-	var buildAtual = "20260626-mobile-db6";
+	var buildAtual = "20260626-sync1";
 	var icones = {
 		atributos: "atributos.webp",
 		inventario: "inventario.webp",
@@ -135,7 +135,7 @@
 		};
 
 		if ("serviceWorker" in navigator && location.protocol !== "file:") {
-			navigator.serviceWorker.register("service-worker.js?v=20260626-mobile-db6", { updateViaCache: "none" }).then(function (registro) {
+			navigator.serviceWorker.register("service-worker.js?v=20260626-sync1", { updateViaCache: "none" }).then(function (registro) {
 				registro.update();
 				if (registro.waiting) registro.waiting.postMessage({ type: "SKIP_WAITING" });
 				registro.addEventListener("updatefound", function () {
@@ -186,6 +186,83 @@
 			return window.RpgSistemas.obterProgresso(personagem);
 		}
 		return personagem && personagem.progressoRpg ? personagem.progressoRpg : {};
+	}
+
+	function chaveInventarioPersonagem(personagem) {
+		return personagem && personagem.nome ? "inventario_" + personagem.nome : "";
+	}
+
+	function mesclarInventarios(a, b) {
+		var mapa = {};
+		[].concat(Array.isArray(a) ? a : [], Array.isArray(b) ? b : []).forEach(function (item) {
+			if (!item) return;
+			var chave = String(item.id || item.nome || "") + "|" + String(item.adicionadoEm || item.origem || "");
+			if (!chave.trim()) chave = JSON.stringify(item);
+			mapa[chave] = Object.assign({}, mapa[chave] || {}, item);
+		});
+		return Object.keys(mapa).map(function (chave) { return mapa[chave]; });
+	}
+
+	function aplicarInventarioRemoto(personagem) {
+		var chave = chaveInventarioPersonagem(personagem);
+		if (!chave) return personagem;
+		var local = lerJson(chave, []);
+		var remoto = Array.isArray(personagem.inventarioRpg) ? personagem.inventarioRpg : [];
+		var mesclado = mesclarInventarios(remoto, local);
+		if (mesclado.length) {
+			salvarJson(chave, mesclado);
+			personagem.inventarioRpg = mesclado;
+		}
+		return personagem;
+	}
+
+	var sincronizacaoAtivaTimer = null;
+
+	function salvarEstadoAtivoNoSupabase(imediato) {
+		if (!window.BancoPersonagens?.salvarPersonagem || !window.RpgSistemas?.obterProgresso) return;
+		var personagem = obterPersonagem();
+		if (!personagem || !personagem.nome) return;
+		var progresso = window.RpgSistemas.obterProgresso(personagem);
+		personagem.progressoRpg = progresso;
+		var chave = chaveInventarioPersonagem(personagem);
+		if (chave) {
+			var inventario = lerJson(chave, []);
+			if (inventario.length || Array.isArray(personagem.inventarioRpg)) personagem.inventarioRpg = inventario;
+		}
+		localStorage.setItem("ultimoPersonagem", JSON.stringify(personagem));
+		clearTimeout(sincronizacaoAtivaTimer);
+		var executar = function () {
+			window.BancoPersonagens.salvarPersonagem(personagem).catch(function (erro) {
+				console.warn("Estado do personagem ainda nao sincronizou:", erro);
+			});
+		};
+		if (imediato === true) executar();
+		else sincronizacaoAtivaTimer = setTimeout(executar, 500);
+	}
+
+	function sincronizarPersonagemAtivoComSupabase(tentativa) {
+		tentativa = tentativa || 0;
+		if (!window.BancoPersonagens?.buscarPorNome || !window.RpgSistemas?.obterProgresso) {
+			if (tentativa < 8) setTimeout(function () { sincronizarPersonagemAtivoComSupabase(tentativa + 1); }, 350);
+			return;
+		}
+		var local = obterPersonagem();
+		if (!local || !local.nome) return;
+		window.BancoPersonagens.buscarPorNome(local.nome).then(function (remoto) {
+			if (!remoto || !remoto.nome) return;
+			var antes = JSON.stringify(local);
+			var personagem = Object.assign({}, local, remoto);
+			var progresso = window.RpgSistemas.obterProgresso(personagem);
+			personagem.progressoRpg = progresso;
+			personagem = aplicarInventarioRemoto(personagem);
+			localStorage.setItem("ultimoPersonagem", JSON.stringify(personagem));
+			if (JSON.stringify(personagem) !== antes) {
+				window.dispatchEvent(new StorageEvent("storage", { key: "ultimoPersonagem", newValue: JSON.stringify(personagem) }));
+			}
+			salvarEstadoAtivoNoSupabase();
+		}).catch(function (erro) {
+			console.warn("Nao foi possivel sincronizar personagem ativo com Supabase:", erro);
+		});
 	}
 
 	function estadoNivel(progresso) {
@@ -1753,6 +1830,7 @@
 		instalarMenuSistema();
 		instalarPageRail();
 		instalarHotkeys();
+		setTimeout(sincronizarPersonagemAtivoComSupabase, 900);
 		atualizarHudBattle();
 		setTimeout(recompensaDiariaGame, 650);
 		setTimeout(abrirLoginDiarioBeta, 450);
@@ -1764,8 +1842,11 @@
 		setTimeout(instalarObjetivosLobby, 900);
 		setTimeout(corrigirDownloadNoMenu, 300);
 		setInterval(atualizarHudBattle, 1000);
+		setInterval(salvarEstadoAtivoNoSupabase, 10000);
 	}
 
 	document.addEventListener("click", navegar, true);
+	window.addEventListener("pagehide", function () { salvarEstadoAtivoNoSupabase(true); });
+	window.addEventListener("beforeunload", function () { salvarEstadoAtivoNoSupabase(true); });
 	onReady(iniciar);
 })();

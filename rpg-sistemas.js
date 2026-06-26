@@ -79,31 +79,91 @@
 		};
 	}
 
+	function ajustarProgresso(progresso) {
+		const base = { ...progressoPadrao(), ...(progresso || {}) };
+		return {
+			...base,
+			nivel: Math.max(1, Math.min(limiteNivel, Number(base.nivel || 1))),
+			expAtual: Math.max(0, Number(base.expAtual || 0)),
+			expTotal: Math.max(0, Number(base.expTotal || 0)),
+			expDisponivel: Math.max(0, Number(base.expDisponivel || 0)),
+			pontosAtributo: Math.max(0, Number(base.pontosAtributo || 0)),
+			berris: Math.max(0, Number(base.berris || 0)),
+			pontosMissao: Math.max(0, Number(base.pontosMissao || 0)),
+			habilidades: Array.from(new Set(Array.isArray(base.habilidades) ? base.habilidades.map(String) : ["0"]))
+		};
+	}
+
+	function pontuarProgresso(progresso) {
+		const dados = ajustarProgresso(progresso);
+		return (dados.nivel * 1000000000) +
+			(dados.expTotal * 10000) +
+			(dados.expDisponivel * 100) +
+			(dados.berris * 10) +
+			dados.pontosAtributo +
+			(dados.habilidades.length * 50);
+	}
+
+	const sincronizacoesPendentes = {};
+
+	function mesmoPersonagem(a, b) {
+		return chavePersonagem(a) && chavePersonagem(a) === chavePersonagem(b);
+	}
+
+	function atualizarPersonagemAtivo(personagem) {
+		if (!personagem?.nome) return;
+		try {
+			const ativo = JSON.parse(localStorage.getItem("ultimoPersonagem") || "null");
+			if (!ativo?.nome || mesmoPersonagem(ativo, personagem)) {
+				localStorage.setItem("ultimoPersonagem", JSON.stringify(personagem));
+			}
+		} catch (erro) {
+			localStorage.setItem("ultimoPersonagem", JSON.stringify(personagem));
+		}
+	}
+
+	function agendarSincronizacao(personagem) {
+		if (!personagem?.nome || !window.BancoPersonagens?.salvarPersonagem) return;
+		const chave = chavePersonagem(personagem);
+		clearTimeout(sincronizacoesPendentes[chave]);
+		sincronizacoesPendentes[chave] = setTimeout(() => {
+			window.BancoPersonagens.salvarPersonagem(personagem).catch((erro) => {
+				console.warn("Progresso ainda nao sincronizou com o Supabase:", erro);
+			});
+		}, 650);
+	}
+
 	function obterProgresso(personagem) {
 		if (!personagem?.nome) return progressoPadrao();
 		try {
-			return { ...progressoPadrao(), ...(JSON.parse(localStorage.getItem(chaveProgresso(personagem)) || "null") || {}) };
+			const local = JSON.parse(localStorage.getItem(chaveProgresso(personagem)) || "null");
+			const remoto = personagem.progressoRpg || null;
+			const escolhido = pontuarProgresso(local) > pontuarProgresso(remoto) ? local : remoto;
+			const ajustado = ajustarProgresso(escolhido);
+			localStorage.setItem(chaveProgresso(personagem), JSON.stringify(ajustado));
+			if (JSON.stringify(personagem.progressoRpg || {}) !== JSON.stringify(ajustado)) {
+				personagem.progressoRpg = ajustado;
+				atualizarPersonagemAtivo(personagem);
+				if (pontuarProgresso(local) > pontuarProgresso(remoto)) {
+					agendarSincronizacao(personagem);
+				}
+			}
+			return ajustado;
 		} catch (erro) {
 			console.warn("Progresso invalido:", erro);
-			return progressoPadrao();
+			const ajustado = ajustarProgresso(personagem.progressoRpg || {});
+			localStorage.setItem(chaveProgresso(personagem), JSON.stringify(ajustado));
+			return ajustado;
 		}
 	}
 
 	function salvarProgresso(personagem, progresso) {
-		const ajustado = {
-			...progressoPadrao(),
-			...progresso,
-			nivel: Math.max(1, Math.min(limiteNivel, Number(progresso.nivel || 1))),
-			expAtual: Math.max(0, Number(progresso.expAtual || 0)),
-			expTotal: Math.max(0, Number(progresso.expTotal || 0)),
-			expDisponivel: Math.max(0, Number(progresso.expDisponivel || 0)),
-			pontosAtributo: Math.max(0, Number(progresso.pontosAtributo || 0)),
-			berris: Math.max(0, Number(progresso.berris || 0)),
-			pontosMissao: Math.max(0, Number(progresso.pontosMissao || 0)),
-			habilidades: Array.from(new Set(Array.isArray(progresso.habilidades) ? progresso.habilidades.map(String) : ["0"]))
-		};
+		const ajustado = ajustarProgresso(progresso);
 		if (personagem?.nome) {
+			personagem.progressoRpg = ajustado;
 			localStorage.setItem(chaveProgresso(personagem), JSON.stringify(ajustado));
+			atualizarPersonagemAtivo(personagem);
+			agendarSincronizacao(personagem);
 		}
 		return ajustado;
 	}

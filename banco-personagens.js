@@ -3,7 +3,7 @@ const BancoPersonagens = (() => {
 	const versao = 1;
 	const storePersonagens = "personagens";
 	const tabelaSupabase = "personagens";
-	const espelhoPublicoUrl = "personagens-publicos.json?v=20260626-db6";
+	const espelhoPublicoUrl = "personagens-publicos.json?v=20260626-sync1";
 	const chaveTravasFamilia = "travasFamiliaDev";
 	const tipoTravaFamilia = "trava_familia_dev";
 	let ultimoDiagnostico = {
