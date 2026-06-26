@@ -135,21 +135,6 @@ function escaparHtml(texto) {
 	            ]);
 	        }
 
-	        function salvarNoCacheLocal(personagemSalvo) {
-	            const personagens = JSON.parse(localStorage.getItem("personagensCriados") || "[]");
-	            const chave = String(personagemSalvo.nome || "").trim().toLowerCase();
-	            const indice = personagens.findIndex((item) => String(item.nome || "").trim().toLowerCase() === chave);
-
-	            if (indice >= 0) {
-	                personagens[indice] = personagemSalvo;
-	            } else {
-	                personagens.push(personagemSalvo);
-	            }
-
-	            localStorage.setItem("personagensCriados", JSON.stringify(personagens));
-	            localStorage.setItem("ultimoPersonagem", JSON.stringify(personagemSalvo));
-	        }
-
 	        function vincularFamiliaSorteadaAoPersonagem(personagemSalvo) {
 	            const sorteio = JSON.parse(localStorage.getItem(chaveFamiliaSorteada) || "null");
 	            if (!sorteio || !sorteio.familia || sorteio.familia !== personagemSalvo.familia) {
