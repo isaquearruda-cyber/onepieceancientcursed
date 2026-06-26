@@ -3,6 +3,7 @@ const BancoPersonagens = (() => {
 	const versao = 1;
 	const storePersonagens = "personagens";
 	const tabelaSupabase = "personagens";
+	const espelhoPublicoUrl = "personagens-publicos.json?v=20260626-db4";
 	const chaveTravasFamilia = "travasFamiliaDev";
 	const tipoTravaFamilia = "trava_familia_dev";
 	let ultimoDiagnostico = {
@@ -249,6 +250,40 @@ const BancoPersonagens = (() => {
 		return mesclados;
 	}
 
+	async function obterTodosEspelhoPublico() {
+		const resposta = await fetch(espelhoPublicoUrl, {
+			cache: "no-store",
+			headers: {
+				Accept: "application/json"
+			}
+		});
+
+		if (!resposta.ok) {
+			throw new Error(`Espelho publico indisponivel (${resposta.status}).`);
+		}
+
+		const dados = await resposta.json();
+		const personagens = (Array.isArray(dados) ? dados : dados.personagens || [])
+			.filter((personagem) => personagem && !ehRegistroInterno(personagem));
+		const cache = lerCacheLocal();
+		const mesclados = mesclarPersonagens(personagens, cache);
+
+		ultimoDiagnostico = {
+			fonte: "espelho-publico",
+			online: false,
+			total: personagens.length,
+			totalComCache: mesclados.length,
+			mensagem: `Supabase indisponivel. Usando espelho publico com ${personagens.length} personagem(ns).`
+		};
+
+		if (mesclados.length > 0) {
+			gravarCacheLocal(mesclados);
+			await salvarTodosLocal(mesclados);
+		}
+
+		return mesclados;
+	}
+
 	async function salvarPersonagemRemoto(personagem) {
 		const id = chavePersonagem(personagem);
 		if (!id) {
@@ -352,24 +387,33 @@ const BancoPersonagens = (() => {
 			try {
 				return await obterTodosRemoto();
 			} catch (erro) {
-				console.warn("Banco online indisponivel; usando cache local:", erro);
-				ultimoDiagnostico = {
-					fonte: "cache-local",
-					online: false,
-					total: lerCacheLocal().length,
-					mensagem: `Banco online indisponivel: ${erro.message || erro}. Usando cache local deste aparelho.`
-				};
+				console.warn("Banco online indisponivel; tentando espelho publico:", erro);
+				try {
+					return await obterTodosEspelhoPublico();
+				} catch (erroEspelho) {
+					console.warn("Espelho publico indisponivel; usando cache local:", erroEspelho);
+					ultimoDiagnostico = {
+						fonte: "cache-local",
+						online: false,
+						total: lerCacheLocal().length,
+						mensagem: `Banco online indisponivel: ${erro.message || erro}. Espelho publico indisponivel: ${erroEspelho.message || erroEspelho}. Usando cache local deste aparelho.`
+					};
+				}
 			}
 		}
 
 		const locais = await obterTodosLocal();
 		if (!supabaseAtivo()) {
-			ultimoDiagnostico = {
-				fonte: "cache-local",
-				online: false,
-				total: locais.length,
-				mensagem: "Supabase nao configurado. Usando somente cache local."
-			};
+			try {
+				return await obterTodosEspelhoPublico();
+			} catch (erroEspelho) {
+				ultimoDiagnostico = {
+					fonte: "cache-local",
+					online: false,
+					total: locais.length,
+					mensagem: `Supabase nao configurado e espelho publico indisponivel: ${erroEspelho.message || erroEspelho}. Usando somente cache local.`
+				};
+			}
 		}
 		return locais;
 	}
@@ -404,8 +448,18 @@ const BancoPersonagens = (() => {
 		await salvarTodosLocal(personagens);
 
 		if (supabaseAtivo()) {
-			await salvarPersonagemRemoto(personagem);
-			gravarCacheLocal(personagens);
+			try {
+				await salvarPersonagemRemoto(personagem);
+				gravarCacheLocal(personagens);
+			} catch (erro) {
+				console.warn("Personagem salvo neste aparelho, mas o banco online nao sincronizou:", erro);
+				ultimoDiagnostico = {
+					fonte: "cache-local",
+					online: false,
+					total: personagens.length,
+					mensagem: `Personagem salvo localmente. Banco online indisponivel: ${erro.message || erro}.`
+				};
+			}
 		}
 
 		localStorage.setItem("ultimoPersonagem", JSON.stringify(personagem));
@@ -422,7 +476,17 @@ const BancoPersonagens = (() => {
 					return linhas[0].dados;
 				}
 			} catch (erro) {
-				console.warn("Busca online falhou; tentando cache local:", erro);
+				console.warn("Busca online falhou; tentando espelho publico:", erro);
+			}
+
+			try {
+				const personagensEspelho = await obterTodosEspelhoPublico();
+				const encontrado = personagensEspelho.find((personagem) => chavePersonagem(personagem) === id);
+				if (encontrado) {
+					return encontrado;
+				}
+			} catch (erroEspelho) {
+				console.warn("Busca no espelho publico falhou; tentando cache local:", erroEspelho);
 			}
 		}
 

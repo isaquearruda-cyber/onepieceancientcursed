@@ -306,7 +306,7 @@
 			});
 
 			if ("serviceWorker" in navigator && !protocoloLocal) {
-				navigator.serviceWorker.register("service-worker.js?v=20260619-game28").then(function (registro) {
+				navigator.serviceWorker.register("service-worker.js?v=20260626-db4").then(function (registro) {
 					if (registro.waiting) registro.waiting.postMessage({ type: "SKIP_WAITING" });
 					escreverStatus(mensagemPadrao());
 				}).catch(function () {

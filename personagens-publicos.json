@@ -1,0 +1,115 @@
+{
+  "atualizadoEm": "2026-06-26T00:27:49.267Z",
+  "origem": "espelho-publico-github-pages",
+  "aviso": "Espelho de leitura usado quando o Supabase configurado estiver indisponivel.",
+  "personagens": [
+    {
+      "nome": "agroboi",
+      "raca": "Lunarians",
+      "gmail": "isaquearruda14@gmail.com",
+      "senha": "290506Mm.",
+      "classe": "Espadachins",
+      "familia": "Davy D",
+      "profissao": "Cartografo",
+      "estiloLuta": "Santoryuu",
+      "organizacao": "Piratas",
+      "criadoEm": "03/06/2026, 12:54:50"
+    },
+    {
+      "nome": "Edno",
+      "raca": "Lunarians",
+      "gmail": "williampb2508@gmail.com",
+      "senha": "123456",
+      "classe": "Manipuladores de Fios",
+      "familia": "Shiki",
+      "profissao": "Alfaiate",
+      "estiloLuta": "Mukiryoku Kusari-ryu",
+      "organizacao": "Marinha",
+      "criadoEm": "03/06/2026, 18:42:48"
+    },
+    {
+      "nome": "Gengar",
+      "raca": "Humanos",
+      "gmail": "gengar.ederson.luan@gmail.com",
+      "senha": "XrTbUK72nBJsp3u",
+      "classe": "Espadachins",
+      "familia": "Davy D",
+      "profissao": "Torturador",
+      "estiloLuta": "Jao Kun Do",
+      "organizacao": "Piratas",
+      "criadoEm": "03/06/2026, 15:50:26"
+    },
+    {
+      "nome": "Kise",
+      "raca": "Stratos shadow",
+      "gmail": "gmattoslima9@gmail.com",
+      "senha": "K!ra8715",
+      "classe": "Piromaniacos",
+      "familia": "Shiki",
+      "profissao": "Ferreiro",
+      "estiloLuta": "Okama Kenpo",
+      "organizacao": "Caadores de Recompensa",
+      "criadoEm": "03/06/2026, 18:50:31"
+    },
+    {
+      "nome": "Robert",
+      "raca": "Humanos",
+      "gmail": "robertlevi765@gmail.com",
+      "senha": "Levisenju",
+      "classe": "Samurais",
+      "familia": "Kurosaki",
+      "profissao": "Musico",
+      "estiloLuta": "Itoryuu",
+      "organizacao": "Piratas",
+      "criadoEm": "04/06/2026, 21:48:00"
+    },
+    {
+      "nome": "sasaki",
+      "raca": "Lunarians",
+      "gmail": "isaquearruda477@gmail.com",
+      "senha": "390506Mm.",
+      "classe": "Manipuladores de Fios",
+      "familia": "Kurosaki",
+      "profissao": "Informante",
+      "estiloLuta": "Hasshouken",
+      "organizacao": "Cipher Pol",
+      "criadoEm": "25/06/2026, 21:16:51"
+    },
+    {
+      "nome": "Satoshi",
+      "raca": "Humanos",
+      "gmail": "isaquesenai14@gmail.com",
+      "senha": "290506",
+      "classe": "Espadachins",
+      "familia": "Gol D",
+      "profissao": "Cartografo",
+      "estiloLuta": "Jao Kun Do",
+      "organizacao": "Marinha",
+      "criadoEm": "04/06/2026, 09:02:58"
+    },
+    {
+      "nome": "Van Hellsing Alucard",
+      "raca": "Lunarians",
+      "gmail": "eleandro.elias00@gmail.com",
+      "senha": "eleandro99",
+      "classe": "Feiticeiros / Macumbeiros",
+      "familia": "Hellsing",
+      "profissao": "Cientista",
+      "estiloLuta": "Kitsune-Ryuu",
+      "organizacao": "Piratas",
+      "criadoEm": "04/06/2026, 08:13:25"
+    },
+    {
+      "nome": "Wyvern Ganzui",
+      "raca": "Birka",
+      "gmail": "cerqueira.victorr@gmail.com",
+      "senha": "Duda281071",
+      "classe": "Combatentes",
+      "familia": "Monkey D",
+      "profissao": "Timoneiro",
+      "estiloLuta": "Freestyle",
+      "organizacao": "Exrcito Revolucionrio",
+      "criadoEm": "05/06/2026, 20:30:14"
+    }
+  ]
+}
