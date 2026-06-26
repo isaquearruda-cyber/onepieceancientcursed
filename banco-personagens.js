@@ -5,6 +5,12 @@ const BancoPersonagens = (() => {
 	const tabelaSupabase = "personagens";
 	const chaveTravasFamilia = "travasFamiliaDev";
 	const tipoTravaFamilia = "trava_familia_dev";
+	let ultimoDiagnostico = {
+		fonte: "inicial",
+		online: false,
+		total: 0,
+		mensagem: "Banco ainda nao consultado."
+	};
 
 	function chavePersonagem(personagem) {
 		return String(personagem?.nome || "").trim().toLowerCase();
@@ -226,6 +232,13 @@ const BancoPersonagens = (() => {
 		const personagens = linhas.map((linha) => linha.dados).filter((dados) => dados && !ehRegistroInterno(dados));
 		const cache = lerCacheLocal();
 		const mesclados = mesclarPersonagens(cache, personagens);
+		ultimoDiagnostico = {
+			fonte: "supabase",
+			online: true,
+			total: personagens.length,
+			totalComCache: mesclados.length,
+			mensagem: `Banco online conectado. ${personagens.length} personagem(ns) remoto(s).`
+		};
 
 		if (personagens.length === 0 && cache.length > 0) {
 			console.warn("Banco online retornou vazio; mantendo personagens do cache local.");
@@ -340,10 +353,29 @@ const BancoPersonagens = (() => {
 				return await obterTodosRemoto();
 			} catch (erro) {
 				console.warn("Banco online indisponivel; usando cache local:", erro);
+				ultimoDiagnostico = {
+					fonte: "cache-local",
+					online: false,
+					total: lerCacheLocal().length,
+					mensagem: `Banco online indisponivel: ${erro.message || erro}. Usando cache local deste aparelho.`
+				};
 			}
 		}
 
-		return obterTodosLocal();
+		const locais = await obterTodosLocal();
+		if (!supabaseAtivo()) {
+			ultimoDiagnostico = {
+				fonte: "cache-local",
+				online: false,
+				total: locais.length,
+				mensagem: "Supabase nao configurado. Usando somente cache local."
+			};
+		}
+		return locais;
+	}
+
+	function diagnostico() {
+		return { ...ultimoDiagnostico, supabaseAtivo: supabaseAtivo() };
 	}
 
 	async function salvarTodos(personagens) {
@@ -431,7 +463,8 @@ const BancoPersonagens = (() => {
 		chaveTravaFamilia,
 		obterTravaFamilia,
 		salvarTravaFamilia,
-		supabaseAtivo
+		supabaseAtivo,
+		diagnostico
 	};
 })();
 

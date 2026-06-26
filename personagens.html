@@ -34,6 +34,11 @@
         </section>
 
         <section class="area-admin" aria-label="Lista de personagens criados">
+            <div class="cartao-admin" id="status-banco-dev" hidden>
+                <h2>Status do banco</h2>
+                <p id="texto-status-banco">Aguardando consulta.</p>
+                <button class="botao-secundario" id="recarregar-banco-dev" type="button">Recarregar banco online</button>
+            </div>
             <div class="lista-personagens" id="lista-personagens"></div>
         </section>
     </main>
@@ -75,7 +80,7 @@
     </div>
 
     <script src="supabase-config.js"></script>
-    <script src="banco-personagens.js?v=20260619-db2"></script>
+    <script src="banco-personagens.js?v=20260625-db3"></script>
     <script src="musica-fundo.js?v=20260619-game28"></script>
     <script>
         // Hashes SHA-256 das senhas administrativas. Em site estatico isso
@@ -99,6 +104,9 @@
         const mensagemDev = document.getElementById("mensagem-dev");
         const acessoDev = document.getElementById("acesso-dev");
         const lista = document.getElementById("lista-personagens");
+        const statusBancoDev = document.getElementById("status-banco-dev");
+        const textoStatusBanco = document.getElementById("texto-status-banco");
+        const recarregarBancoDev = document.getElementById("recarregar-banco-dev");
         const adminGridInventario = document.getElementById("admin-grid-inventario");
         const adminCategoriasInventario = document.getElementById("admin-inventario-categorias");
         const adminInventarioPersonagem = document.getElementById("admin-inventario-personagem");
@@ -427,7 +435,27 @@
         }
 
         async function desenharPersonagens() {
-            const personagens = await BancoPersonagens.obterTodos();
+            statusBancoDev.hidden = false;
+            textoStatusBanco.textContent = "Consultando banco de personagens...";
+            let personagens = [];
+            try {
+                personagens = await BancoPersonagens.obterTodos();
+            } catch (erro) {
+                console.error("Falha ao consultar personagens:", erro);
+                textoStatusBanco.textContent = `Erro ao consultar banco: ${erro.message || erro}`;
+                lista.innerHTML = `
+                    <article class="cartao-personagem">
+                        <h2>Falha ao carregar personagens</h2>
+                        <p>Verifique internet, permissões do Supabase ou cache do navegador.</p>
+                    </article>
+                `;
+                return;
+            }
+
+            const diagnostico = BancoPersonagens.diagnostico ? BancoPersonagens.diagnostico() : null;
+            if (diagnostico) {
+                textoStatusBanco.textContent = `${diagnostico.online ? "Online" : "Offline/cache"} - ${diagnostico.mensagem} Total exibido: ${personagens.length}.`;
+            }
 
             if (personagens.length === 0) {
                 lista.innerHTML = `
@@ -783,6 +811,7 @@
         });
 
         botaoEntrarDev.addEventListener("click", () => liberarAcesso());
+        recarregarBancoDev.addEventListener("click", () => desenharPersonagens());
         campoSenhaDev.addEventListener("keydown", (evento) => {
             if (evento.key === "Enter") {
                 liberarAcesso();

@@ -1,4 +1,4 @@
-const CACHE_NAME = "one-piece-rpg-app-v40";
+const CACHE_NAME = "one-piece-rpg-app-v41";
 const CACHE_PREFIX = "one-piece-rpg-app-";
 
 const APP_SHELL = [
@@ -35,7 +35,7 @@ const APP_SHELL = [
   "./estilo.css",
   "./musica-fundo.js",
   "./rpg-sistemas.js",
-  "./banco-personagens.js?v=20260619-db2",
+  "./banco-personagens.js?v=20260625-db3",
   "./assets/vendor/canvas-confetti/confetti.browser.js",
   "./assets/vendor/phaser/phaser.min.js",
   "./assets/vendor/nprogress/nprogress.css",
