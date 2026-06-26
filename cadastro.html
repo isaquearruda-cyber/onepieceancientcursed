@@ -57,8 +57,8 @@
     </main>
 
     <script src="supabase-config.js"></script>
-    <script src="banco-personagens.js?v=20260626-db5"></script>
-    <script src="musica-fundo.js?v=20260626-mobile-db5"></script>
+    <script src="banco-personagens.js?v=20260626-db6"></script>
+    <script src="musica-fundo.js?v=20260626-mobile-db6"></script>
     <script>
         const personagem = JSON.parse(sessionStorage.getItem("personagemPendente") || "null");
         const resumo = document.getElementById("resumo-personagem");
@@ -228,17 +228,10 @@ function escaparHtml(texto) {
 
 	                await esperar(2000);
 
-	                let personagemSalvo;
-	                try {
-	                    personagemSalvo = await comLimiteDeTempo(
-	                        BancoPersonagens.salvarPersonagem(personagemParaSalvar),
-	                        4000
-	                    );
-	                } catch (erroBanco) {
-	                    console.warn("Banco demorou/falhou; salvando no cache local permanente:", erroBanco);
-	                    salvarNoCacheLocal(personagemParaSalvar);
-	                    personagemSalvo = personagemParaSalvar;
-	                }
+	                const personagemSalvo = await comLimiteDeTempo(
+	                    BancoPersonagens.salvarPersonagem(personagemParaSalvar),
+	                    15000
+	                );
 
 	                localStorage.setItem("ultimoPersonagem", JSON.stringify(personagemSalvo));
 	                vincularFamiliaSorteadaAoPersonagem(personagemSalvo);

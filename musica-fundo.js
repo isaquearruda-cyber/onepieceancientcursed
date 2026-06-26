@@ -24,7 +24,7 @@
 		eventos: "eventos.html",
 		beta: "beta-recompensas.html"
 	};
-	var buildAtual = "20260626-mobile-db5";
+	var buildAtual = "20260626-mobile-db6";
 	var icones = {
 		atributos: "atributos.webp",
 		inventario: "inventario.webp",
@@ -135,7 +135,7 @@
 		};
 
 		if ("serviceWorker" in navigator && location.protocol !== "file:") {
-			navigator.serviceWorker.register("service-worker.js?v=20260626-mobile-db5", { updateViaCache: "none" }).then(function (registro) {
+			navigator.serviceWorker.register("service-worker.js?v=20260626-mobile-db6", { updateViaCache: "none" }).then(function (registro) {
 				registro.update();
 				if (registro.waiting) registro.waiting.postMessage({ type: "SKIP_WAITING" });
 				registro.addEventListener("updatefound", function () {
