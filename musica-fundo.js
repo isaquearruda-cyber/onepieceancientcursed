@@ -135,7 +135,7 @@
 		};
 
 		if ("serviceWorker" in navigator && location.protocol !== "file:") {
-			navigator.serviceWorker.register("service-worker.js?v=20260626-sync1", { updateViaCache: "none" }).then(function (registro) {
+			navigator.serviceWorker.register("service-worker.js?v=20260702-lock1", { updateViaCache: "none" }).then(function (registro) {
 				registro.update();
 				if (registro.waiting) registro.waiting.postMessage({ type: "SKIP_WAITING" });
 				registro.addEventListener("updatefound", function () {

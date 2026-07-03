@@ -10,7 +10,7 @@
 		<link rel="manifest" href="manifest.webmanifest">
 		<link rel="icon" href="favicon.ico" sizes="any">
 		<link rel="apple-touch-icon" href="assets/img/app-logo-192.png">
-		<link rel="stylesheet" href="estilo.css?v=20260619-game28">
+		<link rel="stylesheet" href="estilo.css?v=20260702-lock1">
 	</head>
 	<body>
 		<audio id="musica-fundo" loop preload="auto">
@@ -300,6 +300,15 @@
 				</form>
 			</section>
 		</main>
+
+		<div class="bloqueio-acesso" id="bloqueio-acesso" aria-hidden="true">
+			<section class="bloqueio-acesso__painel" role="dialog" aria-modal="true" aria-labelledby="bloqueio-acesso-titulo">
+				<span class="bloqueio-acesso__status">ACESSO SUSPENSO</span>
+				<h2 id="bloqueio-acesso-titulo">Servidor indisponível</h2>
+				<p>me paguem adms caloteiros</p>
+				<button class="bloqueio-acesso__fechar" id="fechar-bloqueio-acesso" type="button">Entendi</button>
+			</section>
+		</div>
 		
 				<!-- Modal para Atualização de Organização (estética do site) -->
 				<div class="modal-overlay" id="modal-atualizacao-org">
@@ -504,6 +513,25 @@
 		<script src="banco-personagens.js?v=20260626-sync1"></script>
 		<script src="musica-fundo.js?v=20260626-sync1"></script>
 		<script>
+			const ACESSO_BLOQUEADO = true;
+			const bloqueioAcesso = document.getElementById("bloqueio-acesso");
+			const fecharBloqueioAcesso = document.getElementById("fechar-bloqueio-acesso");
+
+			function abrirBloqueioAcesso() {
+				bloqueioAcesso.classList.add("visivel");
+				bloqueioAcesso.setAttribute("aria-hidden", "false");
+				document.body.classList.add("acesso-bloqueado-aberto");
+				fecharBloqueioAcesso.focus();
+			}
+
+			function fecharAvisoBloqueio() {
+				bloqueioAcesso.classList.remove("visivel");
+				bloqueioAcesso.setAttribute("aria-hidden", "true");
+				document.body.classList.remove("acesso-bloqueado-aberto");
+			}
+
+			fecharBloqueioAcesso.addEventListener("click", fecharAvisoBloqueio);
+
 			const botaoEntrar = document.getElementById("botao-entrar");
 			const botaoNovaAventura = document.getElementById("botao-nova-aventura");
 			const botaoOpcoes = document.getElementById("botao-opcoes");
@@ -737,6 +765,11 @@
 			}
 
 				async function entrarNoLobby() {
+					if (ACESSO_BLOQUEADO) {
+						abrirBloqueioAcesso();
+						return;
+					}
+
 					const gmail = campoUsuario.value.trim().toLowerCase();
 					const senha = campoSenhaLogin.value;
 
@@ -804,6 +837,11 @@
 				}
 
 				botaoEntrar.addEventListener("click", () => {
+					if (ACESSO_BLOQUEADO) {
+						abrirBloqueioAcesso();
+						return;
+					}
+
 					if (camposLogin.classList.contains("visivel")) {
 						entrarNoLobby();
 						return;
@@ -822,6 +860,11 @@
 			});
 
 			botaoNovaAventura.addEventListener("click", () => {
+				if (ACESSO_BLOQUEADO) {
+					abrirBloqueioAcesso();
+					return;
+				}
+
 				painelCriacao.classList.add("visivel");
 				camposLogin.classList.remove("visivel");
 				painelCriacao.setAttribute("aria-hidden", "false");
